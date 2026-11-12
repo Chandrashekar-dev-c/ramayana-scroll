@@ -9,12 +9,12 @@ import tuning from '../data/tuning.json';
 import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK, BASE_U } from '../art/figures.js';
-import { drawBackdrop, isNight } from '../art/backdrops.js';
+import { drawBackdrop, drawNear, isNight, backdropChunk, CHUNK } from '../art/backdrops.js';
 import { drawFrame } from '../art/borders.js';
 import { drawProp } from '../art/props.js';
 import { plate } from '../art/ink.js';
 import * as M from '../art/motifs.js';
-import { showLine, tickLine, lineTyping, finishTyping, hideLine, topbar, touchControls, choose } from '../ui/dom.js';
+import { showLine, tickLine, lineTyping, finishTyping, hideLine, topbar, touchControls, choose, showBusy, hideBusy } from '../ui/dom.js';
 import { createBattle, updateBattle, renderBattle, battleSeals } from '../play/battle.js';
 import { setMood, cue } from '../audio/audio.js';
 import { createInteraction } from './interactions.js';
@@ -43,9 +43,29 @@ export function nameOf(who) {
 }
 
 /** Start a chapter. from: optional checkpoint { beat, battle } */
+/** Load a chapter's script, its battle levels, and paint its first backdrop in advance. */
+export async function prefetchChapter(id) {
+  const script = await loadScript(id);
+  await Promise.all(script.filter((b) => b.battle).map((b) => loadLevel(b.battle)));
+  return script;
+}
+
+function prewarm(script, ch) {
+  const bg = script.find((b) => b.bg);
+  if (!bg) return;
+  const lanka = ch.type === 'lanka';
+  const colour = bg.colour !== undefined ? bg.colour : !lanka;
+  const i0 = Math.floor((640 - app.W / 2) / CHUNK);
+  for (let i = i0; i <= i0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, bg.style || (lanka ? 'kachni' : 'bharni-bright'), colour, i);
+}
+
 export async function startChapter(id, from) {
   const ch = chapterById(id);
-  const script = await loadScript(id);
+  // a chapter loads on demand; show the loading plate if it takes more than a moment
+  const busy = setTimeout(() => showBusy(t('load.chapter')), 120);
+  let script;
+  try { script = await prefetchChapter(id); prewarm(script, ch); }
+  finally { clearTimeout(busy); hideBusy(); }
   const r = new Runner(ch, script, from);
   save.data.chapter = id; save.commit();
   setMode('chapter', r);
@@ -60,7 +80,7 @@ class Runner {
     this.bg = { id: 'court', style: 'bharni-bright', colour: true }; this.camX = 640 - app.W / 2; this.camTo = null;
     this.wash = null; this.waitT = 0; this.cur = null; this.sub = null; this.time = 0; this.card = null; this.shakeT = 0;
     this.stats = { kills: 0, headshots: 0, time: 0, hits: 0, shots: 0 }; this.seals = { finish: true, gentle: true, fast: true }; this.anySeals = false;
-    this.from = from; this.skipping = false; this.tapHintShown = save.seen('hint.tap'); this.dialogTop = false; this.flags = {};
+    this.from = from; this.skipping = false; this.linesShown = 0; this.dialogTop = false; this.flags = {};
     this.overlay = null; this.endedTo = null;
   }
   label() { return t('aria.' + (this.sub ? (this.sub.kind === 'battle' ? 'battle' : 'trial') : 'scene')); }
@@ -132,8 +152,9 @@ class Runner {
   start(b) {
     if (b.say || b.narrate) {
       const who = b.say ? (b.nk ? t(b.nk) : nameOf(b.as || b.say)) : '';
-      showLine(who, t(b.k), { top: this.dialogTop || !!b.top });
-      if (!this.tapHintShown) { this.tapHintShown = true; save.markSeen('hint.tap'); this.tapHint = 3; }
+      const hint = this.linesShown++ < 3 && !save.seen('hint.tap.done') ? t(app.isTouch ? 'hint.tapToContinue' : 'hint.clickToContinue') : null;
+      if (this.linesShown >= 3) save.markSeen('hint.tap.done');
+      showLine(who, t(b.k), { top: this.dialogTop || !!b.top, hint });
       bus.emit('scene:line', b.k);
       return;
     }
@@ -319,6 +340,7 @@ class Runner {
     save.commit();
     bus.emit('chapter:end', { id: ch.id, seals });
     showWin({ ch, seals: save.data.seals[ch.id], earned: seals, stats: this.anySeals ? this.stats : null, next: nxt });
+    if (nxt) prefetchChapter(nxt.id).catch(() => {}); // ready by the time the note is read
   }
 
   // ------------------------------------------------------------ render
@@ -333,7 +355,6 @@ class Runner {
       plate(ctx, this.card.title + (this.card.sub ? '\n' + this.card.sub : ''), app.W / 2, 300, { size: 38, font: '"Yatra One", serif', padX: 40, padY: 22, gap: this.lanka ? PAL.terracotta : PAL.madder });
       ctx.restore();
     }
-    if (this.tapHint > 0 && this.cur && (this.cur.say || this.cur.narrate)) { plate(ctx, t(app.isTouch ? 'hint.tapToContinue' : 'hint.clickToContinue'), app.W / 2, 470, { size: 18, seed: 4 }); if (app.isTouch) drawHand(ctx, app.W / 2, 540, this.time); }
   }
 
   renderScene(ctx, o = {}) {
@@ -347,7 +368,7 @@ class Runner {
     if (unheal) { ctx.save(); ctx.globalAlpha = 1 - w.t / w.dur; drawBackdrop(ctx, this.bg.id, this.bg.style, this.camX, W, { colour: true }); ctx.restore(); }
     ctx.save(); ctx.translate(-this.camX, 0);
     const kach = this.lanka;
-    for (const [id, p] of this.props) if (!p.front) drawProp(ctx, p.name, p.x, p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? (kach ? false : true), night: isNight(this.bg.id) && p.colour === false, scale: p.scale, lanka: p.lanka || kach, moving: p.moving, spin: this.time * 6, broken: p.broken, width: p.width, rot: p.rot });
+    for (const [id, p] of this.props) if (!p.front) drawProp(ctx, p.name, p.x, p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? (kach ? false : true), night: isNight(this.bg.id) && p.colour === false, scale: p.scale, lanka: p.lanka || kach, moving: p.moving, spin: this.time * 6, broken: p.broken, width: p.width, rot: p.rot, lift: p.lift });
     const list = [...this.actors.entries()].sort((a, b) => (a[1].z || 0) - (b[1].z || 0));
     for (const [id, a] of list) {
       if (a.hidden) continue;
@@ -355,10 +376,11 @@ class Runner {
       let drain = 0;
       if (w && (w.target === id || w.target === 'actors' || (w.target === 'all'))) { const k = w.t / w.dur; if (w.to === 'colour') { mode = 'colour'; drain = 1 - k; } else { mode = 'colour'; drain = k; } }
       if (a.colourUp != null) this.drawColourUp(ctx, a);
-      else fig(ctx, a.spec, a.pose, a.x, a.y, { facing: a.facing, mode, alpha: a.alpha, scale: a.scale, rot: a.rot, drain, heads: id === 'ravana' || a.char === 'ravana' ? { pride: save.data.pride || 0, ...(a.heads || {}) } : undefined });
+      else fig(ctx, a.spec, a.pose === 'stand' && Math.floor(this.time / 2.6 + (Math.abs(a.x) % 7) * 0.37) % 2 ? 'stand2' : a.pose, a.x, a.y, { facing: a.facing, mode, alpha: a.alpha, scale: a.scale, rot: a.rot, drain, heads: id === 'ravana' || a.char === 'ravana' ? { pride: save.data.pride || 0, ...(a.heads || {}) } : undefined });
     }
     for (const [id, p] of this.props) if (p.front) drawProp(ctx, p.name, p.who && this.actors.get(p.who) ? this.actors.get(p.who).x : p.x, p.who && this.actors.get(p.who) ? this.actors.get(p.who).y : p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? !kach, scale: p.scale, lanka: p.lanka || kach, broken: p.broken, width: p.width, facing: p.who && this.actors.get(p.who) ? this.actors.get(p.who).facing : 1, height: p.who && this.actors.get(p.who) ? this.actors.get(p.who).spec.build.height : 1 });
     ctx.restore();
+    drawNear(ctx, this.bg.id, this.camX, W, { colour: this.bg.colour && !unheal, heal });
     drawFrame(ctx, { colour: this.bg.colour && !this.lanka, night: isNight(this.bg.id) });
     ctx.restore();
     void o;

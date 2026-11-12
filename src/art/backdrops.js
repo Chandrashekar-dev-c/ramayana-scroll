@@ -7,6 +7,7 @@ import { noise, hashStr } from '../core/rng.js';
 import { PAL } from './palette.js';
 import { line, shape, hatch, rectPts, ellipsePts, dots } from './ink.js';
 import * as M from './motifs.js';
+import { pattern } from './patterns.js';
 import { GROUND } from './layout.js';
 
 export const CHUNK = 1024;
@@ -50,10 +51,187 @@ export const BACKDROPS = {
   kailash: { ground: 'rock', lanka: true, sky: ['dots'], layers: [['peak', 700, 0, 470, { off: 350 }], ['peak', 420, 0, 240, {}]] },
 };
 
+// How each place looks beyond its layers: a flat sky pattern, a far band in thin faint line,
+// place details, and a near band in front of the figures. Depth comes from overlap and
+// line weight, never from perspective or shading (brief, Rule G and the depth notes).
+const LOOK = {
+  court: { skyPat: 'royalChecks', far: null, near: 'lotusBorder', sun: false },
+  chamber: { skyPat: 'smallChecks', far: null, near: 'lotusBorder', sun: false },
+  kingRoom: { skyPat: 'stars', far: null, near: 'lotusBorder', sun: false },
+  city: { skyPat: 'flowerDots', far: 'city', near: 'grass' },
+  mithila: { skyPat: 'fishScale', far: 'city', near: 'reeds', extras: ['garlands'] },
+  riverbank: { skyPat: 'waveLines', far: 'palm', near: 'reeds' },
+  road: { skyPat: 'dots', far: 'hill', near: 'grass' },
+  waste: { skyPat: 'crackedEarth', far: 'hill', near: 'thorns', extras: ['thorns'], regrow: [[0, 'banyan']] },
+  ashram: { skyPat: 'leafSprays', far: 'sala', near: 'grass', extras: ['tulsi'], regrow: [[1], [2]] },
+  hermitage: { skyPat: 'leafSprays', far: 'sala', near: 'grass', extras: ['tulsi'] },
+  forest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers', 'eyes'] },
+  deepForest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers', 'eyes'], sun: false, regrow: [[0], [1]] },
+  panchavati: { skyPat: 'flowerDots', far: 'sala', near: 'reeds', extras: ['creepers'] },
+  chitrakuta: { skyPat: 'mountainTriangles', far: 'hill', near: 'grass' },
+  ridge: { skyPat: 'pebbles', far: 'hill', near: 'thorns', regrow: [[2, 'sala']] },
+  kishkindha: { skyPat: 'pebbles', far: 'hill', near: 'grass', extras: ['creepers'] },
+  cave: { skyPat: 'pebbles', far: null, near: 'rocks', sun: false },
+  pampa: { skyPat: 'ripples', far: 'hill', near: 'reeds' },
+  shore: { skyPat: 'seaFoam', far: 'palm', near: 'shells' },
+  ocean: { skyPat: 'waves', far: null, near: null },
+  sky: { skyPat: 'cloudSpirals', far: null, near: null },
+  nightSky: { skyPat: 'stars', far: null, near: null },
+  mountain: { skyPat: 'mountainTriangles', far: 'hill', near: 'grass' },
+  lanka: { skyPat: 'diamonds', far: 'lanka', near: 'goldBorder', extras: ['garlands'] },
+  lankaNight: { skyPat: 'diamonds', far: 'lanka', near: 'goldBorder', extras: ['garlands'] },
+  lankaCourt: { skyPat: 'peacockEyes', far: null, near: 'goldBorder', sun: false, extras: ['lamps'] },
+  lankaRoofs: { skyPat: 'stars', far: null, near: null },
+  grove: { skyPat: 'flowerDots', far: 'sala', near: 'grass', extras: ['creepers'] },
+  battlefield: { skyPat: 'crackedEarth', far: 'lanka', near: 'thorns' },
+  camp: { skyPat: 'seaFoam', far: 'palm', near: 'shells' },
+  nandigram: { skyPat: 'grainStalks', far: 'hill', near: 'grass' },
+  cityNight: { skyPat: 'stars', far: 'city', near: 'grass' },
+  tamasa: { skyPat: 'waveLines', far: 'palm', near: 'reeds' },
+  kailash: { skyPat: 'mountainTriangles', far: 'hill', near: 'rocks' },
+};
+export const lookOf = (id) => LOOK[id] || { skyPat: 'dots', far: 'hill', near: 'grass' };
+
+function paintFar(ctx, def, look, x0, o, seed) {
+  if (!look.far) return;
+  const c = o.night ? PAL.nightLine : PAL.terracotta, base = GROUND - 44;
+  ctx.save(); ctx.globalAlpha *= o.colour ? 0.5 : 0.42;
+  const sp = look.far === 'hill' ? 330 : 190;
+  for (let k = Math.floor((x0 - 300) / sp); k <= Math.ceil((x0 + CHUNK + 300) / sp); k++) {
+    const x = k * sp + noise(seed + 5, k) * sp * 0.3 - x0, h = 1 + noise(seed + 6, k) * 0.15;
+    const lo = { colour: false, night: o.night, lineColor: c, seed: k + 11, w: 0.9 };
+    if (look.far === 'hill') M.hill(ctx, x, base + 10, 300 * h, 120 * h, { ...lo, hatchColor: c, spacing: 15 });
+    else if (look.far === 'city' || look.far === 'lanka') M.building(ctx, x, base, 90 * h, 120 * h, { ...lo, tiers: 2, lanka: look.far === 'lanka' });
+    else M.tree(ctx, x, base, 140 * h, look.far === 'sala' ? 'sala' : look.far, lo);
+  }
+  ctx.restore();
+}
+
+function paintExtras(ctx, look, x0, o, seed) {
+  const c = o.night ? PAL.nightLine : PAL.black;
+  for (const ex of look.extras || []) {
+    for (let k = 0; k < 5; k++) {
+      const x = ((noise(seed + 40, k + (ex.length * 7)) + 1) / 2) * CHUNK, r = (noise(seed + 41, k) + 1) / 2;
+      if (ex === 'creepers') {
+        const len = 70 + r * 110, pts = [];
+        for (let y = 22; y < 22 + len; y += 14) pts.push([x + Math.sin(y * 0.08 + k) * 7, y]);
+        line(ctx, pts, { w: 1.2, color: o.colour ? PAL.green : c, smooth: true, seed: k, amp: 0.4 });
+        for (let i = 1; i < pts.length; i += 2) shape(ctx, [[pts[i][0], pts[i][1]], [pts[i][0] + (i % 4 ? 9 : -9), pts[i][1] + 3], [pts[i][0], pts[i][1] + 8]], { mode: o.colour ? 'colour' : 'line', fill: PAL.leaf, lineColor: c, lineFill: o.night ? PAL.night : PAL.cream, w: 0.9, seed: i, amp: 0.3 });
+      } else if (ex === 'eyes' && k < 2) {
+        // eyes watching from the undergrowth
+        const y = GROUND - 70 - r * 60;
+        for (const dx of [-9, 9]) { shape(ctx, [[x + dx - 7, y], [x + dx, y - 4], [x + dx + 7, y], [x + dx, y + 4]], { mode: 'colour', fill: PAL.white, w: 1, seed: k, smooth: true, amp: 0.2 }); ctx.fillStyle = PAL.black; ctx.beginPath(); ctx.arc(x + dx + 1, y, 2, 0, 7); ctx.fill(); }
+      } else if (ex === 'thorns' && k < 3) {
+        const y = GROUND - 2;
+        line(ctx, [[x - 30, y], [x - 10, y - 30], [x + 8, y - 12], [x + 26, y - 38], [x + 34, y]], { w: 1.3, color: c, seed: k });
+        for (let i = 0; i < 6; i++) line(ctx, [[x - 24 + i * 10, y - 14 - (i % 2) * 12], [x - 20 + i * 10, y - 22 - (i % 2) * 12]], { w: 1, color: o.colour ? PAL.brown : c, seed: i, flat: true });
+      } else if (ex === 'tulsi' && k < 1) {
+        M.pot(ctx, x, GROUND - 2, 34, { colour: o.colour, seed: k, fill: PAL.terracotta });
+        for (let i = -2; i <= 2; i++) line(ctx, [[x, GROUND - 36], [x + i * 8, GROUND - 60 - Math.abs(i) * -4]], { w: 1.1, color: o.colour ? PAL.leaf : c, seed: i });
+        dots(ctx, x, GROUND - 62, 10, 6, o.colour ? PAL.leaf : c, k, 2.2);
+      } else if (ex === 'garlands' && k < 3) {
+        const pts = []; for (let i = 0; i <= 8; i++) pts.push([x - 80 + i * 20, 40 + Math.sin((i / 8) * Math.PI) * 34]);
+        for (const p of pts) dots(ctx, p[0], p[1], 0, 1, o.colour ? PAL.saffron : c, 1, 3.4);
+      } else if (ex === 'lamps' && k < 4) {
+        line(ctx, [[x, 22], [x, 70 + r * 40]], { w: 1, color: c, seed: k });
+        M.diya(ctx, x - 6, 76 + r * 40, 8, true, 0, { colour: true, night: o.night });
+      }
+    }
+  }
+}
+
+/** The near band: a low row of plants, water or pattern in front of the figures. */
+function paintNear(id, colour, index) {
+  const def = BACKDROPS[id] || BACKDROPS.road, look = lookOf(id);
+  const s = Math.min(1, Math.max(0.5, app.scale));
+  const H = 720 - (GROUND - 30);
+  const cv = makeCanvas(CHUNK * s, H * s);
+  const ctx = cv.getContext('2d'); ctx.scale(s, s); ctx.translate(0, -(GROUND - 30));
+  if (!look.near) return cv;
+  const x0 = index * CHUNK, seed = hashStr(id) + index * 57;
+  const night = !!def.night, c = night ? PAL.nightLine : PAL.black, m = colour ? 'colour' : 'line', lf = night ? PAL.night : PAL.cream;
+  const bot = 720 - 22; // just above the painted frame
+  // healed land: thorns give way to grass and flowers
+  const kind = colour && look.near === 'thorns' ? 'grass' : look.near;
+  if (kind === 'lotusBorder' || kind === 'goldBorder') {
+    shape(ctx, rectPts(-4, bot - 30, CHUNK + 8, 30), { mode: m, fill: kind === 'goldBorder' ? PAL.gold : PAL.madder, pattern: colour ? pattern(ctx, kind === 'goldBorder' ? 'peacockEyes' : 'lotusRow', null, kind === 'goldBorder' ? PAL.black : PAL.turmeric, 1) : null, lineColor: c, lineFill: lf, w: 1.4, seed });
+    return cv;
+  }
+  if (kind === 'reeds' || kind === 'shells') {
+    shape(ctx, rectPts(-4, bot - 26, CHUNK + 8, 26), { mode: m, fill: PAL.river, lineColor: c, lineFill: lf, w: 1.2, seed });
+    ctx.save(); ctx.translate(-x0, 0); M.waves(ctx, x0, x0 + CHUNK, bot - 18, bot - 4, { colour: false, night, gap: 9, w: 1 }); ctx.restore();
+  }
+  // dense, small near pattern; an occasional taller plant overlaps the feet
+  for (let k = 0; k < 26; k++) {
+    const x = (k + 0.5) * (CHUNK / 26) + noise(seed, k) * 12, tall = k % 9 === 4;
+    const top = tall ? GROUND + 36 : bot - 22 - ((noise(seed, k + 50) + 1) / 2) * 18;
+    if (kind === 'grass' || kind === 'ferns') {
+      for (let i = -2; i <= 2; i++) line(ctx, [[x, bot], [x + i * 6, (bot + top) / 2], [x + i * 11, top + Math.abs(i) * 6]], { w: 1.2, color: colour ? PAL.green : c, smooth: true, seed: k + i, amp: 0.4 });
+      if (k % 3 === 0) dots(ctx, x + 8, top + 8, 5, 5, colour ? PAL.pink : c, k, 2.2);
+    } else if (kind === 'reeds') {
+      line(ctx, [[x, bot - 10], [x + 3, top]], { w: 1.4, color: colour ? PAL.green : c, seed: k });
+      if (k % 2) shape(ctx, ellipsePts(x + 3, top - 4, 3.5, 10, 8), { mode: m, fill: PAL.brown, lineColor: c, lineFill: lf, w: 1, seed: k, smooth: true });
+      if (k % 5 === 0) M.lotusBud(ctx, x + 14, bot - 22, 9, { colour, seed: k, lineColor: c });
+    } else if (kind === 'thorns') {
+      line(ctx, [[x - 10, bot], [x, top], [x + 10, bot]], { w: 1.2, color: c, seed: k });
+      line(ctx, [[x - 5, (bot + top) / 2], [x - 12, (bot + top) / 2 - 6]], { w: 1, color: c, seed: k + 1, flat: true });
+      line(ctx, [[x + 5, (bot + top) / 2 + 6], [x + 12, (bot + top) / 2]], { w: 1, color: c, seed: k + 2, flat: true });
+    } else if (kind === 'rocks') {
+      shape(ctx, ellipsePts(x, bot - 8, 14, 9, 8), { mode: m, fill: PAL.stone, lineColor: c, lineFill: lf, w: 1.1, seed: k, smooth: true });
+    } else if (kind === 'shells') {
+      if (k % 2) shape(ctx, ellipsePts(x, bot - 34, 9, 7, 8, Math.PI, Math.PI * 2), { mode: m, fill: PAL.white, lineColor: c, lineFill: lf, w: 1, seed: k, amp: 0.3 });
+      else M.fish(ctx, x, bot - 12, 8, { colour, fill: PAL.turmeric, lineColor: c, w: 1, dir: k % 4 ? 1 : -1 });
+    }
+  }
+  return cv;
+}
+
+const nearCache = new Map();
+export function drawNear(ctx, id, camX, W, o = {}) {
+  if (!lookOf(id).near) return;
+  const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK), top = GROUND - 30, H = 720 - top;
+  for (let i = i0; i <= i1; i++) {
+    const colour = !!o.colour;
+    const get = (cl) => { const key = `${id}|${cl ? 1 : 0}|${i}`; let c = nearCache.get(key); if (!c) { c = paintNear(id, cl, i); nearCache.set(key, c); if (nearCache.size > 12) nearCache.delete(nearCache.keys().next().value); } return c; };
+    const dx = i * CHUNK - camX;
+    ctx.drawImage(get(colour), dx, top, CHUNK + 0.5, H);
+    if (o.heal && !colour) { const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK); if (b > a) { ctx.save(); ctx.beginPath(); ctx.rect(a - camX, top, b - a, H); ctx.clip(); ctx.drawImage(get(true), dx, top, CHUNK + 0.5, H); ctx.restore(); } }
+  }
+}
+
+/** Trees that a battle can bring back to life, at the same places the chunk painter uses. */
+export function regrowList(id, left, right) {
+  const def = BACKDROPS[id], look = lookOf(id);
+  if (!def || !look.regrow) return [];
+  const out = [];
+  for (const [li, into] of look.regrow) {
+    const [kind, sp, yOff, size, lo] = def.layers[li];
+    const off = lo.off || 0;
+    for (let k = Math.floor((left - off) / sp); k <= Math.ceil((right - off) / sp); k++) {
+      const x = k * sp + off + noise(hashStr(id) + li * 17, k) * sp * 0.22;
+      const sd = hashStr(kind) % 1000 + k * 13;
+      out.push({ x, y: GROUND + yOff, h: size * (1 + noise(sd, 3) * 0.14), kind: into || lo.kind, seed: sd });
+    }
+  }
+  return out;
+}
+
+/** A tree coming back to life: dead branches fade as the living crown grows in. */
+export function drawGrowingTree(ctx, tr, grow) {
+  if (grow < 1) { ctx.save(); ctx.globalAlpha *= 1 - grow; M.tree(ctx, tr.x, tr.y, tr.h * 0.82, 'bare', { colour: false, seed: tr.seed }); ctx.restore(); }
+  if (grow > 0) {
+    const e = 1 - (1 - grow) * (1 - grow), sc = 0.45 + 0.55 * e;
+    ctx.save(); ctx.globalAlpha *= Math.min(1, grow * 1.6);
+    ctx.translate(tr.x, tr.y); ctx.scale(sc, sc); ctx.translate(-tr.x, -tr.y);
+    M.tree(ctx, tr.x, tr.y, tr.h, tr.kind, { colour: true, seed: tr.seed });
+    ctx.restore();
+  }
+}
+
 const STYLE_LINE = { 'bharni-bright': PAL.madder, 'bharni-earth': PAL.brown, kachni: PAL.terracotta };
 
 const cache = new Map();
-export function clearBackdropCache() { cache.clear(); }
+export function clearBackdropCache() { cache.clear(); nearCache.clear(); }
 
 function paintGround(ctx, def, x0, o, seed) {
   const c = o.night ? PAL.nightLine : PAL.black;
@@ -68,7 +246,7 @@ function paintGround(ctx, def, x0, o, seed) {
   const band = rectPts(-4, GROUND, CHUNK + 8, 720 - GROUND + 4);
   if (o.colour) {
     ctx.fillStyle = kind === 'floor' ? (def.lanka ? PAL.gold : PAL.ochre) : kind === 'sand' ? PAL.wash : kind === 'rock' ? PAL.stone : kind === 'gold' ? PAL.gold : PAL.leaf;
-    ctx.globalAlpha = kind === 'floor' || kind === 'gold' ? 0.55 : 0.8; ctx.fillRect(0, GROUND, CHUNK, 720 - GROUND); ctx.globalAlpha = 1;
+    ctx.globalAlpha = kind === 'floor' || kind === 'gold' ? 0.5 : 0.55; ctx.fillRect(0, GROUND, CHUNK, 720 - GROUND); ctx.globalAlpha = 1;
   }
   if (kind === 'cracked' && !o.colour) {
     for (let i = 0; i < 16; i++) {
@@ -139,7 +317,7 @@ function paintBand(ctx, def, x0, o) {
   ctx.restore();
 }
 
-function paintChunk(id, style, colour, index) {
+function paintChunk(id, style, colour, index, regrow) {
   const def = BACKDROPS[id] || BACKDROPS.road;
   const s = Math.min(1, Math.max(0.5, app.scale));
   const cv = makeCanvas(CHUNK * s, 720 * s);
@@ -151,21 +329,21 @@ function paintChunk(id, style, colour, index) {
   // the wall itself: a mottled wash that differs slightly every time
   ctx.fillStyle = def.night ? PAL.night : PAL.cream;
   ctx.fillRect(0, 0, CHUNK, 720);
-  if (!def.night) {
-    for (let i = 0; i < 26; i++) {
-      const bx = ((noise(seed, i * 2) + 1) / 2) * CHUNK, by = ((noise(seed, i * 2 + 1) + 1) / 2) * 720;
-      ctx.globalAlpha = 0.16 + ((noise(seed, i + 77) + 1) / 2) * 0.16;
-      ctx.fillStyle = i % 3 ? PAL.wash : PAL.washDark;
-      ctx.beginPath(); ctx.ellipse(bx, by, 60 + (i % 5) * 34, 30 + (i % 4) * 20, noise(seed, i) * 1.5, 0, 7); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-  }
+  const look = lookOf(id);
+  // a flat, faint sky pattern: no soft blobs that could read as shading
+  ctx.save(); ctx.globalAlpha = def.night ? 0.16 : colour ? 0.13 : 0.1;
+  ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, 1.5);
+  ctx.translate(-(x0 % 64), 0); ctx.fillRect(0, 26, CHUNK + 64, GROUND - 70); ctx.restore();
   ctx.save(); ctx.translate(-x0, 0);
-  M.fillers(ctx, x0, x0 + CHUNK, 60, GROUND - 190, { colour, night: def.night, kinds: def.sky, seed: seed + 3, density: def.night ? 2.2 : 1 });
+  M.fillers(ctx, x0, x0 + CHUNK, 60, GROUND - 190, { colour, night: def.night, kinds: def.sky, seed: seed + 3, density: def.night ? 2.2 : 1.7 });
+  if (!def.night && look.sun !== false && def.ground !== 'floor' && index % 2 !== 0) M.sun(ctx, x0 + 330, 118, 24, { colour, lineFill: PAL.cream });
   if (def.moon && index % 2 === 0) M.moon(ctx, x0 + 760, 130, 34, { night: true });
   ctx.restore();
+  paintFar(ctx, def, look, x0, o, seed);
   paintBand(ctx, def, x0, o);
+  const skip = new Set(regrow && look.regrow ? look.regrow.map((r) => r[0]) : []);
   for (let li = 0; li < def.layers.length; li++) {
+    if (skip.has(li)) continue;
     const [kind, sp, yOff, size, lo] = def.layers[li];
     const off = lo.off || 0;
     const margin = size * 2.4 + 80;
@@ -176,14 +354,15 @@ function paintChunk(id, style, colour, index) {
       paintItem(ctx, kind, x, GROUND + (kind === 'cloud' ? yOff : yOff), size, k, o, lo);
     }
   }
+  paintExtras(ctx, look, x0, o, seed);
   paintGround(ctx, def, x0, o, seed);
   return cv;
 }
 
-export function backdropChunk(id, style, colour, index) {
-  const key = `${id}|${style}|${colour ? 1 : 0}|${index}`;
+export function backdropChunk(id, style, colour, index, regrow = false) {
+  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}`;
   let c = cache.get(key);
-  if (!c) { c = paintChunk(id, style, colour, index); cache.set(key, c); if (cache.size > 14) cache.delete(cache.keys().next().value); }
+  if (!c) { c = paintChunk(id, style, colour, index, regrow); cache.set(key, c); if (cache.size > 14) cache.delete(cache.keys().next().value); }
   return c;
 }
 
@@ -196,12 +375,12 @@ export function drawBackdrop(ctx, id, style, camX, W, o = {}) {
   const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK);
   for (let i = i0; i <= i1; i++) {
     const dx = i * CHUNK - camX;
-    ctx.drawImage(backdropChunk(id, style, !!o.colour, i), dx, 0, CHUNK + 0.5, 720);
+    ctx.drawImage(backdropChunk(id, style, !!o.colour, i, !!o.regrow), dx, 0, CHUNK + 0.5, 720);
     if (o.heal && !o.colour) {
       const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK);
       if (b > a) {
         ctx.save(); ctx.beginPath(); ctx.rect(a - camX, 0, b - a, 720); ctx.clip();
-        ctx.drawImage(backdropChunk(id, style, true, i), dx, 0, CHUNK + 0.5, 720);
+        ctx.drawImage(backdropChunk(id, style, true, i, !!o.regrow), dx, 0, CHUNK + 0.5, 720);
         ctx.restore();
       }
     }

@@ -14,6 +14,7 @@ import credits from '../data/credits.json';
 import motifs from '../data/motifs.json';
 import { CHAPTERS, nextChapter, allSeals, chapterById } from '../data/chapters.js';
 import { renderSheet } from './sheet.js';
+import { applyDevMode } from './devpanel.js';
 
 const go = {
   hub: (o) => import('../hub/hub.js').then((m) => m.openHub(o)),
@@ -67,7 +68,7 @@ export function openTitle() { setMode('title', new TitleMode()); }
 // ---------------------------------------------------------------- settings
 export function openSettings(o = {}) {
   const s = save.data.settings;
-  const commit = () => { save.commit(); applyVolumes(); document.documentElement.style.setProperty('--text', { normal: 1, large: 1.2, xl: 1.45 }[s.textSize] || 1); app.reducedMotion = s.reducedMotion; };
+  const commit = () => { save.commit(); applyVolumes(); document.documentElement.style.setProperty('--text', { normal: 1, large: 1.2, xl: 1.45 }[s.textSize] || 1); app.reducedMotion = s.reducedMotion; document.documentElement.classList.toggle('rm', !!s.reducedMotion); };
   const range = (key, label) => el('label', {}, label, el('input', { type: 'range', min: 0, max: 1, step: 0.05, value: s[key], 'aria-label': label, oninput: (e) => { s[key] = +e.target.value; commit(); } }));
   const check = (key, label) => el('label', {}, label, el('input', { type: 'checkbox', checked: s[key] ? 'checked' : false, onchange: (e) => { s[key] = e.target.checked; commit(); } }));
   const select = (key, label, opts, onChange) => { const sel = el('select', { 'aria-label': label, onchange: (e) => { s[key] = e.target.value; commit(); if (onChange) onChange(e.target.value); } }); for (const [v, l] of opts) { const op = el('option', { value: v }, l); if (s[key] === v) op.selected = true; sel.append(op); } return el('label', {}, label, sel); };
@@ -78,6 +79,7 @@ export function openSettings(o = {}) {
     range('music', t('set.music')), range('sfx', t('set.sfx')), check('muted', t('set.mute')),
     select('textSize', t('set.text'), [['normal', t('set.text.normal')], ['large', t('set.text.large')], ['xl', t('set.text.xl')]]),
     check('reducedMotion', t('set.motion')), check('leftHanded', t('set.left')), check('toggleDraw', t('set.toggleDraw')),
+    el('label', {}, t('set.dev'), el('input', { id: 'set-dev', type: 'checkbox', checked: s.devMode ? 'checked' : false, onchange: (e) => { s.devMode = e.target.checked; commit(); applyDevMode(); } })),
     el('label', {}, t('set.difficulty'), diffSel),
     el('label', {}, t('set.lanka'), (() => { const sel = el('select', { onchange: (e) => { s.lankaWoven = e.target.value === 'woven'; commit(); } }, el('option', { value: 'woven' }, t('set.lanka.woven')), el('option', { value: 'end' }, t('set.lanka.end'))); sel.value = s.lankaWoven === false ? 'end' : 'woven'; return sel; })()),
     langs.length > 1 ? select('lang', t('set.lang'), langs.map(([k, v]) => [k, v.name]), async (v) => { await loadLang(v); setDraftNote(isDraft()); openSettings(o); }) : null,

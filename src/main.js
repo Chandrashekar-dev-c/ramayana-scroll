@@ -7,13 +7,14 @@ import { app, resize, setMode } from './core/app.js';
 import { createLoop } from './core/loop.js';
 import { initInput, input, pollGamepad } from './core/input.js';
 import { save } from './core/save.js';
-import { loadLang, isDraft } from './core/i18n.js';
+import { loadLang, isDraft, t } from './core/i18n.js';
 import { bus } from './core/events.js';
 import { setSpriteScale, clearSprites } from './art/figures.js';
 import { clearBackdropCache } from './art/backdrops.js';
 import { clearFrameCache } from './art/borders.js';
-import { setLoading, hideLoading, showRotate, setDraftNote, panelOpen } from './ui/dom.js';
+import { setLoading, hideLoading, showRotate, setDraftNote, panelOpen, updateReady } from './ui/dom.js';
 import { openTitle } from './ui/screens.js';
+import { applyDevMode } from './ui/devpanel.js';
 
 async function boot() {
   const q = new URLSearchParams(location.search);
@@ -28,8 +29,10 @@ async function boot() {
   if (q.get('lang')) s.lang = q.get('lang');
   await loadLang(s.lang || 'en');
   setDraftNote(isDraft());
+  if (app.debug) save.data.settings.devMode = true;
   document.documentElement.style.setProperty('--text', { normal: 1, large: 1.2, xl: 1.45 }[s.textSize] || 1);
   app.reducedMotion = s.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.toggle('rm', !!s.reducedMotion);
   if (matchMedia('(prefers-reduced-motion: reduce)').matches && !save.seen('rm')) { s.reducedMotion = true; save.markSeen('rm'); }
   setLoading(0.4);
   try { await Promise.race([document.fonts.load('22px "Yatra One"'), new Promise((r) => setTimeout(r, 1200))]); await document.fonts.load('18px "Alegreya Sans"'); } catch { /* fonts are a nicety */ }
@@ -65,10 +68,16 @@ async function boot() {
   app.loop.start();
   setLoading(1);
   document.addEventListener('visibilitychange', () => { if (document.hidden) input.releaseAll(); });
-  if ('serviceWorker' in navigator && location.protocol === 'https:' && !app.debug) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol === 'https:' && !app.debug) {
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('./sw.js').then((reg) => { setInterval(() => reg.update().catch(() => {}), 30 * 60 * 1000); }).catch(() => {});
+    // the new worker activates itself; tell the player so they are never stuck on an old build
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) updateReady(t('update.ready'), t('update.reload')); });
+  }
   if (q.get('chapter')) { const m = await import('./scenes/runner.js'); m.startChapter(q.get('chapter')); }
   else if (q.has('hub')) { const m = await import('./hub/hub.js'); m.openHub(); }
   else openTitle();
+  applyDevMode();
   exposeTestHooks();
 }
 

@@ -249,7 +249,7 @@ function bow(b, r) {
     o.t += dt;
     if (o.crackT >= 0) { o.crackT += dt; if (o.crackT > 1.4) o.done = true; return; }
     const ph = phases[o.ph], h = held(), p = input.pointer;
-    if (ph === 'lift') { if (h) o.p += dt / 2.2; if (prop) prop.rot = -(o.p) * 1.4; if (actor) actor.pose = h ? 'carry' : 'hold'; }
+    if (ph === 'lift') { if (h) o.p += dt / 2.2; if (prop) prop.lift = o.p; if (actor) actor.pose = h ? 'carry' : 'hold'; }
     else if (ph === 'bend') {
       if (p.down) { if (o.drag0 == null) o.drag0 = p.y; o.p = Math.max(o.p, Math.min(1, Math.abs(p.y - o.drag0) / 160)); }
       else o.drag0 = null;
@@ -263,7 +263,7 @@ function bow(b, r) {
         o.done = true; if (actor) actor.pose = b.endPose || 'shoot'; cue('fullDraw'); return;
       }
     }
-    if (ph !== 'pull' && o.p >= 1) { o.ph++; o.p = 0; cue('chime'); if (prop && ph === 'lift') prop.rot = -1.4; }
+    if (ph !== 'pull' && o.p >= 1) { o.ph++; o.p = 0; cue('chime'); if (prop && ph === 'lift') prop.lift = 1; }
   };
   o.render = (ctx) => {
     const ph = phases[o.ph];

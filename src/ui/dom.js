@@ -36,7 +36,7 @@ export function showLine(who, text, o = {}) {
   say.classList.toggle('narr', !who);
   dlg.full = text; dlg.shown = 0; dlg.typing = true; dlg.el = say;
   say.textContent = '';
-  box.querySelector('.more').style.visibility = 'hidden';
+  const more = box.querySelector('.more'); more.style.visibility = 'hidden'; more.textContent = o.hint ? o.hint + ' ▸' : '▸';
 }
 export function tickLine(dt, speed) {
   if (!dlg.typing) return;
@@ -76,6 +76,15 @@ export function choose(prompt, options, o = {}) {
     kids.push(row);
     panel(kids, { cls: o.cls });
   });
+}
+
+export function showBusy(text) { const b = $('busy'); b.textContent = text; b.classList.remove('hidden'); }
+export function hideBusy() { $('busy').classList.add('hidden'); }
+
+/** A new build has taken over: offer a reload, never force one mid-chapter. */
+export function updateReady(text, label) {
+  const tEl = $('toast'); tEl.innerHTML = ''; tEl.append(el('span', {}, text + ' '), button(label, () => location.reload(), { main: true }));
+  tEl.classList.remove('hidden');
 }
 
 export function toast(text, dur = 2) {

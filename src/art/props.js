@@ -48,12 +48,35 @@ export function drawProp(ctx, name, x, y, o = {}) {
       // a long iron chest on eight wheels, carrying a great curved bow: clearly a bow
       S(rectPts(-190, -62, 380, 34), { fill: PAL.iron, pattern: P('stoneBlocks', PAL.black), gap: PAL.gold });
       for (let i = 0; i < 8; i++) { const wx = -168 + i * 48; S(ellipsePts(wx, -16, 16, 16, 10), { fill: PAL.brown, smooth: true, seed: i }); L([[wx - 12, -16], [wx + 12, -16]], { w: 1, seed: i }); L([[wx, -28], [wx, -4]], { w: 1, seed: i }); }
-      if (!o.state || o.state < 1) {
-        const arc = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + (i / 12) * Math.PI; arc.push([Math.cos(a) * 170, -66 + Math.sin(a) * 60]); }
-        line(ctx, arc, { w: 9, color: c, smooth: true, seed: 5, amp: 0.4 });
-        if (m === 'colour') line(ctx, arc, { w: 4, color: PAL.gold, smooth: true, seed: 5, amp: 0.4, flat: true });
-        L([[-170, -66], [170, -66]], { w: 1.2 });
-      }
+      // Pinaka, Shiva's bow: a long recurved bow with a wrapped grip, lying on the chest.
+      // o.lift (0..1) raises it upright; o.state 1 draws it broken in two.
+      const k = o.lift || 0;
+      const limb = (sign) => {
+        const top = [], bot = [];
+        for (let i = 0; i <= 14; i++) {
+          const u = i / 14, x = sign * u * 196;
+          const y = 34 * (1 - u * u) - (u > 0.86 ? (u - 0.86) * 120 : 0);
+          const w = 10 * (1 - 0.65 * u) + 1.5;
+          top.push([x, y - w]); bot.push([x, y + w]);
+        }
+        return top.concat(bot.reverse());
+      };
+      const drawBow = (broken) => {
+        if (!broken) L([[-196, -16.8], [196, -16.8]], { w: 1.6, flat: true });
+        for (const sg of [-1, 1]) {
+          ctx.save();
+          if (broken) { ctx.translate(sg * 14, 30); ctx.rotate(sg * 0.32); }
+          S(limb(sg), { fill: PAL.brown, gap: PAL.gold, smooth: false, seed: sg + 7 });
+          if (m === 'colour') for (let i = 1; i < 5; i++) dots(ctx, sg * i * 38, 34 * (1 - (i / 5) ** 2), 0, 1, PAL.turmeric, 1, 3.2);
+          if (broken) L([[sg * 2, 22], [sg * 8, 30], [sg * 1, 36], [sg * 7, 44]], { w: 2 });
+          ctx.restore();
+        }
+        if (!broken) { S(rectPts(-16, 20, 32, 28), { fill: PAL.gold, gap: PAL.madder, seed: 9 }); for (let i = -1; i <= 1; i++) L([[i * 9, 20], [i * 9, 48]], { w: 1.4, color: m === 'colour' ? PAL.madder : c, flat: true }); }
+      };
+      ctx.save();
+      ctx.translate(0, -100 - k * 150); ctx.rotate(-k * Math.PI / 2);
+      drawBow(o.state >= 1);
+      ctx.restore();
       break;
     }
     case 'boat': {

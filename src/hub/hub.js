@@ -137,6 +137,7 @@ class Hub {
   enter() {
     app.loop.setMenuFps(true);
     setMood('bala', 'calm');
+    const upcoming = nextChapter(); if (upcoming) import('../scenes/runner.js').then((m) => m.prefetchChapter(upcoming.id)).catch(() => {});
     touchControls(null);
     topbar([{ label: t('btn.journey'), on: () => this.toggleFit() }, { label: t('btn.menu'), on: () => openTitle() }]);
     const pending = save.data.pendingWash;

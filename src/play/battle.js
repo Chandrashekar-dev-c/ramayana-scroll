@@ -10,7 +10,7 @@ import { t } from '../core/i18n.js';
 import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK } from '../art/figures.js';
-import { drawBackdrop, isNight } from '../art/backdrops.js';
+import { drawBackdrop, drawNear, isNight, regrowList, drawGrowingTree } from '../art/backdrops.js';
 import { drawProp } from '../art/props.js';
 import { shape, line, hatch, ellipsePts, dots } from '../art/ink.js';
 import * as M from '../art/motifs.js';
@@ -58,6 +58,11 @@ export function createBattle(level, opts = {}) {
   if (!opts.checkpoint && level.title) b.banner = { title: t(level.title), sub: level.kandaTitle ? t(level.kandaTitle) : '', t: 2.4 };
   else if (opts.checkpoint) b.stepT = 0.6;
   installApi(b);
+  // trees that come back to life when the boss falls (Tataka's wasteland, the Dandaka forest...)
+  if (level.regrow) {
+    const lo = Math.min(...level.arenas.map((a) => a.left)) - 900, hi = Math.max(...level.arenas.map((a) => a.right)) + 900;
+    b.regrow = regrowList(level.backdrop, lo, hi).map((tr) => ({ ...tr, grow: 0, start: null, cued: false }));
+  }
   b.camX = b.hero.x - app.W * tuning.feel.heroScreenX;
   return b;
 }
@@ -71,6 +76,7 @@ function installApi(b) {
     for (const q of b.bosses) if (!q.dead && !q.dying && !q.hidden) yield { x: q.x, y: q.y, boss: q };
     for (const q of b.targets) if (!q.hit) yield { x: q.x, y: GROUND, practice: q };
   };
+  b.boxesOf = (e) => enemyBoxes(e); // for the hitbox view and the squint test
   b.headOf = (e) => {
     if (e.practice) return { x: e.practice.x, y: e.practice.y };
     if (e.boss) { const bx = bossBoxes(b, e.boss).find((x) => x.weak) || bossBoxes(b, e.boss)[0]; return { x: bx.x + bx.w / 2, y: bx.y + bx.h / 2 }; }
@@ -116,7 +122,7 @@ function installApi(b) {
   };
   b.hurtHero = (dmg, fromX, answer, kind) => {
     const h = b.hero;
-    if (h.dead || h.inv > 0 || b.outcome || b.healT >= 0) return;
+    if (h.dead || h.inv > 0 || b.outcome || b.healT >= 0 || (app.dev && app.dev.god)) return;
     if (h.rollInv > 0 && kind !== 'wave' && kind !== 'stomp' && kind !== 'charge') return;
     const amount = Math.max(1, Math.round(dmg * b.diff.damageTaken));
     h.hp -= amount; h.inv = b.tun.hero.hurtInvulnerable; h.hurtAnim = 0.3;
@@ -138,7 +144,7 @@ function installApi(b) {
   b.allyHurt = () => { if (b.protected && !b.outcome) { b.protected.hurt = true; b.allyHurtFlag = true; b.lose('lose.sita'); } };
   b.lose = (key) => { if (b.outcome) return; b.loseKey = key; b.loseDelay = 1.1; };
   b.requestAstra = (symbol, key, cb) => startAstra(b, symbol, key, cb, true);
-  b.onBossDown = () => {};
+  b.onBossDown = (boss) => { b.lastBossX = boss.x; };
   b.waveProgress = () => {
     const total = b.level.arenas.reduce((n, a) => n + a.steps.length, 0);
     let done = 0; for (let i = 0; i < b.arena; i++) done += b.level.arenas[i].steps.length;
@@ -261,8 +267,17 @@ function stepDone(b) {
 function finish(b) {
   b.objective = null; b.goRight = false; b.timer = null;
   for (const e of b.enemies) if (!e.dead && !e.dying) b.killEnemy(e, 'end');
+  b.healX = (b.lastBossX ?? b.hero.x) * b.zoom;
+  b.healSpeed = 760;
+  b.healDur = 3.2;
+  if (b.regrow) {
+    // life spreads outward from where the boss fell, one tree after another
+    let far = 0;
+    for (const tr of b.regrow) { tr.start = Math.abs(tr.x - b.healX) / b.healSpeed; if (tr.start < 3.4) far = Math.max(far, tr.start); }
+    b.healDur = Math.max(3.2, far + 1);
+  }
   if (b.level.heal) { b.healT = 0; bus.emit('cue', 'wash'); b.mood = null; }
-  b.ending = { lines: b.level.end || [], i: 0, t: b.level.heal ? -3.2 : -0.6 };
+  b.ending = { lines: b.level.end || [], i: 0, t: b.level.heal ? -b.healDur : -0.6 };
 }
 
 // ---------------------------------------------------------------- update
@@ -324,6 +339,11 @@ export function updateBattle(b, dt) {
   // the ending: land heals, last lines, then win
   if (b.ending) {
     if (b.healT >= 0) b.healT += dt;
+    if (b.regrow && b.healT >= 0) for (const tr of b.regrow) {
+      const k = (b.healT - tr.start) / 0.8;
+      tr.grow = Math.max(0, Math.min(1, k));
+      if (k > 0 && !tr.cued && tr.start < 3.4) { tr.cued = true; bus.emit('cue', 'grow'); }
+    }
     b.ending.t += dt;
     const e = b.ending;
     if (e.t >= 0) {
@@ -488,11 +508,12 @@ export function renderBattle(ctx, b) {
   if (b.shakeA > 0 && b.shakeT > 0) ctx.translate((b.rng.next() - 0.5) * b.shakeA * 2, (b.rng.next() - 0.5) * b.shakeA * 2);
   // the backdrop: line world, painted where it heals
   const style = b.level.style || 'kachni';
-  const done = b.healT >= 0 && b.healT > 3.2;
-  const heal = b.healT >= 0 ? { x: b.hero.x * z, r: b.healT * 900 } : null;
+  const done = b.healT >= 0 && b.healT > b.healDur;
+  const heal = b.healT >= 0 ? { x: b.healX, r: b.healT * b.healSpeed } : null;
   ctx.save();
   
-  drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal });
+  drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal, regrow: !!b.regrow });
+  if (b.regrow) { ctx.save(); ctx.translate(-b.camX * z, 0); const v0 = b.camX * z - 300, v1 = v0 + W + 600; for (const tr of b.regrow) if (tr.x > v0 && tr.x < v1) drawGrowingTree(ctx, tr, tr.grow); ctx.restore(); }
   ctx.restore();
   // dusk: hatching that thickens toward red-orange in phase 2
   if (b.mood === 'dusk') { ctx.save(); ctx.globalAlpha = 0.5; hatch(ctx, [[0, 0], [W, 0], [W, GROUND - 200], [0, GROUND - 200]], { color: PAL.terracotta, spacing: 16, angle: 0.4, w: 1.2 }); ctx.restore(); }
@@ -513,9 +534,20 @@ export function renderBattle(ctx, b) {
   for (const a of b.arrows) drawArrow(ctx, a);
   for (const s of b.shots) if (!(s.delay > 0)) drawShot(ctx, s);
   drawFx(ctx, b);
+  if (app.dev && app.dev.hitboxes) drawHitboxes(ctx, b);
   ctx.restore();
 
+  drawNear(ctx, b.level.backdrop, b.camX * z, W, { colour: done || b.level.painted, heal });
   drawHud(ctx, b);
+  ctx.restore();
+}
+
+function drawHitboxes(ctx, b) {
+  ctx.save(); ctx.lineWidth = 2;
+  const box = (q, c) => { ctx.strokeStyle = c; ctx.strokeRect(q.x, q.y, q.w, q.h); };
+  for (const e of b.enemies) if (!e.dead && !e.dying) { const bx = enemyBoxes(e); box(bx.body, '#0a0'); box(bx.head, '#f0f'); if (bx.banner) box(bx.banner, '#fa0'); }
+  for (const q of b.bosses) if (!q.dead) for (const bx of bossBoxes(b, q)) box(bx, bx.weak ? '#f0f' : '#0a0');
+  const h = b.hero; box({ x: h.x - 22, y: h.y - 150, w: 44, h: 150 }, '#00f');
   ctx.restore();
 }
 

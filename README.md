@@ -15,7 +15,16 @@ npm run dev        # http://localhost:5173  (?debug shows fps; ?chapter=tataka j
 npm run build      # rebuilds content, runs every check, bundles to dist/, reports size
 npm run preview    # serves dist/ on :4173
 npm run smoke      # plays every chapter in headless Chrome (needs preview running)
+npm run squint     # blurs each battle and checks every enemy still stands out (needs preview)
+npm test           # unit tests: save migration, seeded randomness, astra grading, content links
+npm run sheet      # the character design sheet (dev server only: it imports JSON directly)
 ```
+
+**Developer mode** (temporary, remove before release): Settings → Developer mode shows a DEV
+button with chapter jump, difficulty, game speed, god mode, hitboxes, frame rate, win battle,
+skip beat, mark all done, unlock all and erase progress. Hotkeys while on: ` panel, G god
+mode, H hitboxes, [ and ] speed. To remove it, delete `src/ui/devpanel.js`, the `set-dev`
+checkbox in `src/ui/screens.js` and the `applyDevMode` calls in `src/main.js`.
 
 `dist/` is a static site: copy it to any web host. It installs as a PWA and plays offline.
 
@@ -34,6 +43,14 @@ npm run smoke      # plays every chapter in headless Chrome (needs preview runni
 - **Event bus, seeded randomness, fixed 60 Hz step, versioned save with migrations,
   text keyed by stable ids.** No monkey-patching.
 
+## The land healing
+
+In Tataka's wasteland, the Yajna hermitage, Viradha's forest and Janasthana, the trees stay
+dead through the waves. When the boss falls, life spreads outward from where they fell, one
+tree at a time with a rising note, and the ground fills with colour behind it. Lanka, the
+golden deer and Vali's duel keep their own endings. The list is `REGROW` in
+`tools/build-content.mjs`; the trees are the `regrow` layers in `src/art/backdrops.js`.
+
 ## Content pipeline
 
 Chapter text and scripts are authored in `content/legacy/` (scripts, levels, chapter list,
@@ -50,6 +67,7 @@ Edit `content/`, not the generated files.
 | `tools/notes-check.mjs` | a chapter has no source entry (Valmiki reference, claim, later-tradition flag) |
 | `tools/size-report.mjs` | the shipped game exceeds 400 KB |
 | `tools/smoke-test.mjs` | any chapter fails to finish, any JS error, any failed request |
+| `tools/squint.mjs` | an enemy's darkest part is within 12% of the tone around it in a blurred frame |
 
 ## Open items for the owner
 

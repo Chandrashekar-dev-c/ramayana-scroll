@@ -18,6 +18,7 @@
   "jump": "tataka.lose.tip",
   "move": "tataka.lose.tip"
  },
+ "regrow": true,
  "allies": [
   {
    "id": "lakshmana",

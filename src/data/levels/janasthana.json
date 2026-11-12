@@ -10,6 +10,7 @@
  "tips": {
   "kick": "janasthana.tip"
  },
+ "regrow": true,
  "allies": [],
  "arenas": [
   {
@@ -185,5 +186,6 @@
  "kandaTitle": "kanda.aranya",
  "end": [
   "janasthana.end.1"
- ]
+ ],
+ "heal": true
 }

@@ -33,6 +33,7 @@ export function character(id, stage) {
 // arm: [shoulder, elbow bend]; leg: [thigh, knee bend].
 export const POSES = {
   stand: { armF: [8, 12], armB: [-8, -12], legF: [5, 0], legB: [-5, 0] },
+  stand2: { armF: [13, 20], armB: [-4, -18], legF: [6, 0], legB: [-4, 0], head: 3 },
   walk0: { armF: [28, 18], armB: [-26, -8], legF: [26, -4], legB: [-22, -16], y: 0 },
   walk1: { armF: [10, 14], armB: [-10, -12], legF: [6, 0], legB: [4, -42], y: -3 },
   walk2: { armF: [-22, 10], armB: [24, 16], legF: [-22, -16], legB: [26, -4], y: 0 },
@@ -139,12 +140,21 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
     const nx = (-dy / l), ny = dx / l;
     S([[a[0] + nx * t0, a[1] + ny * t0], [b[0] + nx * t1, b[1] + ny * t1], [b[0] + dx / l * t1 * 0.6, b[1] + dy / l * t1 * 0.6], [b[0] - nx * t1, b[1] - ny * t1], [a[0] - nx * t0, a[1] - ny * t0]], { fill, smooth: false, ...opt });
   };
+  const limbPoly = (a, j, e, t0, t1, t2, fill) => {
+    const n = (p, q) => { const dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+    const n0 = n(a, j), n2 = n(j, e), nj = [(n0[0] + n2[0]) / 2, (n0[1] + n2[1]) / 2];
+    const ln = Math.hypot(nj[0], nj[1]) || 1; nj[0] /= ln; nj[1] /= ln;
+    const d2 = [e[0] - j[0], e[1] - j[1]], l2 = Math.hypot(d2[0], d2[1]) || 1;
+    S([[a[0] + n0[0] * t0, a[1] + n0[1] * t0], [j[0] + nj[0] * t1, j[1] + nj[1] * t1], [e[0] + n2[0] * t2, e[1] + n2[1] * t2], [e[0] + (d2[0] / l2) * t2 * 0.7, e[1] + (d2[1] / l2) * t2 * 0.7], [e[0] - n2[0] * t2, e[1] - n2[1] * t2], [j[0] - nj[0] * t1, j[1] - nj[1] * t1], [a[0] - n0[0] * t0, a[1] - n0[1] * t0]], { fill, smooth: true });
+  };
   const bangle = (p, t, c = accent) => { if (mode === 'sil') return; S(ellipsePts(p[0], p[1], t * 1.25, t * 0.75, 8), { fill: mode === 'colour' ? c : null, gold: true, smooth: true }); };
   const drawArm = (arm, fur) => {
-    seg(arm[0], arm[1], armT, armT * 0.9, skin);
-    seg(arm[1], arm[2], armT * 0.9, armT * 0.72, skin);
-    if (spec.jewels !== 'none' && !fur) { bangle(arm[1], armT); bangle([arm[1][0] * 0.14 + arm[2][0] * 0.86, arm[1][1] * 0.14 + arm[2][1] * 0.86], armT * 0.8); }
-    else if (mode !== 'sil') L([[arm[1][0] - armT, arm[1][1]], [arm[1][0] + armT, arm[1][1]]], { w: lw * 0.6 });
+    limbPoly(arm[0], arm[1], arm[2], armT, armT * 0.88, armT * 0.72, skin);
+    // jewellery sits on the upper arm (keyur) and the wrist, never as a pivot on the elbow
+    const mid = [(arm[0][0] + arm[1][0] * 1.4) / 2.4, (arm[0][1] + arm[1][1] * 1.4) / 2.4];
+    const wrist = [arm[1][0] * 0.14 + arm[2][0] * 0.86, arm[1][1] * 0.14 + arm[2][1] * 0.86];
+    if (spec.jewels !== 'none' && !fur) { bangle(mid, armT * 0.95, PAL.gold); bangle(wrist, armT * 0.8); }
+    else if (spec.uttariya && mode !== 'sil') bangle(wrist, armT * 0.7, PAL.brown);
     if (sig.mark === 'armlets') bangle([(arm[0][0] + arm[1][0]) / 2, (arm[0][1] + arm[1][1]) / 2], armT * 1.5, PAL.gold);
     if (sig.mark === 'nails' && mode !== 'sil') for (let i = -1; i <= 1; i++) { const d = ang(arm[3] + i * 22); L([arm[2], [arm[2][0] + d[0] * U * 0.11, arm[2][1] + d[1] * U * 0.11]], { w: lw * 0.6 }); }
   };
@@ -182,8 +192,7 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
 
   // --- legs and lower garment
   const drawLeg = (leg) => {
-    seg(leg[0], leg[1], legT, legT * 0.92, skin);
-    seg(leg[1], leg[2], legT * 0.92, legT * 0.7, skin);
+    limbPoly(leg[0], leg[1], leg[2], legT, legT * 0.9, legT * 0.7, skin);
     const f = leg[2], fl = 0.085 * U;
     S([[f[0] - fl * 0.35, f[1] - fl * 0.2], [f[0] + fl, f[1] + fl * 0.12], [f[0] + fl * 0.9, f[1] + fl * 0.3], [f[0] - fl * 0.4, f[1] + fl * 0.3]], { fill: skin, smooth: false });
     if (spec.jewels === 'full' || female) bangle([f[0], f[1] - fl * 0.4], legT * 0.75);
@@ -209,9 +218,10 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
       for (let i = 1; i < 6; i++) { const k = i / 6; pts.push([b[0] + (a[0] - b[0]) * k, b[1] + (a[1] - b[1]) * k + (i % 2 ? -0.045 * U : 0.02 * U)]); }
       pts.push(a);
     }
-    const gcol = spec.garment === 'bark' ? PAL.earth : spec.garment === 'loin' || spec.garment === 'bare' ? accent : main;
+    const gcol = spec.garment === 'bark' ? PAL.ochre : spec.garment === 'loin' || spec.garment === 'bare' ? accent : main;
     const pcol = spec.garment === 'bark' ? PAL.brown : spec.garment === 'loin' || spec.garment === 'bare' ? main : accent;
-    S(pts, { fill: gcol, pattern: pat(spec.pattern, null, pcol), gap: mode === 'colour' ? pcol : null, hatchK: 0.7 });
+    S(pts, { fill: gcol, pattern: pat(spec.garment === 'bark' ? 'bark' : spec.pattern, null, pcol, spec.garment === 'bark' ? 0.9 : undefined), gap: mode === 'colour' ? (spec.garment === 'bark' && spec.uttariya ? col(spec.uttariya.border) : pcol) : null, hatchK: 0.7 });
+    if (spec.garment === 'bark' && mode !== 'sil') { const a = pts[0], b = pts[1]; L([[a[0], a[1] + 0.03 * U], [b[0], b[1] + 0.03 * U]], { w: lw * 1.6, color: mode === 'colour' ? (spec.uttariya ? col(spec.uttariya.border) : PAL.brown) : PAL.black }); }
     if (mode !== 'sil' && (spec.garment === 'sari' || spec.garment === 'royal' || spec.garment === 'dhoti' || spec.garment === 'robe')) {
       const a = pts[4], b = pts[2], m = pts[3];
       L([[a[0] + 2, a[1] - 0.045 * U], [m[0], m[1] - 0.045 * U], [b[0] - 2, b[1] - 0.045 * U]], { w: lw * 0.9, color: mode === 'colour' ? pcol : mode === 'kachni' ? PAL.terracotta : PAL.black });
@@ -237,7 +247,16 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
     if (sig.mark === 'garland') { const p = neckArc(nr * 1.6, PAL.leaf, lw * 0.8, 10); for (const q of p) dots(ctx, q[0], q[1], 0, 1, mode === 'colour' ? PAL.pink : PAL.black, 1, lw * 1.3); }
     if (sig.mark === 'bones') { const p = neckArc(nr * 1.3, PAL.black, lw * 0.6, 7); for (const q of p) S(ellipsePts(q[0], q[1], lw * 1.6, lw * 2.6, 6), { fill: PAL.white, smooth: true }); }
     if (sig.mark === 'brooch') { const c = up(sw * 0.4, -B.sh * U + 0.1 * U); S(ellipsePts(c[0], c[1], 0.045 * U, 0.045 * U, 8), { fill: PAL.gold, smooth: true, gold: true }); for (let i = 0; i < 4; i++) { const d = ang(i * 45); L([[c[0] - d[0] * 0.04 * U, c[1] - d[1] * 0.04 * U], [c[0] + d[0] * 0.04 * U, c[1] + d[1] * 0.04 * U]], { w: lw * 0.5 }); } }
-    if (spec.garment === 'bark' || spec.garment === 'royal') L([up(-sw * 0.9, -B.sh * U), up(ww * 0.9, hipY - 0.03 * U)], { w: lw * (spec.garment === 'royal' ? 2.4 : 1.2), color: mode === 'colour' ? (spec.garment === 'royal' ? accent : PAL.brown) : PAL.black });
+    if (spec.uttariya) {
+      const u = spec.uttariya, bw = 0.055 * U;
+      const p0 = up(-sw * 0.95, -B.sh * U - 0.01 * U), p1 = up(ww * 1.05, hipY - 0.03 * U);
+      const dx = p1[0] - p0[0], dy = p1[1] - p0[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l * bw, ny = dx / l * bw;
+      const band = [[p0[0] - nx, p0[1] - ny], [p1[0] - nx, p1[1] - ny], [p1[0] + nx * 1.4, p1[1] + ny * 1.4 + 0.04 * U], [p0[0] + nx, p0[1] + ny]];
+      S(band, { fill: col(u.main), pattern: pat(spec.pattern, null, col(u.border)), gap: mode === 'colour' ? col(u.border) : null, hatchK: 1.2 });
+      // the end falls behind the shoulder
+      const tail = [p0, [p0[0] - 0.07 * U, p0[1] + 0.05 * U], [p0[0] - 0.1 * U, p0[1] + 0.26 * U], [p0[0] - 0.03 * U, p0[1] + 0.24 * U]];
+      S(tail, { fill: col(u.main), gap: mode === 'colour' ? col(u.border) : null, smooth: true, hatchK: 1.2 });
+    } else if (spec.garment === 'bark' || spec.garment === 'royal') L([up(-sw * 0.9, -B.sh * U), up(ww * 0.9, hipY - 0.03 * U)], { w: lw * (spec.garment === 'royal' ? 2.4 : 1.2), color: mode === 'colour' ? (spec.garment === 'royal' ? accent : PAL.brown) : PAL.black });
     if (female && spec.garment === 'sari') L([up(sw * 0.9, -B.sh * U), up(-ww * 0.6, hipY - 0.1 * U), up(-ww, hipY)], { w: lw * 2, color: mode === 'colour' ? accent : mode === 'kachni' ? PAL.terracotta : PAL.black, smooth: true });
     void nk;
   }
@@ -359,6 +378,14 @@ function drawHead(ctx, spec, hc, r, rot, h) {
     case 'queenCrown': case 'pearlCrown': crownShape(0.7, 0.62, 3); if (mode !== 'sil' && crown === 'pearlCrown') for (let i = -2; i <= 2; i++) dots(ctx, i * r * 0.28, -r * 0.8, 0, 1, PAL.white, 1, r * 0.1); break;
     case 'spikeCrown': crownShape(1.3, 0.85, 5); break;
     case 'shellCrown': S(ellipsePts(0, -r * 1.3, r * 0.6, r * 0.5, 9), { fill: PAL.white, smooth: true }); L(ellipsePts(0, -r * 1.3, r * 0.3, r * 0.24, 8, 0, 5), { w: lw * 0.6, smooth: true }); break;
+    case 'tallJata': {
+      const j = mode === 'colour' ? PAL.black : PAL.black;
+      S(ellipsePts(-r * 0.08, -r * 1.12, r * 0.62, r * 0.32, 9), { fill: j, smooth: true });
+      S([[-r * 0.46, -r * 1.2], [-r * 0.34, -r * 2.0], [-r * 0.12, -r * 2.55], [r * 0.12, -r * 2.5], [r * 0.3, -r * 1.95], [r * 0.38, -r * 1.2]], { fill: j, smooth: true });
+      for (let i = 0; i < 3; i++) L([[-r * 0.34 + i * 0.04 * r, -r * (1.45 + i * 0.36)], [r * 0.3 - i * 0.05 * r, -r * (1.5 + i * 0.36)]], { w: lw * 0.9, color: mode === 'colour' ? PAL.ochre : PAL.black });
+      dots(ctx, 0, -r * 2.55, 0, 1, mode === 'colour' ? PAL.brown : PAL.black, 1, r * 0.13);
+      break;
+    }
     case 'jataKnot': S(ellipsePts(-r * 0.1, -r * 1.35, r * 0.48, r * 0.56, 9), { fill: PAL.black, smooth: true }); L([[-r * 0.5, -r * 0.98], [r * 0.3, -r * 0.98]], { w: lw * 1.1, color: mode === 'colour' ? PAL.earth : PAL.black }); break;
     case 'mattedCrown': S(ellipsePts(-r * 0.1, -r * 1.2, r * 0.7, r * 0.42, 9), { fill: PAL.black, smooth: true }); S(ellipsePts(-r * 0.1, -r * 1.7, r * 0.5, r * 0.36, 9), { fill: PAL.black, smooth: true }); S(ellipsePts(-r * 0.1, -r * 2.15, r * 0.3, r * 0.28, 8), { fill: PAL.black, smooth: true }); break;
     case 'topknot': S(ellipsePts(-r * 0.45, -r * 1.2, r * 0.32, r * 0.36, 8), { fill: hairCol, smooth: true }); break;

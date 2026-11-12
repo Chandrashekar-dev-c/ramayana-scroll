@@ -10,6 +10,7 @@
  "tips": {
   "roll": "viradha.tip"
  },
+ "regrow": true,
  "allies": [
   {
    "id": "lakshmana",
@@ -94,5 +95,6 @@
  "end": [
   "viradha.end.1",
   "viradha.end.2"
- ]
+ ],
+ "heal": true
 }

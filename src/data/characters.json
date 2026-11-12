@@ -30,10 +30,13 @@
     "jewels": "princely"
    },
    "exile": {
-    "headdress": "jataKnot",
+    "headdress": "tallJata",
     "garment": "bark",
-    "pattern": "lotusRow",
-    "jewels": "none"
+    "jewels": "none",
+    "uttariya": {
+     "main": "saffron",
+     "border": "indigo"
+    }
    },
    "king": {
     "headdress": "tallestCrown",
@@ -73,9 +76,13 @@
     "jewels": "princely"
    },
    "exile": {
-    "headdress": "jataKnot",
+    "headdress": "tallJata",
     "garment": "bark",
-    "jewels": "none"
+    "jewels": "none",
+    "uttariya": {
+     "main": "ochre",
+     "border": "leaf"
+    }
    },
    "king": {
     "headdress": "lowCrown",

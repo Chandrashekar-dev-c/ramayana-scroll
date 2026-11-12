@@ -223,9 +223,15 @@
  "name.boy": "The boy",
  "valiDuel.o1": "Wait. Shoot only Vali.",
  "__override": [
-  "stat.kills",
+  "hint.clickToContinue",
+  "hint.tapToContinue",
   "stat.headshots",
-  "stat.time",
-  "stat.hits"
- ]
+  "stat.hits",
+  "stat.kills",
+  "stat.time"
+ ],
+ "set.dev": "Developer mode",
+ "load.chapter": "Grinding the colours…",
+ "update.ready": "A new version of the scroll is ready.",
+ "update.reload": "Reload"
 }

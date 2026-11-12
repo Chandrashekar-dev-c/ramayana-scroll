@@ -20,6 +20,7 @@ const RAGAS = {
 };
 
 let ac = null, master = null, musicBus = null, sfxBus = null, droneNodes = [], noiseBuf = null;
+let growN = -1;
 let mood = { kanda: 'bala', intensity: 'calm' }, phraseT = null, started = false;
 
 const hz = (semi, oct = 0) => SA * Math.pow(2, semi / 12 + oct);
@@ -132,6 +133,7 @@ export const CUES = {
   thunder: () => { noise({ freq: 120, a: 0.02, dec: 1.6, peak: 0.6, type: 'lowpass' }); drum(50, { vol: 1, dec: 0.8 }); },
   fail: () => phrase([7, 5, 4, 1], 0.22, 0.12),
   coin: () => bell(hz(11, 2), { dec: 0.4, vol: 0.5 }),
+  grow: () => { growN = (growN + 1) % 8; const n = BHAIRAV[growN]; tone(hz(n, 1), { type: 'sine', a: 0.05, dec: 0.9, peak: 0.07, vib: 0.006 }); bell(hz(n, 2), { dec: 0.6, vol: 0.25 }); },
   win: () => { bell(hz(0, 2), { dec: 2 }); phrase([0, 4, 7, 8, 7, 11, 12], 0.2, 0.18); },
 };
 

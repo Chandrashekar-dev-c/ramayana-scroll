@@ -25,6 +25,7 @@ const scriptFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/l
 const levelFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/legacy/levels')).map((f) => { const d = L('levels/' + f); return [d.id, d]; }));
 const problems = [];
 
+const REGROW = new Set(['tataka', 'yajna', 'viradha', 'janasthana']);
 const CHAR_ALIAS = { young: 'youngAscetic' };
 const ch_ = (c) => CHAR_ALIAS[c] || c;
 const MOOD = (m) => (!m ? 'calm' : /battle|war/.test(m) ? 'battle' : /grief|dark|silence/.test(m) ? (m === 'silence' ? 'silent' : 'grief') : 'calm');
@@ -147,6 +148,8 @@ function convertInteract(kind, a, ctx) {
 // ---------------------------------------------------------------- levels
 function convertLevel(lv) {
   const out = { id: lv.id, backdrop: lv.backdrop, style: lv.style, hero: { id: lv.hero.id, stage: lv.hero.stage }, astras: !!lv.astras, shelves: lv.shelves, tips: lv.tips, practice: lv.id === 'sarayuTargets' || undefined };
+  // the land itself was dead because of this enemy: its trees come back when the boss falls
+  if (REGROW.has(lv.id)) { out.regrow = true; }
   out.allies = (lv.party || []).filter((p) => p.ai === 'archerSupport').map((p) => ({ id: p.id, stage: p.stage, fire: true }));
   const prot = (lv.party || []).find((p) => p.ai === 'protected');
   if (prot) { out.protected = { id: prot.id, stage: prot.stage, x: (lv.arenas[0].left + 140) }; out.gentle = 'ally'; }
@@ -173,6 +176,7 @@ function convertLevel(lv) {
       default: problems.push(`level ${lv.id}: unknown step ${st.type}`);
     }
   }
+  if (out.regrow) out.heal = true;
   // the yajna fire: rakshasas on foot go for the altar
   if (lv.protect) for (const a of out.arenas) for (const s of a.steps) if (s.wave) for (const g of s.groups) if (g.type !== 'flyer' && !g.target) g.target = 'protect';
   if (prot) for (const a of out.arenas) for (const s of a.steps) if (s.wave) s.groups.forEach((g, i) => { if (!g.target && i % 2 === 1 && g.type === 'grunt') g.target = 'ally'; });
