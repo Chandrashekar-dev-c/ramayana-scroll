@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><title>sheet</title><style>body{margin:0;background:#f2e4c3}</style></head>
+<body><canvas id="c"></canvas><script type="module">
+import { renderSheet } from '../src/ui/sheet.js';
+const q = new URLSearchParams(location.search);
+renderSheet(document.getElementById('c'), { mode: q.get('mode') || 'colour', pose: q.get('pose') || 'stand', set: q.get('set') || 'cast', size: +(q.get('size') || 1) });
+window.__done = true;
+</script></body></html>

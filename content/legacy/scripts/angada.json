@@ -1,0 +1,223 @@
+{
+ "id": "angada",
+ "backdrop": "camp",
+ "style": "bharni-earth",
+ "music": "vanara",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.3,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "angada",
+   "at": 0.56,
+   "face": -1
+  }
+ ],
+ "beats": [
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "angada.1"
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaCourt",
+   "clear": true,
+   "style": "kachni"
+  },
+  {
+   "do": "prop",
+   "id": "throne",
+   "name": "throne",
+   "at": 0.74
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "right",
+   "to": 0.74,
+   "time": 0.1,
+   "y": -70,
+   "mode": "kachni"
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "sit",
+   "face": -1
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "left",
+   "to": 0.3,
+   "time": 1.2
+  },
+  {
+   "do": "say",
+   "who": "angada",
+   "text": "angada.2"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "point"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "angada.3"
+  },
+  {
+   "do": "enter",
+   "who": "guard",
+   "side": "right",
+   "to": 0.44,
+   "time": 0.5,
+   "mode": "kachni"
+  },
+  {
+   "do": "enter",
+   "who": "guard2",
+   "side": "left",
+   "to": 0.18,
+   "as": "guard",
+   "time": 0.5,
+   "mode": "kachni"
+  },
+  {
+   "do": "narrate",
+   "text": "angada.4"
+  },
+  {
+   "do": "interact",
+   "kind": "holdRelease",
+   "args": {
+    "who": "angada",
+    "time": 1.1,
+    "pose": [
+     "crouch",
+     "crouch",
+     "crouch"
+    ],
+    "endPose": "jump",
+    "shake": 8,
+    "cue": "boulder",
+    "hint": "angada.5",
+    "ops": [
+     {
+      "do": "set",
+      "who": "guard",
+      "visible": false
+     },
+     {
+      "do": "set",
+      "who": "guard2",
+      "visible": false
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "angada.6"
+  },
+  {
+   "do": "choice",
+   "options": [
+    {
+     "text": "angada.7",
+     "goto": "foot"
+    },
+    {
+     "text": "angada.8",
+     "goto": "back"
+    }
+   ]
+  },
+  {
+   "label": "foot",
+   "do": "set",
+   "who": "angada",
+   "pose": "stand",
+   "y": 0
+  },
+  {
+   "do": "say",
+   "who": "angada",
+   "text": "angada.9"
+  },
+  {
+   "do": "enter",
+   "who": "guard",
+   "side": "right",
+   "to": 0.42,
+   "time": 0.6,
+   "mode": "kachni"
+  },
+  {
+   "do": "set",
+   "who": "guard",
+   "visible": true,
+   "pose": "swing0"
+  },
+  {
+   "do": "interact",
+   "kind": "mash",
+   "args": {
+    "who": "guard",
+    "need": 12,
+    "futile": 5,
+    "hint": "angada.10"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "angada.11"
+  },
+  {
+   "label": "back",
+   "do": "backdrop",
+   "id": "camp",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "right",
+   "to": 0.56,
+   "time": 1
+  },
+  {
+   "do": "say",
+   "who": "angada",
+   "text": "angada.12"
+  },
+  {
+   "do": "music",
+   "mood": "war"
+  },
+  {
+   "do": "sound",
+   "cue": "drum"
+  },
+  {
+   "do": "narrate",
+   "text": "angada.13"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

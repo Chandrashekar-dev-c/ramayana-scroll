@@ -1,0 +1,67 @@
+{
+ "id": "viradhaIntro",
+ "backdrop": "deepForest",
+ "style": "bharni-earth",
+ "music": "forest",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.4,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sita",
+   "at": 0.3,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.5,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sage",
+   "at": 0.74,
+   "face": -1
+  },
+  {
+   "id": "sage2",
+   "at": 0.84,
+   "face": -1,
+   "as": "atri",
+   "scale": 0.95
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "viradha.1"
+  },
+  {
+   "do": "say",
+   "who": "sage",
+   "text": "viradha.2"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "viradha.3"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "viradha.4"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "viradha.5"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

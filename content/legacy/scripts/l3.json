@@ -1,0 +1,188 @@
+{
+ "id": "l3",
+ "backdrop": "lankaCourt",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.3,
+   "face": 1,
+   "pose": "sit",
+   "y": -70
+  },
+  {
+   "id": "minister",
+   "at": 0.5,
+   "face": -1
+  },
+  {
+   "id": "kumbhakarna",
+   "at": 0.92,
+   "face": -1,
+   "scale": 0.5
+  },
+  {
+   "id": "vibhishana",
+   "at": 0.64,
+   "face": -1
+  },
+  {
+   "id": "indrajit",
+   "at": 0.76,
+   "face": -1
+  }
+ ],
+ "props": [
+  {
+   "id": "throne",
+   "name": "throne",
+   "at": 0.3
+  }
+ ],
+ "beats": [
+  {
+   "do": "title",
+   "text": "l3.1",
+   "sub": "l3.2"
+  },
+  {
+   "do": "narrate",
+   "text": "l3.3"
+  },
+  {
+   "do": "say",
+   "who": "minister",
+   "text": "l3.4"
+  },
+  {
+   "do": "say",
+   "who": "kumbhakarna",
+   "text": "l3.5"
+  },
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "l3.6"
+  },
+  {
+   "do": "heads",
+   "voices": [
+    "king",
+    "honour",
+    "pride",
+    "anger"
+   ],
+   "lines": {
+    "king": "l3.7",
+    "honour": "l3.8",
+    "pride": "l3.9",
+    "anger": "l3.10"
+   }
+  },
+  {
+   "do": "say",
+   "who": "indrajit",
+   "text": "l3.11"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "point"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l3.12"
+  },
+  {
+   "do": "pose",
+   "who": "vibhishana",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "l3.13"
+  },
+  {
+   "do": "move",
+   "who": "vibhishana",
+   "to": 0.64,
+   "time": 1.2,
+   "y": -260,
+   "keepFace": true
+  },
+  {
+   "do": "exit",
+   "who": "vibhishana",
+   "side": "right",
+   "y": -300
+  },
+  {
+   "do": "narrate",
+   "text": "l3.14"
+  },
+  {
+   "do": "backdrop",
+   "id": "camp",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "sugriva",
+   "side": "left",
+   "to": 0.16,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "vibhishana",
+   "side": "right",
+   "to": 0.66,
+   "time": 1.4,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "vibhishana",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "l3.15"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "l3.16"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "l3.17"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

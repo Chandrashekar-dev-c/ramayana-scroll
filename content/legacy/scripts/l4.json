@@ -1,0 +1,251 @@
+{
+ "id": "l4",
+ "backdrop": "lankaCourt",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.3,
+   "face": 1,
+   "pose": "sit",
+   "y": -70
+  },
+  {
+   "id": "malyavan",
+   "at": 0.6,
+   "face": -1
+  }
+ ],
+ "props": [
+  {
+   "id": "throne",
+   "name": "throne",
+   "at": 0.3
+  }
+ ],
+ "beats": [
+  {
+   "do": "title",
+   "text": "l4.1",
+   "sub": "l4.2"
+  },
+  {
+   "do": "say",
+   "who": "malyavan",
+   "text": "l4.3"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l4.4"
+  },
+  {
+   "do": "exit",
+   "who": "malyavan",
+   "side": "right"
+  },
+  {
+   "do": "backdrop",
+   "id": "battlefield",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "right",
+   "to": 0.7,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "face": -1,
+   "pose": "hurt"
+  },
+  {
+   "do": "prop",
+   "id": "wreck",
+   "name": "chariot",
+   "at": 0.82,
+   "broken": true,
+   "raw": true,
+   "dir": -1
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.26,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "pose": "shoot"
+  },
+  {
+   "do": "narrate",
+   "text": "l4.5"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "l4.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaCourt",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "throne",
+   "name": "throne",
+   "at": 0.3
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.3,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "stand",
+   "y": 0,
+   "face": 1
+  },
+  {
+   "do": "narrate",
+   "text": "l4.7"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l4.8"
+  },
+  {
+   "do": "backdrop",
+   "id": "cave",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "kumbhakarna",
+   "side": "right",
+   "to": 0.66,
+   "time": 0.1,
+   "scale": 0.62
+  },
+  {
+   "do": "set",
+   "who": "kumbhakarna",
+   "pose": "dead",
+   "rot": -1.5,
+   "y": -60
+  },
+  {
+   "do": "narrate",
+   "text": "l4.9"
+  },
+  {
+   "do": "interact",
+   "kind": "rhythm",
+   "args": {
+    "need": 6,
+    "streak": true,
+    "bpm": 92,
+    "icon": "drum",
+    "cue": "drum",
+    "hint": "l4.10"
+   }
+  },
+  {
+   "do": "set",
+   "who": "kumbhakarna",
+   "pose": "stand",
+   "rot": 0,
+   "y": 0
+  },
+  {
+   "do": "shake",
+   "amount": 8
+  },
+  {
+   "do": "sound",
+   "cue": "thunder"
+  },
+  {
+   "do": "narrate",
+   "text": "l4.11"
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaCourt",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "throne",
+   "name": "throne",
+   "at": 0.3
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.3,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "kumbhakarna",
+   "side": "right",
+   "to": 0.74,
+   "time": 1.4,
+   "scale": 0.62
+  },
+  {
+   "do": "say",
+   "who": "kumbhakarna",
+   "text": "l4.12"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l4.13"
+  },
+  {
+   "do": "say",
+   "who": "kumbhakarna",
+   "text": "l4.14"
+  },
+  {
+   "do": "heads",
+   "voices": [
+    "brother",
+    "pride",
+    "fear",
+    "father"
+   ],
+   "lines": {
+    "brother": "l4.15",
+    "pride": "l4.16",
+    "fear": "l4.17",
+    "father": "l4.18"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "l4.19"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

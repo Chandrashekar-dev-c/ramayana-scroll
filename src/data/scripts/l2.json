@@ -1,0 +1,112 @@
+[
+ {
+  "bg": "lanka",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 452,
+  "face": 1
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 809,
+  "face": -1,
+  "stage": "exile",
+  "mode": "colour"
+ },
+ {
+  "title": "l2.1",
+  "sub": "l2.2"
+ },
+ {
+  "narrate": true,
+  "k": "l2.3"
+ },
+ {
+  "pose": "ravana",
+  "p": "give"
+ },
+ {
+  "say": "ravana",
+  "k": "l2.4"
+ },
+ {
+  "prop": "grass",
+  "name": "grassBlade",
+  "x": 640
+ },
+ {
+  "narrate": true,
+  "k": "l2.5"
+ },
+ {
+  "say": "sita",
+  "k": "l2.6"
+ },
+ {
+  "pose": "ravana",
+  "p": "stand"
+ },
+ {
+  "heads": "l2",
+  "voices": [
+   "desire",
+   "honour",
+   "anger",
+   "king"
+  ],
+  "lines": {
+   "desire": "l2.7",
+   "honour": "l2.8",
+   "anger": "l2.9",
+   "king": "l2.10"
+  }
+ },
+ {
+  "narrate": true,
+  "k": "l2.11"
+ },
+ {
+  "say": "ravana",
+  "k": "l2.12"
+ },
+ {
+  "move": "sita",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "actor": "mandodari",
+  "char": "mandodari",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "mandodari",
+  "x": 264,
+  "speed": 402.8571428571429,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "l2.13"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,276 @@
+[
+ {
+  "bg": "sky",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 490,
+  "face": 1,
+  "stage": "exile",
+  "scale": 0.75,
+  "y": 298
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 565,
+  "face": 1,
+  "stage": "exile",
+  "scale": 0.75,
+  "y": 298
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 414,
+  "face": 1,
+  "stage": "exile",
+  "scale": 0.75,
+  "y": 298
+ },
+ {
+  "prop": "p",
+  "name": "pushpaka",
+  "x": 490,
+  "scale": 1.2,
+  "y": 378
+ },
+ {
+  "narrate": true,
+  "k": "lighting.1"
+ },
+ {
+  "do": "tap",
+  "k": "lighting.2",
+  "ordered": true,
+  "targets": [
+   {
+    "x": 847,
+    "y": 438,
+    "lab": "lighting.3",
+    "k": "lighting.4",
+    "icon": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 734,
+    "y": 488,
+    "lab": "lighting.5",
+    "k": "lighting.6",
+    "icon": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 884,
+    "y": 398,
+    "lab": "lighting.7",
+    "k": "lighting.8",
+    "icon": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 772,
+    "y": 458,
+    "lab": "lighting.9",
+    "k": "lighting.10",
+    "icon": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 922,
+    "y": 488,
+    "lab": "lighting.11",
+    "k": "lighting.12",
+    "icon": "place",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "nandigram"
+ },
+ {
+  "prop": "seat",
+  "name": "sandalsThrone",
+  "x": 358,
+  "state": 0
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 452,
+  "speed": 752,
+  "nowait": false
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 753,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "face": -1
+ },
+ {
+  "narrate": true,
+  "k": "lighting.13"
+ },
+ {
+  "say": "hanuman",
+  "k": "lighting.14"
+ },
+ {
+  "say": "bharata",
+  "k": "lighting.15"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "nandigram"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "scale": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 508,
+  "speed": 673.3333333333334,
+  "nowait": false
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "bharata",
+  "x": 734,
+  "speed": 846,
+  "nowait": false
+ },
+ {
+  "pose": "bharata",
+  "p": "carry"
+ },
+ {
+  "narrate": true,
+  "k": "lighting.16"
+ },
+ {
+  "pose": "bharata",
+  "p": "kneel"
+ },
+ {
+  "wait": 0.8
+ },
+ {
+  "pose": "bharata",
+  "p": "stand"
+ },
+ {
+  "move": "rama",
+  "x": 621,
+  "time": 0.8
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "say": "bharata",
+  "k": "lighting.17"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "cityNight"
+ },
+ {
+  "prop": "p",
+  "name": "pushpaka",
+  "x": 264,
+  "scale": 0.01,
+  "y": 148
+ },
+ {
+  "narrate": true,
+  "k": "lighting.18"
+ },
+ {
+  "do": "lamps",
+  "k": "ch39.obj",
+  "dur": 45
+ },
+ {
+  "bg": "cityNight"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

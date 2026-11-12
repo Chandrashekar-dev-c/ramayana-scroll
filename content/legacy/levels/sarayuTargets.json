@@ -1,0 +1,49 @@
+{
+ "id": "sarayuTargets",
+ "backdrop": "riverbank",
+ "style": "bharni-bright",
+ "music": "bala-morning",
+ "hero": {
+  "id": "rama",
+  "stage": "prince",
+  "start": 260
+ },
+ "arenas": [
+  {
+   "left": 0,
+   "right": 1500
+  }
+ ],
+ "steps": [
+  {
+   "type": "targets",
+   "objective": "sarayu.o1",
+   "targets": [
+    {
+     "kind": "pot",
+     "x": 760,
+     "y": 120
+    },
+    {
+     "kind": "mango",
+     "x": 900,
+     "y": 300
+    },
+    {
+     "kind": "lotus",
+     "x": 1000,
+     "y": 150,
+     "full": true,
+     "pair": true
+    },
+    {
+     "kind": "lotus",
+     "x": 1130,
+     "y": 150,
+     "full": true,
+     "pair": true
+    }
+   ]
+  }
+ ]
+}

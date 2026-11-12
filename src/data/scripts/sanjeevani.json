@@ -1,0 +1,257 @@
+[
+ {
+  "bg": "nightSky",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "narrate": true,
+  "k": "sanjeevani.1"
+ },
+ {
+  "trial": "flight",
+  "kind": "sanjeevani",
+  "calm": true,
+  "length": 3200,
+  "k": "ch36.north"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "mountain"
+ },
+ {
+  "prop": "peak",
+  "name": "herbPeak",
+  "x": 734,
+  "scale": 1.3
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 452,
+  "speed": 752,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "sanjeevani.2"
+ },
+ {
+  "do": "tap",
+  "k": "sanjeevani.3",
+  "targets": [
+   {
+    "x": 640,
+    "y": 428,
+    "k": "sanjeevani.4",
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 753,
+    "y": 328,
+    "k": "sanjeevani.5",
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 847,
+    "y": 448,
+    "k": "sanjeevani.6",
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "say": "hanuman",
+  "k": "sanjeevani.7"
+ },
+ {
+  "move": "hanuman",
+  "x": 734,
+  "time": 0.8
+ },
+ {
+  "pose": "hanuman",
+  "p": "carry"
+ },
+ {
+  "do": "hold",
+  "fx": "lift",
+  "prop": "peak",
+  "dur": 2.6,
+  "k": "sanjeevani.8",
+  "to": 1.6,
+  "lift": 190,
+  "lines": []
+ },
+ {
+  "shake": 8
+ },
+ {
+  "cue": "thunder"
+ },
+ {
+  "unprop": [
+   "peak"
+  ]
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "nightSky"
+ },
+ {
+  "trial": "flight",
+  "kind": "sanjeevani",
+  "dawn": 48,
+  "length": 6400,
+  "k": "ch36.obj"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "tamasa"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "prop": "peak",
+  "name": "herbPeak",
+  "x": 358,
+  "scale": 0.8
+ },
+ {
+  "actor": "sushena",
+  "char": "sushena",
+  "x": 790,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sushena",
+  "char": "sushena",
+  "pose": "give",
+  "face": -1
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 678,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "dead",
+  "rot": 1.45,
+  "y": 508
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 565,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "pose": "kneel"
+ },
+ {
+  "narrate": true,
+  "k": "sanjeevani.9"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "stand",
+  "rot": 0,
+  "y": 548
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "narrate": true,
+  "k": "sanjeevani.10"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "move": "rama",
+  "x": 621,
+  "time": 0.6
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "say": "rama",
+  "k": "sanjeevani.11"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

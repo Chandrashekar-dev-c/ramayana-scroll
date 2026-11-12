@@ -1,0 +1,233 @@
+{
+ "id": "boat",
+ "backdrop": "riverbank",
+ "style": "bharni-earth",
+ "music": "forest",
+ "cast": [
+  {
+   "id": "guha",
+   "at": 0.72,
+   "face": -1
+  },
+  {
+   "id": "rama",
+   "at": 0.34,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sita",
+   "at": 0.24,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.14,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "boat.1"
+  },
+  {
+   "do": "pose",
+   "who": "guha",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "guha",
+   "text": "boat.2"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "boat.3"
+  },
+  {
+   "do": "pose",
+   "who": "guha",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "tamasa",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "bed",
+   "name": "grassBed",
+   "at": 0.3
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.26,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "pose": "sit"
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.36,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "sita",
+   "pose": "sit"
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "right",
+   "to": 0.62,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "guha",
+   "side": "right",
+   "to": 0.76,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "guha",
+   "face": -1
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "face": -1
+  },
+  {
+   "do": "narrate",
+   "text": "boat.4"
+  },
+  {
+   "do": "say",
+   "who": "guha",
+   "text": "boat.5"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "boat.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "riverbank",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.2,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.1,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sumantra",
+   "side": "right",
+   "to": 0.74,
+   "time": 0.6
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "boat.7"
+  },
+  {
+   "do": "exit",
+   "who": "sumantra",
+   "side": "right"
+  },
+  {
+   "do": "narrate",
+   "text": "boat.8"
+  },
+  {
+   "do": "interact",
+   "kind": "boat",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "forest",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.5,
+   "stage": "exile",
+   "time": 1.4,
+   "async": true
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.38,
+   "stage": "exile",
+   "time": 1.6,
+   "async": true
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.62,
+   "stage": "exile",
+   "time": 1.2
+  },
+  {
+   "do": "narrate",
+   "text": "boat.9"
+  },
+  {
+   "do": "backdrop",
+   "id": "riverbank"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

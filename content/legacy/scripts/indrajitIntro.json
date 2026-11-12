@@ -1,0 +1,154 @@
+{
+ "id": "indrajitIntro",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.36,
+   "face": 1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour",
+   "pose": "grieve"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.5,
+   "face": 1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour",
+   "pose": "grieve"
+  }
+ ],
+ "props": [
+  {
+   "id": "cc",
+   "name": "cloudChariot",
+   "at": 0.76,
+   "y": -360,
+   "raw": true
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "indrajit.1"
+  },
+  {
+   "do": "prop",
+   "id": "n1",
+   "name": "naga",
+   "at": 0.36,
+   "raw": true
+  },
+  {
+   "do": "prop",
+   "id": "n2",
+   "name": "naga",
+   "at": 0.5,
+   "raw": true,
+   "dir": -1
+  },
+  {
+   "do": "sound",
+   "cue": "coilHiss"
+  },
+  {
+   "do": "narrate",
+   "text": "indrajit.2"
+  },
+  {
+   "do": "enter",
+   "who": "garuda",
+   "side": "right",
+   "to": 0.62,
+   "time": 1.2,
+   "colour": true,
+   "y": -120
+  },
+  {
+   "do": "prop",
+   "id": "n1",
+   "remove": true
+  },
+  {
+   "do": "prop",
+   "id": "n2",
+   "remove": true
+  },
+  {
+   "do": "prop",
+   "id": "cc",
+   "remove": true
+  },
+  {
+   "do": "shake",
+   "amount": 5
+  },
+  {
+   "do": "sound",
+   "cue": "wingBeat"
+  },
+  {
+   "do": "narrate",
+   "text": "indrajit.3"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "camp",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "vibhishana",
+   "side": "right",
+   "to": 0.66,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.36,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.2,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "indrajit.4"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "indrajit.5"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

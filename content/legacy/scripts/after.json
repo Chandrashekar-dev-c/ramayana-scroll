@@ -1,0 +1,185 @@
+{
+ "id": "after",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "grief",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.76,
+   "face": -1,
+   "pose": "dead",
+   "rot": -1.45,
+   "y": -60,
+   "mode": "line"
+  },
+  {
+   "id": "vibhishana",
+   "at": 0.6,
+   "face": 1,
+   "pose": "grieve",
+   "colour": true,
+   "mode": "colour"
+  },
+  {
+   "id": "rama",
+   "at": 0.2,
+   "face": 1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour"
+  }
+ ],
+ "beats": [
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "after.1"
+  },
+  {
+   "do": "enter",
+   "who": "mandodari",
+   "side": "left",
+   "to": 0.06,
+   "time": 0.8,
+   "colour": true
+  },
+  {
+   "do": "interact",
+   "kind": "walkTo",
+   "args": {
+    "who": "mandodari",
+    "to": 0.66,
+    "speed": 80,
+    "hint": "after.2"
+   }
+  },
+  {
+   "do": "pose",
+   "who": "mandodari",
+   "pose": "kneel"
+  },
+  {
+   "do": "say",
+   "who": "mandodari",
+   "text": "after.3"
+  },
+  {
+   "do": "narrate",
+   "text": "after.4"
+  },
+  {
+   "do": "pose",
+   "who": "vibhishana",
+   "pose": "stand"
+  },
+  {
+   "do": "set",
+   "who": "vibhishana",
+   "face": -1
+  },
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "after.5"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "after.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "lanka",
+   "clear": true,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "vibhishana",
+   "side": "left",
+   "to": 0.5,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.34,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "give"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "after.7"
+  },
+  {
+   "do": "backdrop",
+   "id": "grove",
+   "clear": true,
+   "colour": true
+  },
+  {
+   "do": "prop",
+   "id": "tree",
+   "name": "shimshapa",
+   "at": 0.6,
+   "raw": true,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "right",
+   "to": 0.6,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.36,
+   "time": 1.2,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "namaste"
+  },
+  {
+   "do": "music",
+   "mood": "home"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "after.8"
+  },
+  {
+   "do": "narrate",
+   "text": "after.9"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "after.10"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

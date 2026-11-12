@@ -1,0 +1,64 @@
+{
+ "id": "jewels",
+ "backdrop": "sky",
+ "style": "bharni-earth",
+ "music": "dark",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.3,
+   "face": 1,
+   "y": -280,
+   "scale": 0.6,
+   "mode": "kachni"
+  },
+  {
+   "id": "sita",
+   "at": 0.4,
+   "face": 1,
+   "stage": "exile",
+   "y": -280,
+   "scale": 0.75
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "jewels.1"
+  },
+  {
+   "do": "narrate",
+   "text": "jewels.2"
+  },
+  {
+   "do": "interact",
+   "kind": "drop",
+   "args": {}
+  },
+  {
+   "do": "narrate",
+   "text": "jewels.3"
+  },
+  {
+   "do": "backdrop",
+   "id": "ocean",
+   "clear": true
+  },
+  {
+   "do": "narrate",
+   "text": "jewels.4"
+  },
+  {
+   "do": "backdrop",
+   "id": "lanka",
+   "clear": true
+  },
+  {
+   "do": "narrate",
+   "text": "jewels.5"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

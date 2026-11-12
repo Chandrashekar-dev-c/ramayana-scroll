@@ -1,0 +1,208 @@
+[
+ {
+  "bg": "lankaNight",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 546,
+  "face": 1
+ },
+ {
+  "title": "l6.1",
+  "sub": "l6.2"
+ },
+ {
+  "narrate": true,
+  "k": "l6.3"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "hermitage"
+ },
+ {
+  "prop": "fire",
+  "name": "fireRite",
+  "x": 734,
+  "state": 0.6
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 546,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "kneel"
+ },
+ {
+  "narrate": true,
+  "k": "l6.4",
+  "top": true
+ },
+ {
+  "say": "_",
+  "nk": "l6.5",
+  "k": "l6.6"
+ },
+ {
+  "say": "ravana",
+  "k": "l6.7"
+ },
+ {
+  "narrate": true,
+  "k": "l6.8",
+  "top": true
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kailash"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 602,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "grieve"
+ },
+ {
+  "narrate": true,
+  "k": "l6.9",
+  "top": true
+ },
+ {
+  "narrate": true,
+  "k": "l6.10",
+  "top": true
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaNight"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 546,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "stand"
+ },
+ {
+  "narrate": true,
+  "k": "l6.11"
+ },
+ {
+  "heads": "l6",
+  "do": "heads",
+  "mode": "silence",
+  "lines": {
+   "scholar": "l6.12",
+   "devotee": "l6.13",
+   "brother": "l6.14",
+   "father": "l6.15",
+   "honour": "l6.16",
+   "fear": "l6.17",
+   "anger": "l6.18",
+   "desire": "l6.19",
+   "pride": "l6.20",
+   "king": "l6.21"
+  },
+  "silent": "l6.silent"
+ },
+ {
+  "actor": "mandodari",
+  "char": "mandodari",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "mandodari",
+  "x": 790,
+  "speed": 564.2857142857143,
+  "nowait": false
+ },
+ {
+  "say": "mandodari",
+  "k": "l6.22"
+ },
+ {
+  "move": "ravana",
+  "x": 696,
+  "time": 1.2
+ },
+ {
+  "pose": "ravana",
+  "p": "give"
+ },
+ {
+  "narrate": true,
+  "k": "l6.23"
+ },
+ {
+  "move": "ravana",
+  "x": -320,
+  "speed": 450,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "narrate": true,
+  "k": "l6.24"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,260 @@
+[
+ {
+  "bg": "panchavati",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 358,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "prop": "hut",
+  "name": "hut",
+  "x": 696,
+  "colour": false,
+  "scale": 0.9
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 1580,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 546,
+  "speed": 1034,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "hut.1"
+ },
+ {
+  "say": "rama",
+  "k": "hut.2"
+ },
+ {
+  "say": "lakshmana",
+  "k": "hut.3"
+ },
+ {
+  "narrate": true,
+  "k": "hut.4"
+ },
+ {
+  "do": "tap",
+  "k": "hut.5",
+  "targets": [
+   {
+    "x": 696,
+    "y": 488,
+    "lab": "hut.6",
+    "k": "hut.7",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 490,
+    "y": 518,
+    "lab": "hut.8",
+    "k": "hut.9",
+    "icon": "flower",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 922,
+    "y": 508,
+    "lab": "hut.10",
+    "k": "hut.11",
+    "icon": "ornament",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "pose": "rama",
+  "p": "raise"
+ },
+ {
+  "say": "rama",
+  "k": "hut.12"
+ },
+ {
+  "pose": "rama",
+  "p": "draw2"
+ },
+ {
+  "shake": 4
+ },
+ {
+  "say": "rama",
+  "k": "hut.13"
+ },
+ {
+  "move": "lakshmana",
+  "x": 471,
+  "time": 0.6
+ },
+ {
+  "pose": "lakshmana",
+  "p": "namaste"
+ },
+ {
+  "say": "lakshmana",
+  "k": "hut.14"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "forest"
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "x": 790,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "pose": "grieve"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 546,
+  "speed": 846,
+  "nowait": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 414,
+  "speed": 595,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "hut.15"
+ },
+ {
+  "say": "jatayu",
+  "k": "hut.16"
+ },
+ {
+  "pose": "rama",
+  "p": "kneel"
+ },
+ {
+  "move": "rama",
+  "x": 696,
+  "time": 1
+ },
+ {
+  "narrate": true,
+  "k": "hut.17"
+ },
+ {
+  "say": "rama",
+  "k": "hut.18"
+ },
+ {
+  "prop": "pyre",
+  "name": "pyre",
+  "x": 866,
+  "state": 0
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "hidden": true
+ },
+ {
+  "do": "tap",
+  "k": "hut.19",
+  "ordered": true,
+  "targets": [
+   {
+    "x": 866,
+    "y": 478,
+    "lab": "hut.20",
+    "icon": "flower",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 866,
+    "y": 528,
+    "lab": "hut.21",
+    "cue": "fireWhoosh",
+    "then": [
+     {
+      "prop": "pyre",
+      "name": "pyre",
+      "x": 866,
+      "state": 1
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "hut.22"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

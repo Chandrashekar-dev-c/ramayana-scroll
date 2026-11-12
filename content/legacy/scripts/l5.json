@@ -1,0 +1,124 @@
+{
+ "id": "l5",
+ "backdrop": "lankaCourt",
+ "style": "kachni",
+ "music": "silence",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.4,
+   "face": 1
+  }
+ ],
+ "props": [
+  {
+   "id": "bow",
+   "name": "bow",
+   "at": 0.56,
+   "raw": true
+  }
+ ],
+ "beats": [
+  {
+   "do": "title",
+   "text": "l5.1",
+   "sub": "l5.2"
+  },
+  {
+   "do": "narrate",
+   "text": "l5.3"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.48,
+   "time": 1.6
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "give"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "visual": "lamp",
+    "at": 0.7,
+    "time": 10,
+    "hint": "l5.4",
+    "noMeter": true,
+    "cue": "bellSoft",
+    "texts": [
+     "l5.5",
+     "l5.6",
+     "l5.7",
+     "l5.8"
+    ]
+   }
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "swing0"
+  },
+  {
+   "do": "music",
+   "mood": "dark"
+  },
+  {
+   "do": "shake",
+   "amount": 4
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l5.9"
+  },
+  {
+   "do": "enter",
+   "who": "minister",
+   "side": "right",
+   "to": 0.74,
+   "time": 0.8
+  },
+  {
+   "do": "pose",
+   "who": "minister",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "minister",
+   "text": "l5.10"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "stand"
+  },
+  {
+   "do": "heads",
+   "voices": [
+    "anger",
+    "father"
+   ],
+   "lines": {
+    "anger": "l5.11",
+    "father": "l5.12"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "l5.13"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l5.14"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

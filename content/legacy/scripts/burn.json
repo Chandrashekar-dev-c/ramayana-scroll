@@ -1,0 +1,261 @@
+{
+ "id": "burn",
+ "backdrop": "lanka",
+ "style": "kachni",
+ "music": "flight",
+ "cast": [
+  {
+   "id": "hanuman",
+   "at": 0.4,
+   "face": 1,
+   "colour": true,
+   "mode": "colour"
+  },
+  {
+   "id": "guard",
+   "at": 0.6,
+   "face": -1
+  },
+  {
+   "id": "guard2",
+   "at": 0.24,
+   "face": 1,
+   "as": "guard"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "burn.1"
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "scale": 0.4
+  },
+  {
+   "do": "wait",
+   "time": 0.5
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "jump"
+  },
+  {
+   "do": "narrate",
+   "text": "burn.2"
+  },
+  {
+   "do": "interact",
+   "kind": "burn",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaRoofs",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.5,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "pose": "hurt"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "burn.3"
+  },
+  {
+   "do": "narrate",
+   "text": "burn.4"
+  },
+  {
+   "do": "backdrop",
+   "id": "ocean",
+   "clear": true
+  },
+  {
+   "do": "narrate",
+   "text": "burn.5"
+  },
+  {
+   "do": "backdrop",
+   "id": "forest",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "vanara"
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "left",
+   "to": 0.3,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.44,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "vanara",
+   "side": "left",
+   "to": 0.62,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "vanara2",
+   "side": "left",
+   "to": 0.76,
+   "as": "vanara",
+   "time": 0.1,
+   "scale": 0.9
+  },
+  {
+   "do": "narrate",
+   "text": "burn.6"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "burn.7",
+    "spots": [
+     {
+      "at": 0.5,
+      "y": 260,
+      "icon": "honey",
+      "vanish": true,
+      "cue": "place"
+     },
+     {
+      "at": 0.66,
+      "y": 300,
+      "icon": "honey",
+      "vanish": true,
+      "cue": "place"
+     },
+     {
+      "at": 0.8,
+      "y": 250,
+      "icon": "honey",
+      "vanish": true,
+      "cue": "place"
+     },
+     {
+      "at": 0.9,
+      "y": 310,
+      "icon": "honey",
+      "vanish": true,
+      "cue": "place"
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "burn.8"
+  },
+  {
+   "do": "backdrop",
+   "id": "kishkindha",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "right",
+   "to": 0.66,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "face": -1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.36,
+   "time": 1,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "burn.9"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "give"
+  },
+  {
+   "do": "narrate",
+   "text": "burn.10"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "burn.11"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.46,
+   "time": 0.8
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "narrate",
+   "text": "burn.12"
+  },
+  {
+   "do": "backdrop",
+   "id": "lanka"
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "visible": false
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "visible": false
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

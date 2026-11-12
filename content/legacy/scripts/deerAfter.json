@@ -1,0 +1,69 @@
+{
+ "id": "deerAfter",
+ "backdrop": "deepForest",
+ "style": "bharni-earth",
+ "music": "silence",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.3,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "maricha",
+   "at": 0.7,
+   "face": -1,
+   "pose": "grieve"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "deer.5"
+  },
+  {
+   "do": "say",
+   "who": "maricha",
+   "text": "deer.6",
+   "name": "name.maricha"
+  },
+  {
+   "do": "shake",
+   "amount": 3
+  },
+  {
+   "do": "sound",
+   "cue": "fail"
+  },
+  {
+   "do": "narrate",
+   "text": "deer.7"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "hurt"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "deer.8"
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "face": -1,
+   "pose": "stand"
+  },
+  {
+   "do": "exit",
+   "who": "rama",
+   "side": "left",
+   "time": 0.8
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

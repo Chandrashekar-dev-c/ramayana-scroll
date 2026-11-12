@@ -1,0 +1,263 @@
+{
+ "id": "ashoka",
+ "backdrop": "grove",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "sita",
+   "at": 0.56,
+   "face": -1,
+   "stage": "exile",
+   "pose": "sit",
+   "colour": true,
+   "mode": "colour"
+  },
+  {
+   "id": "rakshasi",
+   "at": 0.76,
+   "face": -1
+  },
+  {
+   "id": "trijata",
+   "at": 0.9,
+   "face": -1,
+   "pose": "sit"
+  }
+ ],
+ "props": [
+  {
+   "id": "tree",
+   "name": "shimshapa",
+   "at": 0.56,
+   "raw": true
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "ashoka.1"
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.22,
+   "time": 1.6
+  },
+  {
+   "do": "enter",
+   "who": "mandodari",
+   "side": "left",
+   "to": 0.08,
+   "time": 1.8
+  },
+  {
+   "do": "narrate",
+   "text": "ashoka.2"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "stand"
+  },
+  {
+   "do": "interact",
+   "kind": "resolve",
+   "args": {
+    "from": "ravana",
+    "threats": [
+     "ashoka.3",
+     "ashoka.4",
+     "ashoka.5"
+    ],
+    "ops": [
+     {
+      "do": "prop",
+      "id": "grass",
+      "name": "grassBlade",
+      "at": 0.4
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "ashoka.6",
+   "name": "name.sita"
+  },
+  {
+   "do": "exit",
+   "who": "ravana",
+   "side": "left",
+   "async": true
+  },
+  {
+   "do": "exit",
+   "who": "mandodari",
+   "side": "left"
+  },
+  {
+   "do": "move",
+   "who": "rakshasi",
+   "to": 0.68,
+   "time": 0.6
+  },
+  {
+   "do": "pose",
+   "who": "rakshasi",
+   "pose": "swing0"
+  },
+  {
+   "do": "say",
+   "who": "rakshasi",
+   "text": "ashoka.7"
+  },
+  {
+   "do": "pose",
+   "who": "trijata",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "trijata",
+   "text": "ashoka.8"
+  },
+  {
+   "do": "pose",
+   "who": "rakshasi",
+   "pose": "stand"
+  },
+  {
+   "do": "move",
+   "who": "rakshasi",
+   "to": 0.94,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "sit"
+  },
+  {
+   "do": "narrate",
+   "text": "ashoka.9"
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.36,
+   "time": 1.2,
+   "scale": 0.6,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "namaste"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "ashoka.10"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "ashoka.11"
+  },
+  {
+   "do": "prop",
+   "id": "ring",
+   "name": "ring",
+   "at": 0.46,
+   "y": -110,
+   "raw": true,
+   "front": true,
+   "colour": true
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "ashoka.12",
+    "spots": [
+     {
+      "at": 0.46,
+      "y": 124,
+      "cue": "bell",
+      "ops": [
+       {
+        "do": "wash"
+       },
+       {
+        "do": "prop",
+        "id": "ring",
+        "remove": true
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "ashoka.13"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "ashoka.14"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "ashoka.15"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "give"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "ashoka.16",
+    "spots": [
+     {
+      "who": "sita",
+      "y": 150,
+      "icon": "ornament",
+      "cue": "chime"
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "ashoka.17"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "ashoka.18"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

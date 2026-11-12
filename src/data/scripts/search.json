@@ -1,0 +1,415 @@
+[
+ {
+  "bg": "cave",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 546,
+  "face": 1,
+  "stage": "exile",
+  "pose": "sit"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 696,
+  "face": -1,
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "search.1"
+ },
+ {
+  "do": "hold",
+  "fx": "seasons",
+  "dur": 8,
+  "k": "search.2",
+  "to": 1.6,
+  "lines": [
+   {
+    "at": 0.2,
+    "k": "search.3"
+   },
+   {
+    "at": 0.4,
+    "k": "search.4"
+   },
+   {
+    "at": 0.6,
+    "k": "search.5"
+   },
+   {
+    "at": 0.8,
+    "k": "search.6"
+   }
+  ],
+  "cue": "bell"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "tara",
+  "char": "tara",
+  "x": 790,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 452,
+  "speed": 940,
+  "nowait": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "draw1"
+ },
+ {
+  "narrate": true,
+  "k": "search.7"
+ },
+ {
+  "say": "tara",
+  "k": "search.8"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 358,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 734,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 866,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "jambavan",
+  "char": "jambavan",
+  "x": 997,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "search.9"
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "prop": "ring",
+  "name": "ring",
+  "x": 621,
+  "front": true,
+  "y": 428
+ },
+ {
+  "say": "rama",
+  "k": "search.10"
+ },
+ {
+  "unprop": [
+   "ring"
+  ]
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "hanuman",
+  "p": "namaste"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "cave"
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 358,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 471,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "jambavan",
+  "char": "jambavan",
+  "x": 264,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "search.11"
+ },
+ {
+  "do": "tap",
+  "k": "search.12",
+  "ordered": true,
+  "targets": [
+   {
+    "x": 584,
+    "y": 408,
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 696,
+    "y": 288,
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 809,
+    "y": 388,
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 922,
+    "y": 308,
+    "icon": "herb",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "actor": "svayamprabha",
+  "char": "svayamprabha",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "svayamprabha",
+  "x": 960,
+  "speed": 620,
+  "nowait": false
+ },
+ {
+  "say": "svayamprabha",
+  "k": "search.13"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "shore"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 452,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 584,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "jambavan",
+  "char": "jambavan",
+  "x": 320,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "pose": "sit"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "pose": "sit"
+ },
+ {
+  "narrate": true,
+  "k": "search.14"
+ },
+ {
+  "say": "angada",
+  "k": "search.15"
+ },
+ {
+  "actor": "sampati",
+  "char": "sampati",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sampati",
+  "x": 903,
+  "speed": 423.125,
+  "nowait": false
+ },
+ {
+  "say": "_",
+  "nk": "search.16",
+  "k": "search.17"
+ },
+ {
+  "say": "sampati",
+  "k": "search.18"
+ },
+ {
+  "pose": "angada",
+  "p": "stand"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "say": "angada",
+  "k": "search.19"
+ },
+ {
+  "say": "jambavan",
+  "k": "search.20"
+ },
+ {
+  "pose": "hanuman",
+  "p": "stand"
+ },
+ {
+  "do": "hold",
+  "fx": "grow",
+  "actor": "hanuman",
+  "dur": 3.2,
+  "k": "search.21",
+  "to": 2.4,
+  "lines": []
+ },
+ {
+  "say": "hanuman",
+  "k": "search.22"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

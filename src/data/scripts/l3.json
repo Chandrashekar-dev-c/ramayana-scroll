@@ -1,0 +1,195 @@
+[
+ {
+  "bg": "lankaCourt",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 452,
+  "face": 1,
+  "pose": "sit",
+  "y": 478
+ },
+ {
+  "actor": "minister",
+  "char": "minister",
+  "x": 640,
+  "face": -1
+ },
+ {
+  "actor": "kumbhakarna",
+  "char": "kumbhakarna",
+  "x": 1035,
+  "face": -1,
+  "scale": 0.5
+ },
+ {
+  "actor": "vibhishana",
+  "char": "vibhishana",
+  "x": 772,
+  "face": -1
+ },
+ {
+  "actor": "indrajit",
+  "char": "indrajit",
+  "x": 884,
+  "face": -1
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 452
+ },
+ {
+  "title": "l3.1",
+  "sub": "l3.2"
+ },
+ {
+  "narrate": true,
+  "k": "l3.3"
+ },
+ {
+  "say": "minister",
+  "k": "l3.4"
+ },
+ {
+  "say": "kumbhakarna",
+  "k": "l3.5"
+ },
+ {
+  "say": "vibhishana",
+  "k": "l3.6"
+ },
+ {
+  "heads": "l3",
+  "voices": [
+   "king",
+   "honour",
+   "pride",
+   "anger"
+  ],
+  "lines": {
+   "king": "l3.7",
+   "honour": "l3.8",
+   "pride": "l3.9",
+   "anger": "l3.10"
+  }
+ },
+ {
+  "say": "indrajit",
+  "k": "l3.11"
+ },
+ {
+  "pose": "ravana",
+  "p": "point"
+ },
+ {
+  "say": "ravana",
+  "k": "l3.12"
+ },
+ {
+  "pose": "vibhishana",
+  "p": "namaste"
+ },
+ {
+  "say": "vibhishana",
+  "k": "l3.13"
+ },
+ {
+  "move": "vibhishana",
+  "x": 772,
+  "time": 1.2,
+  "keepFace": true,
+  "y": 288
+ },
+ {
+  "move": "vibhishana",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "narrate": true,
+  "k": "l3.14"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "camp"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 320,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "vibhishana",
+  "char": "vibhishana",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "vibhishana",
+  "x": 790,
+  "speed": 564.2857142857143,
+  "nowait": false
+ },
+ {
+  "pose": "vibhishana",
+  "p": "namaste"
+ },
+ {
+  "say": "sugriva",
+  "k": "l3.15"
+ },
+ {
+  "say": "rama",
+  "k": "l3.16"
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "narrate": true,
+  "k": "l3.17"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

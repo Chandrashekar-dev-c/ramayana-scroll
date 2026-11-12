@@ -1,0 +1,169 @@
+[
+ {
+  "bg": "court",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 602,
+  "face": 1,
+  "stage": "king",
+  "pose": "sit",
+  "y": 492
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 696,
+  "face": 1,
+  "stage": "queen"
+ },
+ {
+  "actor": "vasishtha",
+  "char": "vasishtha",
+  "x": 490,
+  "face": 1
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 396,
+  "face": 1,
+  "stage": "king"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 302,
+  "face": 1
+ },
+ {
+  "actor": "shatrughna",
+  "char": "shatrughna",
+  "x": 226,
+  "face": 1
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 828,
+  "face": -1,
+  "pose": "kneel"
+ },
+ {
+  "actor": "kaushalya",
+  "char": "kaushalya",
+  "x": 922,
+  "face": -1
+ },
+ {
+  "actor": "sumitra",
+  "char": "sumitra",
+  "x": 988,
+  "face": -1
+ },
+ {
+  "actor": "kaikeyi",
+  "char": "kaikeyi",
+  "x": 1054,
+  "face": -1
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 602
+ },
+ {
+  "bg": "court",
+  "colour": true
+ },
+ {
+  "narrate": true,
+  "k": "coronation.1"
+ },
+ {
+  "pose": "vasishtha",
+  "p": "raise"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "wait": 1
+ },
+ {
+  "pose": "vasishtha",
+  "p": "stand"
+ },
+ {
+  "narrate": true,
+  "k": "coronation.2"
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "narrate": true,
+  "k": "coronation.3"
+ },
+ {
+  "say": "rama",
+  "k": "coronation.4"
+ },
+ {
+  "do": "tap",
+  "k": "coronation.5",
+  "targets": [
+   {
+    "actor": "hanuman",
+    "y": 438,
+    "icon": "ornament",
+    "cue": "bell",
+    "then": [
+     {
+      "pose": "sita",
+      "p": "give"
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "pose": "sita",
+  "p": "stand"
+ },
+ {
+  "pose": "rama",
+  "p": "sit"
+ },
+ {
+  "narrate": true,
+  "k": "coronation.6"
+ },
+ {
+  "narrate": true,
+  "k": "coronation.7"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "title": "coronation.8",
+  "sub": "coronation.9"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,162 @@
+{
+ "id": "night",
+ "backdrop": "lankaNight",
+ "style": "kachni",
+ "music": "lanka-night",
+ "cast": [
+  {
+   "id": "hanuman",
+   "at": 0.2,
+   "face": 1,
+   "scale": 0.5,
+   "colour": true,
+   "mode": "colour"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "night.1"
+  },
+  {
+   "do": "enter",
+   "who": "lankini",
+   "side": "right",
+   "to": 0.66,
+   "time": 1.2
+  },
+  {
+   "do": "say",
+   "who": "lankini",
+   "text": "night.2"
+  },
+  {
+   "do": "move",
+   "who": "hanuman",
+   "to": 0.54,
+   "time": 0.6
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "night.3",
+    "spots": [
+     {
+      "who": "lankini",
+      "y": 100,
+      "cue": "thud",
+      "ops": [
+       {
+        "do": "pose",
+        "who": "lankini",
+        "pose": "grieve"
+       },
+       {
+        "do": "pose",
+        "who": "hanuman",
+        "pose": "kick"
+       },
+       {
+        "do": "shake",
+        "amount": 4
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "lankini",
+   "text": "night.4"
+  },
+  {
+   "do": "set",
+   "who": "lankini",
+   "visible": false
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "stand"
+  },
+  {
+   "do": "interact",
+   "kind": "stealth",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaCourt",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "bed",
+   "name": "bed",
+   "at": 0.6
+  },
+  {
+   "do": "enter",
+   "who": "mandodari",
+   "side": "right",
+   "to": 0.6,
+   "time": 0.1,
+   "y": -30
+  },
+  {
+   "do": "set",
+   "who": "mandodari",
+   "pose": "sit"
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.2,
+   "time": 1,
+   "scale": 0.5,
+   "colour": true
+  },
+  {
+   "do": "narrate",
+   "text": "night.5"
+  },
+  {
+   "do": "narrate",
+   "text": "night.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaNight",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.4,
+   "time": 1,
+   "scale": 0.5,
+   "colour": true
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "pose": "sit"
+  },
+  {
+   "do": "narrate",
+   "text": "night.7"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "night.8"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

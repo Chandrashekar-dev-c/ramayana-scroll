@@ -1,0 +1,190 @@
+[
+ {
+  "bg": "lankaNight",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 358,
+  "face": 1,
+  "mode": "colour",
+  "scale": 0.5
+ },
+ {
+  "narrate": true,
+  "k": "night.1"
+ },
+ {
+  "actor": "lankini",
+  "char": "lankini",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lankini",
+  "x": 790,
+  "speed": 658.3333333333334,
+  "nowait": false
+ },
+ {
+  "say": "lankini",
+  "k": "night.2"
+ },
+ {
+  "move": "hanuman",
+  "x": 678,
+  "time": 0.6
+ },
+ {
+  "do": "tap",
+  "k": "night.3",
+  "targets": [
+   {
+    "actor": "lankini",
+    "y": 448,
+    "cue": "thud",
+    "then": [
+     {
+      "pose": "lankini",
+      "p": "grieve"
+     },
+     {
+      "pose": "hanuman",
+      "p": "kick"
+     },
+     {
+      "shake": 4
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "say": "lankini",
+  "k": "night.4"
+ },
+ {
+  "actor": "lankini",
+  "char": "lankini",
+  "hidden": true
+ },
+ {
+  "pose": "hanuman",
+  "p": "stand"
+ },
+ {
+  "trial": "stealth",
+  "k": "ch27.obj",
+  "par": 75
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaCourt"
+ },
+ {
+  "prop": "bed",
+  "name": "bed",
+  "x": 734
+ },
+ {
+  "actor": "mandodari",
+  "char": "mandodari",
+  "x": 734,
+  "face": -1,
+  "y": 518,
+  "hidden": false
+ },
+ {
+  "actor": "mandodari",
+  "char": "mandodari",
+  "pose": "sit"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "scale": 0.5,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 358,
+  "speed": 658,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "night.5"
+ },
+ {
+  "narrate": true,
+  "k": "night.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaNight"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "scale": 0.5,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 546,
+  "speed": 846,
+  "nowait": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "pose": "sit"
+ },
+ {
+  "narrate": true,
+  "k": "night.7"
+ },
+ {
+  "say": "hanuman",
+  "k": "night.8"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

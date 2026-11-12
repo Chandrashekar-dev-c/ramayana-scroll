@@ -1,0 +1,196 @@
+[
+ {
+  "bg": "shore",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile",
+  "pose": "sit"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 339,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "bridge.1"
+ },
+ {
+  "narrate": true,
+  "k": "bridge.2"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "say": "rama",
+  "k": "bridge.3"
+ },
+ {
+  "do": "charge",
+  "actor": "rama",
+  "dur": 1.6,
+  "poses": [
+   "draw1",
+   "draw2",
+   "draw2"
+  ],
+  "endPose": "draw2",
+  "shake": 7,
+  "cue": "thunder",
+  "k": "bridge.4",
+  "after": []
+ },
+ {
+  "actor": "ocean",
+  "char": "ocean",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "ocean",
+  "x": 828,
+  "speed": 470,
+  "nowait": false
+ },
+ {
+  "pose": "ocean",
+  "p": "namaste"
+ },
+ {
+  "narrate": true,
+  "k": "bridge.5"
+ },
+ {
+  "say": "ocean",
+  "k": "bridge.6"
+ },
+ {
+  "say": "rama",
+  "k": "bridge.7"
+ },
+ {
+  "say": "ocean",
+  "k": "bridge.8"
+ },
+ {
+  "pose": "rama",
+  "p": "shoot"
+ },
+ {
+  "cue": "shootFull"
+ },
+ {
+  "wait": 0.5
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "move": "ocean",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "actor": "nala",
+  "char": "nala",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "nala",
+  "x": 565,
+  "speed": 865,
+  "nowait": false
+ },
+ {
+  "prop": "bridge",
+  "name": "bridge",
+  "x": 584,
+  "state": 0,
+  "width": 620
+ },
+ {
+  "say": "nala",
+  "k": "bridge.9"
+ },
+ {
+  "do": "rhythm",
+  "k": "bridge.10",
+  "need": 14,
+  "bpm": 84,
+  "fx": "bridge",
+  "prop": "bridge",
+  "actor": "nala",
+  "strict": false,
+  "kinds": [
+   "drum",
+   "drumHigh",
+   "drum",
+   "drumHigh"
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "bridge.11"
+ },
+ {
+  "choice": [
+   {
+    "k": "bridge.12",
+    "goto": "sq"
+   },
+   {
+    "k": "bridge.13",
+    "goto": "cross"
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "bridge.14",
+  "label": "sq"
+ },
+ {
+  "narrate": true,
+  "k": "bridge.15"
+ },
+ {
+  "mood": "battle",
+  "label": "cross"
+ },
+ {
+  "narrate": true,
+  "k": "bridge.16"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

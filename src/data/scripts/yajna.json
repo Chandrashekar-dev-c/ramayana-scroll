@@ -1,0 +1,162 @@
+[
+ {
+  "bg": "ashram",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": 772,
+  "face": -1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 546,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 414,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "narrate": true,
+  "k": "yajna.1"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "yajna.2"
+ },
+ {
+  "pose": "rama",
+  "p": "kneel"
+ },
+ {
+  "pose": "vishvamitra",
+  "p": "raise"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "narrate": true,
+  "k": "yajna.3"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "yajna.4"
+ },
+ {
+  "do": "trace",
+  "k": "hint.trace",
+  "cx": 546,
+  "cy": 248,
+  "rx": 110,
+  "ry": 110,
+  "symbol": "sun"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "yajna.5"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "vishvamitra",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "ashram"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "vishvamitra",
+  "x": 734,
+  "speed": 689.3333333333334,
+  "nowait": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 490,
+  "speed": 526.6666666666666,
+  "nowait": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 377,
+  "speed": 451.3333333333333,
+  "nowait": false
+ },
+ {
+  "prop": "altar",
+  "name": "altar",
+  "x": 884,
+  "state": 0.3
+ },
+ {
+  "narrate": true,
+  "k": "yajna.6"
+ },
+ {
+  "say": "lakshmana",
+  "k": "yajna.7"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ },
+ {
+  "battle": "yajna"
+ },
+ {
+  "noop": true,
+  "label": "__seg2"
+ }
+]

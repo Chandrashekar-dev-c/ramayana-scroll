@@ -1,0 +1,173 @@
+{
+ "id": "l6",
+ "backdrop": "lankaNight",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.4,
+   "face": 1
+  }
+ ],
+ "beats": [
+  {
+   "do": "title",
+   "text": "l6.1",
+   "sub": "l6.2"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.3"
+  },
+  {
+   "do": "backdrop",
+   "id": "hermitage",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "fire",
+   "name": "fireRite",
+   "at": 0.6,
+   "state": 0.6
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.4,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "kneel"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.4",
+   "top": true
+  },
+  {
+   "do": "say",
+   "who": "_",
+   "name": "l6.5",
+   "text": "l6.6"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l6.7"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.8",
+   "top": true
+  },
+  {
+   "do": "backdrop",
+   "id": "kailash",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.46,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "grieve"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.9",
+   "top": true
+  },
+  {
+   "do": "narrate",
+   "text": "l6.10",
+   "top": true
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaNight",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.4,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "stand"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.11"
+  },
+  {
+   "do": "headsSilence",
+   "silent": "l6.silent",
+   "lines": {
+    "scholar": "l6.12",
+    "devotee": "l6.13",
+    "brother": "l6.14",
+    "father": "l6.15",
+    "honour": "l6.16",
+    "fear": "l6.17",
+    "anger": "l6.18",
+    "desire": "l6.19",
+    "pride": "l6.20",
+    "king": "l6.21"
+   }
+  },
+  {
+   "do": "enter",
+   "who": "mandodari",
+   "side": "right",
+   "to": 0.66,
+   "time": 1.4
+  },
+  {
+   "do": "say",
+   "who": "mandodari",
+   "text": "l6.22"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.56,
+   "time": 1.2
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "give"
+  },
+  {
+   "do": "narrate",
+   "text": "l6.23"
+  },
+  {
+   "do": "exit",
+   "who": "ravana",
+   "side": "left",
+   "time": 2
+  },
+  {
+   "do": "narrate",
+   "text": "l6.24"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

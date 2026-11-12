@@ -1,0 +1,22 @@
+{
+  "name": "ramayana-scroll",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ramayana Scroll — inspired by Madhubani art, after Valmiki",
+  "scripts": {
+    "dev": "vite",
+    "content": "node tools/build-content.mjs",
+    "check": "node tools/build-content.mjs && node tools/validate-data.mjs && node tools/i18n-check.mjs && node tools/notes-check.mjs",
+    "build": "npm run check && vite build && node tools/size-report.mjs",
+    "preview": "vite preview --port 4173 --strictPort",
+    "test": "node --test tests/",
+    "smoke": "node tools/smoke-test.mjs",
+    "squint": "node tools/squint.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/alegreya-sans": "^5.0.0",
+    "@fontsource/yatra-one": "^5.0.0",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,318 @@
+[
+ {
+  "bg": "deepForest",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 546,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 452,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 640,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sage",
+  "char": "sage",
+  "x": 866,
+  "face": -1
+ },
+ {
+  "actor": "sage2",
+  "char": "atri",
+  "x": 960,
+  "face": -1,
+  "scale": 0.95
+ },
+ {
+  "narrate": true,
+  "k": "viradha.1"
+ },
+ {
+  "say": "sage",
+  "k": "viradha.2"
+ },
+ {
+  "say": "rama",
+  "k": "viradha.3"
+ },
+ {
+  "say": "sita",
+  "k": "viradha.4"
+ },
+ {
+  "say": "rama",
+  "k": "viradha.5"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ },
+ {
+  "battle": "viradha"
+ },
+ {
+  "noop": true,
+  "label": "__seg2"
+ },
+ {
+  "bg": "hermitage",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "sharabhanga",
+  "char": "sharabhanga",
+  "x": 828,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 490,
+  "speed": 790,
+  "nowait": false
+ },
+ {
+  "prop": "fire",
+  "name": "altar",
+  "x": 960,
+  "scale": 0.7
+ },
+ {
+  "narrate": true,
+  "k": "viradha.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "ashram"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 358,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 565,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "viradha.7"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "hermitage"
+ },
+ {
+  "actor": "agastya",
+  "char": "agastya",
+  "x": 790,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 527,
+  "speed": 827,
+  "nowait": false
+ },
+ {
+  "pose": "agastya",
+  "p": "give"
+ },
+ {
+  "say": "agastya",
+  "k": "viradha.8"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "panchavati"
+ },
+ {
+  "prop": "hut",
+  "name": "hut",
+  "x": 790,
+  "scale": 0.85
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 659,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 452,
+  "speed": 752,
+  "nowait": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sita",
+  "x": 358,
+  "speed": 548.3333333333334,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "viradha.9"
+ },
+ {
+  "say": "rama",
+  "k": "viradha.10"
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "jatayu",
+  "x": 978,
+  "speed": 376.25,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "viradha.11"
+ },
+ {
+  "do": "tap",
+  "k": "viradha.12",
+  "targets": [
+   {
+    "actor": "jatayu",
+    "y": 458,
+    "cue": "chime",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "say": "jatayu",
+  "k": "viradha.13"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg3"
+ },
+ {
+  "noop": true,
+  "label": "__seg3"
+ }
+]

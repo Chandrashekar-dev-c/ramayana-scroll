@@ -1,0 +1,299 @@
+[
+ {
+  "bg": "lanka",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 546,
+  "face": 1,
+  "mode": "colour"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "x": 734,
+  "face": -1
+ },
+ {
+  "actor": "guard2",
+  "char": "guard",
+  "x": 396,
+  "face": 1
+ },
+ {
+  "narrate": true,
+  "k": "burn.1"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "scale": 0.4
+ },
+ {
+  "wait": 0.5
+ },
+ {
+  "pose": "hanuman",
+  "p": "jump"
+ },
+ {
+  "narrate": true,
+  "k": "burn.2"
+ },
+ {
+  "trial": "rooftops",
+  "k": "ch30.obj",
+  "par": 80
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaRoofs"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 640,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "pose": "hurt"
+ },
+ {
+  "say": "hanuman",
+  "k": "burn.3"
+ },
+ {
+  "narrate": true,
+  "k": "burn.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "ocean"
+ },
+ {
+  "narrate": true,
+  "k": "burn.5"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "forest"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 452,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 584,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "vanara",
+  "char": "vanara",
+  "x": 753,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "vanara2",
+  "char": "vanara",
+  "x": 884,
+  "face": 1,
+  "scale": 0.9,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "burn.6"
+ },
+ {
+  "do": "tap",
+  "k": "burn.7",
+  "targets": [
+   {
+    "x": 640,
+    "y": 288,
+    "icon": "honey",
+    "cue": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 790,
+    "y": 248,
+    "icon": "honey",
+    "cue": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 922,
+    "y": 298,
+    "icon": "honey",
+    "cue": "place",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 1016,
+    "y": 238,
+    "icon": "honey",
+    "cue": "place",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "burn.8"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 790,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "face": -1
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 508,
+  "speed": 808,
+  "nowait": false
+ },
+ {
+  "pose": "hanuman",
+  "p": "namaste"
+ },
+ {
+  "say": "hanuman",
+  "k": "burn.9"
+ },
+ {
+  "pose": "hanuman",
+  "p": "give"
+ },
+ {
+  "narrate": true,
+  "k": "burn.10"
+ },
+ {
+  "say": "rama",
+  "k": "burn.11"
+ },
+ {
+  "move": "rama",
+  "x": 602,
+  "time": 0.8
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "narrate": true,
+  "k": "burn.12"
+ },
+ {
+  "bg": "lanka"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "hidden": true
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "hidden": true
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

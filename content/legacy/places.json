@@ -1,0 +1,302 @@
+[
+ {
+  "id": "ayodhya",
+  "name": "place.ayodhya",
+  "sub": "place.ayodhya.sub",
+  "tier": "bala",
+  "x": 260,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "city"
+ },
+ {
+  "id": "sarayu",
+  "name": "place.sarayu",
+  "sub": "place.sarayu.sub",
+  "tier": "bala",
+  "x": 680,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "river"
+ },
+ {
+  "id": "tatakaWaste",
+  "name": "place.tatakaWaste",
+  "sub": "place.tatakaWaste.sub",
+  "tier": "bala",
+  "x": 1100,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "waste"
+ },
+ {
+  "id": "siddhashrama",
+  "name": "place.siddhashrama",
+  "sub": "place.siddhashrama.sub",
+  "tier": "bala",
+  "x": 1520,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "hut"
+ },
+ {
+  "id": "gautamaAshram",
+  "name": "place.gautamaAshram",
+  "sub": "place.gautamaAshram.sub",
+  "tier": "bala",
+  "x": 1940,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "grove"
+ },
+ {
+  "id": "mithila",
+  "name": "place.mithila",
+  "sub": "place.mithila.sub",
+  "tier": "bala",
+  "x": 2360,
+  "y": 196,
+  "labelSide": "below",
+  "icon": "palace"
+ },
+ {
+  "id": "palace",
+  "name": "place.palace",
+  "sub": "place.palace.sub",
+  "tier": "ayodhya",
+  "x": 2300,
+  "y": 466,
+  "labelSide": "below",
+  "icon": "palace"
+ },
+ {
+  "id": "tamasa",
+  "name": "place.tamasa",
+  "sub": "place.tamasa.sub",
+  "tier": "ayodhya",
+  "x": 1700,
+  "y": 466,
+  "labelSide": "below",
+  "icon": "river"
+ },
+ {
+  "id": "shringaverapura",
+  "name": "place.shringaverapura",
+  "sub": "place.shringaverapura.sub",
+  "tier": "ayodhya",
+  "x": 1100,
+  "y": 466,
+  "labelSide": "below",
+  "icon": "river"
+ },
+ {
+  "id": "chitrakuta",
+  "name": "place.chitrakuta",
+  "sub": "place.chitrakuta.sub",
+  "tier": "ayodhya",
+  "x": 500,
+  "y": 466,
+  "labelSide": "below",
+  "icon": "hill"
+ },
+ {
+  "id": "dandaka",
+  "name": "place.dandaka",
+  "sub": "place.dandaka.sub",
+  "tier": "aranya",
+  "x": 300,
+  "y": 736,
+  "labelSide": "below",
+  "icon": "forest"
+ },
+ {
+  "id": "panchavati",
+  "name": "place.panchavati",
+  "sub": "place.panchavati.sub",
+  "tier": "aranya",
+  "x": 800,
+  "y": 736,
+  "labelSide": "below",
+  "icon": "hut"
+ },
+ {
+  "id": "janasthana",
+  "name": "place.janasthana",
+  "sub": "place.janasthana.sub",
+  "tier": "aranya",
+  "x": 1300,
+  "y": 736,
+  "labelSide": "below",
+  "icon": "mountain"
+ },
+ {
+  "id": "southSky",
+  "name": "place.southSky",
+  "sub": "place.southSky.sub",
+  "tier": "aranya",
+  "x": 1800,
+  "y": 736,
+  "labelSide": "below",
+  "icon": "sky"
+ },
+ {
+  "id": "pampa",
+  "name": "place.pampa",
+  "sub": "place.pampa.sub",
+  "tier": "aranya",
+  "x": 2300,
+  "y": 736,
+  "labelSide": "below",
+  "icon": "river"
+ },
+ {
+  "id": "rishyamukha",
+  "name": "place.rishyamukha",
+  "sub": "place.rishyamukha.sub",
+  "tier": "kishkindha",
+  "x": 2100,
+  "y": 1006,
+  "labelSide": "below",
+  "icon": "mountain"
+ },
+ {
+  "id": "kishkindhaCity",
+  "name": "place.kishkindhaCity",
+  "sub": "place.kishkindhaCity.sub",
+  "tier": "kishkindha",
+  "x": 1300,
+  "y": 1006,
+  "labelSide": "below",
+  "icon": "cave"
+ },
+ {
+  "id": "southShore",
+  "name": "place.southShore",
+  "sub": "place.southShore.sub",
+  "tier": "kishkindha",
+  "x": 500,
+  "y": 1006,
+  "labelSide": "below",
+  "icon": "sea"
+ },
+ {
+  "id": "mahendra",
+  "name": "place.mahendra",
+  "sub": "place.mahendra.sub",
+  "tier": "sundara",
+  "x": 300,
+  "y": 1276,
+  "labelSide": "below",
+  "icon": "hill"
+ },
+ {
+  "id": "lankaGate",
+  "name": "place.lankaGate",
+  "sub": "place.lankaGate.sub",
+  "tier": "sundara",
+  "x": 800,
+  "y": 1276,
+  "labelSide": "below",
+  "icon": "lanka"
+ },
+ {
+  "id": "ashokaGrove",
+  "name": "place.ashokaGrove",
+  "sub": "place.ashokaGrove.sub",
+  "tier": "sundara",
+  "x": 1300,
+  "y": 1276,
+  "labelSide": "below",
+  "icon": "grove"
+ },
+ {
+  "id": "ravanaCourt",
+  "name": "place.ravanaCourt",
+  "sub": "place.ravanaCourt.sub",
+  "tier": "sundara",
+  "x": 1800,
+  "y": 1276,
+  "labelSide": "below",
+  "icon": "lanka"
+ },
+ {
+  "id": "lankaRoofs",
+  "name": "place.lankaRoofs",
+  "sub": "place.lankaRoofs.sub",
+  "tier": "sundara",
+  "x": 2300,
+  "y": 1276,
+  "labelSide": "below",
+  "icon": "lanka"
+ },
+ {
+  "id": "bridge",
+  "name": "place.bridge",
+  "sub": "place.bridge.sub",
+  "tier": "yuddha",
+  "x": 260,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "sea"
+ },
+ {
+  "id": "lankaWalls",
+  "name": "place.lankaWalls",
+  "sub": "place.lankaWalls.sub",
+  "tier": "yuddha",
+  "x": 620,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "lanka"
+ },
+ {
+  "id": "battlefield",
+  "name": "place.battlefield",
+  "sub": "place.battlefield.sub",
+  "tier": "yuddha",
+  "x": 980,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "field"
+ },
+ {
+  "id": "nikumbhila",
+  "name": "place.nikumbhila",
+  "sub": "place.nikumbhila.sub",
+  "tier": "yuddha",
+  "x": 1340,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "grove"
+ },
+ {
+  "id": "lankaPalace",
+  "name": "place.lankaPalace",
+  "sub": "place.lankaPalace.sub",
+  "tier": "yuddha",
+  "x": 1700,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "lanka"
+ },
+ {
+  "id": "himalaya",
+  "name": "place.himalaya",
+  "sub": "place.himalaya.sub",
+  "tier": "yuddha",
+  "x": 2060,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "mountain"
+ },
+ {
+  "id": "ayodhyaHome",
+  "name": "place.ayodhyaHome",
+  "sub": "place.ayodhyaHome.sub",
+  "tier": "yuddha",
+  "x": 2400,
+  "y": 1546,
+  "labelSide": "below",
+  "icon": "city"
+ }
+]

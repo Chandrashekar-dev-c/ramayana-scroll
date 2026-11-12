@@ -1,0 +1,263 @@
+[
+ {
+  "bg": "camp",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 696,
+  "face": -1
+ },
+ {
+  "say": "rama",
+  "k": "angada.1"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaCourt",
+  "style": "kachni"
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 866
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 866,
+  "face": -1,
+  "mode": "kachni",
+  "y": 478,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "sit",
+  "face": -1
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "angada",
+  "x": 452,
+  "speed": 626.6666666666667,
+  "nowait": false
+ },
+ {
+  "say": "angada",
+  "k": "angada.2"
+ },
+ {
+  "pose": "ravana",
+  "p": "point"
+ },
+ {
+  "say": "ravana",
+  "k": "angada.3"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "x": 1580,
+  "face": -1,
+  "mode": "kachni",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "guard",
+  "x": 584,
+  "speed": 1992,
+  "nowait": false
+ },
+ {
+  "actor": "guard2",
+  "char": "guard",
+  "x": -300,
+  "face": 1,
+  "mode": "kachni",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "guard2",
+  "x": 339,
+  "speed": 1278,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "angada.4"
+ },
+ {
+  "do": "charge",
+  "actor": "angada",
+  "dur": 1.1,
+  "poses": [
+   "crouch",
+   "crouch",
+   "crouch"
+  ],
+  "endPose": "jump",
+  "shake": 8,
+  "cue": "stompLand",
+  "k": "angada.5",
+  "after": [
+   {
+    "actor": "guard",
+    "char": "guard",
+    "hidden": true
+   },
+   {
+    "actor": "guard2",
+    "char": "guard",
+    "hidden": true
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "angada.6"
+ },
+ {
+  "choice": [
+   {
+    "k": "angada.7",
+    "goto": "foot"
+   },
+   {
+    "k": "angada.8",
+    "goto": "back"
+   }
+  ]
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "pose": "stand",
+  "y": 548,
+  "label": "foot"
+ },
+ {
+  "say": "angada",
+  "k": "angada.9"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "x": 1580,
+  "face": -1,
+  "mode": "kachni",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "guard",
+  "x": 565,
+  "speed": 1691.6666666666667,
+  "nowait": false
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "pose": "swing0",
+  "hidden": false
+ },
+ {
+  "do": "mash",
+  "actor": "guard",
+  "need": 12,
+  "futile": 5,
+  "k": "angada.10"
+ },
+ {
+  "narrate": true,
+  "k": "angada.11"
+ },
+ {
+  "exit": [
+   "*"
+  ],
+  "label": "back"
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "camp"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "angada",
+  "x": 696,
+  "speed": 884,
+  "nowait": false
+ },
+ {
+  "say": "angada",
+  "k": "angada.12"
+ },
+ {
+  "mood": "battle"
+ },
+ {
+  "cue": "drum"
+ },
+ {
+  "narrate": true,
+  "k": "angada.13"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

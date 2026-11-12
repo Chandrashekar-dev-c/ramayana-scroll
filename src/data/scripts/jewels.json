@@ -1,0 +1,85 @@
+[
+ {
+  "bg": "sky",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 452,
+  "face": 1,
+  "mode": "kachni",
+  "scale": 0.6,
+  "y": 268
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 546,
+  "face": 1,
+  "stage": "exile",
+  "scale": 0.75,
+  "y": 268
+ },
+ {
+  "narrate": true,
+  "k": "jewels.1"
+ },
+ {
+  "narrate": true,
+  "k": "jewels.2"
+ },
+ {
+  "trial": "flight",
+  "kind": "jewels",
+  "k": "ch19.obj"
+ },
+ {
+  "narrate": true,
+  "k": "jewels.3"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "ocean"
+ },
+ {
+  "narrate": true,
+  "k": "jewels.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lanka"
+ },
+ {
+  "narrate": true,
+  "k": "jewels.5"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,248 @@
+[
+ {
+  "bg": "kingRoom",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": 508,
+  "face": 1,
+  "pose": "sit",
+  "y": 518
+ },
+ {
+  "actor": "kaushalya",
+  "char": "kaushalya",
+  "x": 659,
+  "face": -1
+ },
+ {
+  "prop": "bed",
+  "name": "bed",
+  "x": 508
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.1"
+ },
+ {
+  "say": "dasharatha",
+  "k": "dasharatha.2"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "tamasa"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "hidden": true
+ },
+ {
+  "actor": "young",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "prince",
+  "mode": "line",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "young",
+  "char": "rama",
+  "pose": "draw1"
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.3",
+  "top": true
+ },
+ {
+  "actor": "youngAscetic",
+  "char": "youngAscetic",
+  "x": 1580,
+  "face": -1,
+  "mode": "line",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "youngAscetic",
+  "x": 866,
+  "speed": 595,
+  "nowait": false
+ },
+ {
+  "pose": "youngAscetic",
+  "p": "kneel"
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.4",
+  "top": true
+ },
+ {
+  "pose": "young",
+  "p": "shoot"
+ },
+ {
+  "cue": "shootFull"
+ },
+ {
+  "wait": 0.6
+ },
+ {
+  "pose": "youngAscetic",
+  "p": "grieve"
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.5",
+  "top": true
+ },
+ {
+  "actor": "blindFather",
+  "char": "blindFather",
+  "x": 1580,
+  "face": -1,
+  "mode": "line",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "blindFather",
+  "x": 960,
+  "speed": 442.8571428571429,
+  "nowait": true
+ },
+ {
+  "actor": "blindMother",
+  "char": "blindMother",
+  "x": 1580,
+  "face": -1,
+  "mode": "line",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "blindMother",
+  "x": 1035,
+  "speed": 340.625,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.6",
+  "top": true
+ },
+ {
+  "say": "blindFather",
+  "k": "dasharatha.7"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kingRoom"
+ },
+ {
+  "prop": "bed",
+  "name": "bed",
+  "x": 508
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": 508,
+  "hidden": false
+ },
+ {
+  "actor": "kaushalya",
+  "char": "kaushalya",
+  "x": 659,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "say": "dasharatha",
+  "k": "dasharatha.8"
+ },
+ {
+  "do": "hold",
+  "fx": "lamps",
+  "dur": 12,
+  "k": "dasharatha.9",
+  "count": 7,
+  "to": 1.6,
+  "hideMeter": true,
+  "lines": [
+   {
+    "at": 0.2,
+    "k": "dasharatha.10"
+   },
+   {
+    "at": 0.4,
+    "k": "dasharatha.11"
+   },
+   {
+    "at": 0.6,
+    "k": "dasharatha.12"
+   },
+   {
+    "at": 0.8,
+    "k": "dasharatha.13"
+   }
+  ],
+  "cue": "bell"
+ },
+ {
+  "pose": "dasharatha",
+  "p": "grieve"
+ },
+ {
+  "mood": "silent"
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.14"
+ },
+ {
+  "narrate": true,
+  "k": "dasharatha.15"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "wait": 1.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

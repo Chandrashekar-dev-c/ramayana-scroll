@@ -1,0 +1,93 @@
+{
+ "id": "kumbhakarna",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "war",
+ "hero": {
+  "id": "rama",
+  "stage": "exile",
+  "start": 400
+ },
+ "party": [
+  {
+   "id": "lakshmana",
+   "stage": "exile",
+   "ai": "archerSupport"
+  }
+ ],
+ "astras": true,
+ "arenas": [
+  {
+   "left": -300,
+   "right": 3000
+  }
+ ],
+ "tips": {
+  "shoot": "kumbha.tip",
+  "jump": "kumbha.tip"
+ },
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.kumbhakarna.title",
+   "sub": "kanda.yuddha"
+  },
+  {
+   "type": "wave",
+   "objective": "kumbha.o1",
+   "spawn": [
+    [
+     "grunt",
+     3
+    ],
+    [
+     "firethrower",
+     2
+    ]
+   ],
+   "side": "right",
+   "gap": 1.6,
+   "line": "kumbha.fire"
+  },
+  {
+   "type": "wave",
+   "objective": "kumbha.o2",
+   "spawn": [
+    [
+     "elephant",
+     1
+    ],
+    [
+     "grunt",
+     2
+    ],
+    [
+     "elephant",
+     1
+    ]
+   ],
+   "side": "right",
+   "gap": 3,
+   "line": "kumbha.elephant"
+  },
+  {
+   "type": "checkpoint",
+   "line": "kumbha.cp"
+  },
+  {
+   "type": "boss",
+   "boss": "kumbhakarna",
+   "intro": "kumbha.bossIntro"
+  },
+  {
+   "type": "scene",
+   "lines": [
+    "kumbha.end.1",
+    "kumbha.end.2"
+   ]
+  }
+ ],
+ "win": [
+  "kumbha.win.1"
+ ]
+}

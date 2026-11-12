@@ -1,0 +1,351 @@
+{
+ "id": "search",
+ "backdrop": "cave",
+ "style": "bharni-earth",
+ "music": "rain",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.4,
+   "face": 1,
+   "stage": "exile",
+   "pose": "sit"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.56,
+   "face": -1,
+   "stage": "exile"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "search.1"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "visual": "seasons",
+    "time": 8,
+    "hint": "search.2",
+    "cue": "bellSoft",
+    "texts": [
+     "search.3",
+     "search.4",
+     "search.5",
+     "search.6"
+    ]
+   }
+  },
+  {
+   "do": "backdrop",
+   "id": "kishkindha",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "vanara"
+  },
+  {
+   "do": "enter",
+   "who": "tara",
+   "side": "right",
+   "to": 0.66,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 0.8
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "pose": "draw1"
+  },
+  {
+   "do": "narrate",
+   "text": "search.7"
+  },
+  {
+   "do": "say",
+   "who": "tara",
+   "text": "search.8"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "kishkindha",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "sugriva",
+   "side": "left",
+   "to": 0.2,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.36,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "right",
+   "to": 0.6,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "right",
+   "to": 0.74,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "jambavan",
+   "side": "right",
+   "to": 0.88,
+   "time": 0.1
+  },
+  {
+   "do": "narrate",
+   "text": "search.9"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "prop",
+   "id": "ring",
+   "name": "ring",
+   "at": 0.48,
+   "y": -120,
+   "raw": true,
+   "front": true
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "search.10"
+  },
+  {
+   "do": "prop",
+   "id": "ring",
+   "remove": true
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "namaste"
+  },
+  {
+   "do": "backdrop",
+   "id": "cave",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "left",
+   "to": 0.2,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.32,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "jambavan",
+   "side": "left",
+   "to": 0.1,
+   "time": 0.1
+  },
+  {
+   "do": "narrate",
+   "text": "search.11"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "search.12",
+    "ordered": true,
+    "linger": 0.4,
+    "spots": [
+     {
+      "at": 0.44,
+      "y": 140,
+      "icon": "herb"
+     },
+     {
+      "at": 0.56,
+      "y": 260,
+      "icon": "herb"
+     },
+     {
+      "at": 0.68,
+      "y": 160,
+      "icon": "herb"
+     },
+     {
+      "at": 0.8,
+      "y": 240,
+      "icon": "herb"
+     }
+    ]
+   }
+  },
+  {
+   "do": "enter",
+   "who": "svayamprabha",
+   "side": "right",
+   "to": 0.84,
+   "time": 1
+  },
+  {
+   "do": "say",
+   "who": "svayamprabha",
+   "text": "search.13"
+  },
+  {
+   "do": "backdrop",
+   "id": "shore",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "dark"
+  },
+  {
+   "do": "enter",
+   "who": "angada",
+   "side": "left",
+   "to": 0.3,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.44,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "jambavan",
+   "side": "left",
+   "to": 0.16,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "angada",
+   "pose": "sit"
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "pose": "sit"
+  },
+  {
+   "do": "narrate",
+   "text": "search.14"
+  },
+  {
+   "do": "say",
+   "who": "angada",
+   "text": "search.15"
+  },
+  {
+   "do": "enter",
+   "who": "sampati",
+   "side": "right",
+   "to": 0.78,
+   "time": 1.6
+  },
+  {
+   "do": "say",
+   "who": "_",
+   "name": "search.16",
+   "text": "search.17"
+  },
+  {
+   "do": "say",
+   "who": "sampati",
+   "text": "search.18"
+  },
+  {
+   "do": "pose",
+   "who": "angada",
+   "pose": "stand"
+  },
+  {
+   "do": "music",
+   "mood": "vanara"
+  },
+  {
+   "do": "say",
+   "who": "angada",
+   "text": "search.19"
+  },
+  {
+   "do": "say",
+   "who": "jambavan",
+   "text": "search.20"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "stand"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "who": "hanuman",
+    "visual": "grow",
+    "scale": 2.4,
+    "time": 3.2,
+    "hint": "search.21"
+   }
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "search.22"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

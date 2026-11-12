@@ -1,0 +1,284 @@
+[
+ {
+  "bg": "lankaCourt",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 452,
+  "face": 1,
+  "pose": "sit",
+  "y": 478
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 452
+ },
+ {
+  "title": "l1.1",
+  "sub": "l1.2"
+ },
+ {
+  "narrate": true,
+  "k": "l1.3"
+ },
+ {
+  "actor": "akampana",
+  "char": "akampana",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "akampana",
+  "x": 790,
+  "speed": 790,
+  "nowait": false
+ },
+ {
+  "pose": "akampana",
+  "p": "kneel"
+ },
+ {
+  "say": "akampana",
+  "k": "l1.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "hermitage"
+ },
+ {
+  "actor": "maricha",
+  "char": "maricha",
+  "x": 828,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "ravana",
+  "x": 452,
+  "speed": 626.6666666666667,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "l1.5"
+ },
+ {
+  "say": "maricha",
+  "k": "l1.6"
+ },
+ {
+  "narrate": true,
+  "k": "l1.7"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaCourt"
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 452
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 452,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "sit",
+  "y": 478
+ },
+ {
+  "actor": "shurpanakha",
+  "char": "shurpanakha",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "shurpanakha",
+  "x": 772,
+  "speed": 673.3333333333334,
+  "nowait": false
+ },
+ {
+  "prop": "veil",
+  "name": "veil",
+  "front": true,
+  "who": "shurpanakha"
+ },
+ {
+  "narrate": true,
+  "k": "l1.8"
+ },
+ {
+  "say": "shurpanakha",
+  "k": "l1.9"
+ },
+ {
+  "say": "shurpanakha",
+  "k": "l1.10"
+ },
+ {
+  "unprop": [
+   "veil"
+  ]
+ },
+ {
+  "move": "shurpanakha",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "pose": "ravana",
+  "p": "stand"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "y": 548
+ },
+ {
+  "narrate": true,
+  "k": "l1.11"
+ },
+ {
+  "heads": "l1",
+  "voices": [
+   "scholar",
+   "brother",
+   "desire",
+   "pride"
+  ],
+  "lines": {
+   "scholar": "l1.12",
+   "brother": "l1.13",
+   "desire": "l1.14",
+   "pride": "l1.15"
+  },
+  "then": {
+   "pride": "p",
+   "*": "o"
+  }
+ },
+ {
+  "narrate": true,
+  "k": "l1.16",
+  "label": "p"
+ },
+ {
+  "goto": "go"
+ },
+ {
+  "narrate": true,
+  "k": "l1.17",
+  "label": "o"
+ },
+ {
+  "exit": [
+   "*"
+  ],
+  "label": "go"
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "hermitage"
+ },
+ {
+  "actor": "maricha",
+  "char": "maricha",
+  "x": 828,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "ravana",
+  "x": 490,
+  "speed": 658.3333333333334,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "l1.18"
+ },
+ {
+  "say": "ravana",
+  "k": "l1.19"
+ },
+ {
+  "say": "maricha",
+  "k": "l1.20"
+ },
+ {
+  "say": "ravana",
+  "k": "l1.21"
+ },
+ {
+  "say": "maricha",
+  "k": "l1.22"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

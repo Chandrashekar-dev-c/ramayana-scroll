@@ -1,0 +1,169 @@
+{
+ "id": "coronation",
+ "backdrop": "court",
+ "style": "bharni-bright",
+ "music": "home",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.46,
+   "face": 1,
+   "stage": "king",
+   "pose": "sit",
+   "y": -56
+  },
+  {
+   "id": "sita",
+   "at": 0.56,
+   "face": 1,
+   "stage": "queen"
+  },
+  {
+   "id": "vasishtha",
+   "at": 0.34,
+   "face": 1
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.24,
+   "face": 1,
+   "stage": "king"
+  },
+  {
+   "id": "bharata",
+   "at": 0.14,
+   "face": 1
+  },
+  {
+   "id": "shatrughna",
+   "at": 0.06,
+   "face": 1
+  },
+  {
+   "id": "hanuman",
+   "at": 0.7,
+   "face": -1,
+   "pose": "kneel"
+  },
+  {
+   "id": "kaushalya",
+   "at": 0.8,
+   "face": -1
+  },
+  {
+   "id": "sumitra",
+   "at": 0.87,
+   "face": -1
+  },
+  {
+   "id": "kaikeyi",
+   "at": 0.94,
+   "face": -1
+  }
+ ],
+ "props": [
+  {
+   "id": "throne",
+   "name": "throne",
+   "at": 0.46
+  }
+ ],
+ "beats": [
+  {
+   "do": "backdrop",
+   "id": "court",
+   "colour": true
+  },
+  {
+   "do": "narrate",
+   "text": "coronation.1"
+  },
+  {
+   "do": "pose",
+   "who": "vasishtha",
+   "pose": "raise"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "wait",
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "vasishtha",
+   "pose": "stand"
+  },
+  {
+   "do": "narrate",
+   "text": "coronation.2"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "narrate",
+   "text": "coronation.3"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "coronation.4"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "coronation.5",
+    "spots": [
+     {
+      "who": "hanuman",
+      "y": 110,
+      "icon": "ornament",
+      "cue": "bell",
+      "ops": [
+       {
+        "do": "pose",
+        "who": "sita",
+        "pose": "give"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "sit"
+  },
+  {
+   "do": "narrate",
+   "text": "coronation.6"
+  },
+  {
+   "do": "narrate",
+   "text": "coronation.7"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "title",
+   "text": "coronation.8",
+   "sub": "coronation.9"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

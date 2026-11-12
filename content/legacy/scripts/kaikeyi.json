@@ -1,0 +1,219 @@
+{
+ "id": "kaikeyi",
+ "backdrop": "city",
+ "style": "bharni-bright",
+ "music": "court",
+ "cast": [
+  {
+   "id": "dasharatha",
+   "at": 0.3,
+   "face": 1
+  },
+  {
+   "id": "vasishtha",
+   "at": 0.46,
+   "face": -1
+  },
+  {
+   "id": "citizen",
+   "at": 0.66,
+   "face": -1
+  },
+  {
+   "id": "citizen2",
+   "at": 0.76,
+   "face": -1,
+   "as": "citizen",
+   "scale": 0.94
+  },
+  {
+   "id": "citizen3",
+   "at": 0.86,
+   "face": -1,
+   "as": "sage"
+  }
+ ],
+ "beats": [
+  {
+   "do": "backdrop",
+   "id": "city",
+   "colour": true
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.1"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "kaikeyi.2"
+  },
+  {
+   "do": "pose",
+   "who": "citizen",
+   "pose": "raise"
+  },
+  {
+   "do": "pose",
+   "who": "citizen2",
+   "pose": "raise"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.3"
+  },
+  {
+   "do": "backdrop",
+   "id": "chamber",
+   "clear": true,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "kaikeyi",
+   "side": "left",
+   "to": 0.34,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "manthara",
+   "side": "right",
+   "to": 0.62,
+   "time": 1.6
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.4"
+  },
+  {
+   "do": "say",
+   "who": "manthara",
+   "text": "kaikeyi.5"
+  },
+  {
+   "do": "pose",
+   "who": "kaikeyi",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "kaikeyi",
+   "text": "kaikeyi.6"
+  },
+  {
+   "do": "pose",
+   "who": "kaikeyi",
+   "pose": "stand"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "visual": "whisper",
+    "from": "manthara",
+    "time": 7,
+    "hint": "kaikeyi.7",
+    "cue": "headVoice",
+    "texts": [
+     "kaikeyi.8",
+     "kaikeyi.9",
+     "kaikeyi.10",
+     "kaikeyi.11"
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "kaikeyi",
+   "text": "kaikeyi.12"
+  },
+  {
+   "do": "pose",
+   "who": "kaikeyi",
+   "pose": "grieve"
+  },
+  {
+   "do": "exit",
+   "who": "manthara",
+   "side": "right",
+   "async": true
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.13"
+  },
+  {
+   "do": "enter",
+   "who": "dasharatha",
+   "side": "left",
+   "to": 0.2,
+   "time": 1.6
+  },
+  {
+   "do": "music",
+   "mood": "dark"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "kaikeyi.14"
+  },
+  {
+   "do": "pose",
+   "who": "kaikeyi",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "kaikeyi",
+   "text": "kaikeyi.15"
+  },
+  {
+   "do": "pose",
+   "who": "dasharatha",
+   "pose": "grieve"
+  },
+  {
+   "do": "shake",
+   "amount": 3
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.16"
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.08,
+   "stage": "prince",
+   "time": 1.4
+  },
+  {
+   "do": "narrate",
+   "text": "kaikeyi.17"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "kaikeyi.18"
+  },
+  {
+   "do": "backdrop",
+   "id": "chamber",
+   "colour": false
+  },
+  {
+   "do": "wait",
+   "time": 1.2
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

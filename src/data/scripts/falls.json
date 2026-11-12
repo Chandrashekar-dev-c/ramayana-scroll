@@ -1,0 +1,230 @@
+[
+ {
+  "bg": "battlefield",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "battle"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "pose": "draw2",
+  "mode": "colour"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 847,
+  "face": -1,
+  "pose": "cast"
+ },
+ {
+  "narrate": true,
+  "k": "falls.1"
+ },
+ {
+  "pose": "ravana",
+  "p": "swing1"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "hurt"
+ },
+ {
+  "shake": 8
+ },
+ {
+  "cue": "thunder"
+ },
+ {
+  "wait": 0.6
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "dead",
+  "rot": 1.45,
+  "y": 508
+ },
+ {
+  "narrate": true,
+  "k": "falls.2"
+ },
+ {
+  "move": "ravana",
+  "x": 621,
+  "time": 1
+ },
+ {
+  "pose": "ravana",
+  "p": "hold"
+ },
+ {
+  "narrate": true,
+  "k": "falls.3"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 358,
+  "speed": 822.5,
+  "nowait": false
+ },
+ {
+  "pose": "hanuman",
+  "p": "swing1"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "hurt"
+ },
+ {
+  "move": "ravana",
+  "x": 922,
+  "time": 0.5,
+  "keepFace": true
+ },
+ {
+  "narrate": true,
+  "k": "falls.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "tamasa"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 602,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "pose": "kneel"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 696,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "dead",
+  "rot": 1.45,
+  "y": 508
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 377,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sushena",
+  "char": "sushena",
+  "x": 922,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "falls.5"
+ },
+ {
+  "do": "hold",
+  "fx": "endure",
+  "dur": 16,
+  "k": "falls.6",
+  "to": 1.6,
+  "lines": [
+   {
+    "at": 0.16666666666666666,
+    "k": "falls.7"
+   },
+   {
+    "at": 0.3333333333333333,
+    "k": "falls.8"
+   },
+   {
+    "at": 0.5,
+    "k": "falls.9"
+   },
+   {
+    "at": 0.6666666666666666,
+    "k": "falls.10"
+   },
+   {
+    "at": 0.8333333333333334,
+    "k": "falls.11"
+   }
+  ],
+  "cue": "bell",
+  "endure": true
+ },
+ {
+  "say": "sushena",
+  "k": "falls.12"
+ },
+ {
+  "pose": "hanuman",
+  "p": "jump"
+ },
+ {
+  "move": "hanuman",
+  "x": -320,
+  "speed": 1125,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "cue": "thunder"
+ },
+ {
+  "narrate": true,
+  "k": "falls.13"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

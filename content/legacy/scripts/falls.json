@@ -1,0 +1,211 @@
+{
+ "id": "falls",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "war",
+ "cast": [
+  {
+   "id": "lakshmana",
+   "at": 0.36,
+   "face": 1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour",
+   "pose": "draw2"
+  },
+  {
+   "id": "ravana",
+   "at": 0.72,
+   "face": -1,
+   "pose": "cast"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "falls.1"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "swing1"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "hurt"
+  },
+  {
+   "do": "shake",
+   "amount": 8
+  },
+  {
+   "do": "sound",
+   "cue": "thunder"
+  },
+  {
+   "do": "wait",
+   "time": 0.6
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "pose": "dead",
+   "rot": 1.45,
+   "y": -40
+  },
+  {
+   "do": "narrate",
+   "text": "falls.2"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.48,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "hold"
+  },
+  {
+   "do": "narrate",
+   "text": "falls.3"
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.2,
+   "time": 0.8,
+   "colour": true
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "swing1"
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "hurt"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.8,
+   "time": 0.5,
+   "keepFace": true
+  },
+  {
+   "do": "narrate",
+   "text": "falls.4"
+  },
+  {
+   "do": "backdrop",
+   "id": "tamasa",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "grief"
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.46,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "pose": "kneel"
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.56,
+   "stage": "exile",
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "pose": "dead",
+   "rot": 1.45,
+   "y": -40
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.22,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "enter",
+   "who": "sushena",
+   "side": "right",
+   "to": 0.8,
+   "time": 0.1,
+   "colour": true
+  },
+  {
+   "do": "narrate",
+   "text": "falls.5"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "visual": "night",
+    "time": 16,
+    "endure": true,
+    "hint": "falls.6",
+    "cue": "bellSoft",
+    "texts": [
+     "falls.7",
+     "falls.8",
+     "falls.9",
+     "falls.10",
+     "falls.11"
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "sushena",
+   "text": "falls.12"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "jump"
+  },
+  {
+   "do": "exit",
+   "who": "hanuman",
+   "side": "left",
+   "y": -500,
+   "time": 0.8
+  },
+  {
+   "do": "sound",
+   "cue": "thunder"
+  },
+  {
+   "do": "narrate",
+   "text": "falls.13"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

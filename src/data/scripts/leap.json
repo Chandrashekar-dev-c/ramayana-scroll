@@ -1,0 +1,110 @@
+[
+ {
+  "bg": "shore",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 546,
+  "face": 1,
+  "scale": 1.5
+ },
+ {
+  "narrate": true,
+  "k": "leap.1"
+ },
+ {
+  "do": "charge",
+  "actor": "hanuman",
+  "dur": 1.5,
+  "poses": [
+   "crouch",
+   "crouch",
+   "crouch"
+  ],
+  "endPose": "jump",
+  "shake": 9,
+  "cue": "thunder",
+  "k": "leap.2",
+  "after": []
+ },
+ {
+  "narrate": true,
+  "k": "leap.3"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "ocean"
+ },
+ {
+  "trial": "flight",
+  "kind": "leap",
+  "k": "ch26.obj",
+  "par": 50
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lanka"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "scale": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 452,
+  "speed": 626.6666666666667,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "leap.4"
+ },
+ {
+  "bg": "ocean"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "hidden": true
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

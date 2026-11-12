@@ -1,0 +1,86 @@
+{
+ "id": "ravanaIntro",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.36,
+   "face": 1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour"
+  },
+  {
+   "id": "agastya",
+   "at": 0.62,
+   "face": -1,
+   "colour": true,
+   "mode": "colour"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "ravana.1"
+  },
+  {
+   "do": "say",
+   "who": "agastya",
+   "text": "ravana.2"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "namaste"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "wait",
+   "time": 1
+  },
+  {
+   "do": "narrate",
+   "text": "ravana.3"
+  },
+  {
+   "do": "exit",
+   "who": "agastya",
+   "side": "right",
+   "async": true
+  },
+  {
+   "do": "prop",
+   "id": "ch",
+   "name": "indraChariot",
+   "at": 0.68,
+   "raw": true,
+   "dir": -1
+  },
+  {
+   "do": "enter",
+   "who": "matali",
+   "side": "right",
+   "to": 0.84,
+   "time": 1,
+   "colour": true
+  },
+  {
+   "do": "say",
+   "who": "matali",
+   "text": "ravana.4"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

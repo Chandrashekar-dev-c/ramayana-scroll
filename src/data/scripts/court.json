@@ -1,0 +1,289 @@
+[
+ {
+  "bg": "grove",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 358,
+  "face": 1,
+  "mode": "colour"
+ },
+ {
+  "narrate": true,
+  "k": "court.1"
+ },
+ {
+  "do": "tap",
+  "k": "court.2",
+  "targets": [
+   {
+    "x": 546,
+    "y": 488,
+    "icon": "tree",
+    "cue": "thud",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 696,
+    "y": 488,
+    "icon": "pavilion",
+    "cue": "stompLand",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 847,
+    "y": 488,
+    "icon": "tree",
+    "cue": "thud",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 997,
+    "y": 488,
+    "icon": "pavilion",
+    "cue": "stompLand",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "court.3"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "guard",
+  "x": 828,
+  "speed": 940,
+  "nowait": false
+ },
+ {
+  "actor": "aksha",
+  "char": "aksha",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "aksha",
+  "x": 960,
+  "speed": 620,
+  "nowait": false
+ },
+ {
+  "pose": "hanuman",
+  "p": "swing0"
+ },
+ {
+  "narrate": true,
+  "k": "court.4"
+ },
+ {
+  "pose": "hanuman",
+  "p": "swing1"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "pose": "hurt"
+ },
+ {
+  "actor": "aksha",
+  "char": "aksha",
+  "pose": "hurt"
+ },
+ {
+  "shake": 4
+ },
+ {
+  "narrate": true,
+  "k": "court.5"
+ },
+ {
+  "actor": "guard",
+  "char": "guard",
+  "hidden": true
+ },
+ {
+  "actor": "aksha",
+  "char": "aksha",
+  "hidden": true
+ },
+ {
+  "actor": "indrajit",
+  "char": "indrajit",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "indrajit",
+  "x": 866,
+  "speed": 714,
+  "nowait": false
+ },
+ {
+  "pose": "indrajit",
+  "p": "cast"
+ },
+ {
+  "pose": "hanuman",
+  "p": "hurt"
+ },
+ {
+  "narrate": true,
+  "k": "court.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "lankaCourt"
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 866
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 866,
+  "face": -1,
+  "y": 478,
+  "hidden": false
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "pose": "sit",
+  "face": -1
+ },
+ {
+  "actor": "vibhishana",
+  "char": "vibhishana",
+  "x": 696,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "vibhishana",
+  "char": "vibhishana",
+  "face": -1
+ },
+ {
+  "actor": "minister",
+  "char": "minister",
+  "x": 1016,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 396,
+  "speed": 696,
+  "nowait": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "narrate": true,
+  "k": "court.7"
+ },
+ {
+  "say": "hanuman",
+  "k": "court.8"
+ },
+ {
+  "choice": [
+   {
+    "k": "court.9",
+    "goto": "tail"
+   },
+   {
+    "k": "court.10",
+    "goto": "ans"
+   }
+  ]
+ },
+ {
+  "do": "hold",
+  "fx": "grow",
+  "actor": "hanuman",
+  "dur": 2.4,
+  "k": "court.11",
+  "to": 1.25,
+  "lines": [],
+  "label": "tail"
+ },
+ {
+  "narrate": true,
+  "k": "court.12"
+ },
+ {
+  "pose": "ravana",
+  "p": "point",
+  "label": "ans"
+ },
+ {
+  "say": "ravana",
+  "k": "court.13"
+ },
+ {
+  "say": "vibhishana",
+  "k": "court.14"
+ },
+ {
+  "say": "ravana",
+  "k": "court.15"
+ },
+ {
+  "unprop": [
+   "coil"
+  ]
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

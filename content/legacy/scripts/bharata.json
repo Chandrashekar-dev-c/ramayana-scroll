@@ -1,0 +1,461 @@
+{
+ "id": "bharata",
+ "backdrop": "cityNight",
+ "style": "bharni-bright",
+ "music": "grief",
+ "cast": [
+  {
+   "id": "bharata",
+   "at": 0.3,
+   "face": 1
+  },
+  {
+   "id": "kaikeyi",
+   "at": 0.66,
+   "face": -1
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "bharata.1"
+  },
+  {
+   "do": "say",
+   "who": "kaikeyi",
+   "text": "bharata.2"
+  },
+  {
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.3"
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.4"
+  },
+  {
+   "do": "backdrop",
+   "id": "riverbank",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "left",
+   "to": 0.3,
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "guha",
+   "side": "right",
+   "to": 0.72,
+   "time": 1
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.5"
+  },
+  {
+   "do": "say",
+   "who": "guha",
+   "text": "bharata.6"
+  },
+  {
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.7"
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.8"
+  },
+  {
+   "do": "backdrop",
+   "id": "chitrakuta",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "hut",
+   "name": "hut",
+   "at": 0.82,
+   "scale": 0.8
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "right",
+   "to": 0.66,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "right",
+   "to": 0.56,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "pose": "draw1",
+   "face": -1
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "face": -1
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "bharata.9"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "bharata.10"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "left",
+   "to": 0.1,
+   "time": 0.8
+  },
+  {
+   "do": "interact",
+   "kind": "walkTo",
+   "args": {
+    "who": "bharata",
+    "to": 0.54,
+    "speed": 140,
+    "hint": "bharata.11"
+   }
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "grieve"
+  },
+  {
+   "do": "move",
+   "who": "lakshmana",
+   "to": 0.76,
+   "time": 0.8
+  },
+  {
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.12"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "grieve"
+  },
+  {
+   "do": "music",
+   "mood": "grief"
+  },
+  {
+   "do": "wait",
+   "time": 1.2
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.13"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "kneel"
+  },
+  {
+   "do": "choice",
+   "prompt": "bharata.14",
+   "options": [
+    {
+     "text": "bharata.15",
+     "goto": "a1"
+    },
+    {
+     "text": "bharata.16",
+     "goto": "a2"
+    },
+    {
+     "text": "bharata.17",
+     "goto": "a3"
+    }
+   ]
+  },
+  {
+   "label": "a1",
+   "do": "say",
+   "who": "rama",
+   "text": "bharata.18"
+  },
+  {
+   "do": "goto",
+   "to": "after"
+  },
+  {
+   "label": "a2",
+   "do": "say",
+   "who": "rama",
+   "text": "bharata.19"
+  },
+  {
+   "do": "goto",
+   "to": "after"
+  },
+  {
+   "label": "a3",
+   "do": "say",
+   "who": "rama",
+   "text": "bharata.20"
+  },
+  {
+   "label": "after",
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.21"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "wait",
+   "time": 0.6
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "carry"
+  },
+  {
+   "do": "set",
+   "who": "bharata",
+   "face": -1
+  },
+  {
+   "do": "interact",
+   "kind": "walkTo",
+   "args": {
+    "who": "bharata",
+    "to": 0.08,
+    "speed": 130,
+    "carry": "carry",
+    "hint": "bharata.22"
+   }
+  },
+  {
+   "do": "backdrop",
+   "id": "nandigram",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "seat",
+   "name": "sandalsThrone",
+   "at": 0.62,
+   "state": 0
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "left",
+   "to": 0.3,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "carry"
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.23"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "bharata.24",
+    "spots": [
+     {
+      "at": 0.62,
+      "y": 160,
+      "ops": [
+       {
+        "do": "prop",
+        "id": "seat",
+        "name": "sandalsThrone",
+        "at": 0.62,
+        "state": 1
+       },
+       {
+        "do": "pose",
+        "who": "bharata",
+        "pose": "namaste"
+       }
+      ],
+      "cue": "bell"
+     }
+    ]
+   }
+  },
+  {
+   "do": "set",
+   "who": "bharata"
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.25"
+  },
+  {
+   "do": "choice",
+   "prompt": "bharata.26",
+   "options": [
+    {
+     "text": "bharata.27",
+     "goto": "r1"
+    },
+    {
+     "text": "bharata.28",
+     "goto": "r1"
+    }
+   ]
+  },
+  {
+   "label": "r1",
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.29"
+  },
+  {
+   "do": "choice",
+   "prompt": "bharata.30",
+   "options": [
+    {
+     "text": "bharata.31",
+     "goto": "r2"
+    },
+    {
+     "text": "bharata.32",
+     "goto": "r2"
+    }
+   ]
+  },
+  {
+   "label": "r2",
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.33"
+  },
+  {
+   "do": "choice",
+   "prompt": "bharata.34",
+   "options": [
+    {
+     "text": "bharata.35",
+     "goto": "r3"
+    },
+    {
+     "text": "bharata.36",
+     "goto": "r3"
+    }
+   ]
+  },
+  {
+   "label": "r3",
+   "do": "say",
+   "who": "bharata",
+   "text": "bharata.37"
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.38"
+  },
+  {
+   "do": "backdrop",
+   "id": "hermitage",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.4,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "anasuya",
+   "side": "right",
+   "to": 0.62,
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "atri",
+   "side": "right",
+   "to": 0.84,
+   "time": 1
+  },
+  {
+   "do": "narrate",
+   "text": "bharata.39"
+  },
+  {
+   "do": "pose",
+   "who": "anasuya",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "anasuya",
+   "text": "bharata.40"
+  },
+  {
+   "do": "backdrop",
+   "id": "nandigram",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "seat",
+   "name": "sandalsThrone",
+   "at": 0.62,
+   "state": 1
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

@@ -1,0 +1,187 @@
+{
+ "id": "bridge",
+ "backdrop": "shore",
+ "style": "bharni-earth",
+ "music": "vanara",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.3,
+   "face": 1,
+   "stage": "exile",
+   "pose": "sit"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.18,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "bridge.1"
+  },
+  {
+   "do": "narrate",
+   "text": "bridge.2"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "bridge.3"
+  },
+  {
+   "do": "interact",
+   "kind": "holdRelease",
+   "args": {
+    "who": "rama",
+    "time": 1.6,
+    "pose": [
+     "draw1",
+     "draw2",
+     "draw2"
+    ],
+    "endPose": "draw2",
+    "after": 0.4,
+    "hint": "bridge.4",
+    "shake": 7,
+    "cue": "thunder"
+   }
+  },
+  {
+   "do": "enter",
+   "who": "ocean",
+   "side": "right",
+   "to": 0.7,
+   "time": 1.6
+  },
+  {
+   "do": "pose",
+   "who": "ocean",
+   "pose": "namaste"
+  },
+  {
+   "do": "narrate",
+   "text": "bridge.5"
+  },
+  {
+   "do": "say",
+   "who": "ocean",
+   "text": "bridge.6"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "bridge.7"
+  },
+  {
+   "do": "say",
+   "who": "ocean",
+   "text": "bridge.8"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "shoot"
+  },
+  {
+   "do": "sound",
+   "cue": "release"
+  },
+  {
+   "do": "wait",
+   "time": 0.5
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "exit",
+   "who": "ocean",
+   "side": "right"
+  },
+  {
+   "do": "enter",
+   "who": "nala",
+   "side": "left",
+   "to": 0.42,
+   "time": 1
+  },
+  {
+   "do": "prop",
+   "id": "bridge",
+   "name": "bridge",
+   "at": 0.44,
+   "state": 0,
+   "raw": true,
+   "width": 620
+  },
+  {
+   "do": "say",
+   "who": "nala",
+   "text": "bridge.9"
+  },
+  {
+   "do": "interact",
+   "kind": "rhythm",
+   "args": {
+    "need": 14,
+    "bpm": 84,
+    "icon": "stone",
+    "prop": "bridge",
+    "cue": "thud",
+    "hint": "bridge.10"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "bridge.11"
+  },
+  {
+   "do": "choice",
+   "options": [
+    {
+     "text": "bridge.12",
+     "goto": "sq"
+    },
+    {
+     "text": "bridge.13",
+     "goto": "cross"
+    }
+   ]
+  },
+  {
+   "label": "sq",
+   "do": "narrate",
+   "text": "bridge.14"
+  },
+  {
+   "do": "narrate",
+   "text": "bridge.15"
+  },
+  {
+   "label": "cross",
+   "do": "music",
+   "mood": "war"
+  },
+  {
+   "do": "narrate",
+   "text": "bridge.16"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

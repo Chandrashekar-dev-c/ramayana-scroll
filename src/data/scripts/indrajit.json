@@ -1,0 +1,164 @@
+[
+ {
+  "bg": "battlefield",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "pose": "grieve",
+  "mode": "colour"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 640,
+  "face": 1,
+  "stage": "exile",
+  "pose": "grieve",
+  "mode": "colour"
+ },
+ {
+  "prop": "cc",
+  "name": "cloudChariot",
+  "x": 884,
+  "y": 188
+ },
+ {
+  "narrate": true,
+  "k": "indrajit.1"
+ },
+ {
+  "prop": "n1",
+  "name": "naga",
+  "x": 508
+ },
+ {
+  "prop": "n2",
+  "name": "naga",
+  "x": 640,
+  "dir": -1
+ },
+ {
+  "cue": "hiss"
+ },
+ {
+  "narrate": true,
+  "k": "indrajit.2"
+ },
+ {
+  "actor": "garuda",
+  "char": "garuda",
+  "x": 1580,
+  "face": -1,
+  "y": 428,
+  "hidden": false
+ },
+ {
+  "move": "garuda",
+  "x": 753,
+  "speed": 689.1666666666667,
+  "nowait": false
+ },
+ {
+  "unprop": [
+   "n1"
+  ]
+ },
+ {
+  "unprop": [
+   "n2"
+  ]
+ },
+ {
+  "unprop": [
+   "cc"
+  ]
+ },
+ {
+  "shake": 5
+ },
+ {
+  "cue": "wingBeat"
+ },
+ {
+  "narrate": true,
+  "k": "indrajit.3"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "camp"
+ },
+ {
+  "actor": "vibhishana",
+  "char": "vibhishana",
+  "x": 790,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 358,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "say": "vibhishana",
+  "k": "indrajit.4"
+ },
+ {
+  "say": "rama",
+  "k": "indrajit.5"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ },
+ {
+  "battle": "indrajit"
+ },
+ {
+  "noop": true,
+  "label": "__seg2"
+ }
+]

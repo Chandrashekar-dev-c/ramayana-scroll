@@ -1,0 +1,458 @@
+{
+ "sage": {
+  "text": [
+   "note.sage.1",
+   "note.sage.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 18-22 (verify)",
+  "later": null,
+  "claim": "In Valmiki, Dasharatha first promises Vishvamitra anything, then refuses when he hears the request, and offers his army and himself instead.",
+  "reviewer": null
+ },
+ "sarayu": {
+  "text": [
+   "note.sarayu.1",
+   "note.sarayu.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 22-25 (verify)",
+  "later": null,
+  "claim": "Valmiki has the sage teach Rama the mantras Bala and Atibala on the bank of the Sarayu. The archery practice is the game's own addition, to ",
+  "reviewer": null
+ },
+ "tataka": {
+  "text": [
+   "note.tataka.1"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 24-26 (verify)",
+  "later": null,
+  "claim": "In Valmiki's telling, Tataka was born a yakshini, strong as a thousand elephants, and was cursed to become a rakshasi. She emptied the lands",
+  "reviewer": null
+ },
+ "yajna": {
+  "text": [
+   "note.yajna.1",
+   "note.yajna.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 27-30 (verify)",
+  "later": null,
+  "claim": "After Tataka, Valmiki has the sage give Rama a long list of divine weapons, which appear before him in bodily form. At Siddhashrama the prin",
+  "reviewer": null
+ },
+ "ahalya": {
+  "text": [
+   "note.ahalya.1",
+   "note.ahalya.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 48-49 (verify)",
+  "later": null,
+  "claim": "In Valmiki, Ahalya is not turned to stone. She is cursed to live in the hermitage invisible to all, doing penance, until Rama arrives. Rama ",
+  "reviewer": null
+ },
+ "bow": {
+  "text": [
+   "note.bow.1",
+   "note.bow.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 66-67 (verify)",
+  "later": null,
+  "claim": "Valmiki describes the bow arriving in an iron chest on eight wheels, pulled by a great many men. Rama lifts it, strings it and draws it, and",
+  "reviewer": null
+ },
+ "wedding": {
+  "text": [
+   "note.wedding.1",
+   "note.wedding.2"
+  ],
+  "source": "Valmiki, Bala Kanda, sargas 69-77 (verify)",
+  "later": null,
+  "claim": "Valmiki marries all four brothers at once: Rama to Sita, Lakshmana to Urmila, and Bharata and Shatrughna to Janaka's nieces Mandavi and Shru",
+  "reviewer": null
+ },
+ "kaikeyi": {
+  "text": [
+   "note.kaikeyi.1",
+   "note.kaikeyi.2"
+  ],
+  "source": "Valmiki, Ayodhya Kanda, sargas 7-19 (verify)",
+  "later": null,
+  "claim": "Valmiki shows Kaikeyi at first overjoyed at Rama's crowning; she rewards Manthara for the news. It is Manthara's long argument that turns he",
+  "reviewer": null
+ },
+ "exile": {
+  "text": [
+   "note.exile.1",
+   "note.exile.2"
+  ],
+  "source": "Valmiki, Ayodhya Kanda, sargas 20-46 (verify)",
+  "later": null,
+  "claim": "All of this is in Valmiki: Lakshmana's anger, Sita's refusal to stay, Sumitra's blessing, the giving away of their wealth, and the night at ",
+  "reviewer": null
+ },
+ "boat": {
+  "text": [
+   "note.boat.1",
+   "note.boat.2"
+  ],
+  "source": "Valmiki, Ayodhya Kanda, sargas 50-52 (verify)",
+  "later": null,
+  "claim": "Guha, king of the forest-dwelling Nishadas, is Rama's friend and equal in Valmiki. He offers Rama his kingdom, keeps watch all night with La",
+  "reviewer": null
+ },
+ "dasharatha": {
+  "text": [
+   "note.dasharatha.1",
+   "note.dasharatha.2"
+  ],
+  "source": "Valmiki, Ayodhya Kanda, sargas 57-64 (verify)",
+  "later": null,
+  "claim": "On the sixth night after Rama leaves, Valmiki has Dasharatha tell Kaushalya of the young ascetic he killed by mistake, and of the curse laid",
+  "reviewer": null
+ },
+ "bharata": {
+  "text": [
+   "note.bharata.1",
+   "note.bharata.2"
+  ],
+  "source": "Valmiki, Ayodhya Kanda, sargas 67-119 (verify)",
+  "later": null,
+  "claim": "Bharata's refusal of the throne, Guha's suspicion at the river, the meeting at Chitrakuta and the rule of the sandals from Nandigram are all",
+  "reviewer": null
+ },
+ "viradha": {
+  "text": [
+   "note.viradha.1",
+   "note.viradha.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 1-15 (verify)",
+  "later": null,
+  "claim": "Viradha, in Valmiki, carries Sita off and boasts that no weapon can kill him. The brothers break his arms, and he asks to be buried; he was ",
+  "reviewer": null
+ },
+ "shurpanakha": {
+  "text": [
+   "note.shurpanakha.1",
+   "note.shurpanakha.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 17-18 (verify)",
+  "later": null,
+  "claim": "Valmiki shows this plainly. Rama teases Shurpanakha and sends her to Lakshmana, who mocks her and sends her back. When she attacks Sita, Ram",
+  "reviewer": null
+ },
+ "janasthana": {
+  "text": [
+   "note.janasthana.1",
+   "note.janasthana.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 19-31 (verify)",
+  "later": null,
+  "claim": "Valmiki is explicit that Rama sends Lakshmana and Sita to a cave and fights Khara's army of fourteen thousand by himself, on foot. He kills ",
+  "reviewer": null
+ },
+ "l1": {
+  "text": [
+   "note.l1.1",
+   "note.l1.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 31-41 (verify)",
+  "later": null,
+  "claim": "This follows Valmiki closely. Akampana brings the news; Maricha talks Ravana out of it once; Shurpanakha then shames him in open court and d",
+  "reviewer": null
+ },
+ "deer": {
+  "text": [
+   "note.deer.1"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 42-44 (verify)",
+  "later": null,
+  "claim": "In Valmiki, Lakshmana says at once that the deer is Maricha. Rama goes anyway, reasoning that either Sita will have her deer or a dangerous ",
+  "reviewer": null
+ },
+ "rekha": {
+  "text": [
+   "note.rekha.1",
+   "note.rekha.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 45-49 (verify)",
+  "later": "later tradition",
+  "claim": "The abduction is Valmiki: the cry, Sita's harsh words to Lakshmana, his leaving against his own judgement, Ravana's disguise as a wandering ",
+  "reviewer": null
+ },
+ "jatayu": {
+  "text": [
+   "note.jatayu.1",
+   "note.jatayu.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 50-51 (verify)",
+  "later": null,
+  "claim": "Valmiki gives the old vulture a real fight. Jatayu kills the charioteer and the mules, wrecks the chariot, breaks Ravana's bow and tears at ",
+  "reviewer": null
+ },
+ "jewels": {
+  "text": [
+   "note.jewels.1",
+   "note.jewels.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 54 (verify)",
+  "later": null,
+  "claim": "In Valmiki, Sita sees five vanaras on a mountain top, ties her ornaments in her upper cloth and drops them, hoping they will tell Rama. Rava",
+  "reviewer": null
+ },
+ "l2": {
+  "text": [
+   "note.l2.1",
+   "note.l2.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 55-56 (verify)",
+  "later": "later tradition",
+  "claim": "The tour of the palace, the blade of grass that Sita places between them, and the deadline of twelve months are in Valmiki's Aranya Kanda.\nT",
+  "reviewer": null
+ },
+ "hut": {
+  "text": [
+   "note.hut.1",
+   "note.hut.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 57-68 (verify)",
+  "later": null,
+  "claim": "Rama's search, his questions to the trees and animals, and his threat to destroy the worlds are a long and famous passage of Valmiki. It is ",
+  "reviewer": null
+ },
+ "shabari": {
+  "text": [
+   "note.shabari.1",
+   "note.shabari.2"
+  ],
+  "source": "Valmiki, Aranya Kanda, sargas 69-75 (verify)",
+  "later": "later tradition",
+  "claim": "Kabandha, Shabari's long wait, her welcome and her ascent through the fire are in Valmiki. She is an ascetic honoured by Rama, and he praise",
+  "reviewer": null
+ },
+ "friends": {
+  "text": [
+   "note.friends.1",
+   "note.friends.2"
+  ],
+  "source": "Valmiki, Kishkindha Kanda, sargas 1-8 (verify)",
+  "later": null,
+  "claim": "Rama's praise of Hanuman's speech, the friendship sworn around a fire, and the bundle of ornaments are all Valmiki.\nSo is Lakshmana's answer",
+  "reviewer": null
+ },
+ "sala": {
+  "text": [
+   "note.sala.1"
+  ],
+  "source": "Valmiki, Kishkindha Kanda, sargas 11-12 (verify)",
+  "later": null,
+  "claim": "Both proofs are in Valmiki: the skeleton of Dundubhi flicked away with a toe, and then, because Sugriva points out that it has dried, a sing",
+  "reviewer": null
+ },
+ "vali": {
+  "text": [
+   "note.vali.1",
+   "note.vali.2"
+  ],
+  "source": "Valmiki, Kishkindha Kanda, sargas 12-26 (verify)",
+  "later": null,
+  "claim": "This is one of the most debated moments in the epic, and the game gives Valmiki's account without softening it. Rama shoots Vali from concea",
+  "reviewer": null
+ },
+ "search": {
+  "text": [
+   "note.search.1",
+   "note.search.2"
+  ],
+  "source": "Valmiki, Kishkindha Kanda, sargas 27-67 (verify)",
+  "later": null,
+  "claim": "The rains, Lakshmana's anger and Tara's good sense, the gift of the ring, the cave of Svayamprabha, the despair on the shore, Sampati, and J",
+  "reviewer": null
+ },
+ "leap": {
+  "text": [
+   "note.leap.1",
+   "note.leap.2"
+  ],
+  "source": "Valmiki, Sundara Kanda, sargas 1 (verify)",
+  "later": null,
+  "claim": "The leap opens the Sundara Kanda. The mountain Mainaka rises to offer rest, and Hanuman touches it and flies on. The gods send Surasa to tes",
+  "reviewer": null
+ },
+ "night": {
+  "text": [
+   "note.night.1",
+   "note.night.2"
+  ],
+  "source": "Valmiki, Sundara Kanda, sargas 2-13 (verify)",
+  "later": null,
+  "claim": "Hanuman shrinks to the size of a cat, strikes down the guardian Lankini with his left fist, and searches the city by night. In the palace he",
+  "reviewer": null
+ },
+ "ashoka": {
+  "text": [
+   "note.ashoka.1",
+   "note.ashoka.2"
+  ],
+  "source": "Valmiki, Sundara Kanda, sargas 14-40 (verify)",
+  "later": null,
+  "claim": "Ravana's visit and his two-month threat, the blade of grass, Trijata's dream, Hanuman's way of making himself known by telling Rama's story,",
+  "reviewer": null
+ },
+ "court": {
+  "text": [
+   "note.court.1",
+   "note.court.2"
+  ],
+  "source": "Valmiki, Sundara Kanda, sargas 41-52 (verify)",
+  "later": "later tradition",
+  "claim": "Hanuman wrecks the grove on purpose to measure Lanka's strength, kills Ravana's young son Aksha, and lets Indrajit's Brahma astra bind him. ",
+  "reviewer": null
+ },
+ "burn": {
+  "text": [
+   "note.burn.1"
+  ],
+  "source": "Valmiki, Sundara Kanda, sargas 53-65 (verify)",
+  "later": null,
+  "claim": "The burning of Lanka, Hanuman's sudden fear that he has burned Sita too, the raid on the honey forest Madhuvana and Sugriva's delight at it,",
+  "reviewer": null
+ },
+ "l3": {
+  "text": [
+   "note.l3.1",
+   "note.l3.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 6-19 (verify)",
+  "later": null,
+  "claim": "The council, Kumbhakarna's blunt criticism followed by his loyalty, Vibhishana's advice, Indrajit's mockery and Ravana's insult are in Valmi",
+  "reviewer": null
+ },
+ "bridge": {
+  "text": [
+   "note.bridge.1",
+   "note.bridge.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 21-22 (verify)",
+  "later": "later tradition",
+  "claim": "Rama's three-day vigil, his anger, the Ocean's appearance and advice, and Nala's bridge built in five days are in Valmiki. The arrow, once d",
+  "reviewer": null
+ },
+ "angada": {
+  "text": [
+   "note.angada.1",
+   "note.angada.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 41 (verify)",
+  "later": "later tradition",
+  "claim": "In Valmiki, Rama sends Angada with a final offer. Ravana orders him seized; Angada leaps up with his captors clinging to him, shakes them of",
+  "reviewer": null
+ },
+ "l4": {
+  "text": [
+   "note.l4.1",
+   "note.l4.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 35, 59-65 (verify)",
+  "later": null,
+  "claim": "Malyavan's plea, Ravana's first meeting with Rama (who destroys his chariot and crown and sends him home to rest), and the long comic labour",
+  "reviewer": null
+ },
+ "kumbhakarna": {
+  "text": [
+   "note.kumbhakarna.1",
+   "note.kumbhakarna.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 65-67 (verify)",
+  "later": null,
+  "claim": "In Valmiki, Kumbhakarna scatters the vanara army and carries off Sugriva, who escapes. Rama then kills him.\nThe text describes that death in",
+  "reviewer": null
+ },
+ "indrajit": {
+  "text": [
+   "note.indrajit.1",
+   "note.indrajit.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 44-50, 84-91 (verify)",
+  "later": null,
+  "claim": "Vibhishana reveals that Indrajit can be killed only if his rite at Nikumbhila is interrupted. Lakshmana breaks it and, after a long duel, lo",
+  "reviewer": null
+ },
+ "l5": {
+  "text": [
+   "note.l5.1",
+   "note.l5.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 92-93 (verify)",
+  "later": null,
+  "claim": "Ravana's lament for Indrajit is in Valmiki, and so is what follows it: in his rage he sets out to kill Sita, and his minister Suparshva stop",
+  "reviewer": null
+ },
+ "falls": {
+  "text": [
+   "note.falls.1",
+   "note.falls.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 100-101 (verify)",
+  "later": null,
+  "claim": "In Valmiki it is Ravana's spear, the shakti, that fells Lakshmana, after Indrajit's death. Ravana tries to lift him and cannot; Hanuman stri",
+  "reviewer": null
+ },
+ "sanjeevani": {
+  "text": [
+   "note.sanjeevani.1",
+   "note.sanjeevani.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 74, 101 (verify)",
+  "later": "later tradition",
+  "claim": "Unable to find the herbs, which hide themselves, Hanuman tears up the whole peak and brings it. In Valmiki he does this twice in the war: on",
+  "reviewer": null
+ },
+ "l6": {
+  "text": [
+   "note.l6.1",
+   "note.l6.2"
+  ],
+  "source": "Uttara Kanda, Uttara Kanda, sargas 10, 16 (verify)",
+  "later": "later tradition",
+  "claim": "This chapter is mostly not from Valmiki's six kandas. Ravana's ten thousand years of austerity, the offering of his heads, Brahma's boon tha",
+  "reviewer": null
+ },
+ "ravana": {
+  "text": [
+   "note.ravana.1",
+   "note.ravana.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 102-108 (verify)",
+  "later": null,
+  "claim": "Indra's chariot and its driver Matali, the heads that grow back as fast as Rama cuts them down, Matali's reminder, and the Brahma astra that",
+  "reviewer": null
+ },
+ "after": {
+  "text": [
+   "note.after.1",
+   "note.after.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 109-113 (verify)",
+  "later": null,
+  "claim": "Vibhishana's lament, Mandodari's, and Rama's answer that enmity ends with death are in Valmiki. Vibhishana is crowned by Lakshmana, and Hanu",
+  "reviewer": null
+ },
+ "lighting": {
+  "text": [
+   "note.lighting.1",
+   "note.lighting.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 122-127 (verify)",
+  "later": "later tradition",
+  "claim": "The flight home in the Pushpaka, with Rama pointing out to Sita each place they pass, Hanuman's errand to Bharata, and Bharata placing the s",
+  "reviewer": null
+ },
+ "coronation": {
+  "text": [
+   "note.coronation.1",
+   "note.coronation.2"
+  ],
+  "source": "Valmiki, Yuddha Kanda, sargas 128 (verify)",
+  "later": null,
+  "claim": "Valmiki's Yuddha Kanda ends with the coronation. Sita's gift of the pearl necklace to Hanuman, with Rama's consent, is in the text, and so i",
+  "reviewer": null
+ }
+}

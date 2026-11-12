@@ -1,0 +1,74 @@
+[
+ {
+  "bg": "ridge",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 546,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 433,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 339,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "janasthana.1"
+ },
+ {
+  "say": "rama",
+  "k": "janasthana.2"
+ },
+ {
+  "say": "lakshmana",
+  "k": "janasthana.3"
+ },
+ {
+  "say": "rama",
+  "k": "janasthana.4"
+ },
+ {
+  "move": "lakshmana",
+  "x": -320,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "move": "sita",
+  "x": -320,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ },
+ {
+  "battle": "janasthana"
+ },
+ {
+  "noop": true,
+  "label": "__seg2"
+ }
+]

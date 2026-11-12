@@ -1,0 +1,250 @@
+[
+ {
+  "bg": "city",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": 452,
+  "face": 1
+ },
+ {
+  "actor": "vasishtha",
+  "char": "vasishtha",
+  "x": 602,
+  "face": -1
+ },
+ {
+  "actor": "citizen",
+  "char": "citizen",
+  "x": 790,
+  "face": -1
+ },
+ {
+  "actor": "citizen2",
+  "char": "citizen",
+  "x": 884,
+  "face": -1,
+  "scale": 0.94
+ },
+ {
+  "actor": "citizen3",
+  "char": "sage",
+  "x": 978,
+  "face": -1
+ },
+ {
+  "bg": "city",
+  "colour": true
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.1"
+ },
+ {
+  "say": "dasharatha",
+  "k": "kaikeyi.2"
+ },
+ {
+  "pose": "citizen",
+  "p": "raise"
+ },
+ {
+  "pose": "citizen2",
+  "p": "raise"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.3"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "chamber",
+  "colour": true
+ },
+ {
+  "actor": "kaikeyi",
+  "char": "kaikeyi",
+  "x": 490,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "manthara",
+  "char": "manthara",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "manthara",
+  "x": 753,
+  "speed": 516.875,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.4"
+ },
+ {
+  "say": "manthara",
+  "k": "kaikeyi.5"
+ },
+ {
+  "pose": "kaikeyi",
+  "p": "give"
+ },
+ {
+  "say": "kaikeyi",
+  "k": "kaikeyi.6"
+ },
+ {
+  "pose": "kaikeyi",
+  "p": "stand"
+ },
+ {
+  "do": "hold",
+  "fx": "listen",
+  "dur": 7,
+  "k": "kaikeyi.7",
+  "to": 1.6,
+  "lines": [
+   {
+    "at": 0.2,
+    "k": "kaikeyi.8",
+    "who": "manthara"
+   },
+   {
+    "at": 0.4,
+    "k": "kaikeyi.9",
+    "who": "manthara"
+   },
+   {
+    "at": 0.6,
+    "k": "kaikeyi.10",
+    "who": "manthara"
+   },
+   {
+    "at": 0.8,
+    "k": "kaikeyi.11",
+    "who": "manthara"
+   }
+  ],
+  "cue": "chime",
+  "from": "manthara"
+ },
+ {
+  "say": "kaikeyi",
+  "k": "kaikeyi.12"
+ },
+ {
+  "pose": "kaikeyi",
+  "p": "grieve"
+ },
+ {
+  "move": "manthara",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.13"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "dasharatha",
+  "x": 358,
+  "speed": 411.25,
+  "nowait": false
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "say": "dasharatha",
+  "k": "kaikeyi.14"
+ },
+ {
+  "pose": "kaikeyi",
+  "p": "stand"
+ },
+ {
+  "say": "kaikeyi",
+  "k": "kaikeyi.15"
+ },
+ {
+  "pose": "dasharatha",
+  "p": "grieve"
+ },
+ {
+  "shake": 3
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.16"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 245,
+  "speed": 389.28571428571433,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "kaikeyi.17"
+ },
+ {
+  "say": "rama",
+  "k": "kaikeyi.18"
+ },
+ {
+  "bg": "chamber",
+  "colour": false
+ },
+ {
+  "wait": 1.2
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

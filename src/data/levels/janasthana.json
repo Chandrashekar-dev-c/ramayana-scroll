@@ -1,0 +1,189 @@
+{
+ "id": "janasthana",
+ "backdrop": "ridge",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "rama",
+  "stage": "exile"
+ },
+ "astras": true,
+ "tips": {
+  "kick": "janasthana.tip"
+ },
+ "allies": [],
+ "arenas": [
+  {
+   "left": 0,
+   "right": 1400,
+   "steps": [
+    {
+     "wave": "janasthana.o1",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 4,
+       "side": "right",
+       "gap": 1.4
+      },
+      {
+       "type": "archer",
+       "n": 2,
+       "side": "right",
+       "gap": 1.4
+      },
+      {
+       "type": "runner",
+       "n": 2,
+       "side": "right",
+       "gap": 1.4
+      }
+     ]
+    },
+    {
+     "checkpoint": "janasthana.cp1"
+    }
+   ]
+  },
+  {
+   "left": 1650,
+   "right": 3050,
+   "steps": [
+    {
+     "wave": "janasthana.o2",
+     "teach": "kick",
+     "groups": [
+      {
+       "type": "climber",
+       "n": 3,
+       "side": "both",
+       "gap": 1.6
+      },
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "both",
+       "gap": 1.6
+      },
+      {
+       "type": "climber",
+       "n": 2,
+       "side": "both",
+       "gap": 1.6
+      }
+     ]
+    },
+    {
+     "checkpoint": null
+    }
+   ]
+  },
+  {
+   "left": 3300,
+   "right": 4700,
+   "steps": [
+    {
+     "wave": "janasthana.o3",
+     "groups": [
+      {
+       "type": "mayavi",
+       "n": 1,
+       "side": "both",
+       "gap": 2.2
+      },
+      {
+       "type": "shield",
+       "n": 2,
+       "side": "both",
+       "gap": 2.2
+      },
+      {
+       "type": "archer",
+       "n": 1,
+       "side": "both",
+       "gap": 2.2
+      },
+      {
+       "type": "mayavi",
+       "n": 1,
+       "side": "both",
+       "gap": 2.2
+      }
+     ]
+    },
+    {
+     "checkpoint": "janasthana.cp3"
+    }
+   ]
+  },
+  {
+   "left": 4950,
+   "right": 6350,
+   "steps": [
+    {
+     "wave": "janasthana.o4",
+     "groups": [
+      {
+       "type": "elite:dushana",
+       "n": 1,
+       "side": "right",
+       "gap": 2.4
+      },
+      {
+       "type": "brute",
+       "n": 1,
+       "side": "right",
+       "gap": 2.4
+      },
+      {
+       "type": "climber",
+       "n": 2,
+       "side": "right",
+       "gap": 2.4
+      }
+     ]
+    },
+    {
+     "wave": "janasthana.o5",
+     "groups": [
+      {
+       "type": "elite:trishiras",
+       "n": 1,
+       "side": "both",
+       "gap": 2.2
+      },
+      {
+       "type": "archer",
+       "n": 2,
+       "side": "both",
+       "gap": 2.2
+      },
+      {
+       "type": "shield",
+       "n": 1,
+       "side": "both",
+       "gap": 2.2
+      }
+     ]
+    },
+    {
+     "checkpoint": null
+    }
+   ]
+  },
+  {
+   "left": 6600,
+   "right": 8200,
+   "steps": [
+    {
+     "boss": "khara",
+     "intro": "janasthana.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.janasthana.title",
+ "kandaTitle": "kanda.aranya",
+ "end": [
+  "janasthana.end.1"
+ ]
+}

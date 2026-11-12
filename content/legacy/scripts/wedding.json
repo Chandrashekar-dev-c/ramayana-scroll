@@ -1,0 +1,366 @@
+{
+ "id": "wedding",
+ "backdrop": "mithila",
+ "style": "bharni-bright",
+ "music": "court",
+ "cast": [
+  {
+   "id": "dasharatha",
+   "at": 0.16,
+   "face": 1
+  },
+  {
+   "id": "bharata",
+   "at": 0.07,
+   "face": 1,
+   "scale": 0.95
+  },
+  {
+   "id": "shatrughna",
+   "at": 0.26,
+   "face": 1
+  },
+  {
+   "id": "janaka",
+   "at": 0.84,
+   "face": -1
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "wedding.1"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "wedding.2"
+  },
+  {
+   "do": "backdrop",
+   "id": "court",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.2,
+   "stage": "prince",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.27,
+   "stage": "bride",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.4,
+   "stage": "prince",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "urmila",
+   "side": "left",
+   "to": 0.47,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "left",
+   "to": 0.6,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "mandavi",
+   "side": "left",
+   "to": 0.67,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "shatrughna",
+   "side": "left",
+   "to": 0.8,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "shrutakirti",
+   "side": "left",
+   "to": 0.87,
+   "time": 0.1
+  },
+  {
+   "do": "prop",
+   "id": "fire",
+   "name": "altar",
+   "at": 0.535,
+   "scale": 0.7
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "wedding.3"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "wedding.4",
+   "name": "name.janaka"
+  },
+  {
+   "do": "backdrop",
+   "id": "chamber",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "wall",
+   "name": "kohbar",
+   "at": 0.56,
+   "raw": true,
+   "scale": 1.25
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.14,
+   "stage": "bride",
+   "time": 0.8
+  },
+  {
+   "do": "narrate",
+   "text": "wedding.5"
+  },
+  {
+   "do": "interact",
+   "kind": "dragPlace",
+   "args": {
+    "from": [
+     0.2,
+     190
+    ],
+    "hint": "wedding.6",
+    "items": [
+     {
+      "kind": "lotusBamboo",
+      "to": [
+       0.56,
+       210
+      ],
+      "text": "wedding.7"
+     },
+     {
+      "kind": "parrot",
+      "to": [
+       0.44,
+       330
+      ],
+      "dir": 1,
+      "text": "wedding.8"
+     },
+     {
+      "kind": "parrot",
+      "to": [
+       0.68,
+       330
+      ],
+      "dir": -1
+     },
+     {
+      "kind": "fish",
+      "to": [
+       0.44,
+       100
+      ],
+      "dir": 1,
+      "text": "wedding.9"
+     },
+     {
+      "kind": "fish",
+      "to": [
+       0.68,
+       100
+      ],
+      "dir": -1
+     },
+     {
+      "kind": "sun",
+      "to": [
+       0.5,
+       410
+      ],
+      "text": "wedding.10"
+     },
+     {
+      "kind": "moon",
+      "to": [
+       0.62,
+       410
+      ]
+     },
+     {
+      "kind": "jogin",
+      "dir": 1,
+      "to": [
+       0.4,
+       400
+      ],
+      "text": "wedding.11"
+     },
+     {
+      "kind": "jogin",
+      "dir": -1,
+      "to": [
+       0.72,
+       400
+      ]
+     },
+     {
+      "kind": "jogin",
+      "dir": 1,
+      "to": [
+       0.4,
+       60
+      ]
+     },
+     {
+      "kind": "jogin",
+      "dir": -1,
+      "to": [
+       0.72,
+       60
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "wedding.12"
+  },
+  {
+   "do": "backdrop",
+   "id": "road",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "prince"
+  },
+  {
+   "do": "enter",
+   "who": "dasharatha",
+   "side": "left",
+   "to": 0.14
+  },
+  {
+   "do": "enter",
+   "who": "parashurama",
+   "side": "right",
+   "to": 0.74,
+   "time": 1.4
+  },
+  {
+   "do": "shake",
+   "amount": 4
+  },
+  {
+   "do": "sound",
+   "cue": "bellLow"
+  },
+  {
+   "do": "narrate",
+   "text": "wedding.13"
+  },
+  {
+   "do": "say",
+   "who": "parashurama",
+   "text": "wedding.14"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "wedding.15"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "wedding.16"
+  },
+  {
+   "do": "interact",
+   "kind": "holdRelease",
+   "args": {
+    "who": "rama",
+    "time": 1.4,
+    "pose": [
+     "draw1",
+     "draw2",
+     "draw2"
+    ],
+    "hint": "wedding.17",
+    "shake": 5,
+    "endPose": "draw2"
+   }
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "wedding.18"
+  },
+  {
+   "do": "pose",
+   "who": "parashurama",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "parashurama",
+   "text": "wedding.19"
+  },
+  {
+   "do": "exit",
+   "who": "parashurama",
+   "side": "right"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "city",
+   "clear": true
+  },
+  {
+   "do": "narrate",
+   "text": "wedding.20"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

@@ -1,0 +1,148 @@
+[
+ {
+  "bg": "hermitage",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": 358,
+  "face": 1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 490,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 424,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "ahalya",
+  "char": "ahalya",
+  "x": 828,
+  "face": -1,
+  "stage": "unseen",
+  "pose": "sit",
+  "mode": "line"
+ },
+ {
+  "narrate": true,
+  "k": "ahalya.1"
+ },
+ {
+  "say": "rama",
+  "k": "ahalya.2"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "ahalya.3"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "ahalya.4"
+ },
+ {
+  "narrate": true,
+  "k": "ahalya.5"
+ },
+ {
+  "do": "walk",
+  "actor": "rama",
+  "x": 734,
+  "speed": 130,
+  "k": "hint.walk"
+ },
+ {
+  "pose": "rama",
+  "p": "bow"
+ },
+ {
+  "move": "lakshmana",
+  "x": 678,
+  "time": 1.2
+ },
+ {
+  "pose": "lakshmana",
+  "p": "bow"
+ },
+ {
+  "do": "hold",
+  "fx": "colourUp",
+  "actor": "ahalya",
+  "dur": 2.6,
+  "k": "ahalya.6",
+  "to": 1.6,
+  "lines": []
+ },
+ {
+  "actor": "ahalya",
+  "char": "ahalya",
+  "pose": "stand",
+  "mode": "colour",
+  "alpha": 1,
+  "stage": "freed"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "narrate": true,
+  "k": "ahalya.7"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "pose": "ahalya",
+  "p": "namaste"
+ },
+ {
+  "say": "ahalya",
+  "k": "ahalya.8"
+ },
+ {
+  "actor": "gautama",
+  "char": "gautama",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "gautama",
+  "x": 960,
+  "speed": 387.5,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "ahalya.9"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

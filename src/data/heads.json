@@ -1,0 +1,12 @@
+[
+ { "id": "scholar", "name": "head.scholar", "wise": true },
+ { "id": "devotee", "name": "head.devotee", "wise": true },
+ { "id": "brother", "name": "head.brother", "wise": true },
+ { "id": "father", "name": "head.father", "wise": true },
+ { "id": "honour", "name": "head.honour", "wise": true },
+ { "id": "fear", "name": "head.fear", "wise": false },
+ { "id": "anger", "name": "head.anger", "wise": false },
+ { "id": "desire", "name": "head.desire", "wise": false },
+ { "id": "pride", "name": "head.pride", "wise": false },
+ { "id": "king", "name": "head.king", "wise": true }
+]

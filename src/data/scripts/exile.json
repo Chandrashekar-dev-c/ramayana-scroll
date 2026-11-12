@@ -1,0 +1,290 @@
+[
+ {
+  "bg": "chamber",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "kaushalya",
+  "char": "kaushalya",
+  "x": 790,
+  "face": -1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 527,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 358,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "narrate": true,
+  "k": "exile.1"
+ },
+ {
+  "say": "rama",
+  "k": "exile.2"
+ },
+ {
+  "narrate": true,
+  "k": "exile.3"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "point"
+ },
+ {
+  "say": "lakshmana",
+  "k": "exile.4"
+ },
+ {
+  "say": "rama",
+  "k": "exile.5"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 1580,
+  "face": -1,
+  "stage": "bride",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sita",
+  "x": 960,
+  "speed": 442.8571428571429,
+  "nowait": false
+ },
+ {
+  "say": "rama",
+  "k": "exile.6"
+ },
+ {
+  "say": "sita",
+  "k": "exile.7"
+ },
+ {
+  "say": "lakshmana",
+  "k": "exile.8"
+ },
+ {
+  "actor": "sumitra",
+  "char": "sumitra",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sumitra",
+  "x": 226,
+  "speed": 438.33333333333337,
+  "nowait": false
+ },
+ {
+  "say": "sumitra",
+  "k": "exile.9"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "city"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 584,
+  "face": 1,
+  "stage": "bride",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 715,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "citizen",
+  "char": "citizen",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "citizen",
+  "x": 922,
+  "speed": 1096.6666666666667,
+  "nowait": false
+ },
+ {
+  "actor": "citizen2",
+  "char": "sage",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "citizen2",
+  "x": 1016,
+  "speed": 705,
+  "nowait": false
+ },
+ {
+  "pose": "citizen",
+  "p": "give"
+ },
+ {
+  "pose": "citizen2",
+  "p": "give"
+ },
+ {
+  "narrate": true,
+  "k": "exile.10"
+ },
+ {
+  "do": "give",
+  "k": "exile.11",
+  "from": [
+   {
+    "actor": "rama",
+    "n": 2
+   },
+   {
+    "actor": "sita",
+    "n": 2
+   },
+   {
+    "actor": "lakshmana",
+    "n": 2
+   }
+  ],
+  "hands": [
+   922,
+   1016
+  ],
+  "handY": 528,
+  "lines": [
+   "exile.12",
+   "exile.13",
+   "exile.14"
+  ]
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "stage": "exile"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "exile.15"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "tamasa"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "narrate": true,
+  "k": "exile.16"
+ },
+ {
+  "say": "rama",
+  "nk": "name.rama",
+  "k": "exile.17"
+ },
+ {
+  "do": "hold",
+  "fx": "drive",
+  "prop": "chariot",
+  "x": 1700,
+  "dur": 9,
+  "k": "exile.drive"
+ },
+ {
+  "narrate": true,
+  "k": "exile.18"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "road"
+ },
+ {
+  "narrate": true,
+  "k": "exile.19"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

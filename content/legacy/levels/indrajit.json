@@ -1,0 +1,102 @@
+{
+ "id": "indrajit",
+ "backdrop": "grove",
+ "style": "kachni",
+ "music": "war",
+ "hero": {
+  "id": "lakshmana",
+  "stage": "exile",
+  "start": 300
+ },
+ "astras": true,
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1700
+  },
+  {
+   "left": 1950,
+   "right": 3900
+  }
+ ],
+ "tips": {
+  "roll": "indrajit.tip",
+  "shoot": "indrajit.tip"
+ },
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.indrajit.title",
+   "sub": "kanda.yuddha"
+  },
+  {
+   "type": "timer",
+   "label": "indrajit.rite",
+   "time": 110,
+   "tip": "indrajit.riteTip"
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "indrajit.o1",
+   "spawn": [
+    [
+     "naga",
+     2
+    ],
+    [
+     "grunt",
+     3
+    ]
+   ],
+   "side": "right",
+   "gap": 1.5,
+   "line": "indrajit.naga"
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "indrajit.o2",
+   "spawn": [
+    [
+     "standard",
+     1
+    ],
+    [
+     "shield",
+     2
+    ],
+    [
+     "archer",
+     2
+    ]
+   ],
+   "side": "right",
+   "gap": 1.6,
+   "line": "indrajit.banner"
+  },
+  {
+   "type": "timerStop"
+  },
+  {
+   "type": "checkpoint",
+   "line": "indrajit.cp"
+  },
+  {
+   "type": "boss",
+   "arena": 1,
+   "boss": "indrajit",
+   "intro": "indrajit.bossIntro"
+  },
+  {
+   "type": "scene",
+   "lines": [
+    "indrajit.end.1",
+    "indrajit.end.2"
+   ]
+  }
+ ],
+ "win": [
+  "indrajit.win.1"
+ ]
+}

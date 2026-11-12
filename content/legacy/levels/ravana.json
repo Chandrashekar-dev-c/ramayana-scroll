@@ -1,0 +1,104 @@
+{
+ "id": "ravana",
+ "backdrop": "battlefield",
+ "style": "kachni",
+ "music": "war",
+ "hero": {
+  "id": "rama",
+  "stage": "exile",
+  "start": 300
+ },
+ "astras": true,
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1700
+  },
+  {
+   "left": 1950,
+   "right": 4000
+  }
+ ],
+ "tips": {
+  "move": "ravana.tip",
+  "roll": "ravana.tip",
+  "jump": "ravana.tip"
+ },
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.ravana.title",
+   "sub": "kanda.yuddha"
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "ravana.o1",
+   "spawn": [
+    [
+     "standard",
+     1
+    ],
+    [
+     "shield",
+     2
+    ],
+    [
+     "naga",
+     2
+    ]
+   ],
+   "side": "right",
+   "gap": 1.5
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "ravana.o2",
+   "spawn": [
+    [
+     "elephant",
+     1
+    ],
+    [
+     "archer",
+     2
+    ],
+    [
+     "standard",
+     1
+    ],
+    [
+     "brute",
+     1
+    ]
+   ],
+   "side": "both",
+   "gap": 2
+  },
+  {
+   "type": "checkpoint",
+   "line": "ravana.cp"
+  },
+  {
+   "type": "boss",
+   "arena": 1,
+   "boss": "ravana",
+   "intro": "ravana.bossIntro"
+  },
+  {
+   "type": "heal"
+  },
+  {
+   "type": "scene",
+   "lines": [
+    "ravana.end.1",
+    "ravana.end.2"
+   ]
+  }
+ ],
+ "win": [
+  "ravana.win.1",
+  "ravana.win.2"
+ ]
+}

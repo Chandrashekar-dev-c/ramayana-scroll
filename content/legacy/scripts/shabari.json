@@ -1,0 +1,224 @@
+{
+ "id": "shabari",
+ "backdrop": "forest",
+ "style": "bharni-earth",
+ "music": "dark",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.3,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.2,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "beats": [
+  {
+   "do": "enter",
+   "who": "kabandha",
+   "side": "right",
+   "to": 0.72,
+   "time": 1.2
+  },
+  {
+   "do": "shake",
+   "amount": 5
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.1"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "swing1"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "swing1"
+  },
+  {
+   "do": "set",
+   "who": "kabandha",
+   "pose": "hurt"
+  },
+  {
+   "do": "sound",
+   "cue": "thud"
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.2"
+  },
+  {
+   "do": "say",
+   "who": "kabandha",
+   "text": "shabari.3"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "pampa",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "forest"
+  },
+  {
+   "do": "enter",
+   "who": "shabari",
+   "side": "right",
+   "to": 0.3,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "shabari",
+   "face": 1
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.4"
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "right",
+   "to": 0.8,
+   "stage": "exile",
+   "time": 1.4
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "face": -1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "right",
+   "to": 0.9,
+   "stage": "exile",
+   "time": 1.6
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "face": -1
+  },
+  {
+   "do": "say",
+   "who": "shabari",
+   "text": "shabari.5"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "sit"
+  },
+  {
+   "do": "interact",
+   "kind": "berries",
+   "args": {
+    "count": 8
+   }
+  },
+  {
+   "do": "pose",
+   "who": "shabari",
+   "pose": "give"
+  },
+  {
+   "do": "move",
+   "who": "shabari",
+   "to": 0.66,
+   "time": 1.4
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.6"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "shabari.7"
+  },
+  {
+   "do": "say",
+   "who": "shabari",
+   "text": "shabari.8"
+  },
+  {
+   "do": "prop",
+   "id": "fire",
+   "name": "altar",
+   "at": 0.3,
+   "scale": 0.8
+  },
+  {
+   "do": "move",
+   "who": "shabari",
+   "to": 0.3,
+   "time": 1.6
+  },
+  {
+   "do": "set",
+   "who": "shabari",
+   "visible": false
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.9"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.6,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "music",
+   "mood": "grief"
+  },
+  {
+   "do": "narrate",
+   "text": "shabari.10"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "shabari.11"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

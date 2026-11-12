@@ -1,0 +1,318 @@
+[
+ {
+  "id": "ayodhya",
+  "tier": 0,
+  "x": 260,
+  "icon": "city",
+  "lanka": false,
+  "chapters": [
+   "sage"
+  ]
+ },
+ {
+  "id": "sarayu",
+  "tier": 0,
+  "x": 680,
+  "icon": "river",
+  "lanka": false,
+  "chapters": [
+   "sarayu"
+  ]
+ },
+ {
+  "id": "tatakaWaste",
+  "tier": 0,
+  "x": 1100,
+  "icon": "waste",
+  "lanka": false,
+  "chapters": [
+   "tataka"
+  ]
+ },
+ {
+  "id": "siddhashrama",
+  "tier": 0,
+  "x": 1520,
+  "icon": "ashram",
+  "lanka": false,
+  "chapters": [
+   "yajna"
+  ]
+ },
+ {
+  "id": "gautamaAshram",
+  "tier": 0,
+  "x": 1940,
+  "icon": "hermitage",
+  "lanka": false,
+  "chapters": [
+   "ahalya"
+  ]
+ },
+ {
+  "id": "mithila",
+  "tier": 0,
+  "x": 2300,
+  "icon": "mithila",
+  "lanka": false,
+  "chapters": [
+   "bow",
+   "wedding"
+  ]
+ },
+ {
+  "id": "palace",
+  "tier": 1,
+  "x": 2300,
+  "icon": "palace",
+  "lanka": false,
+  "chapters": [
+   "kaikeyi",
+   "dasharatha"
+  ]
+ },
+ {
+  "id": "tamasa",
+  "tier": 1,
+  "x": 1700,
+  "icon": "river",
+  "lanka": false,
+  "chapters": [
+   "exile"
+  ]
+ },
+ {
+  "id": "shringaverapura",
+  "tier": 1,
+  "x": 1100,
+  "icon": "river",
+  "lanka": false,
+  "chapters": [
+   "boat"
+  ]
+ },
+ {
+  "id": "chitrakuta",
+  "tier": 1,
+  "x": 500,
+  "icon": "hill",
+  "lanka": false,
+  "chapters": [
+   "bharata"
+  ]
+ },
+ {
+  "id": "dandaka",
+  "tier": 2,
+  "x": 300,
+  "icon": "forest",
+  "lanka": false,
+  "chapters": [
+   "viradha"
+  ]
+ },
+ {
+  "id": "panchavati",
+  "tier": 2,
+  "x": 800,
+  "icon": "hut",
+  "lanka": false,
+  "chapters": [
+   "shurpanakha",
+   "deer",
+   "rekha",
+   "hut"
+  ]
+ },
+ {
+  "id": "janasthana",
+  "tier": 2,
+  "x": 1300,
+  "icon": "ridge",
+  "lanka": false,
+  "chapters": [
+   "janasthana"
+  ]
+ },
+ {
+  "id": "southSky",
+  "tier": 2,
+  "x": 1800,
+  "icon": "sky",
+  "lanka": false,
+  "chapters": [
+   "jatayu",
+   "jewels"
+  ]
+ },
+ {
+  "id": "pampa",
+  "tier": 2,
+  "x": 2300,
+  "icon": "lake",
+  "lanka": false,
+  "chapters": [
+   "shabari"
+  ]
+ },
+ {
+  "id": "rishyamukha",
+  "tier": 3,
+  "x": 2100,
+  "icon": "trees",
+  "lanka": false,
+  "chapters": [
+   "friends",
+   "sala"
+  ]
+ },
+ {
+  "id": "kishkindhaCity",
+  "tier": 3,
+  "x": 1300,
+  "icon": "rocks",
+  "lanka": false,
+  "chapters": [
+   "vali"
+  ]
+ },
+ {
+  "id": "southShore",
+  "tier": 3,
+  "x": 500,
+  "icon": "shore",
+  "lanka": false,
+  "chapters": [
+   "search"
+  ]
+ },
+ {
+  "id": "mahendra",
+  "tier": 4,
+  "x": 300,
+  "icon": "ocean",
+  "lanka": false,
+  "chapters": [
+   "leap"
+  ]
+ },
+ {
+  "id": "lankaGate",
+  "tier": 4,
+  "x": 800,
+  "icon": "lanka",
+  "lanka": true,
+  "chapters": [
+   "night"
+  ]
+ },
+ {
+  "id": "ashokaGrove",
+  "tier": 4,
+  "x": 1300,
+  "icon": "grove",
+  "lanka": false,
+  "chapters": [
+   "l2",
+   "ashoka"
+  ]
+ },
+ {
+  "id": "ravanaCourt",
+  "tier": 4,
+  "x": 1800,
+  "icon": "lanka",
+  "lanka": true,
+  "chapters": [
+   "l1",
+   "court",
+   "l3"
+  ]
+ },
+ {
+  "id": "lankaRoofs",
+  "tier": 4,
+  "x": 2300,
+  "icon": "lanka",
+  "lanka": true,
+  "chapters": [
+   "burn"
+  ]
+ },
+ {
+  "id": "bridge",
+  "tier": 5,
+  "x": 260,
+  "icon": "bridge",
+  "lanka": false,
+  "chapters": [
+   "bridge"
+  ]
+ },
+ {
+  "id": "lankaWalls",
+  "tier": 5,
+  "x": 620,
+  "icon": "lanka",
+  "lanka": true,
+  "chapters": [
+   "angada"
+  ]
+ },
+ {
+  "id": "battlefield",
+  "tier": 5,
+  "x": 980,
+  "icon": "field",
+  "lanka": false,
+  "chapters": [
+   "kumbhakarna",
+   "falls",
+   "ravana",
+   "after"
+  ]
+ },
+ {
+  "id": "nikumbhila",
+  "tier": 5,
+  "x": 1340,
+  "icon": "grove",
+  "lanka": false,
+  "chapters": [
+   "indrajit"
+  ]
+ },
+ {
+  "id": "lankaPalace",
+  "tier": 5,
+  "x": 1700,
+  "icon": "lanka",
+  "lanka": true,
+  "chapters": [
+   "l4",
+   "l5",
+   "l6"
+  ]
+ },
+ {
+  "id": "himalaya",
+  "tier": 5,
+  "x": 2060,
+  "icon": "camp",
+  "lanka": false,
+  "chapters": [
+   "sanjeevani"
+  ]
+ },
+ {
+  "id": "ayodhyaHome",
+  "tier": 5,
+  "x": 2300,
+  "icon": "city",
+  "lanka": false,
+  "chapters": [
+   "lighting",
+   "coronation"
+  ]
+ }
+]

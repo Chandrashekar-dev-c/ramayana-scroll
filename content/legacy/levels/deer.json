@@ -1,0 +1,34 @@
+{
+ "id": "deer",
+ "backdrop": "deepForest",
+ "style": "bharni-earth",
+ "music": "dark",
+ "hero": {
+  "id": "rama",
+  "stage": "exile",
+  "start": 200
+ },
+ "astras": false,
+ "arenas": [
+  {
+   "left": 0,
+   "right": 5600
+  }
+ ],
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.deer.title",
+   "sub": "kanda.aranya"
+  },
+  {
+   "type": "boss",
+   "arena": 0,
+   "boss": "deer",
+   "intro": "deer.intro"
+  }
+ ],
+ "win": [
+  "deer.win.1"
+ ]
+}

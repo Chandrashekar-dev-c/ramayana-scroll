@@ -1,0 +1,128 @@
+{
+ "id": "yajnaIntro",
+ "backdrop": "ashram",
+ "style": "bharni-bright",
+ "music": "bala-morning",
+ "cast": [
+  {
+   "id": "vishvamitra",
+   "at": 0.64,
+   "face": -1
+  },
+  {
+   "id": "rama",
+   "at": 0.4,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.26,
+   "face": 1,
+   "stage": "prince"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "yajna.1"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "yajna.2"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "kneel"
+  },
+  {
+   "do": "pose",
+   "who": "vishvamitra",
+   "pose": "raise"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "yajna.3"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "yajna.4"
+  },
+  {
+   "do": "interact",
+   "kind": "trace",
+   "args": {
+    "symbol": "sun",
+    "at": 0.4,
+    "y": 300,
+    "size": 110
+   }
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "yajna.5"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "vishvamitra",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "ashram",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "vishvamitra",
+   "side": "left",
+   "to": 0.6
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.34,
+   "stage": "prince"
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.22,
+   "stage": "prince"
+  },
+  {
+   "do": "prop",
+   "id": "altar",
+   "name": "altar",
+   "at": 0.76,
+   "state": 0.3
+  },
+  {
+   "do": "narrate",
+   "text": "yajna.6"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "yajna.7"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

@@ -1,0 +1,279 @@
+{
+ "id": "exile",
+ "backdrop": "chamber",
+ "style": "bharni-bright",
+ "music": "dark",
+ "cast": [
+  {
+   "id": "kaushalya",
+   "at": 0.66,
+   "face": -1
+  },
+  {
+   "id": "rama",
+   "at": 0.38,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.2,
+   "face": 1,
+   "stage": "prince"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "exile.1"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "exile.2"
+  },
+  {
+   "do": "narrate",
+   "text": "exile.3"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "point"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "exile.4"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "exile.5"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "right",
+   "to": 0.84,
+   "stage": "bride",
+   "time": 1.4
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "exile.6"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "exile.7"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "exile.8"
+  },
+  {
+   "do": "enter",
+   "who": "sumitra",
+   "side": "left",
+   "to": 0.06,
+   "time": 1.2
+  },
+  {
+   "do": "say",
+   "who": "sumitra",
+   "text": "exile.9"
+  },
+  {
+   "do": "backdrop",
+   "id": "city",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "prince",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.44,
+   "stage": "bride",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.58,
+   "stage": "prince",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "citizen",
+   "side": "right",
+   "to": 0.8,
+   "time": 0.6
+  },
+  {
+   "do": "enter",
+   "who": "citizen2",
+   "side": "right",
+   "to": 0.9,
+   "as": "sage",
+   "time": 0.8
+  },
+  {
+   "do": "pose",
+   "who": "citizen",
+   "pose": "give"
+  },
+  {
+   "do": "pose",
+   "who": "citizen2",
+   "pose": "give"
+  },
+  {
+   "do": "narrate",
+   "text": "exile.10"
+  },
+  {
+   "do": "interact",
+   "kind": "dragPlace",
+   "args": {
+    "hint": "exile.11",
+    "keep": false,
+    "items": [
+     {
+      "kind": "ornament",
+      "who": "rama",
+      "fy": 190,
+      "to": [
+       0.8,
+       120
+      ],
+      "text": "exile.12"
+     },
+     {
+      "kind": "ornament",
+      "who": "rama",
+      "fy": 110,
+      "to": [
+       0.9,
+       120
+      ]
+     },
+     {
+      "kind": "ornament",
+      "who": "sita",
+      "fy": 150,
+      "to": [
+       0.8,
+       120
+      ],
+      "text": "exile.13"
+     },
+     {
+      "kind": "ornament",
+      "who": "sita",
+      "fy": 90,
+      "to": [
+       0.9,
+       120
+      ]
+     },
+     {
+      "kind": "ornament",
+      "who": "lakshmana",
+      "fy": 180,
+      "to": [
+       0.8,
+       120
+      ],
+      "text": "exile.14"
+     },
+     {
+      "kind": "ornament",
+      "who": "lakshmana",
+      "fy": 110,
+      "to": [
+       0.9,
+       120
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "set",
+   "who": "rama",
+   "stage": "exile"
+  },
+  {
+   "do": "set",
+   "who": "lakshmana",
+   "stage": "exile"
+  },
+  {
+   "do": "set",
+   "who": "sita",
+   "stage": "exile"
+  },
+  {
+   "do": "narrate",
+   "text": "exile.15"
+  },
+  {
+   "do": "backdrop",
+   "id": "tamasa",
+   "clear": true
+  },
+  {
+   "do": "music",
+   "mood": "grief"
+  },
+  {
+   "do": "narrate",
+   "text": "exile.16"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "exile.17",
+   "name": "name.rama"
+  },
+  {
+   "do": "interact",
+   "kind": "drive",
+   "args": {}
+  },
+  {
+   "do": "narrate",
+   "text": "exile.18"
+  },
+  {
+   "do": "backdrop",
+   "id": "road",
+   "clear": true
+  },
+  {
+   "do": "narrate",
+   "text": "exile.19"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

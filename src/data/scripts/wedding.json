@@ -1,0 +1,329 @@
+[
+ {
+  "bg": "mithila",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": 320,
+  "face": 1
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 236,
+  "face": 1,
+  "scale": 0.95
+ },
+ {
+  "actor": "shatrughna",
+  "char": "shatrughna",
+  "x": 414,
+  "face": 1
+ },
+ {
+  "actor": "janaka",
+  "char": "janaka",
+  "x": 960,
+  "face": -1
+ },
+ {
+  "narrate": true,
+  "k": "wedding.1"
+ },
+ {
+  "say": "janaka",
+  "k": "wedding.2"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "court"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 358,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 424,
+  "face": 1,
+  "stage": "bride",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 546,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "urmila",
+  "char": "urmila",
+  "x": 612,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 734,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "mandavi",
+  "char": "mandavi",
+  "x": 800,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "shatrughna",
+  "char": "shatrughna",
+  "x": 922,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "shrutakirti",
+  "char": "shrutakirti",
+  "x": 988,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "prop": "fire",
+  "name": "altar",
+  "x": 673,
+  "scale": 0.7
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "narrate": true,
+  "k": "wedding.3"
+ },
+ {
+  "say": "janaka",
+  "nk": "name.janaka",
+  "k": "wedding.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "chamber"
+ },
+ {
+  "prop": "wall",
+  "name": "kohbar",
+  "x": 696,
+  "scale": 1.25
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": -300,
+  "face": 1,
+  "stage": "bride",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sita",
+  "x": 302,
+  "speed": 752.5,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "wedding.5"
+ },
+ {
+  "do": "kohbar"
+ },
+ {
+  "say": "sita",
+  "k": "wedding.12"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "road"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 452,
+  "speed": 501.3333333333333,
+  "nowait": false
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "dasharatha",
+  "x": 302,
+  "speed": 401.3333333333333,
+  "nowait": false
+ },
+ {
+  "actor": "parashurama",
+  "char": "parashurama",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "parashurama",
+  "x": 866,
+  "speed": 510.00000000000006,
+  "nowait": false
+ },
+ {
+  "shake": 4
+ },
+ {
+  "cue": "starLow"
+ },
+ {
+  "narrate": true,
+  "k": "wedding.13"
+ },
+ {
+  "say": "parashurama",
+  "k": "wedding.14"
+ },
+ {
+  "say": "dasharatha",
+  "k": "wedding.15"
+ },
+ {
+  "say": "rama",
+  "k": "wedding.16"
+ },
+ {
+  "do": "charge",
+  "actor": "rama",
+  "dur": 1.4,
+  "poses": [
+   "draw1",
+   "draw2",
+   "draw2"
+  ],
+  "endPose": "draw2",
+  "shake": 5,
+  "k": "wedding.17",
+  "after": []
+ },
+ {
+  "say": "rama",
+  "k": "wedding.18"
+ },
+ {
+  "pose": "parashurama",
+  "p": "namaste"
+ },
+ {
+  "say": "parashurama",
+  "k": "wedding.19"
+ },
+ {
+  "move": "parashurama",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "city"
+ },
+ {
+  "narrate": true,
+  "k": "wedding.20"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,202 @@
+[
+ {
+  "bg": "kishkindha",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 414,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 320,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "friends.1"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 753,
+  "speed": 590.7142857142858,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "friends.2"
+ },
+ {
+  "say": "hanuman",
+  "k": "friends.3"
+ },
+ {
+  "say": "rama",
+  "nk": "name.rama",
+  "k": "friends.4"
+ },
+ {
+  "say": "lakshmana",
+  "k": "friends.5"
+ },
+ {
+  "pose": "hanuman",
+  "p": "namaste"
+ },
+ {
+  "say": "hanuman",
+  "k": "friends.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "prop": "fire",
+  "name": "altar",
+  "x": 640,
+  "scale": 0.7
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 772,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 960,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 358,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "narrate": true,
+  "k": "friends.7"
+ },
+ {
+  "say": "sugriva",
+  "k": "friends.8"
+ },
+ {
+  "prop": "bundle",
+  "name": "bundle",
+  "x": 640,
+  "front": true,
+  "y": 478
+ },
+ {
+  "do": "tap",
+  "k": "friends.9",
+  "targets": [
+   {
+    "x": 584,
+    "y": 418,
+    "lab": "friends.10",
+    "k": "friends.11",
+    "icon": "ornament",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 640,
+    "y": 398,
+    "lab": "friends.12",
+    "k": "friends.13",
+    "icon": "ornament",
+    "then": [],
+    "r": 64
+   },
+   {
+    "x": 696,
+    "y": 418,
+    "lab": "friends.14",
+    "k": "friends.15",
+    "icon": "ornament",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "say": "lakshmana",
+  "k": "friends.16"
+ },
+ {
+  "pose": "rama",
+  "p": "grieve"
+ },
+ {
+  "wait": 1
+ },
+ {
+  "say": "sugriva",
+  "k": "friends.17"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "say": "rama",
+  "k": "friends.18"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

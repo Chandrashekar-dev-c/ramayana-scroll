@@ -1,0 +1,98 @@
+[
+ {
+  "kind": "fade",
+  "place": "ayodhya",
+  "after": "kaikeyi",
+  "until": "coronation"
+ },
+ {
+  "kind": "fade",
+  "place": "panchavati",
+  "after": "rekha",
+  "until": "coronation"
+ },
+ {
+  "kind": "ravanaLine",
+  "after": "l1",
+  "from": "ravanaCourt",
+  "to": "panchavati"
+ },
+ {
+  "kind": "ravanaLine",
+  "after": "l3",
+  "from": "ravanaCourt",
+  "to": "bridge"
+ },
+ {
+  "kind": "ravanaLine",
+  "after": "l6",
+  "from": "lankaPalace",
+  "to": "battlefield"
+ },
+ {
+  "kind": "feather",
+  "after": "jatayu",
+  "at": "southSky"
+ },
+ {
+  "kind": "goldDots",
+  "after": "jewels",
+  "at": "southSky"
+ },
+ {
+  "kind": "flame",
+  "after": "hut",
+  "at": "panchavati",
+  "dx": 110,
+  "dy": 10
+ },
+ {
+  "kind": "holes",
+  "after": "sala",
+  "at": "rishyamukha"
+ },
+ {
+  "kind": "dotted",
+  "after": "search",
+  "from": "southShore",
+  "to": "lankaGate"
+ },
+ {
+  "kind": "flame",
+  "after": "court",
+  "at": "ravanaCourt"
+ },
+ {
+  "kind": "flames",
+  "after": "burn",
+  "at": "lankaRoofs"
+ },
+ {
+  "kind": "bridge",
+  "after": "bridge",
+  "from": "bridge",
+  "to": "lankaWalls"
+ },
+ {
+  "kind": "dotted",
+  "after": "falls",
+  "from": "battlefield",
+  "to": "himalaya",
+  "gold": true
+ },
+ {
+  "kind": "lamps",
+  "after": "lighting",
+  "at": "ayodhyaHome"
+ },
+ {
+  "kind": "sandals",
+  "after": "bharata",
+  "at": "chitrakuta"
+ },
+ {
+  "kind": "door",
+  "after": "coronation",
+  "at": "ayodhyaHome"
+ }
+]

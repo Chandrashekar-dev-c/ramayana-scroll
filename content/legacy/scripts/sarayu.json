@@ -1,0 +1,163 @@
+{
+ "id": "sarayu",
+ "backdrop": "riverbank",
+ "style": "bharni-bright",
+ "music": "bala-morning",
+ "cast": [
+  {
+   "id": "vishvamitra",
+   "at": 0.62,
+   "face": -1
+  },
+  {
+   "id": "rama",
+   "at": 0.36,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.24,
+   "face": 1,
+   "stage": "prince"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "sarayu.1"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.2"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.3"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "kneel"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "kneel"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "wait",
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "narrate",
+   "text": "sarayu.4"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.5"
+  },
+  {
+   "do": "interact",
+   "kind": "battle",
+   "args": {
+    "level": "sarayuTargets",
+    "hides": [
+     "rama"
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "waste",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "vishvamitra",
+   "side": "left",
+   "to": 0.5
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.34,
+   "stage": "prince"
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.22,
+   "stage": "prince"
+  },
+  {
+   "do": "narrate",
+   "text": "sarayu.7"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "sarayu.8"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.9"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "sarayu.10"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sarayu.11"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "sarayu.12"
+  },
+  {
+   "do": "backdrop",
+   "id": "riverbank",
+   "clear": true
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

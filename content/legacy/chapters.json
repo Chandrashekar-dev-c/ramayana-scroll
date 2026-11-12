@@ -1,0 +1,1415 @@
+[
+ {
+  "id": "sage",
+  "order": 1,
+  "kanda": "bala",
+  "place": "ayodhya",
+  "type": "scene",
+  "title": "chapter.sage.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "sage",
+  "lanka": false,
+  "unlock": {
+   "after": null
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 240
+  },
+  "note": "note.sage",
+  "win": [
+   "sage.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "18-22 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "sarayu",
+  "order": 2,
+  "kanda": "bala",
+  "place": "sarayu",
+  "type": "scene",
+  "title": "chapter.sarayu.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "sarayu",
+  "lanka": false,
+  "unlock": {
+   "after": "sage"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.sarayu",
+  "win": [
+   "sarayu.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "22-25 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "tataka",
+  "order": 3,
+  "kanda": "bala",
+  "place": "tatakaWaste",
+  "type": "battle",
+  "title": "chapter.tataka.title",
+  "style": "bharni-bright",
+  "level": "tataka",
+  "script": null,
+  "lanka": false,
+  "unlock": {
+   "after": "sarayu"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 540
+  },
+  "note": "note.tataka",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "24-26 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "yajna",
+  "order": 4,
+  "kanda": "bala",
+  "place": "siddhashrama",
+  "type": "battle",
+  "title": "chapter.yajna.title",
+  "style": "bharni-bright",
+  "level": "yajna",
+  "script": "yajnaIntro",
+  "lanka": false,
+  "unlock": {
+   "after": "tataka"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 600
+  },
+  "note": "note.yajna",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "27-30 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "ahalya",
+  "order": 5,
+  "kanda": "bala",
+  "place": "gautamaAshram",
+  "type": "scene",
+  "title": "chapter.ahalya.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "ahalya",
+  "lanka": false,
+  "unlock": {
+   "after": "yajna"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 200
+  },
+  "note": "note.ahalya",
+  "win": [
+   "ahalya.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "48-49 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "bow",
+  "order": 6,
+  "kanda": "bala",
+  "place": "mithila",
+  "type": "scene",
+  "title": "chapter.bow.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "bow",
+  "lanka": false,
+  "unlock": {
+   "after": "ahalya"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 240
+  },
+  "note": "note.bow",
+  "win": [
+   "bow.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "66-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "wedding",
+  "order": 7,
+  "kanda": "bala",
+  "place": "mithila",
+  "type": "trial",
+  "title": "chapter.wedding.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "wedding",
+  "lanka": false,
+  "unlock": {
+   "after": "bow"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 330
+  },
+  "note": "note.wedding",
+  "win": [
+   "wedding.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "69-77 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "kaikeyi",
+  "order": 8,
+  "kanda": "ayodhya",
+  "place": "palace",
+  "type": "scene",
+  "title": "chapter.kaikeyi.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "kaikeyi",
+  "lanka": false,
+  "unlock": {
+   "after": "wedding"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.kaikeyi",
+  "win": [
+   "kaikeyi.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "7-19 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "exile",
+  "order": 9,
+  "kanda": "ayodhya",
+  "place": "tamasa",
+  "type": "scene",
+  "title": "chapter.exile.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "exile",
+  "lanka": false,
+  "unlock": {
+   "after": "kaikeyi"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 330
+  },
+  "note": "note.exile",
+  "win": [
+   "exile.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "20-46 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "boat",
+  "order": 10,
+  "kanda": "ayodhya",
+  "place": "shringaverapura",
+  "type": "trial",
+  "title": "chapter.boat.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "boat",
+  "lanka": false,
+  "unlock": {
+   "after": "exile"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.boat",
+  "win": [
+   "boat.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "50-52 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "dasharatha",
+  "order": 11,
+  "kanda": "ayodhya",
+  "place": "palace",
+  "type": "scene",
+  "title": "chapter.dasharatha.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "dasharatha",
+  "lanka": false,
+  "unlock": {
+   "after": "boat"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.dasharatha",
+  "win": [
+   "dasharatha.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "57-64 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "bharata",
+  "order": 12,
+  "kanda": "ayodhya",
+  "place": "chitrakuta",
+  "type": "trial",
+  "title": "chapter.bharata.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "bharata",
+  "lanka": false,
+  "unlock": {
+   "after": "dasharatha"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 420
+  },
+  "note": "note.bharata",
+  "win": [
+   "bharata.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "67-119 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "viradha",
+  "order": 13,
+  "kanda": "aranya",
+  "place": "dandaka",
+  "type": "battle",
+  "title": "chapter.viradha.title",
+  "style": "bharni-earth",
+  "level": "viradha",
+  "script": "viradhaIntro",
+  "after": "viradhaAfter",
+  "lanka": false,
+  "unlock": {
+   "after": "bharata"
+  },
+  "seals": {
+   "finish": true,
+   "protect": "sita",
+   "parTime": 600
+  },
+  "note": "note.viradha",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "1-15 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "shurpanakha",
+  "order": 14,
+  "kanda": "aranya",
+  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.shurpanakha.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "shurpanakha",
+  "lanka": false,
+  "unlock": {
+   "after": "viradha"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 200
+  },
+  "note": "note.shurpanakha",
+  "win": [
+   "shurpanakha.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "17-18 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "janasthana",
+  "order": 15,
+  "kanda": "aranya",
+  "place": "janasthana",
+  "type": "battle",
+  "title": "chapter.janasthana.title",
+  "style": "bharni-earth",
+  "level": "janasthana",
+  "script": "janasthanaIntro",
+  "lanka": false,
+  "unlock": {
+   "after": "shurpanakha"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 780
+  },
+  "note": "note.janasthana",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "19-31 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l1",
+  "order": 1,
+  "kanda": "aranya",
+  "place": "ravanaCourt",
+  "type": "lanka",
+  "title": "chapter.l1.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l1",
+  "lanka": true,
+  "unlock": {
+   "after": "janasthana"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.l1",
+  "win": [
+   "l1.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "31-41 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "deer",
+  "order": 16,
+  "kanda": "aranya",
+  "place": "panchavati",
+  "type": "battle",
+  "title": "chapter.deer.title",
+  "style": "bharni-earth",
+  "level": "deer",
+  "script": "deerIntro",
+  "after": "deerAfter",
+  "lanka": false,
+  "unlock": {
+   "after": "l1"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.deer",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "42-44 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "rekha",
+  "order": 17,
+  "kanda": "aranya",
+  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.rekha.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "rekha",
+  "lanka": false,
+  "unlock": {
+   "after": "deer"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 280
+  },
+  "note": "note.rekha",
+  "win": [
+   "rekha.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "45-49 (verify)",
+   "later": true,
+   "laterNote": "The line itself is later tradition; the abduction is Valmiki.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "jatayu",
+  "order": 18,
+  "kanda": "aranya",
+  "place": "southSky",
+  "type": "battle",
+  "title": "chapter.jatayu.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "jatayu",
+  "lanka": false,
+  "unlock": {
+   "after": "rekha"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.jatayu",
+  "win": [
+   "jatayu.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "50-51 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "jewels",
+  "order": 19,
+  "kanda": "aranya",
+  "place": "southSky",
+  "type": "trial",
+  "title": "chapter.jewels.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "jewels",
+  "lanka": false,
+  "unlock": {
+   "after": "jatayu"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 150
+  },
+  "note": "note.jewels",
+  "win": [
+   "jewels.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "54 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l2",
+  "order": 2,
+  "kanda": "aranya",
+  "place": "ashokaGrove",
+  "type": "lanka",
+  "title": "chapter.l2.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l2",
+  "lanka": true,
+  "unlock": {
+   "after": "jewels"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 220
+  },
+  "note": "note.l2",
+  "win": [
+   "l2.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "55-56 (verify)",
+   "later": true,
+   "laterNote": "The curse is from the Uttara Kanda.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "hut",
+  "order": 20,
+  "kanda": "aranya",
+  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.hut.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "hut",
+  "lanka": false,
+  "unlock": {
+   "after": "l2"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 280
+  },
+  "note": "note.hut",
+  "win": [
+   "hut.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "57-68 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "shabari",
+  "order": 21,
+  "kanda": "aranya",
+  "place": "pampa",
+  "type": "trial",
+  "title": "chapter.shabari.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "shabari",
+  "lanka": false,
+  "unlock": {
+   "after": "hut"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.shabari",
+  "win": [
+   "shabari.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "69-75 (verify)",
+   "later": true,
+   "laterNote": "The tasting of the berries is later tradition.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "friends",
+  "order": 22,
+  "kanda": "kishkindha",
+  "place": "rishyamukha",
+  "type": "scene",
+  "title": "chapter.friends.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "friends",
+  "lanka": false,
+  "unlock": {
+   "after": "shabari"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.friends",
+  "win": [
+   "friends.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "1-8 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "sala",
+  "order": 23,
+  "kanda": "kishkindha",
+  "place": "rishyamukha",
+  "type": "trial",
+  "title": "chapter.sala.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "sala",
+  "lanka": false,
+  "unlock": {
+   "after": "friends"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 160
+  },
+  "note": "note.sala",
+  "win": [
+   "sala.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "11-12 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "vali",
+  "order": 24,
+  "kanda": "kishkindha",
+  "place": "kishkindhaCity",
+  "type": "battle",
+  "title": "chapter.vali.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "vali",
+  "lanka": false,
+  "unlock": {
+   "after": "sala"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.vali",
+  "win": [
+   "vali.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "12-26 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "search",
+  "order": 25,
+  "kanda": "kishkindha",
+  "place": "southShore",
+  "type": "scene",
+  "title": "chapter.search.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "search",
+  "lanka": false,
+  "unlock": {
+   "after": "vali"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 330
+  },
+  "note": "note.search",
+  "win": [
+   "search.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "27-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "leap",
+  "order": 26,
+  "kanda": "sundara",
+  "place": "mahendra",
+  "type": "trial",
+  "title": "chapter.leap.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "leap",
+  "lanka": false,
+  "unlock": {
+   "after": "search"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.leap",
+  "win": [
+   "leap.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "1 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "night",
+  "order": 27,
+  "kanda": "sundara",
+  "place": "lankaGate",
+  "type": "trial",
+  "title": "chapter.night.title",
+  "style": "kachni",
+  "level": null,
+  "script": "night",
+  "lanka": false,
+  "unlock": {
+   "after": "leap"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.night",
+  "win": [
+   "night.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "2-13 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "ashoka",
+  "order": 28,
+  "kanda": "sundara",
+  "place": "ashokaGrove",
+  "type": "trial",
+  "title": "chapter.ashoka.title",
+  "style": "kachni",
+  "level": null,
+  "script": "ashoka",
+  "lanka": false,
+  "unlock": {
+   "after": "night"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 330
+  },
+  "note": "note.ashoka",
+  "win": [
+   "ashoka.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "14-40 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "court",
+  "order": 29,
+  "kanda": "sundara",
+  "place": "ravanaCourt",
+  "type": "scene",
+  "title": "chapter.court.title",
+  "style": "kachni",
+  "level": null,
+  "script": "court",
+  "lanka": false,
+  "unlock": {
+   "after": "ashoka"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.court",
+  "win": [
+   "court.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "41-52 (verify)",
+   "later": true,
+   "laterNote": "The tail-seat is later tradition.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "burn",
+  "order": 30,
+  "kanda": "sundara",
+  "place": "lankaRoofs",
+  "type": "trial",
+  "title": "chapter.burn.title",
+  "style": "kachni",
+  "level": null,
+  "script": "burn",
+  "lanka": false,
+  "unlock": {
+   "after": "court"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 330
+  },
+  "note": "note.burn",
+  "win": [
+   "burn.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "53-65 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l3",
+  "order": 3,
+  "kanda": "yuddha",
+  "place": "ravanaCourt",
+  "type": "lanka",
+  "title": "chapter.l3.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l3",
+  "lanka": true,
+  "unlock": {
+   "after": "burn"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.l3",
+  "win": [
+   "l3.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "6-19 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "bridge",
+  "order": 31,
+  "kanda": "yuddha",
+  "place": "bridge",
+  "type": "scene",
+  "title": "chapter.bridge.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "bridge",
+  "lanka": false,
+  "unlock": {
+   "after": "l3"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 280
+  },
+  "note": "note.bridge",
+  "win": [
+   "bridge.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "21-22 (verify)",
+   "later": true,
+   "laterNote": "The squirrel is later tradition.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "angada",
+  "order": 32,
+  "kanda": "yuddha",
+  "place": "lankaWalls",
+  "type": "scene",
+  "title": "chapter.angada.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "angada",
+  "lanka": false,
+  "unlock": {
+   "after": "bridge"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 240
+  },
+  "note": "note.angada",
+  "win": [
+   "angada.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "41 (verify)",
+   "later": true,
+   "laterNote": "The immovable foot is later tradition.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l4",
+  "order": 4,
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l4.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l4",
+  "lanka": true,
+  "unlock": {
+   "after": "angada"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 280
+  },
+  "note": "note.l4",
+  "win": [
+   "l4.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "35, 59-65 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "kumbhakarna",
+  "order": 33,
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "type": "battle",
+  "title": "chapter.kumbhakarna.title",
+  "style": "kachni",
+  "level": "kumbhakarna",
+  "script": null,
+  "lanka": false,
+  "unlock": {
+   "after": "l4"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 600
+  },
+  "note": "note.kumbhakarna",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "65-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "indrajit",
+  "order": 34,
+  "kanda": "yuddha",
+  "place": "nikumbhila",
+  "type": "battle",
+  "title": "chapter.indrajit.title",
+  "style": "kachni",
+  "level": "indrajit",
+  "script": "indrajitIntro",
+  "lanka": false,
+  "unlock": {
+   "after": "kumbhakarna"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 660
+  },
+  "note": "note.indrajit",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "44-50, 84-91 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l5",
+  "order": 5,
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l5.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l5",
+  "lanka": true,
+  "unlock": {
+   "after": "indrajit"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 220
+  },
+  "note": "note.l5",
+  "win": [
+   "l5.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "92-93 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "falls",
+  "order": 35,
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "type": "trial",
+  "title": "chapter.falls.title",
+  "style": "kachni",
+  "level": null,
+  "script": "falls",
+  "lanka": false,
+  "unlock": {
+   "after": "l5"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.falls",
+  "win": [
+   "falls.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "100-101 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "sanjeevani",
+  "order": 36,
+  "kanda": "yuddha",
+  "place": "himalaya",
+  "type": "trial",
+  "title": "chapter.sanjeevani.title",
+  "style": "bharni-earth",
+  "level": null,
+  "script": "sanjeevani",
+  "lanka": false,
+  "unlock": {
+   "after": "falls"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.sanjeevani",
+  "win": [
+   "sanjeevani.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "74, 101 (verify)",
+   "later": true,
+   "laterNote": "The race against dawn is later tradition, used as a timer only.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "l6",
+  "order": 6,
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l6.title",
+  "style": "kachni",
+  "level": null,
+  "script": "l6",
+  "lanka": true,
+  "unlock": {
+   "after": "sanjeevani"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 260
+  },
+  "note": "note.l6",
+  "win": [
+   "l6.win.1"
+  ],
+  "source": {
+   "text": "Uttara Kanda",
+   "kanda": "Uttara",
+   "sargas": "10, 16 (verify)",
+   "later": true,
+   "laterNote": "The flashbacks are from the Uttara Kanda.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "ravana",
+  "order": 37,
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "type": "battle",
+  "title": "chapter.ravana.title",
+  "style": "kachni",
+  "level": "ravana",
+  "script": "ravanaIntro",
+  "lanka": false,
+  "unlock": {
+   "after": "l6"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 780
+  },
+  "note": "note.ravana",
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "102-108 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "after",
+  "order": 38,
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "type": "scene",
+  "title": "chapter.after.title",
+  "style": "kachni",
+  "level": null,
+  "script": "after",
+  "lanka": false,
+  "unlock": {
+   "after": "ravana"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 240
+  },
+  "note": "note.after",
+  "win": [
+   "after.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "109-113 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "lighting",
+  "order": 39,
+  "kanda": "yuddha",
+  "place": "ayodhyaHome",
+  "type": "trial",
+  "title": "chapter.lighting.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "lighting",
+  "lanka": false,
+  "unlock": {
+   "after": "after"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 300
+  },
+  "note": "note.lighting",
+  "win": [
+   "lighting.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "122-127 (verify)",
+   "later": true,
+   "laterNote": "The lamps are popular tradition.",
+   "reviewedBy": null
+  }
+ },
+ {
+  "id": "coronation",
+  "order": 40,
+  "kanda": "yuddha",
+  "place": "ayodhyaHome",
+  "type": "scene",
+  "title": "chapter.coronation.title",
+  "style": "bharni-bright",
+  "level": null,
+  "script": "coronation",
+  "lanka": false,
+  "unlock": {
+   "after": "lighting"
+  },
+  "seals": {
+   "finish": true,
+   "protect": null,
+   "parTime": 240
+  },
+  "note": "note.coronation",
+  "win": [
+   "coronation.win.1"
+  ],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "128 (verify)",
+   "later": false,
+   "reviewedBy": null
+  }
+ }
+]

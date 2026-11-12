@@ -1,0 +1,512 @@
+[
+ {
+  "bg": "cityNight",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 452,
+  "face": 1
+ },
+ {
+  "actor": "kaikeyi",
+  "char": "kaikeyi",
+  "x": 790,
+  "face": -1
+ },
+ {
+  "narrate": true,
+  "k": "bharata.1"
+ },
+ {
+  "say": "kaikeyi",
+  "k": "bharata.2"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.3"
+ },
+ {
+  "narrate": true,
+  "k": "bharata.4"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "riverbank"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "bharata",
+  "x": 452,
+  "speed": 752,
+  "nowait": false
+ },
+ {
+  "actor": "guha",
+  "char": "guha",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "guha",
+  "x": 847,
+  "speed": 733,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "bharata.5"
+ },
+ {
+  "say": "guha",
+  "k": "bharata.6"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.7"
+ },
+ {
+  "narrate": true,
+  "k": "bharata.8"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "chitrakuta"
+ },
+ {
+  "prop": "hut",
+  "name": "hut",
+  "x": 941,
+  "scale": 0.8
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 790,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 696,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "pose": "draw1",
+  "face": -1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "face": -1
+ },
+ {
+  "say": "lakshmana",
+  "k": "bharata.9"
+ },
+ {
+  "say": "rama",
+  "k": "bharata.10"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "bharata",
+  "x": 264,
+  "speed": 705,
+  "nowait": false
+ },
+ {
+  "do": "walk",
+  "actor": "bharata",
+  "x": 678,
+  "speed": 140,
+  "k": "bharata.11"
+ },
+ {
+  "pose": "bharata",
+  "p": "grieve"
+ },
+ {
+  "move": "lakshmana",
+  "x": 884,
+  "time": 0.8
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.12"
+ },
+ {
+  "pose": "rama",
+  "p": "grieve"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "wait": 1.2
+ },
+ {
+  "narrate": true,
+  "k": "bharata.13"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "bharata",
+  "p": "kneel"
+ },
+ {
+  "choice": [
+   {
+    "k": "bharata.15",
+    "goto": "a1"
+   },
+   {
+    "k": "bharata.16",
+    "goto": "a2"
+   },
+   {
+    "k": "bharata.17",
+    "goto": "a3"
+   }
+  ],
+  "prompt": "bharata.14"
+ },
+ {
+  "say": "rama",
+  "k": "bharata.18",
+  "label": "a1"
+ },
+ {
+  "goto": "after"
+ },
+ {
+  "say": "rama",
+  "k": "bharata.19",
+  "label": "a2"
+ },
+ {
+  "goto": "after"
+ },
+ {
+  "say": "rama",
+  "k": "bharata.20",
+  "label": "a3"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.21",
+  "label": "after"
+ },
+ {
+  "pose": "rama",
+  "p": "give"
+ },
+ {
+  "wait": 0.6
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "bharata",
+  "p": "carry"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "face": -1
+ },
+ {
+  "do": "walk",
+  "actor": "bharata",
+  "x": 245,
+  "speed": 130,
+  "k": "bharata.22",
+  "idle": "carry",
+  "walkPose": "carry"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "nandigram"
+ },
+ {
+  "prop": "seat",
+  "name": "sandalsThrone",
+  "x": 753,
+  "state": 0
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "bharata",
+  "x": 452,
+  "speed": 752,
+  "nowait": false
+ },
+ {
+  "pose": "bharata",
+  "p": "carry"
+ },
+ {
+  "narrate": true,
+  "k": "bharata.23"
+ },
+ {
+  "do": "tap",
+  "k": "bharata.24",
+  "targets": [
+   {
+    "x": 753,
+    "y": 388,
+    "cue": "bell",
+    "then": [
+     {
+      "prop": "seat",
+      "name": "sandalsThrone",
+      "x": 753,
+      "state": 1
+     },
+     {
+      "pose": "bharata",
+      "p": "namaste"
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata"
+ },
+ {
+  "narrate": true,
+  "k": "bharata.25"
+ },
+ {
+  "choice": [
+   {
+    "k": "bharata.27",
+    "goto": "r1"
+   },
+   {
+    "k": "bharata.28",
+    "goto": "r1"
+   }
+  ],
+  "prompt": "bharata.26"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.29",
+  "label": "r1"
+ },
+ {
+  "choice": [
+   {
+    "k": "bharata.31",
+    "goto": "r2"
+   },
+   {
+    "k": "bharata.32",
+    "goto": "r2"
+   }
+  ],
+  "prompt": "bharata.30"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.33",
+  "label": "r2"
+ },
+ {
+  "choice": [
+   {
+    "k": "bharata.35",
+    "goto": "r3"
+   },
+   {
+    "k": "bharata.36",
+    "goto": "r3"
+   }
+  ],
+  "prompt": "bharata.34"
+ },
+ {
+  "say": "bharata",
+  "k": "bharata.37",
+  "label": "r3"
+ },
+ {
+  "narrate": true,
+  "k": "bharata.38"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "hermitage"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sita",
+  "x": 546,
+  "speed": 846,
+  "nowait": false
+ },
+ {
+  "actor": "anasuya",
+  "char": "anasuya",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "anasuya",
+  "x": 753,
+  "speed": 827,
+  "nowait": false
+ },
+ {
+  "actor": "atri",
+  "char": "atri",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "atri",
+  "x": 960,
+  "speed": 620,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "bharata.39"
+ },
+ {
+  "pose": "anasuya",
+  "p": "give"
+ },
+ {
+  "say": "anasuya",
+  "k": "bharata.40"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "nandigram"
+ },
+ {
+  "prop": "seat",
+  "name": "sandalsThrone",
+  "x": 753,
+  "state": 1
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

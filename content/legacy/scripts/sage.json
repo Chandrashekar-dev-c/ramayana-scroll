@@ -1,0 +1,236 @@
+{
+ "id": "sage",
+ "backdrop": "court",
+ "style": "bharni-bright",
+ "music": "court",
+ "cast": [
+  {
+   "id": "dasharatha",
+   "at": 0.2,
+   "face": 1,
+   "pose": "sit",
+   "y": -56
+  },
+  {
+   "id": "vasishtha",
+   "at": 0.33,
+   "face": 1
+  },
+  {
+   "id": "rama",
+   "at": 0.07,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.115,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "bharata",
+   "at": 0.03,
+   "face": 1,
+   "scale": 0.92
+  },
+  {
+   "id": "shatrughna",
+   "at": 0.155,
+   "face": 1
+  }
+ ],
+ "props": [
+  {
+   "id": "throne",
+   "name": "throne",
+   "at": 0.2
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "sage.1"
+  },
+  {
+   "do": "narrate",
+   "text": "sage.2"
+  },
+  {
+   "do": "enter",
+   "who": "vishvamitra",
+   "side": "right",
+   "to": 0.66,
+   "time": 1.8
+  },
+  {
+   "do": "pose",
+   "who": "dasharatha",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "sage.3"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sage.4"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sage.5"
+  },
+  {
+   "do": "pose",
+   "who": "dasharatha",
+   "pose": "sit"
+  },
+  {
+   "do": "choice",
+   "prompt": "sage.6",
+   "options": [
+    {
+     "text": "sage.7",
+     "goto": "boy",
+     "flag": "sage.choice",
+     "value": "boy"
+    },
+    {
+     "text": "sage.8",
+     "goto": "bless",
+     "flag": "sage.choice",
+     "value": "blessing"
+    }
+   ]
+  },
+  {
+   "label": "boy",
+   "do": "say",
+   "who": "dasharatha",
+   "text": "sage.9"
+  },
+  {
+   "do": "pose",
+   "who": "vishvamitra",
+   "pose": "point"
+  },
+  {
+   "do": "shake",
+   "amount": 3
+  },
+  {
+   "do": "sound",
+   "cue": "bellLow"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "sage.10"
+  },
+  {
+   "do": "say",
+   "who": "vasishtha",
+   "text": "sage.11"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "sage.12"
+  },
+  {
+   "do": "goto",
+   "to": "go"
+  },
+  {
+   "label": "bless",
+   "do": "say",
+   "who": "dasharatha",
+   "text": "sage.13"
+  },
+  {
+   "do": "say",
+   "who": "vasishtha",
+   "text": "sage.14"
+  },
+  {
+   "label": "go",
+   "do": "pose",
+   "who": "vishvamitra",
+   "pose": "stand"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.46,
+   "time": 1.6
+  },
+  {
+   "do": "move",
+   "who": "lakshmana",
+   "to": 0.52,
+   "time": 1.6
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "bow"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "bow"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "sage.15"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "sage.16"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "exit",
+   "who": "vishvamitra",
+   "side": "right",
+   "async": true
+  },
+  {
+   "do": "exit",
+   "who": "rama",
+   "side": "right",
+   "async": true,
+   "time": 1.8
+  },
+  {
+   "do": "exit",
+   "who": "lakshmana",
+   "side": "right",
+   "time": 2.1
+  },
+  {
+   "do": "narrate",
+   "text": "sage.17"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

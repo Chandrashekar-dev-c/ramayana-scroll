@@ -1,0 +1,240 @@
+{
+ "id": "hut",
+ "backdrop": "panchavati",
+ "style": "bharni-earth",
+ "music": "grief",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.2,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "props": [
+  {
+   "id": "hut",
+   "name": "hut",
+   "at": 0.56,
+   "scale": 0.9,
+   "colour": false
+  }
+ ],
+ "beats": [
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "right",
+   "to": 0.4,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "narrate",
+   "text": "hut.1"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "hut.2"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "hut.3"
+  },
+  {
+   "do": "narrate",
+   "text": "hut.4"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "hut.5",
+    "spots": [
+     {
+      "at": 0.56,
+      "y": 60,
+      "label": "hut.6",
+      "text": "hut.7"
+     },
+     {
+      "at": 0.34,
+      "y": 30,
+      "label": "hut.8",
+      "icon": "flower",
+      "text": "hut.9"
+     },
+     {
+      "at": 0.8,
+      "y": 40,
+      "label": "hut.10",
+      "icon": "ornament",
+      "text": "hut.11"
+     }
+    ]
+   }
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "raise"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "hut.12"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "draw2"
+  },
+  {
+   "do": "shake",
+   "amount": 4
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "hut.13"
+  },
+  {
+   "do": "move",
+   "who": "lakshmana",
+   "to": 0.32,
+   "time": 0.6
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "hut.14"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "backdrop",
+   "id": "forest",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "jatayu",
+   "side": "right",
+   "to": 0.66,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "jatayu",
+   "pose": "grieve"
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.4,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.26,
+   "stage": "exile",
+   "time": 1.2
+  },
+  {
+   "do": "narrate",
+   "text": "hut.15"
+  },
+  {
+   "do": "say",
+   "who": "jatayu",
+   "text": "hut.16"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "kneel"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.56,
+   "time": 1
+  },
+  {
+   "do": "narrate",
+   "text": "hut.17"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "hut.18"
+  },
+  {
+   "do": "prop",
+   "id": "pyre",
+   "name": "pyre",
+   "at": 0.74,
+   "state": 0
+  },
+  {
+   "do": "set",
+   "who": "jatayu",
+   "visible": false
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "hut.19",
+    "ordered": true,
+    "spots": [
+     {
+      "at": 0.74,
+      "y": 70,
+      "icon": "flower",
+      "label": "hut.20"
+     },
+     {
+      "at": 0.74,
+      "y": 20,
+      "label": "hut.21",
+      "ops": [
+       {
+        "do": "prop",
+        "id": "pyre",
+        "name": "pyre",
+        "at": 0.74,
+        "state": 1
+       }
+      ],
+      "cue": "fireWhoosh"
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "hut.22"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

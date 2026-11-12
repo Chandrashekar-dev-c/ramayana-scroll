@@ -1,0 +1,131 @@
+{
+ "id": "sala",
+ "backdrop": "kishkindha",
+ "style": "bharni-earth",
+ "music": "vanara",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.18,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sugriva",
+   "at": 0.08,
+   "face": 1
+  }
+ ],
+ "props": [
+  {
+   "id": "bones",
+   "name": "skeleton",
+   "at": 0.5,
+   "raw": true
+  }
+ ],
+ "beats": [
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "sala.1"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.36,
+   "time": 1.2
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "sala.2",
+    "spots": [
+     {
+      "at": 0.5,
+      "y": 40,
+      "r": 110,
+      "cue": "thud",
+      "ops": [
+       {
+        "do": "prop",
+        "id": "bones",
+        "remove": true
+       },
+       {
+        "do": "pose",
+        "who": "rama",
+        "pose": "kick"
+       },
+       {
+        "do": "shake",
+        "amount": 4
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "sala.3"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "sala.4"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "sala.5"
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "sala.6"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.16,
+   "time": 1
+  },
+  {
+   "do": "interact",
+   "kind": "sala",
+   "args": {}
+  },
+  {
+   "do": "narrate",
+   "text": "sala.7"
+  },
+  {
+   "do": "pose",
+   "who": "sugriva",
+   "pose": "bow"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "sala.8"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

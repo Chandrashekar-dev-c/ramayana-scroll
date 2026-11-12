@@ -1,0 +1,106 @@
+{
+ "id": "l2",
+ "backdrop": "lanka",
+ "style": "kachni",
+ "music": "lanka",
+ "cast": [
+  {
+   "id": "ravana",
+   "at": 0.3,
+   "face": 1
+  },
+  {
+   "id": "sita",
+   "at": 0.68,
+   "face": -1,
+   "stage": "exile",
+   "colour": true,
+   "mode": "colour"
+  }
+ ],
+ "beats": [
+  {
+   "do": "title",
+   "text": "l2.1",
+   "sub": "l2.2"
+  },
+  {
+   "do": "narrate",
+   "text": "l2.3"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l2.4"
+  },
+  {
+   "do": "prop",
+   "id": "grass",
+   "name": "grassBlade",
+   "at": 0.5
+  },
+  {
+   "do": "narrate",
+   "text": "l2.5"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "l2.6"
+  },
+  {
+   "do": "pose",
+   "who": "ravana",
+   "pose": "stand"
+  },
+  {
+   "do": "heads",
+   "voices": [
+    "desire",
+    "honour",
+    "anger",
+    "king"
+   ],
+   "lines": {
+    "desire": "l2.7",
+    "honour": "l2.8",
+    "anger": "l2.9",
+    "king": "l2.10"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "l2.11"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "l2.12"
+  },
+  {
+   "do": "exit",
+   "who": "sita",
+   "side": "right",
+   "time": 1.6
+  },
+  {
+   "do": "enter",
+   "who": "mandodari",
+   "side": "left",
+   "to": 0.1,
+   "time": 1.4
+  },
+  {
+   "do": "narrate",
+   "text": "l2.13"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

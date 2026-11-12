@@ -1,0 +1,83 @@
+{
+ "id": "leap",
+ "backdrop": "shore",
+ "style": "bharni-earth",
+ "music": "flight",
+ "cast": [
+  {
+   "id": "hanuman",
+   "at": 0.4,
+   "face": 1,
+   "scale": 1.5
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "leap.1"
+  },
+  {
+   "do": "interact",
+   "kind": "holdRelease",
+   "args": {
+    "who": "hanuman",
+    "time": 1.5,
+    "pose": [
+     "crouch",
+     "crouch",
+     "crouch"
+    ],
+    "endPose": "jump",
+    "shake": 9,
+    "cue": "thunder",
+    "hint": "leap.2"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "leap.3"
+  },
+  {
+   "do": "backdrop",
+   "id": "ocean",
+   "clear": true
+  },
+  {
+   "do": "interact",
+   "kind": "leap",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "lanka",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.3,
+   "time": 1.2,
+   "scale": 1
+  },
+  {
+   "do": "narrate",
+   "text": "leap.4"
+  },
+  {
+   "do": "backdrop",
+   "id": "ocean"
+  },
+  {
+   "do": "set",
+   "who": "hanuman",
+   "visible": false
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

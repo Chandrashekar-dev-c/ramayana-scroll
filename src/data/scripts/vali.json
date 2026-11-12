@@ -1,0 +1,327 @@
+[
+ {
+  "bg": "kishkindha",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "battle"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 302,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 226,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 696,
+  "face": 1
+ },
+ {
+  "actor": "vali",
+  "char": "vali",
+  "x": 922,
+  "face": -1
+ },
+ {
+  "narrate": true,
+  "k": "vali.1"
+ },
+ {
+  "pose": "sugriva",
+  "p": "swing0"
+ },
+ {
+  "pose": "vali",
+  "p": "swing1"
+ },
+ {
+  "shake": 3
+ },
+ {
+  "narrate": true,
+  "k": "vali.2"
+ },
+ {
+  "pose": "sugriva",
+  "p": "hurt"
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "face": -1
+ },
+ {
+  "move": "sugriva",
+  "x": 452,
+  "time": 0.8,
+  "keepFace": true
+ },
+ {
+  "move": "vali",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "say": "sugriva",
+  "k": "vali.3"
+ },
+ {
+  "say": "rama",
+  "k": "vali.4"
+ },
+ {
+  "move": "lakshmana",
+  "x": 396,
+  "time": 0.8
+ },
+ {
+  "narrate": true,
+  "k": "vali.5"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "cave"
+ },
+ {
+  "actor": "vali",
+  "char": "vali",
+  "x": 546,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "tara",
+  "char": "tara",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "tara",
+  "x": 753,
+  "speed": 827,
+  "nowait": false
+ },
+ {
+  "say": "tara",
+  "k": "vali.6"
+ },
+ {
+  "say": "vali",
+  "k": "vali.7"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 302,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 734,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "vali",
+  "char": "vali",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "vali",
+  "x": 847,
+  "speed": 1221.6666666666667,
+  "nowait": false
+ },
+ {
+  "battle": "valiDuel"
+ },
+ {
+  "actor": "vali",
+  "char": "vali",
+  "pose": "grieve",
+  "x": 753
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "pose": "stand",
+  "face": -1,
+  "x": 922
+ },
+ {
+  "move": "rama",
+  "x": 546,
+  "time": 1.4
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "say": "vali",
+  "k": "vali.8"
+ },
+ {
+  "say": "rama",
+  "k": "vali.9"
+ },
+ {
+  "narrate": true,
+  "k": "vali.10"
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "angada",
+  "x": 866,
+  "speed": 714,
+  "nowait": false
+ },
+ {
+  "actor": "tara",
+  "char": "tara",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "tara",
+  "x": 1016,
+  "speed": 470,
+  "nowait": false
+ },
+ {
+  "pose": "tara",
+  "p": "grieve"
+ },
+ {
+  "say": "vali",
+  "k": "vali.11"
+ },
+ {
+  "narrate": true,
+  "k": "vali.12"
+ },
+ {
+  "actor": "vali",
+  "char": "vali",
+  "hidden": true
+ },
+ {
+  "pose": "sugriva",
+  "p": "grieve"
+ },
+ {
+  "wait": 1.2
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "kishkindha"
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 640,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "angada",
+  "char": "angada",
+  "x": 790,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": 490,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "narrate": true,
+  "k": "vali.13"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

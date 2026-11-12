@@ -1,0 +1,143 @@
+[
+ {
+  "bg": "panchavati",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 490,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 396,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 602,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "prop": "hut",
+  "name": "hut",
+  "x": 264,
+  "scale": 0.8
+ },
+ {
+  "prop": "deer",
+  "name": "deer",
+  "x": 922
+ },
+ {
+  "narrate": true,
+  "k": "deer.1"
+ },
+ {
+  "pose": "sita",
+  "p": "point"
+ },
+ {
+  "say": "sita",
+  "k": "deer.2"
+ },
+ {
+  "say": "lakshmana",
+  "k": "deer.3"
+ },
+ {
+  "say": "rama",
+  "k": "deer.4"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ },
+ {
+  "battle": "deer"
+ },
+ {
+  "noop": true,
+  "label": "__seg2"
+ },
+ {
+  "bg": "deepForest",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "silent"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "maricha",
+  "char": "maricha",
+  "x": 828,
+  "face": -1,
+  "pose": "grieve"
+ },
+ {
+  "narrate": true,
+  "k": "deer.5"
+ },
+ {
+  "say": "maricha",
+  "nk": "name.maricha",
+  "k": "deer.6"
+ },
+ {
+  "shake": 3
+ },
+ {
+  "cue": "fail"
+ },
+ {
+  "narrate": true,
+  "k": "deer.7"
+ },
+ {
+  "pose": "rama",
+  "p": "hurt"
+ },
+ {
+  "say": "rama",
+  "k": "deer.8"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "pose": "stand",
+  "face": -1
+ },
+ {
+  "move": "rama",
+  "x": -320,
+  "speed": 1125,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "goto": "__seg3"
+ },
+ {
+  "noop": true,
+  "label": "__seg3"
+ }
+]

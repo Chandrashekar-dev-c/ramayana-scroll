@@ -1,0 +1,292 @@
+[
+ {
+  "bg": "riverbank",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "guha",
+  "char": "guha",
+  "x": 847,
+  "face": -1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 490,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 396,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 302,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "narrate": true,
+  "k": "boat.1"
+ },
+ {
+  "pose": "guha",
+  "p": "give"
+ },
+ {
+  "say": "guha",
+  "k": "boat.2"
+ },
+ {
+  "say": "rama",
+  "k": "boat.3"
+ },
+ {
+  "pose": "guha",
+  "p": "stand"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "tamasa"
+ },
+ {
+  "prop": "bed",
+  "name": "grassBed",
+  "x": 452
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 414,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "pose": "sit"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 508,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "pose": "sit"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 753,
+  "face": -1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "guha",
+  "char": "guha",
+  "x": 884,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "guha",
+  "char": "guha",
+  "face": -1
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "face": -1
+ },
+ {
+  "narrate": true,
+  "k": "boat.4"
+ },
+ {
+  "say": "guha",
+  "k": "boat.5"
+ },
+ {
+  "say": "lakshmana",
+  "k": "boat.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "riverbank"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 452,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 358,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 264,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "sumantra",
+  "char": "sumantra",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sumantra",
+  "x": 866,
+  "speed": 1190,
+  "nowait": false
+ },
+ {
+  "say": "rama",
+  "k": "boat.7"
+ },
+ {
+  "move": "sumantra",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "narrate": true,
+  "k": "boat.8"
+ },
+ {
+  "trial": "row",
+  "k": "ch10.obj",
+  "par": 45
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "forest"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 640,
+  "speed": 671.4285714285714,
+  "nowait": true
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "sita",
+  "x": 527,
+  "speed": 516.875,
+  "nowait": true
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": -300,
+  "face": 1,
+  "stage": "exile",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 753,
+  "speed": 877.5,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "boat.9"
+ },
+ {
+  "bg": "riverbank"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

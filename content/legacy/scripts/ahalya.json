@@ -1,0 +1,147 @@
+{
+ "id": "ahalya",
+ "backdrop": "hermitage",
+ "style": "bharni-bright",
+ "music": "calm",
+ "cast": [
+  {
+   "id": "vishvamitra",
+   "at": 0.2,
+   "face": 1
+  },
+  {
+   "id": "rama",
+   "at": 0.34,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.27,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "ahalya",
+   "at": 0.7,
+   "face": -1,
+   "stage": "unseen",
+   "mode": "line",
+   "alpha": 0.28,
+   "pose": "sit"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "ahalya.1"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "ahalya.2"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "ahalya.3"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "ahalya.4"
+  },
+  {
+   "do": "narrate",
+   "text": "ahalya.5"
+  },
+  {
+   "do": "interact",
+   "kind": "walkTo",
+   "args": {
+    "who": "rama",
+    "to": 0.6,
+    "speed": 130
+   }
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "bow"
+  },
+  {
+   "do": "move",
+   "who": "lakshmana",
+   "to": 0.54,
+   "time": 1.2
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "bow"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "who": "ahalya",
+    "visual": "colour",
+    "time": 2.6,
+    "hint": "ahalya.6"
+   }
+  },
+  {
+   "do": "set",
+   "who": "ahalya",
+   "stage": "freed",
+   "mode": "colour",
+   "alpha": 1,
+   "pose": "stand"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "narrate",
+   "text": "ahalya.7"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "ahalya",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "ahalya",
+   "text": "ahalya.8"
+  },
+  {
+   "do": "enter",
+   "who": "gautama",
+   "side": "right",
+   "to": 0.84,
+   "time": 1.6
+  },
+  {
+   "do": "narrate",
+   "text": "ahalya.9"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

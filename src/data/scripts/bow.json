@@ -1,0 +1,121 @@
+[
+ {
+  "bg": "mithila",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "janaka",
+  "char": "janaka",
+  "x": 903,
+  "face": -1
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": 358,
+  "face": 1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 480,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 283,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "narrate": true,
+  "k": "bow.1"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.2"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "bow.3"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.4"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.5"
+ },
+ {
+  "prop": "cart",
+  "name": "bowCart",
+  "x": 696
+ },
+ {
+  "narrate": true,
+  "k": "bow.6"
+ },
+ {
+  "say": "rama",
+  "k": "bow.7"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.8"
+ },
+ {
+  "move": "rama",
+  "x": 602,
+  "time": 1
+ },
+ {
+  "do": "bow",
+  "phases": [
+   "lift",
+   "bend",
+   "pull"
+  ],
+  "prop": "cart",
+  "actor": "rama",
+  "breaks": true,
+  "keys": [
+   "hint.lift",
+   "hint.bend",
+   "hint.pullBow"
+  ]
+ },
+ {
+  "pose": "janaka",
+  "p": "raise"
+ },
+ {
+  "narrate": true,
+  "k": "bow.9"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.10"
+ },
+ {
+  "say": "janaka",
+  "k": "bow.11"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

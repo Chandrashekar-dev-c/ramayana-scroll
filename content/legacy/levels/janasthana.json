@@ -1,0 +1,188 @@
+{
+ "id": "janasthana",
+ "backdrop": "ridge",
+ "style": "bharni-earth",
+ "music": "forest-battle",
+ "hero": {
+  "id": "rama",
+  "stage": "exile",
+  "start": 260
+ },
+ "astras": true,
+ "cliffs": [
+  "left",
+  "right"
+ ],
+ "arenas": [
+  {
+   "left": 0,
+   "right": 1400
+  },
+  {
+   "left": 1650,
+   "right": 3050
+  },
+  {
+   "left": 3300,
+   "right": 4700
+  },
+  {
+   "left": 4950,
+   "right": 6350
+  },
+  {
+   "left": 6600,
+   "right": 8200
+  }
+ ],
+ "tips": {
+  "kick": "janasthana.tip"
+ },
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.janasthana.title",
+   "sub": "kanda.aranya"
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "janasthana.o1",
+   "spawn": [
+    [
+     "grunt",
+     4
+    ],
+    [
+     "archer",
+     2
+    ],
+    [
+     "runner",
+     2
+    ]
+   ],
+   "side": "right",
+   "gap": 1.4
+  },
+  {
+   "type": "checkpoint",
+   "line": "janasthana.cp1"
+  },
+  {
+   "type": "wave",
+   "arena": 1,
+   "objective": "janasthana.o2",
+   "spawn": [
+    [
+     "climber",
+     3
+    ],
+    [
+     "grunt",
+     2
+    ],
+    [
+     "climber",
+     2
+    ]
+   ],
+   "side": "both",
+   "gap": 1.6,
+   "teach": "kick"
+  },
+  {
+   "type": "checkpoint"
+  },
+  {
+   "type": "wave",
+   "arena": 2,
+   "objective": "janasthana.o3",
+   "spawn": [
+    [
+     "mayavi",
+     1
+    ],
+    [
+     "shield",
+     2
+    ],
+    [
+     "archer",
+     1
+    ],
+    [
+     "mayavi",
+     1
+    ]
+   ],
+   "side": "both",
+   "gap": 2.2
+  },
+  {
+   "type": "checkpoint",
+   "line": "janasthana.cp3"
+  },
+  {
+   "type": "wave",
+   "arena": 3,
+   "objective": "janasthana.o4",
+   "spawn": [
+    [
+     "elite:dushana",
+     1
+    ],
+    [
+     "brute",
+     1
+    ],
+    [
+     "climber",
+     2
+    ]
+   ],
+   "side": "right",
+   "gap": 2.4
+  },
+  {
+   "type": "wave",
+   "arena": 3,
+   "objective": "janasthana.o5",
+   "spawn": [
+    [
+     "elite:trishiras",
+     1
+    ],
+    [
+     "archer",
+     2
+    ],
+    [
+     "shield",
+     1
+    ]
+   ],
+   "side": "both",
+   "gap": 2.2
+  },
+  {
+   "type": "checkpoint"
+  },
+  {
+   "type": "boss",
+   "arena": 4,
+   "boss": "khara",
+   "intro": "janasthana.bossIntro"
+  },
+  {
+   "type": "scene",
+   "lines": [
+    "janasthana.end.1"
+   ]
+  }
+ ],
+ "win": [
+  "janasthana.win.1",
+  "janasthana.win.2"
+ ]
+}

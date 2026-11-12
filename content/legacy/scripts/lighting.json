@@ -1,0 +1,233 @@
+{
+ "id": "lighting",
+ "backdrop": "sky",
+ "style": "bharni-bright",
+ "music": "home",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.34,
+   "face": 1,
+   "stage": "exile",
+   "y": -250,
+   "scale": 0.75
+  },
+  {
+   "id": "sita",
+   "at": 0.42,
+   "face": 1,
+   "stage": "exile",
+   "y": -250,
+   "scale": 0.75
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.26,
+   "face": 1,
+   "stage": "exile",
+   "y": -250,
+   "scale": 0.75
+  }
+ ],
+ "props": [
+  {
+   "id": "p",
+   "name": "pushpaka",
+   "at": 0.34,
+   "y": -170,
+   "raw": true,
+   "scale": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "lighting.1"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "lighting.2",
+    "ordered": true,
+    "linger": 0.6,
+    "spots": [
+     {
+      "at": 0.72,
+      "y": 110,
+      "icon": "place",
+      "label": "lighting.3",
+      "text": "lighting.4"
+     },
+     {
+      "at": 0.6,
+      "y": 60,
+      "icon": "place",
+      "label": "lighting.5",
+      "text": "lighting.6"
+     },
+     {
+      "at": 0.76,
+      "y": 150,
+      "icon": "place",
+      "label": "lighting.7",
+      "text": "lighting.8"
+     },
+     {
+      "at": 0.64,
+      "y": 90,
+      "icon": "place",
+      "label": "lighting.9",
+      "text": "lighting.10"
+     },
+     {
+      "at": 0.8,
+      "y": 60,
+      "icon": "place",
+      "label": "lighting.11",
+      "text": "lighting.12"
+     }
+    ]
+   }
+  },
+  {
+   "do": "backdrop",
+   "id": "nandigram",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "seat",
+   "name": "sandalsThrone",
+   "at": 0.2,
+   "state": 0
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.3,
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "right",
+   "to": 0.62,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "bharata",
+   "face": -1
+  },
+  {
+   "do": "narrate",
+   "text": "lighting.13"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "lighting.14"
+  },
+  {
+   "do": "say",
+   "who": "bharata",
+   "text": "lighting.15"
+  },
+  {
+   "do": "backdrop",
+   "id": "nandigram",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.36,
+   "stage": "exile",
+   "time": 1.2,
+   "y": 0,
+   "scale": 1
+  },
+  {
+   "do": "enter",
+   "who": "bharata",
+   "side": "right",
+   "to": 0.6,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "carry"
+  },
+  {
+   "do": "narrate",
+   "text": "lighting.16"
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "kneel"
+  },
+  {
+   "do": "wait",
+   "time": 0.8
+  },
+  {
+   "do": "pose",
+   "who": "bharata",
+   "pose": "stand"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.48,
+   "time": 0.8
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "bharata",
+   "text": "lighting.17"
+  },
+  {
+   "do": "backdrop",
+   "id": "cityNight",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "p",
+   "name": "pushpaka",
+   "at": 0.1,
+   "y": -400,
+   "raw": true,
+   "scale": 0.01
+  },
+  {
+   "do": "narrate",
+   "text": "lighting.18"
+  },
+  {
+   "do": "interact",
+   "kind": "lamps",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "cityNight"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

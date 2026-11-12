@@ -1,0 +1,229 @@
+[
+ {
+  "bg": "court",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "dasharatha",
+  "char": "dasharatha",
+  "x": 358,
+  "face": 1,
+  "pose": "sit",
+  "y": 492
+ },
+ {
+  "actor": "vasishtha",
+  "char": "vasishtha",
+  "x": 480,
+  "face": 1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 236,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 278,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "bharata",
+  "char": "bharata",
+  "x": 198,
+  "face": 1,
+  "scale": 0.92
+ },
+ {
+  "actor": "shatrughna",
+  "char": "shatrughna",
+  "x": 316,
+  "face": 1
+ },
+ {
+  "prop": "throne",
+  "name": "throne",
+  "x": 358
+ },
+ {
+  "narrate": true,
+  "k": "sage.1"
+ },
+ {
+  "narrate": true,
+  "k": "sage.2"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": 1580,
+  "face": -1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "vishvamitra",
+  "x": 790,
+  "speed": 438.88888888888886,
+  "nowait": false
+ },
+ {
+  "pose": "dasharatha",
+  "p": "namaste"
+ },
+ {
+  "say": "dasharatha",
+  "k": "sage.3"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sage.4"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sage.5"
+ },
+ {
+  "pose": "dasharatha",
+  "p": "sit"
+ },
+ {
+  "choice": [
+   {
+    "k": "sage.7",
+    "goto": "boy",
+    "flag": "sage.choice",
+    "value": "boy"
+   },
+   {
+    "k": "sage.8",
+    "goto": "bless",
+    "flag": "sage.choice",
+    "value": "blessing"
+   }
+  ],
+  "prompt": "sage.6"
+ },
+ {
+  "say": "dasharatha",
+  "k": "sage.9",
+  "label": "boy"
+ },
+ {
+  "pose": "vishvamitra",
+  "p": "point"
+ },
+ {
+  "shake": 3
+ },
+ {
+  "cue": "starLow"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sage.10"
+ },
+ {
+  "say": "vasishtha",
+  "k": "sage.11"
+ },
+ {
+  "say": "dasharatha",
+  "k": "sage.12"
+ },
+ {
+  "goto": "go"
+ },
+ {
+  "say": "dasharatha",
+  "k": "sage.13",
+  "label": "bless"
+ },
+ {
+  "say": "vasishtha",
+  "k": "sage.14"
+ },
+ {
+  "pose": "vishvamitra",
+  "p": "stand",
+  "label": "go"
+ },
+ {
+  "move": "rama",
+  "x": 602,
+  "time": 1.6
+ },
+ {
+  "move": "lakshmana",
+  "x": 659,
+  "time": 1.6
+ },
+ {
+  "pose": "rama",
+  "p": "bow"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "bow"
+ },
+ {
+  "say": "lakshmana",
+  "k": "sage.15"
+ },
+ {
+  "say": "dasharatha",
+  "k": "sage.16"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "move": "vishvamitra",
+  "x": 1600,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "move": "rama",
+  "x": 1600,
+  "speed": 500,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "move": "lakshmana",
+  "x": 1600,
+  "speed": 428.57142857142856,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "narrate": true,
+  "k": "sage.17"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

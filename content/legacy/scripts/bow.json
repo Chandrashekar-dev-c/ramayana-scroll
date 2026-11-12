@@ -1,0 +1,112 @@
+{
+ "id": "bow",
+ "backdrop": "mithila",
+ "style": "bharni-bright",
+ "music": "court",
+ "cast": [
+  {
+   "id": "janaka",
+   "at": 0.78,
+   "face": -1
+  },
+  {
+   "id": "vishvamitra",
+   "at": 0.2,
+   "face": 1
+  },
+  {
+   "id": "rama",
+   "at": 0.33,
+   "face": 1,
+   "stage": "prince"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.12,
+   "face": 1,
+   "stage": "prince"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "bow.1"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.2"
+  },
+  {
+   "do": "say",
+   "who": "vishvamitra",
+   "text": "bow.3"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.4"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.5"
+  },
+  {
+   "do": "prop",
+   "id": "cart",
+   "name": "bowCart",
+   "at": 0.56
+  },
+  {
+   "do": "narrate",
+   "text": "bow.6"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "bow.7"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.8"
+  },
+  {
+   "do": "move",
+   "who": "rama",
+   "to": 0.46,
+   "time": 1
+  },
+  {
+   "do": "interact",
+   "kind": "greatBow",
+   "args": {}
+  },
+  {
+   "do": "pose",
+   "who": "janaka",
+   "pose": "raise"
+  },
+  {
+   "do": "narrate",
+   "text": "bow.9"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.10"
+  },
+  {
+   "do": "say",
+   "who": "janaka",
+   "text": "bow.11"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

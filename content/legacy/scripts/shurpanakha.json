@@ -1,0 +1,216 @@
+{
+ "id": "shurpanakha",
+ "backdrop": "panchavati",
+ "style": "bharni-earth",
+ "music": "forest",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.36,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sita",
+   "at": 0.26,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.62,
+   "face": -1,
+   "stage": "exile"
+  }
+ ],
+ "props": [
+  {
+   "id": "hut",
+   "name": "hut",
+   "at": 0.12,
+   "scale": 0.8
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "shurpanakha.1"
+  },
+  {
+   "do": "enter",
+   "who": "shurpanakha",
+   "side": "right",
+   "to": 0.5,
+   "time": 1.4
+  },
+  {
+   "do": "say",
+   "who": "shurpanakha",
+   "text": "shurpanakha.2"
+  },
+  {
+   "do": "choice",
+   "prompt": "shurpanakha.3",
+   "options": [
+    {
+     "text": "shurpanakha.4",
+     "goto": "tease",
+     "flag": "shurpanakha.choice",
+     "value": "tease"
+    },
+    {
+     "text": "shurpanakha.5",
+     "goto": "plain",
+     "flag": "shurpanakha.choice",
+     "value": "plain"
+    }
+   ]
+  },
+  {
+   "label": "tease",
+   "do": "say",
+   "who": "rama",
+   "text": "shurpanakha.6"
+  },
+  {
+   "do": "move",
+   "who": "shurpanakha",
+   "to": 0.54,
+   "time": 0.8
+  },
+  {
+   "do": "goto",
+   "to": "lak"
+  },
+  {
+   "label": "plain",
+   "do": "say",
+   "who": "rama",
+   "text": "shurpanakha.7"
+  },
+  {
+   "do": "say",
+   "who": "shurpanakha",
+   "text": "shurpanakha.8"
+  },
+  {
+   "do": "move",
+   "who": "shurpanakha",
+   "to": 0.54,
+   "time": 0.8
+  },
+  {
+   "label": "lak",
+   "do": "say",
+   "who": "lakshmana",
+   "text": "shurpanakha.9"
+  },
+  {
+   "do": "narrate",
+   "text": "shurpanakha.10"
+  },
+  {
+   "do": "say",
+   "who": "shurpanakha",
+   "text": "shurpanakha.11"
+  },
+  {
+   "do": "move",
+   "who": "shurpanakha",
+   "to": 0.32,
+   "time": 0.5
+  },
+  {
+   "do": "pose",
+   "who": "shurpanakha",
+   "pose": "swing0"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "hurt"
+  },
+  {
+   "do": "shake",
+   "amount": 3
+  },
+  {
+   "do": "sound",
+   "cue": "starBell"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "shurpanakha.12"
+  },
+  {
+   "do": "move",
+   "who": "lakshmana",
+   "to": 0.42,
+   "time": 0.4
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "swing1"
+  },
+  {
+   "do": "prop",
+   "id": "veil",
+   "name": "veil",
+   "at": 0,
+   "who": "shurpanakha",
+   "front": true
+  },
+  {
+   "do": "pose",
+   "who": "shurpanakha",
+   "pose": "hurt"
+  },
+  {
+   "do": "sound",
+   "cue": "fail"
+  },
+  {
+   "do": "narrate",
+   "text": "shurpanakha.13"
+  },
+  {
+   "do": "exit",
+   "who": "shurpanakha",
+   "side": "right",
+   "time": 0.9
+  },
+  {
+   "do": "prop",
+   "id": "veil",
+   "remove": true
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "stand"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "stand"
+  },
+  {
+   "do": "music",
+   "mood": "dark"
+  },
+  {
+   "do": "sound",
+   "cue": "drum"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "shurpanakha.14"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

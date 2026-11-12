@@ -1,0 +1,260 @@
+[
+ {
+  "bg": "grove",
+  "style": "kachni",
+  "colour": false
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 696,
+  "face": -1,
+  "stage": "exile",
+  "pose": "sit",
+  "mode": "colour"
+ },
+ {
+  "actor": "rakshasi",
+  "char": "rakshasi",
+  "x": 884,
+  "face": -1
+ },
+ {
+  "actor": "trijata",
+  "char": "trijata",
+  "x": 1016,
+  "face": -1,
+  "pose": "sit"
+ },
+ {
+  "prop": "tree",
+  "name": "shimshapa",
+  "x": 696
+ },
+ {
+  "narrate": true,
+  "k": "ashoka.1"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "ravana",
+  "x": 377,
+  "speed": 423.125,
+  "nowait": false
+ },
+ {
+  "actor": "mandodari",
+  "char": "mandodari",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "mandodari",
+  "x": 245,
+  "speed": 302.77777777777777,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "ashoka.2"
+ },
+ {
+  "pose": "sita",
+  "p": "stand"
+ },
+ {
+  "prop": "grass",
+  "name": "grassBlade",
+  "x": 546
+ },
+ {
+  "do": "resolve",
+  "who": "ravana",
+  "threats": [
+   "ashoka.3",
+   "ashoka.4",
+   "ashoka.5"
+  ]
+ },
+ {
+  "say": "sita",
+  "nk": "name.sita",
+  "k": "ashoka.6"
+ },
+ {
+  "move": "ravana",
+  "x": -320,
+  "speed": 562.5,
+  "nowait": true,
+  "exitAfter": true
+ },
+ {
+  "move": "mandodari",
+  "x": -320,
+  "speed": 562.5,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "move": "rakshasi",
+  "x": 809,
+  "time": 0.6
+ },
+ {
+  "pose": "rakshasi",
+  "p": "swing0"
+ },
+ {
+  "say": "rakshasi",
+  "k": "ashoka.7"
+ },
+ {
+  "pose": "trijata",
+  "p": "stand"
+ },
+ {
+  "say": "trijata",
+  "k": "ashoka.8"
+ },
+ {
+  "pose": "rakshasi",
+  "p": "stand"
+ },
+ {
+  "move": "rakshasi",
+  "x": 1054,
+  "time": 1
+ },
+ {
+  "pose": "sita",
+  "p": "sit"
+ },
+ {
+  "narrate": true,
+  "k": "ashoka.9"
+ },
+ {
+  "actor": "hanuman",
+  "char": "hanuman",
+  "x": -300,
+  "face": 1,
+  "scale": 0.6,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "hanuman",
+  "x": 508,
+  "speed": 673.3333333333334,
+  "nowait": false
+ },
+ {
+  "pose": "hanuman",
+  "p": "namaste"
+ },
+ {
+  "pose": "sita",
+  "p": "stand"
+ },
+ {
+  "say": "sita",
+  "k": "ashoka.10"
+ },
+ {
+  "say": "hanuman",
+  "k": "ashoka.11"
+ },
+ {
+  "prop": "ring",
+  "name": "ring",
+  "x": 602,
+  "colour": true,
+  "front": true,
+  "y": 438
+ },
+ {
+  "do": "tap",
+  "k": "ashoka.12",
+  "targets": [
+   {
+    "x": 602,
+    "y": 424,
+    "cue": "bell",
+    "then": [
+     {
+      "wash": "all",
+      "to": "colour",
+      "dur": 2.6
+     },
+     {
+      "unprop": [
+       "ring"
+      ]
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "ashoka.13"
+ },
+ {
+  "say": "hanuman",
+  "k": "ashoka.14"
+ },
+ {
+  "say": "sita",
+  "k": "ashoka.15"
+ },
+ {
+  "pose": "sita",
+  "p": "give"
+ },
+ {
+  "do": "tap",
+  "k": "ashoka.16",
+  "targets": [
+   {
+    "actor": "sita",
+    "y": 398,
+    "icon": "ornament",
+    "cue": "chime",
+    "then": [],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "say": "sita",
+  "k": "ashoka.17"
+ },
+ {
+  "pose": "sita",
+  "p": "stand"
+ },
+ {
+  "say": "sita",
+  "k": "ashoka.18"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

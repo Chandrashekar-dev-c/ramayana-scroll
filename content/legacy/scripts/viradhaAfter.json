@@ -1,0 +1,179 @@
+{
+ "id": "viradhaAfter",
+ "backdrop": "hermitage",
+ "style": "bharni-earth",
+ "music": "forest",
+ "cast": [],
+ "beats": [
+  {
+   "do": "enter",
+   "who": "sharabhanga",
+   "side": "right",
+   "to": 0.7,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.34,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "prop",
+   "id": "fire",
+   "name": "altar",
+   "at": 0.84,
+   "scale": 0.7
+  },
+  {
+   "do": "narrate",
+   "text": "viradha.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "ashram",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.2,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.42,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "narrate",
+   "text": "viradha.7"
+  },
+  {
+   "do": "backdrop",
+   "id": "hermitage",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "agastya",
+   "side": "right",
+   "to": 0.66,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.38,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "agastya",
+   "pose": "give"
+  },
+  {
+   "do": "say",
+   "who": "agastya",
+   "text": "viradha.8"
+  },
+  {
+   "do": "backdrop",
+   "id": "panchavati",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "hut",
+   "name": "hut",
+   "at": 0.66,
+   "scale": 0.85
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "right",
+   "to": 0.52,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.3,
+   "stage": "exile",
+   "time": 1
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.2,
+   "stage": "exile",
+   "time": 1.2
+  },
+  {
+   "do": "narrate",
+   "text": "viradha.9"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "viradha.10"
+  },
+  {
+   "do": "enter",
+   "who": "jatayu",
+   "side": "right",
+   "to": 0.86,
+   "time": 1.6
+  },
+  {
+   "do": "narrate",
+   "text": "viradha.11"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "viradha.12",
+    "spots": [
+     {
+      "who": "jatayu",
+      "y": 90,
+      "cue": "chime"
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "jatayu",
+   "text": "viradha.13"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

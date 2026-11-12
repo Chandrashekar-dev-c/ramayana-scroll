@@ -1,0 +1,278 @@
+{
+ "id": "rekha",
+ "backdrop": "panchavati",
+ "style": "bharni-earth",
+ "music": "dark",
+ "cast": [
+  {
+   "id": "sita",
+   "at": 0.5,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.72,
+   "face": -1,
+   "stage": "exile"
+  }
+ ],
+ "props": [
+  {
+   "id": "hut",
+   "name": "hut",
+   "at": 0.5,
+   "scale": 0.9
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "rekha.1"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "rekha.2"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "rekha.3"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "rekha.4"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "hurt"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.5"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "rekha.6"
+  },
+  {
+   "do": "pose",
+   "who": "lakshmana",
+   "pose": "hold"
+  },
+  {
+   "do": "interact",
+   "kind": "trace",
+   "args": {
+    "rect": [
+     0.34,
+     0.66
+    ],
+    "h": 300,
+    "hint": "rekha.7"
+   }
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "rekha.8"
+  },
+  {
+   "do": "exit",
+   "who": "lakshmana",
+   "side": "right",
+   "time": 1
+  },
+  {
+   "do": "music",
+   "mood": "silence"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.9"
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.12,
+   "stage": "ascetic",
+   "time": 2.2
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.10"
+  },
+  {
+   "do": "say",
+   "who": "_",
+   "name": "rekha.11",
+   "text": "rekha.12"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.3,
+   "time": 1.2
+  },
+  {
+   "do": "prop",
+   "id": "rekha",
+   "name": "rekha",
+   "at": 0,
+   "rect": [
+    0.34,
+    0.66
+   ],
+   "h": 300,
+   "state": "flare"
+  },
+  {
+   "do": "shake",
+   "amount": 3
+  },
+  {
+   "do": "sound",
+   "cue": "starBell"
+  },
+  {
+   "do": "move",
+   "who": "ravana",
+   "to": 0.24,
+   "time": 0.5,
+   "keepFace": true
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.13"
+  },
+  {
+   "do": "prop",
+   "id": "rekha",
+   "name": "rekha",
+   "at": 0,
+   "rect": [
+    0.34,
+    0.66
+   ],
+   "h": 300
+  },
+  {
+   "do": "say",
+   "who": "_",
+   "name": "rekha.14",
+   "text": "rekha.15"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.16"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "give"
+  },
+  {
+   "do": "move",
+   "who": "sita",
+   "to": 0.31,
+   "time": 1.6
+  },
+  {
+   "do": "prop",
+   "id": "rekha",
+   "name": "rekha",
+   "at": 0,
+   "rect": [
+    0.34,
+    0.66
+   ],
+   "h": 300,
+   "state": "out"
+  },
+  {
+   "do": "sound",
+   "cue": "bellLow"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.17"
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "stage": "king",
+   "mode": "colour"
+  },
+  {
+   "do": "shake",
+   "amount": 8
+  },
+  {
+   "do": "music",
+   "mood": "lanka"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.18"
+  },
+  {
+   "do": "backdrop",
+   "id": "sky",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "pushpaka",
+   "name": "pushpaka",
+   "at": 0.5,
+   "y": -260,
+   "raw": true
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "left",
+   "to": 0.46,
+   "time": 0.1,
+   "y": -330,
+   "scale": 0.7
+  },
+  {
+   "do": "enter",
+   "who": "sita",
+   "side": "left",
+   "to": 0.58,
+   "stage": "exile",
+   "time": 0.1,
+   "y": -330,
+   "scale": 0.8
+  },
+  {
+   "do": "set",
+   "who": "sita",
+   "pose": "raise"
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.19"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "rekha.20"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

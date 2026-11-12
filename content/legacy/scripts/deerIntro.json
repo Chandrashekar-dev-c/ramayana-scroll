@@ -1,0 +1,69 @@
+{
+ "id": "deerIntro",
+ "backdrop": "panchavati",
+ "style": "bharni-earth",
+ "music": "forest",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.34,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "sita",
+   "at": 0.24,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.46,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "props": [
+  {
+   "id": "hut",
+   "name": "hut",
+   "at": 0.1,
+   "scale": 0.8
+  },
+  {
+   "id": "deer",
+   "name": "deer",
+   "at": 0.8,
+   "raw": true
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "deer.1"
+  },
+  {
+   "do": "pose",
+   "who": "sita",
+   "pose": "point"
+  },
+  {
+   "do": "say",
+   "who": "sita",
+   "text": "deer.2"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "deer.3"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "deer.4"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

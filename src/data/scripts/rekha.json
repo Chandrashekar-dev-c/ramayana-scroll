@@ -1,0 +1,252 @@
+[
+ {
+  "bg": "panchavati",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 640,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 847,
+  "face": -1,
+  "stage": "exile"
+ },
+ {
+  "prop": "hut",
+  "name": "hut",
+  "x": 640,
+  "scale": 0.9
+ },
+ {
+  "narrate": true,
+  "k": "rekha.1"
+ },
+ {
+  "say": "sita",
+  "k": "rekha.2"
+ },
+ {
+  "say": "lakshmana",
+  "k": "rekha.3"
+ },
+ {
+  "say": "sita",
+  "k": "rekha.4"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "hurt"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.5"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "namaste"
+ },
+ {
+  "say": "lakshmana",
+  "k": "rekha.6"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "hold"
+ },
+ {
+  "do": "trace",
+  "k": "rekha.7",
+  "cx": 640,
+  "cy": 564,
+  "rx": 190,
+  "ry": 50
+ },
+ {
+  "say": "lakshmana",
+  "k": "rekha.8"
+ },
+ {
+  "move": "lakshmana",
+  "x": 1600,
+  "speed": 900,
+  "nowait": false,
+  "exitAfter": true
+ },
+ {
+  "mood": "silent"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.9"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": -300,
+  "face": 1,
+  "stage": "ascetic",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "ravana",
+  "x": 283,
+  "speed": 265,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "rekha.10"
+ },
+ {
+  "say": "_",
+  "nk": "rekha.11",
+  "k": "rekha.12"
+ },
+ {
+  "move": "ravana",
+  "x": 452,
+  "time": 1.2
+ },
+ {
+  "prop": "rekha",
+  "name": "rekha",
+  "x": 640,
+  "state": "flare"
+ },
+ {
+  "shake": 3
+ },
+ {
+  "cue": "starBell"
+ },
+ {
+  "move": "ravana",
+  "x": 396,
+  "time": 0.5,
+  "keepFace": true
+ },
+ {
+  "narrate": true,
+  "k": "rekha.13"
+ },
+ {
+  "prop": "rekha",
+  "name": "rekha",
+  "x": 640
+ },
+ {
+  "say": "_",
+  "nk": "rekha.14",
+  "k": "rekha.15"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.16"
+ },
+ {
+  "pose": "sita",
+  "p": "give"
+ },
+ {
+  "move": "sita",
+  "x": 461,
+  "time": 1.6
+ },
+ {
+  "prop": "rekha",
+  "name": "rekha",
+  "x": 640,
+  "state": "out"
+ },
+ {
+  "cue": "starLow"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.17"
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "mode": "colour",
+  "stage": "king"
+ },
+ {
+  "shake": 8
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.18"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "sky"
+ },
+ {
+  "prop": "pushpaka",
+  "name": "pushpaka",
+  "x": 640,
+  "y": 288
+ },
+ {
+  "actor": "ravana",
+  "char": "ravana",
+  "x": 602,
+  "face": 1,
+  "scale": 0.7,
+  "y": 218,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "x": 715,
+  "face": 1,
+  "stage": "exile",
+  "scale": 0.8,
+  "y": 218,
+  "hidden": false
+ },
+ {
+  "actor": "sita",
+  "char": "sita",
+  "pose": "raise"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.19"
+ },
+ {
+  "say": "sita",
+  "k": "rekha.20"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

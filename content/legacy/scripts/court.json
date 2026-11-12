@@ -1,0 +1,267 @@
+{
+ "id": "court",
+ "backdrop": "grove",
+ "style": "kachni",
+ "music": "flight",
+ "cast": [
+  {
+   "id": "hanuman",
+   "at": 0.2,
+   "face": 1,
+   "colour": true,
+   "mode": "colour"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "court.1"
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "court.2",
+    "spots": [
+     {
+      "at": 0.4,
+      "y": 60,
+      "icon": "tree",
+      "vanish": true,
+      "cue": "thud",
+      "r": 80
+     },
+     {
+      "at": 0.56,
+      "y": 60,
+      "icon": "pavilion",
+      "vanish": true,
+      "cue": "boulder",
+      "r": 80
+     },
+     {
+      "at": 0.72,
+      "y": 60,
+      "icon": "tree",
+      "vanish": true,
+      "cue": "thud",
+      "r": 80
+     },
+     {
+      "at": 0.88,
+      "y": 60,
+      "icon": "pavilion",
+      "vanish": true,
+      "cue": "boulder",
+      "r": 80
+     }
+    ]
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "court.3"
+  },
+  {
+   "do": "enter",
+   "who": "guard",
+   "side": "right",
+   "to": 0.7,
+   "time": 0.8
+  },
+  {
+   "do": "enter",
+   "who": "aksha",
+   "side": "right",
+   "to": 0.84,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "swing0"
+  },
+  {
+   "do": "narrate",
+   "text": "court.4"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "swing1"
+  },
+  {
+   "do": "set",
+   "who": "guard",
+   "pose": "hurt"
+  },
+  {
+   "do": "set",
+   "who": "aksha",
+   "pose": "hurt"
+  },
+  {
+   "do": "shake",
+   "amount": 4
+  },
+  {
+   "do": "narrate",
+   "text": "court.5"
+  },
+  {
+   "do": "set",
+   "who": "guard",
+   "visible": false
+  },
+  {
+   "do": "set",
+   "who": "aksha",
+   "visible": false
+  },
+  {
+   "do": "enter",
+   "who": "indrajit",
+   "side": "right",
+   "to": 0.74,
+   "time": 1
+  },
+  {
+   "do": "pose",
+   "who": "indrajit",
+   "pose": "cast"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "hurt"
+  },
+  {
+   "do": "narrate",
+   "text": "court.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "lankaCourt",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "throne",
+   "name": "throne",
+   "at": 0.74
+  },
+  {
+   "do": "enter",
+   "who": "ravana",
+   "side": "right",
+   "to": 0.74,
+   "time": 0.1,
+   "y": -70
+  },
+  {
+   "do": "set",
+   "who": "ravana",
+   "pose": "sit",
+   "face": -1
+  },
+  {
+   "do": "enter",
+   "who": "vibhishana",
+   "side": "right",
+   "to": 0.56,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "vibhishana",
+   "face": -1
+  },
+  {
+   "do": "enter",
+   "who": "minister",
+   "side": "right",
+   "to": 0.9,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "left",
+   "to": 0.24,
+   "time": 1,
+   "colour": true
+  },
+  {
+   "do": "music",
+   "mood": "lanka"
+  },
+  {
+   "do": "narrate",
+   "text": "court.7"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "court.8"
+  },
+  {
+   "do": "choice",
+   "options": [
+    {
+     "text": "court.9",
+     "goto": "tail"
+    },
+    {
+     "text": "court.10",
+     "goto": "ans"
+    }
+   ]
+  },
+  {
+   "label": "tail",
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "who": "hanuman",
+    "visual": "tail",
+    "time": 2.4,
+    "hint": "court.11"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "court.12"
+  },
+  {
+   "label": "ans",
+   "do": "pose",
+   "who": "ravana",
+   "pose": "point"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "court.13"
+  },
+  {
+   "do": "say",
+   "who": "vibhishana",
+   "text": "court.14"
+  },
+  {
+   "do": "say",
+   "who": "ravana",
+   "text": "court.15"
+  },
+  {
+   "do": "prop",
+   "id": "coil",
+   "name": "coil",
+   "at": 0,
+   "remove": true
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

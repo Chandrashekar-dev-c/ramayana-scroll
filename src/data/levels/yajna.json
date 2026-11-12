@@ -1,0 +1,112 @@
+{
+ "id": "yajna",
+ "backdrop": "ashram",
+ "style": "bharni-bright",
+ "hero": {
+  "id": "rama",
+  "stage": "prince"
+ },
+ "astras": true,
+ "allies": [
+  {
+   "id": "lakshmana",
+   "stage": "prince",
+   "fire": true
+  }
+ ],
+ "protect": {
+  "x": 700,
+  "hp": 12,
+  "label": "yajna.fire",
+  "kind": "altar",
+  "fail": "lose.fire"
+ },
+ "gentle": "protect",
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1500,
+   "steps": [
+    {
+     "wave": "yajna.o1",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 4,
+       "side": "both",
+       "gap": 1.8,
+       "target": "protect"
+      }
+     ]
+    },
+    {
+     "wave": "yajna.o2",
+     "groups": [
+      {
+       "type": "runner",
+       "n": 2,
+       "side": "both",
+       "gap": 1.7,
+       "target": "protect"
+      },
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "both",
+       "gap": 1.7,
+       "target": "protect"
+      },
+      {
+       "type": "brute",
+       "n": 1,
+       "side": "both",
+       "gap": 1.7,
+       "target": "protect"
+      }
+     ]
+    },
+    {
+     "checkpoint": "yajna.cp"
+    },
+    {
+     "say": "yajna.up",
+     "wait": 0.2
+    },
+    {
+     "wave": "yajna.o3",
+     "groups": [
+      {
+       "type": "flyer",
+       "n": 5,
+       "side": "both",
+       "gap": 1.5
+      },
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "both",
+       "gap": 1.5,
+       "target": "protect"
+      }
+     ]
+    },
+    {
+     "checkpoint": null
+    },
+    {
+     "bosses": [
+      "subahu",
+      "maricha"
+     ],
+     "intro": "yajna.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.yajna.title",
+ "kandaTitle": "kanda.bala",
+ "heal": true,
+ "end": [
+  "yajna.end.1"
+ ]
+}

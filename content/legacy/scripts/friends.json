@@ -1,0 +1,188 @@
+{
+ "id": "friends",
+ "backdrop": "kishkindha",
+ "style": "bharni-earth",
+ "music": "vanara",
+ "cast": [
+  {
+   "id": "rama",
+   "at": 0.26,
+   "face": 1,
+   "stage": "exile"
+  },
+  {
+   "id": "lakshmana",
+   "at": 0.16,
+   "face": 1,
+   "stage": "exile"
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "friends.1"
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "right",
+   "to": 0.62,
+   "time": 1.4
+  },
+  {
+   "do": "narrate",
+   "text": "friends.2"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "friends.3"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "friends.4",
+   "name": "name.rama"
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "friends.5"
+  },
+  {
+   "do": "pose",
+   "who": "hanuman",
+   "pose": "namaste"
+  },
+  {
+   "do": "say",
+   "who": "hanuman",
+   "text": "friends.6"
+  },
+  {
+   "do": "backdrop",
+   "id": "kishkindha",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "fire",
+   "name": "altar",
+   "at": 0.5,
+   "scale": 0.7
+  },
+  {
+   "do": "enter",
+   "who": "rama",
+   "side": "left",
+   "to": 0.36,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "sugriva",
+   "side": "right",
+   "to": 0.64,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "hanuman",
+   "side": "right",
+   "to": 0.84,
+   "time": 0.1
+  },
+  {
+   "do": "enter",
+   "who": "lakshmana",
+   "side": "left",
+   "to": 0.2,
+   "stage": "exile",
+   "time": 0.1
+  },
+  {
+   "do": "narrate",
+   "text": "friends.7"
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "friends.8"
+  },
+  {
+   "do": "prop",
+   "id": "bundle",
+   "name": "bundle",
+   "at": 0.5,
+   "y": -70,
+   "front": true,
+   "raw": true
+  },
+  {
+   "do": "interact",
+   "kind": "tapSpots",
+   "args": {
+    "hint": "friends.9",
+    "spots": [
+     {
+      "at": 0.44,
+      "y": 130,
+      "icon": "ornament",
+      "label": "friends.10",
+      "text": "friends.11"
+     },
+     {
+      "at": 0.5,
+      "y": 150,
+      "icon": "ornament",
+      "label": "friends.12",
+      "text": "friends.13"
+     },
+     {
+      "at": 0.56,
+      "y": 130,
+      "icon": "ornament",
+      "label": "friends.14",
+      "text": "friends.15"
+     }
+    ]
+   }
+  },
+  {
+   "do": "say",
+   "who": "lakshmana",
+   "text": "friends.16"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "grieve"
+  },
+  {
+   "do": "wait",
+   "time": 1
+  },
+  {
+   "do": "say",
+   "who": "sugriva",
+   "text": "friends.17"
+  },
+  {
+   "do": "pose",
+   "who": "rama",
+   "pose": "stand"
+  },
+  {
+   "do": "say",
+   "who": "rama",
+   "text": "friends.18"
+  },
+  {
+   "do": "wash"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "id": "jatayu",
+ "backdrop": "sky",
+ "style": "bharni-earth",
+ "music": "forest-battle",
+ "cast": [
+  {
+   "id": "jatayu",
+   "at": 0.2,
+   "face": 1,
+   "y": -200
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "jatayu.1"
+  },
+  {
+   "do": "say",
+   "who": "jatayu",
+   "text": "jatayu.2"
+  },
+  {
+   "do": "interact",
+   "kind": "jatayu",
+   "args": {}
+  },
+  {
+   "do": "backdrop",
+   "id": "forest",
+   "clear": true
+  },
+  {
+   "do": "enter",
+   "who": "jatayu",
+   "side": "left",
+   "to": 0.5,
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "jatayu",
+   "pose": "grieve",
+   "y": 0
+  },
+  {
+   "do": "music",
+   "mood": "grief"
+  },
+  {
+   "do": "narrate",
+   "text": "jatayu.3"
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

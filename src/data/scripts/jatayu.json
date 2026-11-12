@@ -1,0 +1,69 @@
+[
+ {
+  "bg": "sky",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "battle"
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "x": 358,
+  "face": 1,
+  "y": 348
+ },
+ {
+  "narrate": true,
+  "k": "jatayu.1"
+ },
+ {
+  "say": "jatayu",
+  "k": "jatayu.2"
+ },
+ {
+  "trial": "flight",
+  "kind": "jatayu"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "forest"
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "x": 640,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "actor": "jatayu",
+  "char": "jatayu",
+  "pose": "grieve",
+  "y": 548
+ },
+ {
+  "mood": "grief"
+ },
+ {
+  "narrate": true,
+  "k": "jatayu.3"
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

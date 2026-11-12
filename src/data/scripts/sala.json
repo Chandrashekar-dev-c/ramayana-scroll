@@ -1,0 +1,121 @@
+[
+ {
+  "bg": "kishkindha",
+  "style": "bharni-earth"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 339,
+  "face": 1,
+  "stage": "exile"
+ },
+ {
+  "actor": "sugriva",
+  "char": "sugriva",
+  "x": 245,
+  "face": 1
+ },
+ {
+  "prop": "bones",
+  "name": "skeleton",
+  "x": 640
+ },
+ {
+  "say": "sugriva",
+  "k": "sala.1"
+ },
+ {
+  "move": "rama",
+  "x": 508,
+  "time": 1.2
+ },
+ {
+  "do": "tap",
+  "k": "sala.2",
+  "targets": [
+   {
+    "x": 640,
+    "y": 508,
+    "cue": "thud",
+    "then": [
+     {
+      "unprop": [
+       "bones"
+      ]
+     },
+     {
+      "pose": "rama",
+      "p": "kick"
+     },
+     {
+      "shake": 4
+     }
+    ],
+    "r": 64
+   }
+  ]
+ },
+ {
+  "narrate": true,
+  "k": "sala.3"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "say": "sugriva",
+  "k": "sala.4"
+ },
+ {
+  "say": "rama",
+  "k": "sala.5"
+ },
+ {
+  "say": "sugriva",
+  "k": "sala.6"
+ },
+ {
+  "move": "rama",
+  "x": 320,
+  "time": 1
+ },
+ {
+  "do": "sala",
+  "k": "ch23.obj",
+  "x0": 520,
+  "gap": 84
+ },
+ {
+  "narrate": true,
+  "k": "sala.7"
+ },
+ {
+  "pose": "sugriva",
+  "p": "bow"
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "say": "sugriva",
+  "k": "sala.8"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]

@@ -1,0 +1,211 @@
+{
+ "id": "dasharatha",
+ "backdrop": "kingRoom",
+ "style": "bharni-bright",
+ "music": "grief",
+ "cast": [
+  {
+   "id": "dasharatha",
+   "at": 0.36,
+   "face": 1,
+   "pose": "sit",
+   "y": -30
+  },
+  {
+   "id": "kaushalya",
+   "at": 0.52,
+   "face": -1
+  }
+ ],
+ "props": [
+  {
+   "id": "bed",
+   "name": "bed",
+   "at": 0.36
+  }
+ ],
+ "beats": [
+  {
+   "do": "narrate",
+   "text": "dasharatha.1"
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "dasharatha.2"
+  },
+  {
+   "do": "backdrop",
+   "id": "tamasa",
+   "clear": true
+  },
+  {
+   "do": "set",
+   "who": "dasharatha",
+   "visible": false
+  },
+  {
+   "do": "enter",
+   "who": "young",
+   "side": "left",
+   "to": 0.3,
+   "as": "rama",
+   "stage": "prince",
+   "mode": "line",
+   "time": 0.1
+  },
+  {
+   "do": "set",
+   "who": "young",
+   "pose": "draw1"
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.3",
+   "top": true
+  },
+  {
+   "do": "enter",
+   "who": "youngAscetic",
+   "side": "right",
+   "to": 0.74,
+   "mode": "line",
+   "time": 1.2
+  },
+  {
+   "do": "pose",
+   "who": "youngAscetic",
+   "pose": "kneel"
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.4",
+   "top": true
+  },
+  {
+   "do": "pose",
+   "who": "young",
+   "pose": "shoot"
+  },
+  {
+   "do": "sound",
+   "cue": "release"
+  },
+  {
+   "do": "wait",
+   "time": 0.6
+  },
+  {
+   "do": "pose",
+   "who": "youngAscetic",
+   "pose": "grieve"
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.5",
+   "top": true
+  },
+  {
+   "do": "enter",
+   "who": "blindFather",
+   "side": "right",
+   "to": 0.84,
+   "mode": "line",
+   "time": 1.4,
+   "async": true
+  },
+  {
+   "do": "enter",
+   "who": "blindMother",
+   "side": "right",
+   "to": 0.92,
+   "mode": "line",
+   "time": 1.6
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.6",
+   "top": true
+  },
+  {
+   "do": "say",
+   "who": "blindFather",
+   "text": "dasharatha.7"
+  },
+  {
+   "do": "backdrop",
+   "id": "kingRoom",
+   "clear": true
+  },
+  {
+   "do": "prop",
+   "id": "bed",
+   "name": "bed",
+   "at": 0.36
+  },
+  {
+   "do": "set",
+   "who": "dasharatha",
+   "visible": true,
+   "at": 0.36
+  },
+  {
+   "do": "enter",
+   "who": "kaushalya",
+   "side": "right",
+   "to": 0.52,
+   "time": 0.1
+  },
+  {
+   "do": "say",
+   "who": "dasharatha",
+   "text": "dasharatha.8"
+  },
+  {
+   "do": "interact",
+   "kind": "hold",
+   "args": {
+    "visual": "lamps",
+    "count": 7,
+    "time": 12,
+    "hint": "dasharatha.9",
+    "noMeter": true,
+    "cue": "bellSoft",
+    "texts": [
+     "dasharatha.10",
+     "dasharatha.11",
+     "dasharatha.12",
+     "dasharatha.13"
+    ]
+   }
+  },
+  {
+   "do": "pose",
+   "who": "dasharatha",
+   "pose": "grieve"
+  },
+  {
+   "do": "music",
+   "mood": "silence"
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.14"
+  },
+  {
+   "do": "narrate",
+   "text": "dasharatha.15"
+  },
+  {
+   "do": "sound",
+   "cue": "bell"
+  },
+  {
+   "do": "wait",
+   "time": 1.6
+  },
+  {
+   "do": "end"
+  }
+ ]
+}

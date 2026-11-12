@@ -1,0 +1,154 @@
+{
+ "id": "tataka",
+ "backdrop": "waste",
+ "style": "bharni-bright",
+ "music": "bala-battle",
+ "hero": {
+  "id": "rama",
+  "stage": "prince",
+  "start": 200
+ },
+ "party": [
+  {
+   "id": "lakshmana",
+   "stage": "prince",
+   "ai": "archerSupport"
+  }
+ ],
+ "astras": false,
+ "arenas": [
+  {
+   "left": -140,
+   "right": 1250
+  },
+  {
+   "left": 1500,
+   "right": 2800
+  }
+ ],
+ "shelves": [
+  {
+   "x1": 1980,
+   "x2": 2300,
+   "h": 70
+  }
+ ],
+ "tips": {
+  "jump": "tataka.lose.tip",
+  "move": "tataka.lose.tip"
+ },
+ "steps": [
+  {
+   "type": "banner",
+   "title": "chapter.tataka.title",
+   "sub": "kanda.bala",
+   "time": 2.4
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "tataka.o1",
+   "spawn": [
+    [
+     "grunt",
+     3
+    ]
+   ],
+   "side": "right",
+   "gap": 1.6
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "tataka.o2",
+   "spawn": [
+    [
+     "runner",
+     3
+    ]
+   ],
+   "side": "right",
+   "gap": 2,
+   "teach": "jump"
+  },
+  {
+   "type": "wave",
+   "arena": 0,
+   "objective": "tataka.o3",
+   "spawn": [
+    [
+     "grunt",
+     1
+    ],
+    [
+     "runner",
+     1
+    ],
+    [
+     "grunt",
+     1
+    ]
+   ],
+   "side": "both",
+   "gap": 1.8,
+   "teach": "roll"
+  },
+  {
+   "type": "checkpoint",
+   "line": "tataka.cp1"
+  },
+  {
+   "type": "wave",
+   "arena": 1,
+   "objective": "tataka.o4",
+   "spawn": [
+    [
+     "grunt",
+     2
+    ],
+    [
+     "runner",
+     1
+    ],
+    [
+     "brute",
+     1
+    ],
+    [
+     "grunt",
+     1
+    ],
+    [
+     "runner",
+     1
+    ]
+   ],
+   "side": "both",
+   "gap": 1.9,
+   "teach": "kick"
+  },
+  {
+   "type": "checkpoint"
+  },
+  {
+   "type": "boss",
+   "arena": 1,
+   "boss": "tataka",
+   "intro": "tataka.bossIntro"
+  },
+  {
+   "type": "heal"
+  },
+  {
+   "type": "scene",
+   "lines": [
+    "tataka.end.1",
+    "tataka.end.2"
+   ]
+  }
+ ],
+ "win": [
+  "tataka.win.1",
+  "tataka.win.2"
+ ]
+}

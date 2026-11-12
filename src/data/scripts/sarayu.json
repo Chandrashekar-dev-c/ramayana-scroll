@@ -1,0 +1,188 @@
+[
+ {
+  "bg": "riverbank",
+  "style": "bharni-bright"
+ },
+ {
+  "mood": "calm"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": 753,
+  "face": -1
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": 508,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": 396,
+  "face": 1,
+  "stage": "prince"
+ },
+ {
+  "narrate": true,
+  "k": "sarayu.1"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.2"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.3"
+ },
+ {
+  "pose": "rama",
+  "p": "kneel"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "kneel"
+ },
+ {
+  "cue": "bell"
+ },
+ {
+  "wait": 1
+ },
+ {
+  "pose": "rama",
+  "p": "stand"
+ },
+ {
+  "pose": "lakshmana",
+  "p": "stand"
+ },
+ {
+  "narrate": true,
+  "k": "sarayu.4"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.5"
+ },
+ {
+  "battle": "sarayuTargets"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.6"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "waste"
+ },
+ {
+  "actor": "vishvamitra",
+  "char": "vishvamitra",
+  "x": -300,
+  "face": 1,
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "vishvamitra",
+  "x": 640,
+  "speed": 626.6666666666666,
+  "nowait": false
+ },
+ {
+  "actor": "rama",
+  "char": "rama",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "rama",
+  "x": 490,
+  "speed": 526.6666666666666,
+  "nowait": false
+ },
+ {
+  "actor": "lakshmana",
+  "char": "lakshmana",
+  "x": -300,
+  "face": 1,
+  "stage": "prince",
+  "y": 548,
+  "hidden": false
+ },
+ {
+  "move": "lakshmana",
+  "x": 377,
+  "speed": 451.3333333333333,
+  "nowait": false
+ },
+ {
+  "narrate": true,
+  "k": "sarayu.7"
+ },
+ {
+  "say": "lakshmana",
+  "k": "sarayu.8"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.9"
+ },
+ {
+  "say": "rama",
+  "k": "sarayu.10"
+ },
+ {
+  "say": "vishvamitra",
+  "k": "sarayu.11"
+ },
+ {
+  "pose": "rama",
+  "p": "namaste"
+ },
+ {
+  "say": "rama",
+  "k": "sarayu.12"
+ },
+ {
+  "exit": [
+   "*"
+  ]
+ },
+ {
+  "unprop": [
+   "*"
+  ]
+ },
+ {
+  "bg": "riverbank"
+ },
+ {
+  "wash": "all",
+  "to": "colour",
+  "dur": 2.6
+ },
+ {
+  "goto": "__seg1"
+ },
+ {
+  "noop": true,
+  "label": "__seg1"
+ }
+]
