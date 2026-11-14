@@ -22,6 +22,27 @@ const go = {
 };
 
 // ---------------------------------------------------------------- title
+// A visible fullscreen toggle. Browsers only allow fullscreen from a tap, so this is a button
+// the player presses, and it says so if the browser refuses rather than failing silently.
+function fullscreenButton() {
+  const canFs = !!document.documentElement.requestFullscreen;
+  const label = () => (document.fullscreenElement ? t('btn.exitFull') : t('btn.fullscreen'));
+  if (!canFs) return null;
+  const b = button(label(), async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+    } catch {
+      b.textContent = t('btn.fullscreenNo');
+      setTimeout(() => { b.textContent = label(); }, 2200);
+      return;
+    }
+    b.textContent = label();
+  }, {});
+  document.addEventListener('fullscreenchange', () => { b.textContent = label(); });
+  return b;
+}
+
 class TitleMode {
   constructor() { this.t = 0; }
   label() { return t('aria.title'); }
@@ -41,6 +62,7 @@ class TitleMode {
     else if (!started) row.append(button(t('btn.begin'), () => this.begin(null), { main: true }));
     if (started) row.append(button(t('btn.journeyOpen'), () => this.begin('hub')));
     row.append(button(t('btn.settings'), () => openSettings({ back: () => this.show() })));
+    const fs = fullscreenButton(); if (fs) row.append(fs);
     if (allSeals()) row.append(button(t('btn.gallery'), () => openGallery({ back: () => this.show() })));
     kids.push(row);
     if (credits.reviewers.length) kids.push(el('p', { class: 'mini' }, t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') })));
