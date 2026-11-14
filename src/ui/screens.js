@@ -44,6 +44,7 @@ class TitleMode {
     kids.push(row);
     const rev = credits.reviewers.length ? t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') }) : t('title.reviewersSoon');
     kids.push(el('p', { class: 'mini' }, rev));
+    kids.push(el('p', { class: 'mini' }, t('title.madeBy')));
     panel(kids, { cls: 'title' });
   }
   begin(id) {
