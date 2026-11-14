@@ -27,19 +27,10 @@ function isIosBrowser() { return /iPhone|iPad|iPod/.test(navigator.userAgent) &&
 
 // A visible fullscreen toggle. Browsers only allow fullscreen from a tap, so this is a button
 // the player presses, and it says so if the browser refuses rather than failing silently.
-function homeScreenButton() {
-  const standalone = window.navigator.standalone || matchMedia('(display-mode: standalone)').matches;
-  if (standalone) return null;
-  return button(t('btn.homescreen'), () => panel([
-    el('h2', {}, t('btn.homescreen')),
-    el('p', {}, t('homescreen.body')),
-    el('div', { class: 'row' }, button(t('btn.back'), () => closePanel(), { main: true })),
-  ], { cls: 'title' }));
-}
 function fullscreenButton() {
   const canFs = !!document.documentElement.requestFullscreen;
   const label = () => (document.fullscreenElement ? t('btn.exitFull') : t('btn.fullscreen'));
-  if (!canFs) return homeScreenButton();
+  if (!canFs || isIosBrowser()) return null;
   const b = button(label(), async () => {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
