@@ -3,7 +3,7 @@
 import { app } from '../core/app.js';
 import { save } from '../core/save.js';
 import { t } from '../core/i18n.js';
-import { panel, closePanel, button, el } from './dom.js';
+import { panel, closePanel, button, el, withGrinding } from './dom.js';
 
 /** Live developer switches, read by the battle and the loop. */
 export const dev = { god: false, hitboxes: false, slow: 1, fps: true };
@@ -23,8 +23,8 @@ export function applyDevMode() {
 }
 
 const go = {
-  chapter: (id) => import('../scenes/runner.js').then((m) => m.startChapter(id)),
-  hub: () => import('../hub/hub.js').then((m) => m.openHub()),
+  chapter: (id) => withGrinding(() => import('../scenes/runner.js').then((m) => m.startChapter(id))),
+  hub: () => withGrinding(() => import('../hub/hub.js').then((m) => m.openHub())),
 };
 
 export async function openDevPanel() {

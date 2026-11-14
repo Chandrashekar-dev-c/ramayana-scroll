@@ -167,6 +167,21 @@ bus.on('hint', (h) => { if (h.button) flashButton(h.button, h.dur); });
 export function setDraftNote(show) { const d = $('draftNote'); d.textContent = t('lang.draft'); d.classList.toggle('hidden', !show); }
 export function setLoading(k) { const b = $('loadbar'); if (b) b.style.width = Math.round(k * 100) + '%'; }
 export function hideLoading() { const l = $('loading'); if (l) l.remove(); }
+
+/** Show the "Grinding the colours…" plate while the next scene loads, for at least minMs. */
+export async function withGrinding(work, minMs = 700) {
+  const plate = document.createElement('div');
+  plate.id = 'grinding';
+  plate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--cream);font:400 26px "Yatra One",serif;color:var(--madder);z-index:55';
+  plate.innerHTML = '<div style="text-align:center"><div>Grinding the colours…</div><div style="width:220px;height:12px;border:2px solid var(--black);margin:12px auto 0;background:var(--paper)"><i style="display:block;height:100%;width:0;background:var(--madder);animation:rs-grind 1.1s ease-in-out infinite"></i></div></div>';
+  document.body.append(plate);
+  const started = Date.now();
+  try { return await work(); }
+  finally {
+    const wait = Math.max(0, minMs - (Date.now() - started));
+    setTimeout(() => plate.remove(), wait);
+  }
+}
 export function showRotate(on) { $('rotate').classList.toggle('hidden', !on); }
 
 export function sealSvg(on) {

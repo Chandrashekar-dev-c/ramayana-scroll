@@ -59,6 +59,7 @@
   .rotphone .turn { transform-origin: 0 0; animation: rs-turn 2.6s ease-in-out infinite; }
   .rotphone .arrow { animation: rs-arrow 2.6s ease-in-out infinite; }
   @keyframes rs-turn { 0%, 18% { transform: rotate(0deg); } 50%, 80% { transform: rotate(90deg); } 100% { transform: rotate(0deg); } }
+  @keyframes rs-grind { 0% { width: 6%; margin-left: 0; } 50% { width: 80%; } 100% { width: 6%; margin-left: 94%; } }
   @keyframes rs-arrow { 0%, 12% { opacity: 1; } 45%, 85% { opacity: 0; } 100% { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .rotphone .turn { animation: none; transform: rotate(90deg); } .rotphone .arrow { animation: none; } }
   #draftNote { position: fixed; left: 8px; bottom: 4px; font-size: 12px; background: var(--paper); padding: 2px 6px; border: 1px solid var(--black); }
@@ -110,6 +111,16 @@
   <div class="rottitle">Turn me sideways</div>
   <p>The scroll is painted for a landscape screen.</p>
 </div></div>
+<script>
+  (function () {
+    function stuck(msg) {
+      var box = document.querySelector('#loading > div');
+      if (box && document.getElementById('loading')) box.innerHTML = '<div>' + msg + '</div><div style="font:400 16px sans-serif;margin-top:12px;color:#1d1613">Check your connection, then reload this page.</div>';
+    }
+    window.addEventListener('error', function (e) { if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) stuck('The game files did not load.'); }, true);
+    setTimeout(function () { stuck('This is taking longer than usual.'); }, 25000);
+  })();
+</script>
 <noscript>This painted game needs JavaScript.</noscript>
 <script type="module" src="./src/main.js"></script>
 </body>

@@ -4,7 +4,7 @@ import { save, defaultSettings } from '../core/save.js';
 import { t, LANGUAGES, loadLang, lang, isDraft } from '../core/i18n.js';
 import { input, DEFAULT_KEYS } from '../core/input.js';
 import { bus } from '../core/events.js';
-import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine } from './dom.js';
+import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine, withGrinding } from './dom.js';
 import { initAudio, applyVolumes, cue } from '../audio/audio.js';
 import { PAL } from '../art/palette.js';
 import { plate } from '../art/ink.js';
@@ -17,8 +17,8 @@ import { renderSheet } from './sheet.js';
 import { applyDevMode } from './devpanel.js';
 
 const go = {
-  hub: (o) => import('../hub/hub.js').then((m) => m.openHub(o)),
-  chapter: (id) => import('../scenes/runner.js').then((m) => m.startChapter(id)),
+  hub: (o) => withGrinding(() => import('../hub/hub.js').then((m) => m.openHub(o))),
+  chapter: (id) => withGrinding(() => import('../scenes/runner.js').then((m) => m.startChapter(id))),
 };
 
 // ---------------------------------------------------------------- title
