@@ -210,6 +210,8 @@
  "btn.fullscreen": "Full screen",
  "btn.exitFull": "Exit full screen",
  "btn.fullscreenNo": "Not available in this browser",
+ "btn.installIos": "Add to Home Screen",
+ "install.ios": "Tap the Share button in Safari, then Add to Home Screen. Open the game from that icon and it runs without the browser bars.",
  "title.madeBy": "Made by Chandrashekar C",
  "title.disclaimer": "This is a work of fiction. It is here to tell the old story with reverence, not to hurt anyone's sentiments.",
  "type.scene": "Scene",

@@ -22,6 +22,9 @@ const go = {
 };
 
 // ---------------------------------------------------------------- title
+// iPhone/iPad browsers cannot go full screen, but a home-screen icon opens without browser chrome.
+function isIosBrowser() { return /iPhone|iPad|iPod/.test(navigator.userAgent) && !navigator.standalone; }
+
 // A visible fullscreen toggle. Browsers only allow fullscreen from a tap, so this is a button
 // the player presses, and it says so if the browser refuses rather than failing silently.
 function fullscreenButton() {
@@ -63,6 +66,7 @@ class TitleMode {
     if (started) row.append(button(t('btn.journeyOpen'), () => this.begin('hub')));
     row.append(button(t('btn.settings'), () => openSettings({ back: () => this.show() })));
     const fs = fullscreenButton(); if (fs) row.append(fs);
+    if (isIosBrowser()) row.append(button(t('btn.installIos'), () => panel([el('p', {}, t('install.ios')), button(t('btn.back'), () => closePanel(), { main: true })])));
     if (allSeals()) row.append(button(t('btn.gallery'), () => openGallery({ back: () => this.show() })));
     kids.push(row);
     if (credits.reviewers.length) kids.push(el('p', { class: 'mini' }, t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') })));

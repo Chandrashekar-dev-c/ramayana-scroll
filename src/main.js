@@ -16,6 +16,17 @@ import { setLoading, hideLoading, showRotate, setDraftNote, panelOpen, updateRea
 import { openTitle } from './ui/screens.js';
 import { applyDevMode } from './ui/devpanel.js';
 
+// iPhone Safari zooms the page on rapid taps and on pinches. Stop both on the game surface only,
+// so the buttons (which use click events) still respond to quick taps.
+let lastCanvasEnd = 0;
+document.addEventListener('touchend', (e) => {
+  if (e.target && e.target.id !== 'game') return;
+  const now = Date.now();
+  if (now - lastCanvasEnd < 350) e.preventDefault();
+  lastCanvasEnd = now;
+}, { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) => document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
+
 async function boot() {
   const q = new URLSearchParams(location.search);
   app.debug = q.has('debug');
