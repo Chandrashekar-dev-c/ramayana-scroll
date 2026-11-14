@@ -106,13 +106,37 @@ export function drawProp(ctx, name, x, y, o = {}) {
       break;
     }
     case 'pushpaka': {
-      // the flying palace-chariot: rectangular tiers, gold
-      S([[-130, 0], [-150, -30], [150, -30], [130, 0]], { fill: PAL.gold, pattern: P('peacockEyes', PAL.black), gap: PAL.terracotta });
-      S(rectPts(-100, -84, 200, 54), { fill: PAL.gold, pattern: P('checks', PAL.terracotta), gap: PAL.black });
-      S(rectPts(-64, -124, 128, 40), { fill: PAL.gold, gap: PAL.terracotta });
-      S([[-40, -124], [0, -164], [40, -124]], { fill: PAL.gold });
-      for (const sx of [-1, 1]) S([[sx * 150, -30], [sx * 200, -56 + Math.sin(t * 6) * 8], [sx * 190, -20], [sx * 150, -10]], { fill: PAL.white, pattern: P('featherChevrons', PAL.terracotta), seed: sx + 4 });
-      if (o.broken) { L([[-80, -84], [-40, -30], [-60, 0]], { w: 2.4, color: PAL.black }); L([[60, -124], [40, -60]], { w: 2.4, color: PAL.black }); }
+      // The flying palace: a gold swan-boat with upturned ends, an open canopy on four pillars,
+      // a lotus seat, pennants, and clouds underneath. It floats gently.
+      const bob = Math.sin(t * 2) * 3;
+      ctx.save(); ctx.translate(0, bob);
+      for (let i = -1; i <= 1; i++) M.cloud(ctx, i * 96, 34 + Math.abs(i) * 4, 84, { hatch: o.thin ? 10 : 5, seed: i + 9 });
+      // the hull curls up at both ends
+      S([[-164, -62], [-120, -40], [-60, -34], [0, -32], [60, -34], [120, -40], [164, -62], [140, -44], [112, -20], [0, -8], [-112, -20], [-140, -44]],
+        { fill: PAL.gold, pattern: P('peacockEyes', PAL.black), gap: PAL.terracotta, smooth: true });
+      // the lotus seat inside the canopy
+      S([[-44, -28], [-26, -50], [0, -38], [26, -50], [44, -28], [0, -22]], { fill: PAL.white, pattern: P('featherChevrons', PAL.terracotta), gap: PAL.terracotta, smooth: true, seed: 3 });
+      // four pillars and the canopy
+      for (const px of [-96, -32, 32, 96]) S(rectPts(px - 5, -150, 10, 120), { fill: PAL.gold, gap: PAL.terracotta });
+      S([[-124, -142], [-80, -172], [-30, -184], [30, -184], [80, -172], [124, -142], [96, -150], [0, -168], [-96, -150]],
+        { fill: PAL.gold, pattern: P('checks', PAL.terracotta), gap: PAL.black, smooth: true });
+      // the finial
+      S([[-6, -186], [0, -208], [6, -186]], { fill: PAL.gold });
+      ctx.fillStyle = PAL.black; ctx.beginPath(); ctx.arc(0, -210, 3, 0, TAU); ctx.fill();
+      // two pennants that flutter from the canopy
+      for (const sx of [-1, 1]) {
+        const flut = Math.sin(t * 6 + sx) * 7;
+        S([[sx * 124, -142], [sx * 166, -154 + flut], [sx * 150, -142], [sx * 166, -130 - flut], [sx * 124, -132]], { fill: PAL.madder, gap: PAL.black, seed: sx + 5 });
+      }
+      if (o.broken) {
+        // Jatayu's claws have torn the palace: splintered canopy, cracks, a shed feather
+        L([[-60, -150], [-26, -104], [-52, -58]], { w: 3, color: PAL.black });
+        L([[44, -150], [18, -96], [36, -58]], { w: 3, color: PAL.black });
+        L([[-96, -128], [-70, -150], [-40, -120]], { w: 3, color: PAL.madder });
+        L([[6, -34], [34, -6]], { w: 2.4, color: PAL.black });
+        for (const d of [[-70, -40], [70, -40]]) { ctx.save(); ctx.translate(d[0], d[1]); ctx.rotate(0.5); line(ctx, [[0, 0], [26, 3], [40, -4]], { w: 2, color: PAL.kusum, smooth: true }); ctx.restore(); }
+      }
+      ctx.restore();
       break;
     }
     case 'cloudChariot': {

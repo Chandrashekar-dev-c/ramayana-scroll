@@ -192,6 +192,20 @@
   "k": "rekha.18"
  },
  {
+  "narrate": true,
+  "k": "rekha.grab"
+ },
+ {
+  "do": "mash",
+  "actor": "sita",
+  "futile": 9,
+  "k": "rekha.struggle"
+ },
+ {
+  "narrate": true,
+  "k": "rekha.taken"
+ },
+ {
   "exit": [
    "*"
   ]
@@ -216,23 +230,23 @@
   "x": 602,
   "face": 1,
   "scale": 0.7,
-  "y": 218,
+  "y": 258,
   "hidden": false
  },
  {
   "actor": "sita",
   "char": "sita",
-  "x": 715,
+  "x": 678,
   "face": 1,
   "stage": "exile",
   "scale": 0.8,
-  "y": 218,
+  "y": 258,
   "hidden": false
  },
  {
   "actor": "sita",
   "char": "sita",
-  "pose": "raise"
+  "pose": "sit"
  },
  {
   "narrate": true,

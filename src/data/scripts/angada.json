@@ -35,7 +35,7 @@
  },
  {
   "bg": "lankaCourt",
-  "style": "kachni"
+  "style": "bharni-earth"
  },
  {
   "prop": "throne",
@@ -47,7 +47,7 @@
   "char": "ravana",
   "x": 866,
   "face": -1,
-  "mode": "kachni",
+  "mode": "colour",
   "y": 478,
   "hidden": false
  },
@@ -88,7 +88,7 @@
   "char": "guard",
   "x": 1580,
   "face": -1,
-  "mode": "kachni",
+  "mode": "colour",
   "y": 548,
   "hidden": false
  },
@@ -103,7 +103,7 @@
   "char": "guard",
   "x": -300,
   "face": 1,
-  "mode": "kachni",
+  "mode": "colour",
   "y": 548,
   "hidden": false
  },
@@ -175,7 +175,7 @@
   "char": "guard",
   "x": 1580,
   "face": -1,
-  "mode": "kachni",
+  "mode": "colour",
   "y": 548,
   "hidden": false
  },

@@ -2,6 +2,7 @@
  "id": "viradha",
  "backdrop": "deepForest",
  "style": "bharni-earth",
+ "density": "full",
  "music": "forest-battle",
  "hero": {
   "id": "rama",
@@ -17,7 +18,7 @@
   {
    "id": "sita",
    "stage": "exile",
-   "ai": "protected"
+   "ai": "archerSupport"
   }
  ],
  "astras": true,

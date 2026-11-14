@@ -328,7 +328,7 @@ function tenHeads(b, r) {
       save.data.headsChosen[b.heads] = v;
       save.data.voiceCount = { ...(save.data.voiceCount || {}), [v]: ((save.data.voiceCount || {})[v] || 0) + 1 };
       if (v === 'pride') save.data.pride = Math.min(10, (save.data.pride || 0) + 1);
-      else if (heads.find((h) => h.id === v)?.wise) save.data.pride = Math.max(0, (save.data.pride || 0) - 0);
+      else if (heads.find((h) => h.id === v)?.wise) save.data.pride = Math.max(0, (save.data.pride || 0) - 1);
       save.commit();
       rav.heads = { ...rav.heads, active: HEAD_INDEX[v], pride: save.data.pride };
       if (has(`heads.${b.heads}.${v}.then`)) o.lq.push('head.' + v, `heads.${b.heads}.${v}.then`);

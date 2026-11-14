@@ -233,5 +233,8 @@
  "set.dev": "Developer mode",
  "load.chapter": "Grinding the colours…",
  "update.ready": "A new version of the scroll is ready.",
- "update.reload": "Reload"
+ "update.reload": "Reload",
+ "btn.ravanaWall": "Ravana's thread",
+ "btn.ramaWall": "Rama's journey",
+ "ravana.wall.title": "The Demon-King's Court"
 }

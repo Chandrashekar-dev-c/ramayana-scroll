@@ -7,7 +7,7 @@
   "stage": "prince"
  },
  "astras": true,
- "regrow": true,
+ "painted": true,
  "allies": [
   {
    "id": "lakshmana",
@@ -106,7 +106,6 @@
  ],
  "title": "chapter.yajna.title",
  "kandaTitle": "kanda.bala",
- "heal": true,
  "end": [
   "yajna.end.1"
  ]

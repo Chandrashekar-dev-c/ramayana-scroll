@@ -27,6 +27,30 @@ export function bird(ctx, x, y, s, o = {}) {
   line(ctx, P([[-0.2, -0.05], [0.25, 0.12], [-0.1, 0.2]]), { w: (o.w ?? 1.2) * 0.7, color: lc(o), seed: 4, amp: 0.3, flat: true });
 }
 
+/** A Mithila peacock: plump blue body, crested head on a curving neck, and a sweep of
+ *  eye-spot tail feathers. Perches in trees and stands by ponds. */
+export function peacock(ctx, x, y, s, o = {}) {
+  const d = o.dir === -1 ? -1 : 1, c = lc(o), m = md(o);
+  const blue = o.colour ? PAL.indigo : (o.night ? PAL.nightLine : c);
+  const nF = 7;
+  for (let i = 0; i < nF; i++) {
+    const t = i / (nF - 1);
+    const fl = s * (1.5 + t * 0.6);
+    const fx = x - d * (0.2 + t * 0.9) * fl, fy = y + (0.1 + t * 0.7) * fl;
+    line(ctx, [[x - d * s * 0.1, y], [(x - d * s * 0.1 + fx) / 2, (y + fy) / 2 - s * 0.25], [fx, fy]], { w: 1, color: o.colour ? PAL.leaf : c, smooth: true, seed: (o.seed ?? 1) + i, amp: 0.4 });
+    shape(ctx, ellipsePts(fx, fy, s * 0.2, s * 0.26, 8), { mode: m, fill: o.colour ? PAL.leaf : bg(o), lineColor: c, w: 0.9, seed: i, smooth: true });
+    ctx.fillStyle = o.colour ? PAL.indigo : c; ctx.beginPath(); ctx.ellipse(fx, fy, s * 0.1, s * 0.13, 0, 0, TAU); ctx.fill();
+    if (o.colour) { ctx.fillStyle = PAL.turmeric; ctx.beginPath(); ctx.ellipse(fx, fy, s * 0.045, s * 0.06, 0, 0, TAU); ctx.fill(); }
+  }
+  shape(ctx, [[x + d * s * 0.32, y - s * 0.12], [x + d * s * 0.1, y - s * 0.52], [x - d * s * 0.22, y - s * 0.38], [x - d * s * 0.26, y + s * 0.2], [x + d * s * 0.22, y + s * 0.24]], { mode: m, fill: blue, lineColor: c, w: 1.1, seed: (o.seed ?? 2) + 1, smooth: true, amp: 0.4 });
+  line(ctx, [[x + d * s * 0.18, y - s * 0.42], [x + d * s * 0.52, y - s * 0.72], [x + d * s * 0.46, y - s * 0.98]], { w: s * 0.15, color: blue, smooth: true, seed: 3 });
+  ctx.fillStyle = blue; ctx.beginPath(); ctx.ellipse(x + d * s * 0.47, y - s * 1.05, s * 0.13, s * 0.11, 0, 0, TAU); ctx.fill();
+  line(ctx, [[x + d * s * 0.58, y - s * 1.06], [x + d * s * 0.74, y - s * 1.04]], { w: 1, color: c, flat: true });
+  ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x + d * s * 0.5, y - s * 1.08, s * 0.03, 0, TAU); ctx.fill();
+  for (let i = -1; i <= 1; i++) { line(ctx, [[x + d * s * 0.46, y - s * 1.16], [x + d * s * 0.46 + i * s * 0.09, y - s * 1.34]], { w: 0.8, color: c, seed: i }); if (o.colour) { ctx.fillStyle = PAL.indigo; ctx.beginPath(); ctx.arc(x + d * s * 0.46 + i * s * 0.09, y - s * 1.36, s * 0.035, 0, TAU); ctx.fill(); } }
+  for (const lx of [-s * 0.02, d * s * 0.12]) line(ctx, [[x + lx, y + s * 0.24], [x + lx, y + s * 0.5]], { w: 1, color: c, seed: 5 });
+}
+
 /** A lotus seen from above, opening from bud (0) to full (1). The stomp telegraph. */
 export function lotus(ctx, x, y, r, open = 1, o = {}) {
   const n = o.petals || 8, k = 0.25 + open * 0.75;
@@ -190,6 +214,20 @@ export function nagaCoil(ctx, x, y, r, k, o = {}) {
 
 // ---------------------------------------------------------------- scenery
 /** Trees in the Mithila manner: a trunk and stacked leaf forms, flat, no shading. */
+/** One Mithila leaf: a pointed blade with a mid-vein, pointing along `ang`. */
+function drawLeaf(ctx, x, y, L, ang, col, c, m, o, sd) {
+  const dx = Math.cos(ang), dy = Math.sin(ang);
+  const bx = x - dx * L * 0.3, by = y - dy * L * 0.3, tx = x + dx * L * 0.7, ty = y + dy * L * 0.7;
+  const wx = -dy * L * 0.32, wy = dx * L * 0.32;
+  shape(ctx, [[bx, by], [bx + (tx - bx) * 0.42 + wx, by + (ty - by) * 0.42 + wy], [tx, ty], [bx + (tx - bx) * 0.42 - wx, by + (ty - by) * 0.42 - wy]], { mode: m, fill: col, lineColor: c, lineFill: bg(o), w: 0.9, seed: sd, smooth: true, amp: 0.3 });
+  line(ctx, [[bx, by], [tx, ty]], { w: 0.6, color: c, seed: sd, flat: true });
+}
+/** A small blossom: a ring of petal-dots around a bright centre. */
+function drawBlossom(ctx, x, y, r, col, c, sd) {
+  dots(ctx, x, y, r, 5, col, sd, r * 0.85);
+  ctx.fillStyle = c === PAL.nightLine ? PAL.nightLine : PAL.turmeric; ctx.beginPath(); ctx.arc(x, y, r * 0.5, 0, TAU); ctx.fill();
+}
+
 export function tree(ctx, x, y, h, kind, o = {}) {
   const c = lc(o), m = md(o), sd = o.seed ?? 1, w = o.w ?? 1.3;
   const tw = h * 0.05;
@@ -203,20 +241,45 @@ export function tree(ctx, x, y, h, kind, o = {}) {
     for (let i = 0; i < 7; i++) { const a = Math.PI + (i / 6) * Math.PI; const ex = x - h * 0.02 + Math.cos(a) * h * 0.3, ey = y - h * 0.86 + Math.sin(a) * h * 0.2 + Math.abs(i - 3) * h * 0.03; shape(ctx, [[x - h * 0.02, y - h * 0.86], [(x + ex) / 2, (y - h * 0.86 + ey) / 2 - h * 0.07], [ex, ey], [(x + ex) / 2, (y - h * 0.86 + ey) / 2 + h * 0.02]], { mode: m, fill: PAL.leaf, lineColor: c, w, seed: sd + i, smooth: true, amp: 0.5 }); }
   } else if (kind === 'bamboo') {
     for (let i = -1; i <= 1; i++) { const bx = x + i * h * 0.06; line(ctx, [[bx, y], [bx + i * h * 0.03, y - h]], { w: w * 1.8, color: o.colour ? PAL.leaf : c, seed: sd + i, amp: 0.5 }); for (let j = 1; j < 5; j++) line(ctx, [[bx - 4 + i * h * 0.03 * j / 5, y - h * j / 5], [bx + 4 + i * h * 0.03 * j / 5, y - h * j / 5]], { w, color: c, seed: j, amp: 0.2, flat: true }); }
-  } else if (kind === 'sala') {
-    for (let i = 0; i < 4; i++) { const yy = y - h * (0.42 + i * 0.15), ww = h * (0.26 - i * 0.045); shape(ctx, [[x - ww, yy], [x, yy - h * 0.24], [x + ww, yy]], { mode: m, fill: PAL.leaf, lineColor: c, w, seed: sd + i, smooth: false, amp: 0.8 }); if (!o.colour) hatch(ctx, [[x - ww, yy], [x, yy - h * 0.24], [x + ww, yy]], { color: c, spacing: 6, angle: 1.57, seed: sd + i, w: 0.7 }); }
   } else {
-    // round canopy of leaf clusters (banyan, ashoka, mango)
-    const n = kind === 'banyan' ? 7 : 5, R = h * (kind === 'banyan' ? 0.34 : 0.27);
-    for (let i = 0; i < n; i++) {
-      const a = (i / n) * TAU + noise(sd, i) * 0.3, rr = R * 0.55;
-      const cx = x + Math.cos(a) * rr, cy = y - h * 0.68 + Math.sin(a) * rr * 0.8;
-      shape(ctx, ellipsePts(cx, cy, R * 0.52, R * 0.46, 9), { mode: m, fill: leafCol, lineFill: bg(o), lineColor: c, w, seed: sd + i, smooth: true, amp: 0.8 });
+    // an authentic Mithila tree: a banded trunk, branches that fan and arch, leaves growing in
+    // rows ALONG each branch (so the structure shows), with flowers, round fruit and a perched bird
+    const tall = kind === 'sala';
+    const top = y - h * (tall ? 0.5 : 0.42);
+    const spread = h * (tall ? 0.33 : kind === 'banyan' ? 0.5 : 0.42);
+    const leafL = h * (tall ? 0.085 : 0.1);
+    const leaf2 = o.night ? PAL.night : PAL.leafDark || PAL.green;
+    const brown = o.colour ? PAL.brown : c;
+    const fcol = kind === 'ashoka' ? PAL.kusum : kind === 'mango' ? PAL.turmeric : kind === 'banyan' ? PAL.madder : PAL.saffron;
+    // band rings up the trunk
+    for (let i = 1; i <= 3; i++) line(ctx, [[x - tw * 0.85, y - h * 0.12 * i], [x + tw * 0.85, y - h * 0.12 * i]], { w: 0.7, color: c, seed: sd + i, amp: 0.2, flat: true });
+    const nB = tall ? 6 : 8;
+    const qpt = (p0, p1, p2, t) => [(1 - t) * (1 - t) * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0], (1 - t) * (1 - t) * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1]];
+    for (let b = 0; b < nB; b++) {
+      const side = b - (nB - 1) / 2;
+      const a = -Math.PI / 2 + side * (tall ? 0.24 : 0.4) + noise(sd, b) * 0.07;
+      const len = spread * (tall ? 1.5 : 1.0) * (0.8 + (noise(sd, b + 7) + 1) * 0.12);
+      const ex = x + Math.cos(a) * len, ey = top + Math.sin(a) * len;
+      const mid = [(x + ex) / 2 + noise(sd, b) * 10, (top + ey) / 2 - h * 0.05];
+      const P0 = [x, top];
+      line(ctx, [P0, mid, [ex, ey]], { w: w * 1.5, color: brown, smooth: true, seed: sd + b, amp: 0.5 });
+      // paired leaves march up the outer part of the branch
+      const perp = a + Math.PI / 2;
+      for (let i = 1; i <= 6; i++) {
+        const t = 0.28 + (i / 6) * 0.66;
+        const [px, py] = qpt(P0, mid, [ex, ey], t);
+        const ll = leafL * (0.75 + (noise(sd, b * 7 + i) + 1) * 0.2);
+        for (const sgn of [-1, 1]) drawLeaf(ctx, px + Math.cos(perp) * sgn * ll * 0.45, py + Math.sin(perp) * sgn * ll * 0.45, ll, a + sgn * 0.6, i % 2 ? leafCol : leaf2, c, m, o, sd + b * 11 + i * 2 + (sgn > 0 ? 0 : 1));
+      }
+      drawLeaf(ctx, ex, ey, leafL * 1.15, a, leafCol, c, m, o, sd + b);
+      // a flower or a round fruit at the branch tip (painted scenes)
+      if (o.colour) {
+        if (b % 2 === 0) drawBlossom(ctx, ex + Math.cos(a) * leafL * 0.5, ey + Math.sin(a) * leafL * 0.5, leafL * 0.36, fcol, c, sd + b);
+        else { ctx.fillStyle = PAL.madder; ctx.beginPath(); ctx.arc(ex + Math.cos(a) * leafL * 0.3, ey + Math.sin(a) * leafL * 0.3, leafL * 0.2, 0, TAU); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 0.8; ctx.stroke(); }
+      }
     }
-    shape(ctx, ellipsePts(x, y - h * 0.68, R * 0.5, R * 0.45, 9), { mode: m, fill: leafCol, lineFill: bg(o), lineColor: c, w, seed: sd + 20, smooth: true, amp: 0.8 });
-    if (o.colour) dots(ctx, x, y - h * 0.68, R * 0.7, kind === 'mango' ? 7 : 9, kind === 'ashoka' ? PAL.madder : kind === 'mango' ? PAL.turmeric : PAL.green, sd, kind === 'mango' ? 4 : 2.5);
-    else dots(ctx, x, y - h * 0.68, R * 0.7, 9, c, sd, 1.4);
-    if (kind === 'banyan') for (let i = -2; i <= 2; i++) if (i) line(ctx, [[x + i * R * 0.4, y - h * 0.5], [x + i * R * 0.42, y - h * 0.12]], { w: 0.9, color: c, seed: sd + i, amp: 0.8 });
+    // a peacock or songbird perched where two branches meet
+    if (o.perch) { const pa = -Math.PI / 2 + ((noise(sd, 30) > 0 ? 1 : -1)) * (tall ? 0.24 : 0.4) * 1.5; const [bx, by] = qpt([x, top], [x + Math.cos(pa) * spread * 0.5, top + Math.sin(pa) * spread * 0.5 - h * 0.04], [x + Math.cos(pa) * spread, top + Math.sin(pa) * spread], 0.78); if (o.perch === 'peacock') peacock(ctx, bx, by - leafL, leafL * 2.2, { colour: o.colour, night: o.night, dir: pa < -Math.PI / 2 ? 1 : -1, seed: sd }); else bird(ctx, bx, by - leafL * 0.5, leafL * 0.9, { colour: o.colour, night: o.night, fill: PAL.indigo, dir: pa < -Math.PI / 2 ? 1 : -1, seed: sd }); }
   }
 }
 
@@ -297,7 +360,7 @@ export function fillers(ctx, x0, x1, y0, y1, o = {}) {
     else if (kind === 'bird') bird(ctx, x, y, 8, { ...oo, fill: i % 3 ? PAL.leaf : PAL.madder });
     else if (kind === 'flower') { dots(ctx, x, y, 5, 5, o.colour ? PAL.pink : lc(o), sd + i, 1.8); dots(ctx, x, y, 0, 1, o.colour ? PAL.turmeric : lc(o), 1, 1.6); }
     else if (kind === 'star') { ctx.fillStyle = PAL.white; ctx.beginPath(); ctx.arc(x, y, 1.6 + (i % 3) * 0.6, 0, TAU); ctx.fill(); if (i % 4 === 0) { ctx.strokeStyle = PAL.white; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 5, y); ctx.lineTo(x + 5, y); ctx.moveTo(x, y - 5); ctx.lineTo(x, y + 5); ctx.stroke(); } }
-    else if (kind === 'leaf') shape(ctx, [[x - 7, y], [x, y - 4], [x + 7, y], [x, y + 4]], { mode: md(o), fill: PAL.leaf, lineColor: lc(o), w: 1, seed: sd + i, smooth: true, amp: 0.3 });
+    else if (kind === 'leaf') { const ang = -1.2 + (i % 3) * 0.5; const dx = Math.cos(ang), dy = Math.sin(ang), L = 9; shape(ctx, [[x - dx * L * 0.3, y - dy * L * 0.3], [x + dy * L * 0.3, y - dx * L * 0.3], [x + dx * L * 0.7, y + dy * L * 0.7], [x - dy * L * 0.3, y + dx * L * 0.3]], { mode: md(o), fill: PAL.leaf, lineColor: lc(o), w: 1, seed: sd + i, smooth: true, amp: 0.3 }); line(ctx, [[x - dx * L * 0.3, y - dy * L * 0.3], [x + dx * L * 0.7, y + dy * L * 0.7]], { w: 0.6, color: lc(o), seed: sd + i, flat: true }); }
     else dots(ctx, x, y, 4, 4, lc(o), sd + i, 1.3);
   }
   ctx.restore();

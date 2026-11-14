@@ -12,8 +12,9 @@
   "x": 490,
   "face": 1,
   "stage": "exile",
+  "pose": "sit",
   "scale": 0.75,
-  "y": 298
+  "y": 342
  },
  {
   "actor": "sita",
@@ -21,8 +22,9 @@
   "x": 565,
   "face": 1,
   "stage": "exile",
+  "pose": "sit",
   "scale": 0.75,
-  "y": 298
+  "y": 342
  },
  {
   "actor": "lakshmana",
@@ -30,8 +32,9 @@
   "x": 414,
   "face": 1,
   "stage": "exile",
+  "pose": "sit",
   "scale": 0.75,
-  "y": 298
+  "y": 342
  },
  {
   "prop": "p",

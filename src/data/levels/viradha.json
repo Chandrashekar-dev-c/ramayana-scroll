@@ -10,20 +10,20 @@
  "tips": {
   "roll": "viradha.tip"
  },
- "regrow": true,
+ "density": "full",
+ "painted": true,
  "allies": [
   {
    "id": "lakshmana",
    "stage": "exile",
    "fire": true
+  },
+  {
+   "id": "sita",
+   "stage": "exile",
+   "fire": true
   }
  ],
- "protected": {
-  "id": "sita",
-  "stage": "exile",
-  "x": 40
- },
- "gentle": "ally",
  "arenas": [
   {
    "left": -100,
@@ -63,8 +63,7 @@
        "type": "grunt",
        "n": 2,
        "side": "both",
-       "gap": 1.9,
-       "target": "ally"
+       "gap": 1.9
       },
       {
        "type": "archer",
@@ -95,6 +94,5 @@
  "end": [
   "viradha.end.1",
   "viradha.end.2"
- ],
- "heal": true
+ ]
 }

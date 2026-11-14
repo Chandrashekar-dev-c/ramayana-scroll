@@ -2,6 +2,7 @@
  "id": "deer",
  "backdrop": "deepForest",
  "style": "bharni-earth",
+ "density": "moderate",
  "music": "dark",
  "hero": {
   "id": "rama",

@@ -75,17 +75,8 @@ function paintWall(states) {
     M.fillers(ctx, 40, WALL_W - 40, y + 40, y + TIER_H - 140, { colour: false, seed: 30 + i, density: 0.5 });
   }
   M.vineBand(ctx, 0, WALL_W, tierY(6), { colour: allDone(), h: 22, step: 60 });
-  // paths: Rama's down from Ayodhya in colour, Ravana's up from Lanka in kachni
-  const rama = PLACES.filter((p) => !p.lanka);
-  for (let k = 1; k < rama.length; k++) {
-    const a = rama[k - 1], b = rama[k];
-    const done = states.st[a.id] !== 'line' && states.st[b.id] !== 'line' || (save.data.done[a.chapters[a.chapters.length - 1]]);
-    const pts = pathPts(a, b);
-    for (let j = 0; j < pts.length; j += 1) { ctx.fillStyle = done ? PAL.madder : PAL.black; ctx.beginPath(); ctx.arc(pts[j][0], pts[j][1], done ? 5 : 3, 0, 7); ctx.fill(); }
-  }
-  const lanka = PLACES.filter((p) => p.lanka);
-  for (let k = 1; k < lanka.length; k++) { const pts = pathPts(lanka[k - 1], lanka[k]); line(ctx, pts, { w: 2, color: PAL.terracotta, smooth: true }); }
   for (const p of PLACES) {
+    if (!placeOnRamaWall(p)) continue; // places that are all Ravana's belong on his wall
     const st = states.st[p.id];
     const y = tierY(p.tier) + TIER_H - 60;
     vignette(ctx, p, p.x, y, st === 'colour', {});
@@ -118,19 +109,47 @@ function paintWall(states) {
   return cv;
 }
 
-function pathPts(a, b) {
-  const ax = a.x, ay = tierY(a.tier) + TIER_H - 40, bx = b.x, by = tierY(b.tier) + TIER_H - 40;
-  const pts = [];
-  if (a.tier === b.tier) { for (let k = 0; k <= 1; k += 0.04) pts.push([ax + (bx - ax) * k, ay + 14 + Math.sin(k * Math.PI) * 10]); }
-  else { const midY = tierY(b.tier) + 10; for (let k = 0; k <= 1; k += 0.05) pts.push([ax + (WALL_W - 60 - ax) * k * (bx < ax ? 0 : 0) + (bx - ax) * k, ay + (by - ay) * k + Math.sin(k * Math.PI) * -40]); void midY; }
-  return pts;
-}
-
 function allDone() { return CHAPTERS.filter((c) => c.playable !== false).every((c) => save.data.done[c.id]); }
+
+// ---------------------------------------------------------------- Ravana's thread (a separate wall)
+// The six Lanka chapters are Ravana's court, told from his side. They live on their own dark wall,
+// reached by auto-flip (when the next chapter is one of his) or the toggle. The main wall never shows them.
+const RAVANA_IDS = CHAPTERS.filter((c) => c.type === 'lanka').map((c) => c.id);
+const isRavanaCh = (id) => RAVANA_IDS.includes(id);
+/** True when a place has at least one chapter that is NOT part of Ravana's thread. */
+function placeOnRamaWall(p) { return p.chapters.some((id) => !isRavanaCh(id)); }
+/** The six court nodes, two rows of three, in screen space. */
+function ravanaNodes() {
+  const W = app.W, cols = [W * 0.24, W * 0.5, W * 0.76];
+  return RAVANA_IDS.map((id, i) => ({ id, x: cols[i % 3], y: i < 3 ? 214 : 476 }));
+}
+function renderRavanaWall(ctx, hub) {
+  const W = app.W;
+  // a dark court: indigo ground, Ravana's ten-headed shadow behind, terracotta kachni hatching
+  ctx.fillStyle = PAL.black; ctx.fillRect(0, 0, W, 720);
+  ctx.save(); ctx.globalAlpha = 0.16;
+  for (let i = 0; i < 24; i++) { ctx.fillStyle = i % 2 ? PAL.indigo : PAL.madder; ctx.beginPath(); ctx.ellipse((i * 331) % W, (i * 197) % 720, 180, 70, i, 0, 7); ctx.fill(); }
+  ctx.restore();
+  // Ravana's ten-headed shadow looms behind the court
+  ctx.save(); ctx.globalAlpha = 0.14; fig(ctx, character('ravana'), 'stand', W / 2, 760, { scale: 2.6, mode: 'line', facing: 1 }); ctx.restore();
+  plate(ctx, t('ravana.wall.title'), W / 2, 66, { size: 28, font: '"Yatra One", serif', bg: PAL.black, color: PAL.turmeric, gap: PAL.madder, padX: 24, padY: 11 });
+  const next = nextChapter();
+  for (const nd of ravanaNodes()) {
+    const ch = chapterById(nd.id), open = isUnlocked(nd.id), done = save.data.done[nd.id];
+    ctx.save(); ctx.translate(nd.x, nd.y); ctx.globalAlpha = open ? 1 : 0.4;
+    drawProp(ctx, 'throne', 0, 36, { colour: done, scale: 0.62, lanka: true, t: hub.t });
+    if (next && nd.id === next.id) M.usableRing(ctx, 0, 4, 80, hub.t);
+    if (!open) { ctx.strokeStyle = PAL.turmeric; ctx.lineWidth = 3; ctx.strokeRect(-11, -4, 22, 18); ctx.beginPath(); ctx.arc(0, -4, 9, Math.PI, 0); ctx.stroke(); }
+    ctx.restore();
+    plate(ctx, `${ch.n}. ${t('chapter.' + nd.id + '.title')}`, nd.x, nd.y + 92, { size: 16, bg: done ? PAL.madder : PAL.black, color: done ? '#fbf5e4' : PAL.turmeric, gap: done ? PAL.turmeric : PAL.indigo, padX: 12, padY: 6 });
+    if (done) { ctx.fillStyle = PAL.turmeric; const seals = save.data.seals[nd.id] || {}; ['finish', 'gentle', 'fast'].forEach((k, i) => { if (seals[k]) { ctx.beginPath(); ctx.arc(nd.x - 18 + i * 18, nd.y - 80, 5, 0, 7); ctx.fill(); } }); }
+  }
+}
 
 class Hub {
   constructor(o = {}) {
     this.cam = { x: WALL_W / 2, y: 300, z: 0.6 }; this.t = 0; this.o = o; this.intro = o.intro ? 0 : -1; this.wash = null; this.marker = null; this.target = null; this.fit = false;
+    this.view = 'rama'; // 'rama' = the main wall, 'ravana' = his court (the Lanka thread)
   }
   label() { return t('aria.map'); }
   fitZoom() { return Math.min(app.W / WALL_W, 720 / WALL_H) * 0.98; }
@@ -139,7 +158,10 @@ class Hub {
     setMood('bala', 'calm');
     const upcoming = nextChapter(); if (upcoming) import('../scenes/runner.js').then((m) => m.prefetchChapter(upcoming.id)).catch(() => {});
     touchControls(null);
-    topbar([{ label: t('btn.journey'), on: () => this.toggleFit() }, { label: t('btn.menu'), on: () => openTitle() }]);
+    // auto-flip to Ravana's wall when the next chapter is one of his court scenes
+    const up = nextChapter();
+    this.view = up && isRavanaCh(up.id) ? 'ravana' : 'rama';
+    this.setTopbar();
     const pending = save.data.pendingWash;
     const focus = pending ? placeOf(pending) : placeOf((nextChapter() || CHAPTERS[0]).id);
     if (focus) { this.cam.x = focus.x; this.cam.y = tierY(focus.tier) + TIER_H / 2; }
@@ -155,6 +177,14 @@ class Hub {
     this.hintPlace = !save.data.done[CHAPTERS[0].id] ? PLACES[0] : null;
   }
   exit() { topbar(null); closePanel(); }
+  setTopbar() {
+    topbar([
+      { label: t(this.view === 'ravana' ? 'btn.ramaWall' : 'btn.ravanaWall'), on: () => this.flipView() },
+      { label: t('btn.journey'), on: () => this.toggleFit() },
+      { label: t('btn.menu'), on: () => openTitle() },
+    ]);
+  }
+  flipView() { this.view = this.view === 'ravana' ? 'rama' : 'ravana'; closePanel(); this.setTopbar(); cue('bell'); }
   invalidate() { cache.key = ''; }
   toggleFit() { this.fit = !this.fit; this.zoomTo = this.fit ? this.fitZoom() : Math.max(0.42, Math.min(0.8, app.W / 1600)); if (this.fit) { this.panTo = { x: WALL_W / 2, y: WALL_H / 2 }; } }
   wallCanvas() {
@@ -165,6 +195,14 @@ class Hub {
   update(dt) {
     this.t += dt;
     const c = this.cam;
+    if (this.view === 'ravana') {
+      if (!panelOpen()) {
+        const p = input.pointer;
+        if (p.justUp && p.moved < 12) { const nd = ravanaNodes().find((n) => Math.hypot(n.x - p.x, n.y + 24 - p.y) < 100); if (nd) this.openRavanaCard(nd.id); }
+        if (input.consume('confirm') || input.consume('action')) { const n = nextChapter(); if (n && isRavanaCh(n.id)) this.openRavanaCard(n.id); }
+      }
+      input.endTick(); return;
+    }
     if (this.intro >= 0) {
       // the opening pan: Ayodhya down to Lanka, then back to Ayodhya; any tap skips
       this.intro += dt;
@@ -191,7 +229,7 @@ class Hub {
     c.y = Math.max(Math.min(hh, WALL_H / 2), Math.min(Math.max(WALL_H - hh, WALL_H / 2), c.y));
     if (p.justUp && p.moved < 10) {
       const w = this.toWall(p.x, p.y);
-      const hit = PLACES.find((q) => Math.abs(q.x - w.x) < 190 && w.y > tierY(q.tier) + 40 && w.y < tierY(q.tier) + TIER_H);
+      const hit = PLACES.find((q) => placeOnRamaWall(q) && Math.abs(q.x - w.x) < 190 && w.y > tierY(q.tier) + 40 && w.y < tierY(q.tier) + TIER_H);
       if (hit) this.openCard(hit);
       else if (save.data.unlocked && w.x > WALL_W - 220 && w.y > tierY(5) + 100) this.openScroll();
     }
@@ -209,7 +247,7 @@ class Hub {
     const rows = [];
     for (const id of p.chapters) {
       const ch = chapterById(id);
-      if (ch.playable === false) continue;
+      if (ch.playable === false || isRavanaCh(id)) continue; // Ravana's chapters live on his own wall
       const open = isUnlocked(id), seals = save.data.seals[id] || {};
       const sealRow = el('span', { html: ['finish', 'gentle', 'fast'].map((k) => sealSvg(!!seals[k])).join('') });
       const label = `${ch.n}. ${t('chapter.' + id + '.title')}`;
@@ -219,8 +257,18 @@ class Hub {
     panel([el('h2', {}, t('place.' + p.id)), el('div', { class: 'col' }, rows), button(t('btn.close'), () => closePanel())], { cls: 'card' });
   }
   openScroll() { panel([el('h2', {}, t('scroll.title')), el('p', {}, t('scroll.body')), button(t('btn.close'), () => closePanel())]); }
+  openRavanaCard(id) {
+    const ch = chapterById(id), open = isUnlocked(id), seals = save.data.seals[id] || {};
+    const sealRow = el('span', { html: ['finish', 'gentle', 'fast'].map((k) => sealSvg(!!seals[k])).join('') });
+    const label = `${ch.n}. ${t('chapter.' + id + '.title')}`;
+    const row = open
+      ? el('div', { class: 'ch' }, button(label, () => { closePanel(); startChapter(id); }, { main: id === (nextChapter() || {}).id, small: t('type.' + ch.type) }), sealRow)
+      : el('div', { class: 'ch lock' }, el('span', {}, label), el('span', {}, t('lock.finish', { name: (blocker(id) ? t('chapter.' + blocker(id).id + '.title') : '') })));
+    panel([el('h2', {}, t('ravana.wall.title')), el('div', { class: 'col' }, [row]), button(t('btn.close'), () => closePanel())], { cls: 'card' });
+  }
   render(ctx) {
     const c = this.cam, W = app.W;
+    if (this.view === 'ravana') { renderRavanaWall(ctx, this); return; }
     ctx.fillStyle = PAL.cream; ctx.fillRect(0, 0, W, 720);
     ctx.save();
     ctx.translate(W / 2, 360); ctx.scale(c.z, c.z); ctx.translate(-c.x, -c.y);
@@ -237,11 +285,12 @@ class Hub {
     const next = nextChapter();
     const nextPlace = next ? placeOf(next.id) : null;
     for (const p of PLACES) {
+      if (!placeOnRamaWall(p)) continue;
       const y = tierY(p.tier) + TIER_H - 20;
       const st = this.states.st[p.id];
       const lit = st === 'colour';
       const lb = plate(ctx, t('place.' + p.id), p.x, y + 4, { size: 20, bg: lit ? PAL.paper : PAL.cream, gap: lit ? PAL.turmeric : PAL.cream, seed: p.x | 0 });
-      if (p === nextPlace) { M.usableRing(ctx, p.x, y - 120, 150, this.t); }
+      if (p === nextPlace && !isRavanaCh(next.id)) { M.usableRing(ctx, p.x, y - 120, 150, this.t); }
       void lb;
     }
     if (this.marker || nextPlace) {

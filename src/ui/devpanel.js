@@ -64,7 +64,7 @@ export async function openDevPanel() {
 
 // Hotkeys while developer mode is on: ` opens the panel, G god mode, H hitboxes, [ ] speed.
 window.addEventListener('keydown', (e) => {
-  if (!save.data.settings.devMode || e.target instanceof HTMLInputElement) return;
+  if (!save.data.settings.devMode || e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
   if (e.code === 'Backquote') openDevPanel();
   else if (e.code === 'KeyG') dev.god = !dev.god;
   else if (e.code === 'KeyH') dev.hitboxes = !dev.hitboxes;

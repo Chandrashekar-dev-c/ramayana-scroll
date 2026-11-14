@@ -53,7 +53,9 @@ function refreshAxis() {
 export function initInput() {
   const c = app.canvas;
   window.addEventListener('keydown', (e) => {
-    if (e.target instanceof HTMLInputElement) return;
+    // Form controls and the open panel's buttons handle their own keys (arrows pick an option, Enter presses a button).
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement) return;
+    if (e.target instanceof HTMLButtonElement && e.target.closest('#panel')) return;
     input.device = 'key';
     if (input.keys[e.code]) return;
     input.keys[e.code] = true;

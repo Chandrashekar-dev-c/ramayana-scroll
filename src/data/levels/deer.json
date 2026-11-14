@@ -7,6 +7,8 @@
   "stage": "exile"
  },
  "astras": false,
+ "density": "moderate",
+ "painted": true,
  "allies": [],
  "arenas": [
   {

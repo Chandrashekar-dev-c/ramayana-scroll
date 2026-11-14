@@ -17,7 +17,7 @@
   "prop": "hut",
   "name": "hut",
   "x": 696,
-  "colour": false,
+  "colour": true,
   "scale": 0.9
  },
  {

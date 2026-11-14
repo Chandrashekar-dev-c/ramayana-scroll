@@ -65,8 +65,8 @@ const LOOK = {
   waste: { skyPat: 'crackedEarth', far: 'hill', near: 'thorns', extras: ['thorns'], regrow: [[0, 'banyan']] },
   ashram: { skyPat: 'leafSprays', far: 'sala', near: 'grass', extras: ['tulsi'], regrow: [[1], [2]] },
   hermitage: { skyPat: 'leafSprays', far: 'sala', near: 'grass', extras: ['tulsi'] },
-  forest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers', 'eyes'] },
-  deepForest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers', 'eyes'], sun: false, regrow: [[0], [1]] },
+  forest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers'] },
+  deepForest: { skyPat: 'leaf', far: 'sala', near: 'ferns', extras: ['creepers'], sun: false, regrow: [[0], [1]] },
   panchavati: { skyPat: 'flowerDots', far: 'sala', near: 'reeds', extras: ['creepers'] },
   chitrakuta: { skyPat: 'mountainTriangles', far: 'hill', near: 'grass' },
   ridge: { skyPat: 'pebbles', far: 'hill', near: 'thorns', regrow: [[2, 'sala']] },
@@ -95,7 +95,7 @@ export const lookOf = (id) => LOOK[id] || { skyPat: 'dots', far: 'hill', near: '
 function paintFar(ctx, def, look, x0, o, seed) {
   if (!look.far) return;
   const c = o.night ? PAL.nightLine : PAL.terracotta, base = GROUND - 44;
-  ctx.save(); ctx.globalAlpha *= o.colour ? 0.5 : 0.42;
+  ctx.save(); ctx.globalAlpha *= o.far != null ? o.far : (o.colour ? 0.5 : 0.42);
   const sp = look.far === 'hill' ? 330 : 190;
   for (let k = Math.floor((x0 - 300) / sp); k <= Math.ceil((x0 + CHUNK + 300) / sp); k++) {
     const x = k * sp + noise(seed + 5, k) * sp * 0.3 - x0, h = 1 + noise(seed + 6, k) * 0.15;
@@ -317,25 +317,83 @@ function paintBand(ctx, def, x0, o) {
   ctx.restore();
 }
 
-function paintChunk(id, style, colour, index, regrow) {
+// The Madhubani fill: not bigger tree-blobs, but fine repeated motifs — small leaves, little flowers,
+// birds and fish — packed into the negative space, the way Mithila murals leave almost no space empty.
+const DENSITY = {
+  full: { sky: 0.32, skyScale: 1.25, filler: 4.4, tree: 1.12, far: 0.64, canopy: 1 },
+  moderate: { sky: 0.18, skyScale: 1.3, filler: 2.8, tree: 1.06, far: 0.5, canopy: 0.6 },
+};
+
+// Shared Mithila foliage marks: a small almond leaf and a little round flower, drawn many times over.
+function mLeaf(ctx, x, y, a, colour, night, sd) {
+  const cc = night ? PAL.nightLine : PAL.black, lf = night ? PAL.night : PAL.cream;
+  const dx = Math.cos(a) * 6.5, dy = Math.sin(a) * 6.5;
+  shape(ctx, [[x, y], [x + dx * 0.5 - dy * 0.3, y + dy * 0.5 + dx * 0.3], [x + dx, y + dy], [x + dx * 0.5 + dy * 0.3, y + dy * 0.5 - dx * 0.3]], { mode: colour ? 'colour' : 'line', fill: colour ? PAL.leaf : cc, lineColor: cc, lineFill: lf, w: 0.9, seed: sd, smooth: true, amp: 0.3 });
+}
+function mFlower(ctx, x, y, colour, night, sd) {
+  const cc = night ? PAL.nightLine : PAL.black;
+  dots(ctx, x, y, 5, 5, colour ? (sd % 2 ? PAL.kusum : PAL.turmeric) : cc, sd, 2.3);
+  dots(ctx, x, y, 0, 1, colour ? PAL.gold : cc, 1, 1.8);
+}
+
+/** A flowering bough: a brown branch hung with many small leaves and little flowers. */
+function paintCanopy(ctx, def, colour, seed, strength) {
+  const brown = colour ? PAL.brown : (def.night ? PAL.nightLine : PAL.black), night = !!def.night;
+  ctx.save(); ctx.globalAlpha *= strength;
+  for (let bx = -30; bx < CHUNK + 90; bx += 156) {
+    const by = 24 + noise(seed + 70, bx) * 14;
+    line(ctx, [[bx - 50, by + 2], [bx + 40, by + 10], [bx + 120, by], [bx + 200, by + 12]], { w: 3.6, color: brown, smooth: true, seed: bx, amp: 0.5 });
+    for (let t = 0; t < 12; t++) {
+      const px = bx - 40 + t * 20 + noise(seed + 71, bx + t) * 7, hang = 18 + ((noise(seed + 72, bx + t) + 1) / 2) * 62, py = by + 8 + hang;
+      line(ctx, [[px - 4, by + 7], [px, py]], { w: 1, color: brown, seed: t, amp: 0.4 });
+      for (let l = 0; l < 4; l++) mLeaf(ctx, px, py - l * 12, 1.1 + (l % 2) * 1.6 + (t % 2) * 3.14, colour, night, seed + t * 7 + l);
+      if (t % 2 === 0) mFlower(ctx, px, py + 2, colour, night, seed + t);
+    }
+  }
+  ctx.restore();
+}
+
+/** A Mithila tree: a trunk and a rounded crown packed with small leaves and flowers (no flat blob). */
+function paintMithilaTree(ctx, x, y, h, colour, night, seed) {
+  const cc = night ? PAL.nightLine : PAL.black, brown = colour ? PAL.brown : cc, lf = night ? PAL.night : PAL.cream;
+  const tw = Math.max(7, h * 0.05);
+  shape(ctx, [[x - tw, y], [x - tw * 0.7, y - h * 0.52], [x + tw * 0.7, y - h * 0.52], [x + tw, y]], { mode: colour ? 'colour' : 'line', fill: brown, lineColor: cc, lineFill: lf, w: 1.2, seed, amp: 0.4 });
+  const cy = y - h * 0.62, R = h * 0.34;
+  for (const a of [-0.7, -0.24, 0.24, 0.7]) line(ctx, [[x, cy + R * 0.5], [x + Math.sin(a) * R * 0.85, cy - Math.cos(a) * R * 0.5]], { w: tw * 0.45, color: brown, seed: seed + Math.round(a * 10), amp: 0.4 });
+  const crown = ellipsePts(x, cy, R, R * 0.94, 13);
+  shape(ctx, crown, { mode: colour ? 'colour' : 'line', fill: colour ? PAL.cream : null, lineColor: cc, lineFill: lf, w: 1.5, seed: seed + 1, smooth: true, amp: 0.7 });
+  ctx.save(); ctx.beginPath(); ctx.ellipse(x, cy, R - 2, R * 0.94 - 2, 0, 0, 7); ctx.clip();
+  let n = 0;
+  for (let ly = -R; ly < R; ly += 12) for (let lx = -R; lx < R; lx += 12) {
+    const px = x + lx + noise(seed + 2, n) * 6, py = cy + ly + noise(seed + 3, n) * 6;
+    mLeaf(ctx, px, py, n * 1.37, colour, night, seed + n);
+    if (n % 3 === 0) mFlower(ctx, px, py, colour, night, seed + n * 2);
+    n++;
+  }
+  ctx.restore();
+}
+
+function paintChunk(id, style, colour, index, regrow, density = '') {
   const def = BACKDROPS[id] || BACKDROPS.road;
+  const dp = DENSITY[density] || null;
   const s = Math.min(1, Math.max(0.5, app.scale));
   const cv = makeCanvas(CHUNK * s, 720 * s);
   const ctx = cv.getContext('2d');
   ctx.scale(s, s);
   const x0 = index * CHUNK;
   const seed = hashStr(id) + index * 31;
-  const o = { colour, night: !!def.night, style };
+  const o = { colour, night: !!def.night, style, far: dp ? dp.far : null, tree: dp ? dp.tree : 1 };
   // the wall itself: a mottled wash that differs slightly every time
   ctx.fillStyle = def.night ? PAL.night : PAL.cream;
   ctx.fillRect(0, 0, CHUNK, 720);
   const look = lookOf(id);
-  // a flat, faint sky pattern: no soft blobs that could read as shading
-  ctx.save(); ctx.globalAlpha = def.night ? 0.16 : colour ? 0.13 : 0.1;
-  ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, 1.5);
+  // the sky pattern: faint by default, but a bold kachni tapestry when a density is set
+  ctx.save(); ctx.globalAlpha = dp ? (def.night ? dp.sky + 0.06 : dp.sky) : (def.night ? 0.16 : colour ? 0.13 : 0.1);
+  ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, dp ? dp.skyScale : 1.5);
   ctx.translate(-(x0 % 64), 0); ctx.fillRect(0, 26, CHUNK + 64, GROUND - 70); ctx.restore();
+  if (dp && dp.canopy) paintCanopy(ctx, def, colour, seed, dp.canopy);
   ctx.save(); ctx.translate(-x0, 0);
-  M.fillers(ctx, x0, x0 + CHUNK, 60, GROUND - 190, { colour, night: def.night, kinds: def.sky, seed: seed + 3, density: def.night ? 2.2 : 1.7 });
+  M.fillers(ctx, x0, x0 + CHUNK, 60, GROUND - 190, { colour, night: def.night, kinds: def.sky, seed: seed + 3, density: dp ? dp.filler : (def.night ? 2.2 : 1.7) });
   if (!def.night && look.sun !== false && def.ground !== 'floor' && index % 2 !== 0) M.sun(ctx, x0 + 330, 118, 24, { colour, lineFill: PAL.cream });
   if (def.moon && index % 2 === 0) M.moon(ctx, x0 + 760, 130, 34, { night: true });
   ctx.restore();
@@ -351,7 +409,8 @@ function paintChunk(id, style, colour, index, regrow) {
     for (let k = k0; k <= k1; k++) {
       const jitter = kind === 'pillar' || kind === 'arch' || kind === 'curtain' || kind === 'wall' ? 0 : noise(hashStr(id) + li * 17, k) * sp * 0.22;
       const x = k * sp + off + jitter - x0;
-      paintItem(ctx, kind, x, GROUND + (kind === 'cloud' ? yOff : yOff), size, k, o, lo);
+      const sz = (kind === 'tree' || kind === 'hill') ? size * (o.tree || 1) : size;
+      paintItem(ctx, kind, x, GROUND + (kind === 'cloud' ? yOff : yOff), sz, k, o, lo);
     }
   }
   paintExtras(ctx, look, x0, o, seed);
@@ -359,10 +418,10 @@ function paintChunk(id, style, colour, index, regrow) {
   return cv;
 }
 
-export function backdropChunk(id, style, colour, index, regrow = false) {
-  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}`;
+export function backdropChunk(id, style, colour, index, regrow = false, density = '') {
+  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}`;
   let c = cache.get(key);
-  if (!c) { c = paintChunk(id, style, colour, index, regrow); cache.set(key, c); if (cache.size > 14) cache.delete(cache.keys().next().value); }
+  if (!c) { c = paintChunk(id, style, colour, index, regrow, density); cache.set(key, c); if (cache.size > 16) cache.delete(cache.keys().next().value); }
   return c;
 }
 
@@ -375,12 +434,12 @@ export function drawBackdrop(ctx, id, style, camX, W, o = {}) {
   const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK);
   for (let i = i0; i <= i1; i++) {
     const dx = i * CHUNK - camX;
-    ctx.drawImage(backdropChunk(id, style, !!o.colour, i, !!o.regrow), dx, 0, CHUNK + 0.5, 720);
+    ctx.drawImage(backdropChunk(id, style, !!o.colour, i, !!o.regrow, o.density), dx, 0, CHUNK + 0.5, 720);
     if (o.heal && !o.colour) {
       const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK);
       if (b > a) {
         ctx.save(); ctx.beginPath(); ctx.rect(a - camX, 0, b - a, 720); ctx.clip();
-        ctx.drawImage(backdropChunk(id, style, true, i, !!o.regrow), dx, 0, CHUNK + 0.5, 720);
+        ctx.drawImage(backdropChunk(id, style, true, i, !!o.regrow, o.density), dx, 0, CHUNK + 0.5, 720);
         ctx.restore();
       }
     }

@@ -1,7 +1,7 @@
 {
  "id": "ravana",
  "backdrop": "battlefield",
- "style": "kachni",
+ "style": "bharni-earth",
  "hero": {
   "id": "rama",
   "stage": "exile"
@@ -12,6 +12,7 @@
   "roll": "ravana.tip",
   "jump": "ravana.tip"
  },
+ "painted": true,
  "allies": [],
  "arenas": [
   {
@@ -88,7 +89,6 @@
  ],
  "title": "chapter.ravana.title",
  "kandaTitle": "kanda.yuddha",
- "heal": true,
  "end": [
   "ravana.end.1",
   "ravana.end.2"

@@ -107,15 +107,32 @@ export function drawObject(ctx, name, U, o) {
       break;
     }
     case 'sword': {
-      const h = 0.52 * U * k;
-      S([[-3, 0], [-5, -h * 0.5], [h * 0.14, -h], [h * 0.1, -h * 0.5], [4, 0]], { fill: PAL.stone, smooth: true, gap: mode === 'colour' ? gold : null });
-      L([[-9, 0], [9, 0]], { w: o.lw * 1.4 });
+      const h = 0.74 * U * k;
+      // grip and a round pommel at the base
+      L([[0, h * 0.17], [0, 0]], { w: o.lw * 2.6, color: mode === 'colour' ? PAL.madder : PAL.black });
+      S(ellipsePts(0, h * 0.21, 4.5, 4.5, 8), { fill: mode === 'colour' ? gold : PAL.black, smooth: true });
+      // crossguard
+      L([[-9, -2], [9, -2]], { w: o.lw * 1.6 });
+      // a long tapering blade with a centre fuller
+      S([[-3.6, -2], [3.6, -2], [2.4, -h * 0.82], [0, -h], [-2.4, -h * 0.82]], { fill: PAL.stone, gap: mode === 'colour' ? gold : null, smooth: true });
+      L([[0, -h * 0.08], [0, -h * 0.82]], { w: o.lw * 0.7 });
       break;
     }
     case 'mace': case 'club': {
-      const h = 0.5 * U * k;
-      L([[0, h * 0.25], [0, -h * 0.7]], { w: o.lw * 1.6 });
-      S(ellipsePts(0, -h * 0.82, h * (name === 'mace' ? 0.2 : 0.13), h * 0.22, 10), { fill: name === 'mace' ? gold : wood, gap: name === 'mace' ? PAL.madder : null, smooth: true, gold: name === 'mace' });
+      const h = 0.62 * U * k, isMace = name === 'mace';
+      // a thick shaft up to the head (short grip below the hand)
+      L([[0, h * 0.12], [0, -h * 0.4]], { w: o.lw * (isMace ? 2.4 : 2), color: mode === 'colour' ? (isMace ? gold : wood) : PAL.black });
+      if (isMace) {
+        // the gada: a tall, heavy fluted head with a collar at its base and a finial on top
+        const hy = -h * 0.74, R = h * 0.26;
+        S(ellipsePts(0, hy, R, R * 1.45, 16), { fill: gold, gap: PAL.madder, smooth: true, gold: true });
+        for (const dx of [-R * 0.52, 0, R * 0.52]) L([[dx, hy - R * 1.15], [dx, hy + R * 1.15]], { w: o.lw * 0.6 });
+        L([[-R * 1.02, hy + R * 1.4], [R * 1.02, hy + R * 1.4]], { w: o.lw });
+        S(ellipsePts(0, hy - R * 1.6, R * 0.32, R * 0.42, 8), { fill: gold, gap: PAL.madder, smooth: true, gold: true });
+      } else {
+        S(ellipsePts(0, -h * 0.58, h * 0.17, h * 0.27, 10), { fill: wood, smooth: true });
+        dots(ctx, 0, -h * 0.58, h * 0.1, 5, PAL.black, seed, 1.6);
+      }
       break;
     }
     case 'axe': {

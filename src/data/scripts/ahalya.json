@@ -33,7 +33,7 @@
   "face": -1,
   "stage": "unseen",
   "pose": "sit",
-  "mode": "line"
+  "mode": "colour"
  },
  {
   "narrate": true,

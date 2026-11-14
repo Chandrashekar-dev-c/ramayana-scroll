@@ -25,7 +25,26 @@ const scriptFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/l
 const levelFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/legacy/levels')).map((f) => { const d = L('levels/' + f); return [d.id, d]; }));
 const problems = [];
 
-const REGROW = new Set(['tataka', 'yajna', 'viradha', 'janasthana']);
+// Only Tataka's wasteland comes back to life when its demon falls. Every other battle land is painted in full colour from the start.
+const REGROW = new Set(['tataka']);
+// Every scene and fight is painted in full colour. Set to false to bring back the line-art
+// (kachni) states that scripts can still ask for.
+const FULL_COLOUR = true;
+const LINE_MODES = new Set(['line', 'kachni']);
+/** Turns every line-art request into colour, in place. */
+function paintAll(v) {
+  if (!FULL_COLOUR || v === null || typeof v !== 'object') return v;
+  if (Array.isArray(v)) { v.forEach(paintAll); return v; }
+  for (const k of Object.keys(v)) {
+    const x = v[k];
+    if (k === 'colour' && x === false) v[k] = true;
+    else if (k === 'colourAll' && x === false) v[k] = true;
+    else if (k === 'mode' && LINE_MODES.has(x)) v[k] = 'colour';
+    else if (k === 'style' && x === 'kachni') v[k] = 'bharni-earth';
+    else paintAll(x);
+  }
+  return v;
+}
 const CHAR_ALIAS = { young: 'youngAscetic' };
 const ch_ = (c) => CHAR_ALIAS[c] || c;
 const MOOD = (m) => (!m ? 'calm' : /battle|war/.test(m) ? 'battle' : /grief|dark|silence/.test(m) ? (m === 'silence' ? 'silent' : 'grief') : 'calm');
@@ -148,8 +167,9 @@ function convertInteract(kind, a, ctx) {
 // ---------------------------------------------------------------- levels
 function convertLevel(lv) {
   const out = { id: lv.id, backdrop: lv.backdrop, style: lv.style, hero: { id: lv.hero.id, stage: lv.hero.stage }, astras: !!lv.astras, shelves: lv.shelves, tips: lv.tips, practice: lv.id === 'sarayuTargets' || undefined };
+  if (lv.density) out.density = lv.density; // backdrop richness: 'full' or 'moderate' (A/B of the "Thousand Lines" treatment)
   // the land itself was dead because of this enemy: its trees come back when the boss falls
-  if (REGROW.has(lv.id)) { out.regrow = true; }
+  if (REGROW.has(lv.id)) { out.regrow = true; } else { out.painted = true; }
   out.allies = (lv.party || []).filter((p) => p.ai === 'archerSupport').map((p) => ({ id: p.id, stage: p.stage, fire: true }));
   const prot = (lv.party || []).find((p) => p.ai === 'protected');
   if (prot) { out.protected = { id: prot.id, stage: prot.stage, x: (lv.arenas[0].left + 140) }; out.gentle = 'ally'; }
@@ -168,7 +188,7 @@ function convertLevel(lv) {
       }
       case 'checkpoint': A.push({ checkpoint: st.line || null }); break;
       case 'boss': A.push(Array.isArray(st.boss) ? { bosses: st.boss, intro: st.intro } : { boss: st.boss, intro: st.intro }); break;
-      case 'heal': out.heal = true; break;
+      case 'heal': if (REGROW.has(lv.id)) out.heal = true; break; // only Tataka's land heals on screen
       case 'scene': out.end = st.lines; break;
       case 'timer': A.push({ timer: { dur: st.time, label: st.label, fail: 'lose.rite' } }); out.timerTip = st.tip; break;
       case 'timerStop': A.push({ timerStop: true }); break;
@@ -241,7 +261,7 @@ const marks = hubmarks.filter((m) => m.kind !== 'fade');
 
 // ---------------------------------------------------------------- levels
 const levels = {};
-for (const id in levelFiles) levels[id] = convertLevel(levelFiles[id]);
+for (const id in levelFiles) levels[id] = paintAll(convertLevel(levelFiles[id]));
 for (const id in ownLevels) levels[id] = ownLevels[id];
 
 // ---------------------------------------------------------------- text and notes
@@ -260,7 +280,7 @@ for (const c of chapters) {
 const write = (rel, data) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n'); };
 fs.rmSync(path.join(ROOT, 'src/data/scripts'), { recursive: true, force: true });
 fs.rmSync(path.join(ROOT, 'src/data/levels'), { recursive: true, force: true });
-for (const id in scripts) write(`src/data/scripts/${id}.json`, scripts[id]);
+for (const id in scripts) write(`src/data/scripts/${id}.json`, paintAll(scripts[id]));
 for (const id in levels) write(`src/data/levels/${id}.json`, levels[id]);
 write('src/data/chapters.json', out);
 write('src/data/places.json', outPlaces);

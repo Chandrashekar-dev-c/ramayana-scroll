@@ -226,6 +226,23 @@
    "text": "rekha.18"
   },
   {
+   "do": "narrate",
+   "text": "rekha.grab"
+  },
+  {
+   "do": "interact",
+   "kind": "mash",
+   "args": {
+    "who": "sita",
+    "futile": 9,
+    "hint": "rekha.struggle"
+   }
+  },
+  {
+   "do": "narrate",
+   "text": "rekha.taken"
+  },
+  {
    "do": "backdrop",
    "id": "sky",
    "clear": true
@@ -244,23 +261,24 @@
    "side": "left",
    "to": 0.46,
    "time": 0.1,
-   "y": -330,
+   "y": -290,
+   "pose": "sit",
    "scale": 0.7
   },
   {
    "do": "enter",
    "who": "sita",
    "side": "left",
-   "to": 0.58,
+   "to": 0.54,
    "stage": "exile",
    "time": 0.1,
-   "y": -330,
+   "y": -290,
    "scale": 0.8
   },
   {
    "do": "set",
    "who": "sita",
-   "pose": "raise"
+   "pose": "sit"
   },
   {
    "do": "narrate",

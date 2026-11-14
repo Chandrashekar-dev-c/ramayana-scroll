@@ -1,7 +1,7 @@
 {
  "id": "kumbhakarna",
  "backdrop": "battlefield",
- "style": "kachni",
+ "style": "bharni-earth",
  "hero": {
   "id": "rama",
   "stage": "exile"
@@ -11,6 +11,7 @@
   "shoot": "kumbha.tip",
   "jump": "kumbha.tip"
  },
+ "painted": true,
  "allies": [
   {
    "id": "lakshmana",

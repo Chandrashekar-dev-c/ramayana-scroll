@@ -9,7 +9,8 @@
    "at": 0.34,
    "face": 1,
    "stage": "exile",
-   "y": -250,
+   "y": -206,
+   "pose": "sit",
    "scale": 0.75
   },
   {
@@ -17,7 +18,8 @@
    "at": 0.42,
    "face": 1,
    "stage": "exile",
-   "y": -250,
+   "y": -206,
+   "pose": "sit",
    "scale": 0.75
   },
   {
@@ -25,7 +27,8 @@
    "at": 0.26,
    "face": 1,
    "stage": "exile",
-   "y": -250,
+   "y": -206,
+   "pose": "sit",
    "scale": 0.75
   }
  ],

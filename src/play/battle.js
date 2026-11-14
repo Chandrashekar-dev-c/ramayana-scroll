@@ -11,6 +11,7 @@ import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK } from '../art/figures.js';
 import { drawBackdrop, drawNear, isNight, regrowList, drawGrowingTree } from '../art/backdrops.js';
+import { drawLife } from '../art/life.js';
 import { drawProp } from '../art/props.js';
 import { shape, line, hatch, ellipsePts, dots } from '../art/ink.js';
 import * as M from '../art/motifs.js';
@@ -52,7 +53,8 @@ export function createBattle(level, opts = {}) {
   b.hero.x = opts.checkpoint ? opts.checkpoint.x : A.left + 220;
   if (opts.hp && diffName !== 'story') b.hero.hp = Math.max(Math.round(b.hero.maxHp * 0.5), Math.min(b.hero.maxHp, opts.hp + b.hero.maxHp * tuning.hero.checkpointHeal));
   b.step = opts.checkpoint ? opts.checkpoint.stepInArena : -1;
-  for (const a of level.allies || []) b.allies.push({ ...a, spec: character(a.id, a.stage), x: b.hero.x - 90, y: GROUND, fireT: 1 + b.allies.length, facing: 1, walkT: 0, shootAnim: 0 });
+  // each ally stands a little further back than the last, so two of them (e.g. Lakshmana and Sita) don't overlap
+  for (const a of level.allies || []) b.allies.push({ ...a, spec: character(a.id, a.stage), lane: b.allies.length * 52, x: b.hero.x - 90 - b.allies.length * 52, y: GROUND, fireT: 1 + b.allies.length, facing: 1, walkT: 0, shootAnim: 0 });
   if (level.protect) b.protect = { ...level.protect, hp: level.protect.hp, max: level.protect.hp };
   if (level.protected) b.protected = { ...level.protected, spec: character(level.protected.id, level.protected.stage), hurt: false };
   if (!opts.checkpoint && level.title) b.banner = { title: t(level.title), sub: level.kandaTitle ? t(level.kandaTitle) : '', t: 2.4 };
@@ -195,7 +197,7 @@ function updateAstra(b, dt) {
   if (input.consume('astra') || input.consume('confirm')) { fireAstra(b, 0.75); return; }
   if (p.justDown) { a.tracing = true; a.pts = [[p.x, p.y]]; }
   else if (a.tracing && p.down) { const l = a.pts[a.pts.length - 1]; if (Math.hypot(p.x - l[0], p.y - l[1]) > 4) a.pts.push([p.x, p.y]); }
-  if (a.tracing && p.justUp) { const g = grade(a.pts, a.symbol); a.tracing = false; if (g > 0.05 || a.pts.length > 12) { fireAstra(b, Math.max(0.3, g)); return; } a.pts = []; }
+  if (a.tracing && p.justUp) { const g = grade(a.pts, a.symbol); a.tracing = false; if (g >= 0.4 && a.pts.length >= 10) { fireAstra(b, Math.max(0.3, g)); return; } a.pts = []; }
   if (a.t > b.tun.boon.traceTime) fireAstra(b, 0.3);
 }
 
@@ -373,7 +375,7 @@ function updateAllies(b, dt) {
   const h = b.hero;
   for (const a of b.allies) {
     a.shootAnim -= dt;
-    const want = h.x - h.facing * b.tun.ally.follow;
+    const want = h.x - h.facing * (b.tun.ally.follow + (a.lane || 0));
     const dx = want - a.x;
     if (Math.abs(dx) > 30 && !a.fixed) { a.x += Math.sign(dx) * Math.min(Math.abs(dx) * 3, 240) * dt; a.walkT += dt; } else a.walkT = 0;
     if (!a.fire) continue;
@@ -507,12 +509,12 @@ export function renderBattle(ctx, b) {
   ctx.save();
   if (b.shakeA > 0 && b.shakeT > 0) ctx.translate((b.rng.next() - 0.5) * b.shakeA * 2, (b.rng.next() - 0.5) * b.shakeA * 2);
   // the backdrop: line world, painted where it heals
-  const style = b.level.style || 'kachni';
+  const style = b.level.style || 'bharni-earth';
   const done = b.healT >= 0 && b.healT > b.healDur;
   const heal = b.healT >= 0 ? { x: b.healX, r: b.healT * b.healSpeed } : null;
   ctx.save();
   
-  drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal, regrow: !!b.regrow });
+  drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal, regrow: !!b.regrow, density: b.level.density });
   if (b.regrow) { ctx.save(); ctx.translate(-b.camX * z, 0); const v0 = b.camX * z - 300, v1 = v0 + W + 600; for (const tr of b.regrow) if (tr.x > v0 && tr.x < v1) drawGrowingTree(ctx, tr, tr.grow); ctx.restore(); }
   ctx.restore();
   // dusk: hatching that thickens toward red-orange in phase 2
@@ -522,6 +524,7 @@ export function renderBattle(ctx, b) {
   // world space
   ctx.save();
   ctx.translate(0, GROUND); ctx.scale(z, z); ctx.translate(-b.camX, -GROUND);
+  drawLife(ctx, b.level.backdrop, b.camX, W / z, b.time, { colour: done || b.level.painted, quiet: true });
   drawZones(ctx, b);
   for (const c of b.checkpoints) { const k = Math.min(1, c.t / 0.8); M.lotusBud(ctx, c.x, GROUND - 2, 18 * k + 2, { wilt: 0, seed: 3 }); line(ctx, [[c.x, GROUND], [c.x, GROUND - 4]], { w: 2 }); }
   if (b.protect) drawProtect(ctx, b);

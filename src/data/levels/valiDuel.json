@@ -7,6 +7,7 @@
   "stage": "exile"
  },
  "astras": false,
+ "painted": true,
  "arenas": [
   {
    "left": 0,

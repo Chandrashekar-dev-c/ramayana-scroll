@@ -10,6 +10,7 @@ import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK, BASE_U } from '../art/figures.js';
 import { drawBackdrop, drawNear, isNight, backdropChunk, CHUNK } from '../art/backdrops.js';
+import { drawLife } from '../art/life.js';
 import { drawFrame } from '../art/borders.js';
 import { drawProp } from '../art/props.js';
 import { plate } from '../art/ink.js';
@@ -54,9 +55,9 @@ function prewarm(script, ch) {
   const bg = script.find((b) => b.bg);
   if (!bg) return;
   const lanka = ch.type === 'lanka';
-  const colour = bg.colour !== undefined ? bg.colour : !lanka;
+  const colour = bg.colour !== undefined ? bg.colour : true;
   const i0 = Math.floor((640 - app.W / 2) / CHUNK);
-  for (let i = i0; i <= i0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, bg.style || (lanka ? 'kachni' : 'bharni-bright'), colour, i);
+  for (let i = i0; i <= i0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, bg.style || (lanka ? 'bharni-earth' : 'bharni-bright'), colour, i);
 }
 
 export async function startChapter(id, from) {
@@ -119,7 +120,7 @@ class Runner {
 
   /** Apply a beat that takes no time. Returns true when the beat is complete. */
   instant(b) {
-    if (b.bg !== undefined) { this.bg = { id: b.bg, style: b.style || (this.lanka ? 'kachni' : 'bharni-bright'), colour: b.colour !== undefined ? b.colour : !this.lanka }; this.camX = (b.cam ?? 640) - app.W / 2; return true; }
+    if (b.bg !== undefined) { this.bg = { id: b.bg, style: b.style || (this.lanka ? 'bharni-earth' : 'bharni-bright'), colour: b.colour !== undefined ? b.colour : true }; this.camX = (b.cam ?? 640) - app.W / 2; return true; }
     if (b.actor) {
       const old = this.actors.get(b.actor);
       const spec = character(b.char || (old && old.char) || b.actor, b.stage || (old && old.stage));
@@ -327,7 +328,6 @@ class Runner {
     if (this.ended) return; this.ended = true;
     hideLine(); topbar(null); touchControls(null);
     const ch = this.ch;
-    const firstTime = !save.data.done[ch.id];
     save.data.done[ch.id] = true;
     const prev = save.data.seals[ch.id] || {};
     const seals = this.anySeals ? this.seals : { finish: true, gentle: true, fast: true };
@@ -336,7 +336,8 @@ class Runner {
     const idx = order.findIndex((c) => c.id === ch.id);
     const nxt = order.slice(idx + 1).find((c) => !(save.data.settings.lankaWoven === false && c.type === 'lanka')) || null;
     if (ch.id === 'coronation') { save.data.unlocked = true; save.data.allOpen = true; }
-    save.data.chapter = nxt ? nxt.id : null; save.data.pendingWash = firstTime ? ch.id : null;
+    // The wall shows the finished place in colour straight away — no fade-in reveal.
+    save.data.chapter = nxt ? nxt.id : null; save.data.pendingWash = null;
     save.commit();
     bus.emit('chapter:end', { id: ch.id, seals });
     showWin({ ch, seals: save.data.seals[ch.id], earned: seals, stats: this.anySeals ? this.stats : null, next: nxt });
@@ -367,21 +368,21 @@ class Runner {
     drawBackdrop(ctx, this.bg.id, this.bg.style, this.camX, W, { colour: this.bg.colour && !unheal, heal });
     if (unheal) { ctx.save(); ctx.globalAlpha = 1 - w.t / w.dur; drawBackdrop(ctx, this.bg.id, this.bg.style, this.camX, W, { colour: true }); ctx.restore(); }
     ctx.save(); ctx.translate(-this.camX, 0);
-    const kach = this.lanka;
-    for (const [id, p] of this.props) if (!p.front) drawProp(ctx, p.name, p.x, p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? (kach ? false : true), night: isNight(this.bg.id) && p.colour === false, scale: p.scale, lanka: p.lanka || kach, moving: p.moving, spin: this.time * 6, broken: p.broken, width: p.width, rot: p.rot, lift: p.lift });
+    if (!unheal) drawLife(ctx, this.bg.id, this.camX, W, this.time, { colour: this.bg.colour });
+    for (const [id, p] of this.props) if (!p.front) drawProp(ctx, p.name, p.x, p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? true, night: isNight(this.bg.id) && p.colour === false, scale: p.scale, moving: p.moving, spin: this.time * 6, broken: p.broken, width: p.width, rot: p.rot, lift: p.lift });
     const list = [...this.actors.entries()].sort((a, b) => (a[1].z || 0) - (b[1].z || 0));
     for (const [id, a] of list) {
       if (a.hidden) continue;
-      let mode = a.mode || (kach ? 'kachni' : 'colour');
+      let mode = a.mode || 'colour';
       let drain = 0;
       if (w && (w.target === id || w.target === 'actors' || (w.target === 'all'))) { const k = w.t / w.dur; if (w.to === 'colour') { mode = 'colour'; drain = 1 - k; } else { mode = 'colour'; drain = k; } }
       if (a.colourUp != null) this.drawColourUp(ctx, a);
       else fig(ctx, a.spec, a.pose === 'stand' && Math.floor(this.time / 2.6 + (Math.abs(a.x) % 7) * 0.37) % 2 ? 'stand2' : a.pose, a.x, a.y, { facing: a.facing, mode, alpha: a.alpha, scale: a.scale, rot: a.rot, drain, heads: id === 'ravana' || a.char === 'ravana' ? { pride: save.data.pride || 0, ...(a.heads || {}) } : undefined });
     }
-    for (const [id, p] of this.props) if (p.front) drawProp(ctx, p.name, p.who && this.actors.get(p.who) ? this.actors.get(p.who).x : p.x, p.who && this.actors.get(p.who) ? this.actors.get(p.who).y : p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? !kach, scale: p.scale, lanka: p.lanka || kach, broken: p.broken, width: p.width, facing: p.who && this.actors.get(p.who) ? this.actors.get(p.who).facing : 1, height: p.who && this.actors.get(p.who) ? this.actors.get(p.who).spec.build.height : 1 });
+    for (const [id, p] of this.props) if (p.front) drawProp(ctx, p.name, p.who && this.actors.get(p.who) ? this.actors.get(p.who).x : p.x, p.who && this.actors.get(p.who) ? this.actors.get(p.who).y : p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? true, scale: p.scale, broken: p.broken, width: p.width, facing: p.who && this.actors.get(p.who) ? this.actors.get(p.who).facing : 1, height: p.who && this.actors.get(p.who) ? this.actors.get(p.who).spec.build.height : 1 });
     ctx.restore();
     drawNear(ctx, this.bg.id, this.camX, W, { colour: this.bg.colour && !unheal, heal });
-    drawFrame(ctx, { colour: this.bg.colour && !this.lanka, night: isNight(this.bg.id) });
+    drawFrame(ctx, { colour: this.bg.colour, night: isNight(this.bg.id) });
     ctx.restore();
     void o;
   }

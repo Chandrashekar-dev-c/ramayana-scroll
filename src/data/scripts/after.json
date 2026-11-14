@@ -1,8 +1,8 @@
 [
  {
   "bg": "battlefield",
-  "style": "kachni",
-  "colour": false
+  "style": "bharni-earth",
+  "colour": true
  },
  {
   "mood": "grief"
@@ -13,7 +13,7 @@
   "x": 884,
   "face": -1,
   "pose": "dead",
-  "mode": "line",
+  "mode": "colour",
   "y": 488
  },
  {

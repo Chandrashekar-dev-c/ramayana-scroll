@@ -19,7 +19,8 @@ export function playOrder() {
 }
 
 export function isUnlocked(id) {
-  if (save.data.allOpen) return true;
+  // Developer mode opens every chapter on the wall (remove with the dev mode, see README).
+  if (save.data.allOpen || save.data.settings.devMode) return true;
   const order = playOrder();
   const i = order.findIndex((c) => c.id === id);
   if (i <= 0) return i === 0;

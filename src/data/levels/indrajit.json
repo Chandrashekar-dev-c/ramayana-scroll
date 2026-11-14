@@ -1,7 +1,7 @@
 {
  "id": "indrajit",
  "backdrop": "grove",
- "style": "kachni",
+ "style": "bharni-earth",
  "hero": {
   "id": "lakshmana",
   "stage": "exile"
@@ -11,6 +11,7 @@
   "roll": "indrajit.tip",
   "shoot": "indrajit.tip"
  },
+ "painted": true,
  "allies": [],
  "arenas": [
   {

@@ -24,7 +24,8 @@ npm run sheet      # the character design sheet (dev server only: it imports JSO
 button with chapter jump, difficulty, game speed, god mode, hitboxes, frame rate, win battle,
 skip beat, mark all done, unlock all and erase progress. Hotkeys while on: ` panel, G god
 mode, H hitboxes, [ and ] speed. To remove it, delete `src/ui/devpanel.js`, the `set-dev`
-checkbox in `src/ui/screens.js` and the `applyDevMode` calls in `src/main.js`.
+checkbox in `src/ui/screens.js`, the `applyDevMode` calls in `src/main.js` and the
+`devMode` line in `isUnlocked` in `src/data/chapters.js`.
 
 `dist/` is a static site: copy it to any web host. It installs as a PWA and plays offline.
 
@@ -45,11 +46,11 @@ checkbox in `src/ui/screens.js` and the `applyDevMode` calls in `src/main.js`.
 
 ## The land healing
 
-In Tataka's wasteland, the Yajna hermitage, Viradha's forest and Janasthana, the trees stay
-dead through the waves. When the boss falls, life spreads outward from where they fell, one
-tree at a time with a rising note, and the ground fills with colour behind it. Lanka, the
-golden deer and Vali's duel keep their own endings. The list is `REGROW` in
-`tools/build-content.mjs`; the trees are the `regrow` layers in `src/art/backdrops.js`.
+Only Tataka's wasteland is dead through the waves. When the demon falls, life spreads
+outward from where it fell, one tree at a time with a rising note, and the ground fills
+with colour behind it. Every other battle land is painted in full colour from the start.
+The list is `REGROW` in `tools/build-content.mjs`; the trees are the `regrow` layers in
+`src/art/backdrops.js`.
 
 ## Content pipeline
 

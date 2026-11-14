@@ -133,7 +133,7 @@ export function createFlight(b, r) {
 
   function updateJatayu(dt) {
     const e = st.enemy;
-    const ax = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0) + (input.axis || 0) * 0;
+    const ax = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0) + (input.axis || 0);
     st.px = Math.max(120, Math.min(app.W - 120, st.px + ax * 380 * dt));
     if (input.pointer.down && input.device !== 'pad') { const d = input.pointer.x - st.px; st.px += Math.sign(d) * Math.min(Math.abs(d), 380 * dt); }
     steerY(dt, 420);
@@ -154,7 +154,7 @@ export function createFlight(b, r) {
     st.obs = st.obs.filter((q) => !q.dead && q.x > -100);
     // strike by flying close; a short cooldown between strikes
     st.cd = (st.cd || 0) - dt;
-    if (st.cd <= 0 && Math.hypot(st.px - e.x, st.y - e.y) < 120 && (input.held.action || input.pointer.down || true)) {
+    if (st.cd <= 0 && Math.hypot(st.px - e.x, st.y - e.y) < 120 && (input.held.action || input.pointer.down)) {
       st.cd = 0.9; cue('kick'); st.flash = 0.2;
       if (e.phase === 1) { e.hp--; if (e.hp <= 0) { e.phase = 2; o.say('ch18.phase2', 3); cue('thunder'); } else o.say(['ch18.mules', 'ch18.driver', 'ch18.bow'][Math.min(2, 5 - e.hp >> 1)], 1.6); }
       else { e.hp2--; if (e.hp2 <= 0) { e.phase = 3; e.t = 0; o.say('ch18.wings', 3.2); cue('fail'); } }
@@ -198,9 +198,11 @@ export function createFlight(b, r) {
     // the flyer
     const blink = st.inv > 0 && Math.floor(st.inv * 12) % 2 === 0;
     if (kind === 'jewels') {
+      // both riders sit on the lotus seat inside the canopy (seat is 30 units up, at scale 0.6)
+      const seat = st.y + 60 - 18;
       drawProp(ctx, 'pushpaka', st.px, st.y + 60, { t: o.t, scale: 0.6 });
-      fig(ctx, character('ravana'), 'stand', st.px + 20, st.y + 20, { scale: 0.42, facing: 1, mode: 'kachni' });
-      fig(ctx, character('sita', 'exile'), 'raise', st.px - 40, st.y + 20, { scale: 0.42, facing: -1 });
+      fig(ctx, character('ravana'), 'sit', st.px + 22, seat, { scale: 0.42, facing: 1 });
+      fig(ctx, character('sita', 'exile'), 'sit', st.px - 26, seat, { scale: 0.42, facing: -1 });
       for (const d of st.drops) dots(ctx, d.x - st.x, d.y, 4, 5, PAL.gold, 3, 4);
     } else {
       if (kind === 'sanjeevani') drawProp(ctx, 'herbPeak', st.px + 6, st.y - 64, { scale: 0.42, colour: true });
@@ -213,8 +215,16 @@ export function createFlight(b, r) {
 
   function renderJatayu(ctx) {
     const e = st.enemy, W = app.W;
-    if (e.phase === 1) { drawProp(ctx, 'pushpaka', e.x, e.y + 50, { t: o.t, scale: 0.7 }); fig(ctx, character('ravana'), e.wind ? 'draw2' : 'stand', e.x + 10, e.y, { scale: 0.5, facing: -1 }); fig(ctx, character('sita', 'exile'), 'raise', e.x + 70, e.y, { scale: 0.45, facing: -1 }); }
-    else { fig(ctx, character('ravana'), e.swing > 0 ? 'swing1' : e.wind ? 'swing0' : 'stand', e.x, e.y + 90, { scale: 0.6, facing: -1 }); fig(ctx, character('sita', 'exile'), 'raise', e.x + 80, e.y + 40, { scale: 0.42, facing: -1 }); }
+    // Ravana's flying palace stays on screen through the whole chase, and cracks as Jatayu tears at it
+    const seat = e.y + 50 - 21;
+    drawProp(ctx, 'pushpaka', e.x, e.y + 50, { t: o.t, scale: 0.7, broken: e.phase >= 2 });
+    if (e.phase === 1) {
+      fig(ctx, character('ravana'), 'sit', e.x + 10, seat, { scale: 0.5, facing: -1 });
+      fig(ctx, character('sita', 'exile'), 'sit', e.x + 40, seat, { scale: 0.45, facing: -1 });
+    } else {
+      fig(ctx, character('ravana'), e.swing > 0 ? 'swing1' : e.wind ? 'swing0' : 'stand', e.x - 6, seat + 6, { scale: 0.46, facing: -1 });
+      fig(ctx, character('sita', 'exile'), 'raise', e.x + 48, seat + 4, { scale: 0.4, facing: -1 });
+    }
     if (e.wind && e.phase === 2) M.star(ctx, e.x, e.y - 70, 18, { rot: o.t * 3 });
     if (e.wind && e.phase === 1) { ctx.fillStyle = PAL.kusum; for (let i = 1; i < 12; i++) { const k = i / 12; ctx.beginPath(); ctx.arc(e.x - 60 + (e.wind.tx - e.x + 60) * k, e.y + (e.wind.ty - e.y) * k, 4, 0, 7); ctx.fill(); } }
     if (e.phase < 3 && Math.hypot(st.px - e.x, st.y - e.y) < 240) M.usableRing(ctx, e.x, e.y, 70, o.t);

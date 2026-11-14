@@ -826,22 +826,23 @@
   },
   "colour": {
    "main": "pink",
-   "accent": "black"
+   "accent": "madder"
   },
-  "skin": "rakshasaLight",
+  "skin": "skinPale",
   "pattern": "fanShapes",
   "face": {
    "eye": "wide",
    "brow": "arched",
    "beard": null,
-   "tilak": null,
-   "fangs": true
+   "tilak": "dot",
+   "fangs": false
   },
-  "walk": "stride",
-  "signature": "fanNails",
-  "headdress": "wildHair",
+  "walk": "glide",
+  "signature": "flower",
+  "headdress": "flowerBun",
   "garment": "sari",
-  "female": true
+  "female": true,
+  "jewels": "full"
  },
  {
   "id": "maricha",
