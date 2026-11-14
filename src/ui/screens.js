@@ -34,6 +34,7 @@ class TitleMode {
       el('h1', { style: 'font-size:2.6em;margin:0' }, t('title.name')),
       el('p', {}, t('title.sub')),
       el('p', { style: 'font-style:italic' }, t('title.reverence')),
+      el('p', { class: 'mini' }, t('title.disclaimer')),
     ];
     const row = el('div', { class: 'col' });
     if (started && n) row.append(button(t('btn.continue'), () => this.begin(n.id), { main: true, small: t('chapter.' + n.id + '.title') }));
@@ -42,8 +43,7 @@ class TitleMode {
     row.append(button(t('btn.settings'), () => openSettings({ back: () => this.show() })));
     if (allSeals()) row.append(button(t('btn.gallery'), () => openGallery({ back: () => this.show() })));
     kids.push(row);
-    const rev = credits.reviewers.length ? t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') }) : t('title.reviewersSoon');
-    kids.push(el('p', { class: 'mini' }, rev));
+    if (credits.reviewers.length) kids.push(el('p', { class: 'mini' }, t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') })));
     kids.push(el('p', { class: 'mini' }, t('title.madeBy')));
     panel(kids, { cls: 'title' });
   }
