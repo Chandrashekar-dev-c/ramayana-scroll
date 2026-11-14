@@ -2,7 +2,7 @@
  {
   "id": "tataka",
   "character": "tataka",
-  "hp": 60,
+  "hp": 42,
   "rule": "boss.tataka.rule",
   "weakSpot": "head",
   "zoom": 0.74,
@@ -76,7 +76,7 @@
  {
   "id": "subahu",
   "character": "subahu",
-  "hp": 46,
+  "hp": 32,
   "rule": "boss.subahu.rule",
   "weakSpot": "head",
   "zoom": 0.9,
@@ -236,7 +236,7 @@
  {
   "id": "khara",
   "character": "khara",
-  "hp": 70,
+  "hp": 48,
   "rule": "boss.khara.rule",
   "weakSpot": "head",
   "zoom": 0.85,
@@ -329,7 +329,7 @@
  {
   "id": "kumbhakarna",
   "character": "kumbhakarna",
-  "hp": 90,
+  "hp": 60,
   "rule": "boss.kumbhakarna.rule",
   "weakSpot": "eyes",
   "zoom": 0.6,
@@ -420,7 +420,7 @@
  {
   "id": "indrajit",
   "character": "indrajit",
-  "hp": 64,
+  "hp": 44,
   "rule": "boss.indrajit.rule",
   "weakSpot": "body",
   "zoom": 0.82,
@@ -496,7 +496,7 @@
  {
   "id": "ravana",
   "character": "ravana",
-  "hp": 100,
+  "hp": 70,
   "rule": "boss.ravana.rule",
   "weakSpot": "activeHead",
   "zoom": 0.74,

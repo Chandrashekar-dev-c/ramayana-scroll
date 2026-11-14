@@ -82,7 +82,7 @@ export function hitBoss(b, boss, arrow, box) {
   if (rule && rule.hit) { const r = rule.hit(b, boss, arrow, box); if (r !== undefined) return r; }
   if (boss.hidden) return false;
   const B = b.tun.bow;
-  let mult = box.weak ? B.headMultiplier * (boss.state === 'weak' ? 1.5 : 1) : boss.def.strictWeak ? 0 : 0.5;
+  let mult = box.weak ? B.headMultiplier * (boss.state === 'weak' ? 1.5 : 1) : boss.def.strictWeak ? 0 : 0.75;
   if (mult === 0) { b.tink(arrow.x, arrow.y); return true; }
   if (box.weak) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else b.addBoon(b.tun.boon.perHit);
   b.burst(arrow.x, arrow.y, box.weak ? PAL.turmeric : PAL.white, box.weak ? 12 : 6);
