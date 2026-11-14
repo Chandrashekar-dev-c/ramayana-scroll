@@ -212,6 +212,8 @@
  "btn.fullscreenNo": "Not available in this browser",
  "btn.installIos": "Add to Home Screen",
  "install.ios": "Tap the Share button in Safari, then Add to Home Screen. Open the game from that icon and it runs without the browser bars.",
+ "btn.homescreen": "Add to Home Screen",
+ "homescreen.body": "On iPhone, full screen comes from the home screen icon. Tap the Share button in Safari or Chrome, choose Add to Home Screen, then open the game from that icon. It opens without the browser bar.",
  "title.madeBy": "Made by Chandrashekar C",
  "title.disclaimer": "This is a work of fiction. It is here to tell the old story with reverence, not to hurt anyone's sentiments.",
  "type.scene": "Scene",

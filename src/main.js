@@ -79,6 +79,20 @@ async function boot() {
   app.loop.start();
   setLoading(1);
   document.addEventListener('visibilitychange', () => { if (document.hidden) input.releaseAll(); });
+// Safari zooms the page on rapid taps and on pinch. The game is one full-screen canvas, so stop
+// that here. Buttons are not affected: only touches that start on the canvas are changed.
+document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+{
+  const gameCanvas = document.getElementById('game');
+  let lastTouch = 0;
+  gameCanvas.addEventListener('touchstart', (e) => {
+    const now = performance.now();
+    if (now - lastTouch < 350 && e.touches.length === 1) e.preventDefault();
+    lastTouch = now;
+  }, { passive: false });
+}
+
   if ('serviceWorker' in navigator && location.protocol === 'https:' && !app.debug) {
     const hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('./sw.js').then((reg) => { setInterval(() => reg.update().catch(() => {}), 30 * 60 * 1000); }).catch(() => {});
