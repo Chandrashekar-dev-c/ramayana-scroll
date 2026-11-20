@@ -1,7 +1,7 @@
 // A side-scrolling stage built from a backdrop's layers, with parallax and the land-healing effect.
 // Used by every walk and battle; a chapter only names its backdrop.
 import Phaser from 'phaser';
-import { W, H, GROUND_Y } from '../engine/layout.js';
+import { H, GROUND_Y, view } from '../engine/layout.js';
 import { TILE } from './backdrops.js';
 import { sfx } from '../engine/audio.js';
 
@@ -13,10 +13,11 @@ const LAYERS = [ // name, parallax factor, y of the layer's top, depth
 ];
 
 export class Stage {
-  constructor(scene, id, { trees = 7, healed = false, span = W } = {}) {
+  constructor(scene, id, { trees = 7, healed = false, span } = {}) {
     this.scene = scene;
+    const W = view(scene).w; span = span ?? W;
     this.scroll = 0;
-    scene.add.image(W / 2, H / 2, `${id}.sky`).setDepth(0);
+    scene.add.image(W / 2, H / 2, `${id}.sky`).setDisplaySize(W, H).setDepth(0);
     this.layers = {};
     for (const [name, f, y, depth] of LAYERS) {
       const make = key => scene.add.tileSprite(0, y, W, scene.textures.get(key).getSourceImage().height, key).setOrigin(0, 0).setDepth(depth);

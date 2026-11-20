@@ -1,13 +1,14 @@
 // A walk through a chapter's land: walk with the left thumb, touch glowing marks to read them,
 // and reach the end trigger. Everything comes from the chapter's `walk` data.
 import Phaser from 'phaser';
-import { W, H, GROUND_Y, HUMAN_PX } from '../engine/layout.js';
+import { GROUND_Y, HUMAN_PX, view } from '../engine/layout.js';
 import { Stage } from '../art/stage.js';
 import { Controls } from '../engine/controls.js';
 import { face, sizeFor } from '../engine/assets.js';
 import { bark, titleCard } from '../engine/ui.js';
 import { sfx, setDrone } from '../engine/audio.js';
 import { applyFinish } from '../fx/finish.js';
+import { pauseButton } from '../engine/ui.js';
 import { chapter } from '../engine/chapters.js';
 
 export class WalkScene extends Phaser.Scene {
@@ -34,6 +35,8 @@ export class WalkScene extends Phaser.Scene {
     this.controls = new Controls(this);
     this.controls.on('tap', (x, y) => this.touch(x, y));
     setDrone('dusk');
+    const pause = () => { this.scene.launch('Pause', { from: this.scene.key, chapter: this.chapterId ?? this.ch.id, data: { chapter: this.chapterId ?? this.ch.id } }); this.scene.pause(); };
+    pauseButton(this, pause); this.controls.on('pause', pause);
     applyFinish(this);
     this.cameras.main.fadeIn(500, 29, 22, 19);
     titleCard(this, this.ch.title, this.ch.kanda);
@@ -42,7 +45,7 @@ export class WalkScene extends Phaser.Scene {
   }
 
   /** Screen x of a world position: the camera keeps the hero in the left-middle of the screen. */
-  get scroll() { return Phaser.Math.Clamp(this.wx - W * 0.38, 0, this.cfg.length - W * 0.8); }
+  get scroll() { const W = this.scale.width; return Phaser.Math.Clamp(this.wx - W * 0.38, 0, this.cfg.length - W * 0.8); }
 
   touch(x) {
     for (const m of this.marks) {
@@ -76,6 +79,7 @@ export class WalkScene extends Phaser.Scene {
   finish() {
     this.ending = true; this.controls.enabled = false;
     sfx.stomp(); this.cameras.main.shake(700, 0.012);
+    const W = view(this).w;
     if (this.cfg.end.dust) for (let i = 0; i < 9; i++) {
       const d = this.add.image(W + 200 + i * 60, GROUND_Y - 60 - Math.random() * 220, 'dust').setScale(1.2 + Math.random()).setDepth(70).setAlpha(0.95);
       this.tweens.add({ targets: d, x: W * 0.35 + i * 90, duration: 1800 + i * 120, ease: 'Sine.easeOut' });

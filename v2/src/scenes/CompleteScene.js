@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { W, H, PAL, FONT } from '../engine/layout.js';
+import { view, H, PAL, FONT } from '../engine/layout.js';
 import { chapter, markDone } from '../engine/chapters.js';
 import { applyFinish } from '../fx/finish.js';
 import { setDrone, sfx } from '../engine/audio.js';
@@ -8,6 +8,7 @@ export class CompleteScene extends Phaser.Scene {
   constructor() { super('Complete'); }
 
   create({ chapter: id }) {
+    const W = this.scale.width;
     const ch = chapter(id);
     markDone(id);
     setDrone('dawn');

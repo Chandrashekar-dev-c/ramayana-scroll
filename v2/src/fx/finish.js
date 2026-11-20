@@ -1,7 +1,7 @@
 // The shared paint finish (decided after the art pilot): the art is drawn clean, and the game lays
 // one pigment-and-paper surface over every scene, so all assets match and the look is tunable here.
 import Phaser from 'phaser';
-import { W, H } from '../engine/layout.js';
+import { view } from '../engine/layout.js';
 
 export const FINISH = { grain: 0.3, mottle: 0.2, vignette: 0.16 };
 
@@ -27,6 +27,7 @@ function grainTexture(scene) {
 /** Add the finish to a scene: grain multiplied over everything, a soft vignette on the camera. */
 export function applyFinish(scene) {
   grainTexture(scene);
-  scene.add.tileSprite(W / 2, H / 2, W, H, 'finish.grain').setScrollFactor(0).setDepth(950).setBlendMode(Phaser.BlendModes.MULTIPLY);
+  const { w, h } = view(scene);
+  scene.add.tileSprite(w / 2, h / 2, w, h, 'finish.grain').setScrollFactor(0).setDepth(950).setBlendMode(Phaser.BlendModes.MULTIPLY);
   scene.cameras.main.filters.external.addVignette(0.5, 0.5, 1.1, FINISH.vignette, 0x1d1613);
 }

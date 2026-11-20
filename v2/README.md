@@ -33,9 +33,26 @@ one-line change. Backdrop layers without a file are painted in code (`src/art/ba
 
 ## Controls
 
-Left thumb: press and slide to walk, flick up to jump. Right thumb: tap to read or advance; pull
-back and release to loose an arrow (the dotted arc shows its flight). Keyboard: A/D walk, W or
-Space jump, Enter advances; mouse-drag on the right half aims.
+The first game's scheme. Move thumb (left): press and slide to walk, flick up to jump, flick
+down to roll. Bow thumb (right): tap to read or advance; **hold** to draw. A ring fills around
+Rama as he draws; drag up or down to angle the shot. Release early for a quick arrow (1 damage) or
+at full draw, when the ring turns gold and the flight shows in rice-paste dots, for a heavy one
+(3 damage, flies flatter). Head hits count double. Settings (pause button) swap the thumbs, add aim
+help, set difficulty, vibration, sound and screen shake. Keyboard: A/D walk, W jump, S roll,
+hold J to draw (Up aims higher), Enter advances, Esc pauses. Mouse: hold the button and point.
+
+## Adding a boss
+
+A boss is `src/bosses/<id>.js` (one function per move: telegraph, act, call `done()`) plus its
+moves, phases and timings in the chapter JSON. The battle scene supplies the helpers: `mark`
+(ground warning), `teach` (first-time prompt with slow motion), `hazard`, `hurt`, `pose`, `puff`,
+`impact`, `shake`. Difficulty scales every telegraph through `t()`.
+
+## The whole game
+
+`content/chapters/index.json` lists all 47 chapters in story order (from the first game), each
+`playable`, `planned` or `undecided`. The Chapters screen shows them all; a chapter lights up as
+soon as its JSON and Ink script exist.
 
 ## Stand-ins
 

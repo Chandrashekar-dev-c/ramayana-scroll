@@ -1,0 +1,428 @@
+{
+ "$comment": "The whole game in story order (47 chapters, Lanka chapters woven in), from the first game. status: playable = has content/chapters/<id>.json and an Ink script; planned = not built yet; undecided = waiting on a story decision.",
+ "chapters": [
+  {
+   "id": "sage",
+   "number": 1,
+   "kanda": "Bala Kanda",
+   "title": "The Sage at the Gate",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "sarayu",
+   "number": 2,
+   "kanda": "Bala Kanda",
+   "title": "The Road to Tataka",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "tataka",
+   "number": 3,
+   "kanda": "Bala Kanda",
+   "title": "Tataka's Wasteland",
+   "kind": "battle",
+   "lanka": false,
+   "status": "playable"
+  },
+  {
+   "id": "yajna",
+   "number": 4,
+   "kanda": "Bala Kanda",
+   "title": "Guarding the Yajna",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "ahalya",
+   "number": 5,
+   "kanda": "Bala Kanda",
+   "title": "Ahalya",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "bow",
+   "number": 6,
+   "kanda": "Bala Kanda",
+   "title": "The Bow of Shiva",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "wedding",
+   "number": 7,
+   "kanda": "Bala Kanda",
+   "title": "The Wedding",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "kaikeyi",
+   "number": 8,
+   "kanda": "Ayodhya Kanda",
+   "title": "Kaikeyi's Boons",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "exile",
+   "number": 9,
+   "kanda": "Ayodhya Kanda",
+   "title": "Into Exile",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "boat",
+   "number": 10,
+   "kanda": "Ayodhya Kanda",
+   "title": "Guha's Boat",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "dasharatha",
+   "number": 11,
+   "kanda": "Ayodhya Kanda",
+   "title": "The Death of Dasharatha",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "bharata",
+   "number": 12,
+   "kanda": "Ayodhya Kanda",
+   "title": "Bharata at Chitrakuta",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "viradha",
+   "number": 13,
+   "kanda": "Aranya Kanda",
+   "title": "Viradha",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "shurpanakha",
+   "number": 14,
+   "kanda": "Aranya Kanda",
+   "title": "Shurpanakha",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "janasthana",
+   "number": 15,
+   "kanda": "Aranya Kanda",
+   "title": "Janasthana",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l1",
+   "number": 16,
+   "kanda": "Aranya Kanda",
+   "title": "The Council of Ten",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "deer",
+   "number": 17,
+   "kanda": "Aranya Kanda",
+   "title": "The Golden Deer",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "rekha",
+   "number": 18,
+   "kanda": "Aranya Kanda",
+   "title": "The Lakshmana Rekha",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "jatayu",
+   "number": 19,
+   "kanda": "Aranya Kanda",
+   "title": "Jatayu",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "jewels",
+   "number": 20,
+   "kanda": "Aranya Kanda",
+   "title": "Sita's Jewels",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l2",
+   "number": 21,
+   "kanda": "Aranya Kanda",
+   "title": "The Ashoka Grove, His Side",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "hut",
+   "number": 22,
+   "kanda": "Aranya Kanda",
+   "title": "The Empty Hut",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "shabari",
+   "number": 23,
+   "kanda": "Aranya Kanda",
+   "title": "Shabari",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "friends",
+   "number": 24,
+   "kanda": "Kishkindha Kanda",
+   "title": "Friends in Kishkindha",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "sala",
+   "number": 25,
+   "kanda": "Kishkindha Kanda",
+   "title": "The Seven Sala Trees",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "vali",
+   "number": 26,
+   "kanda": "Kishkindha Kanda",
+   "title": "Vali and Sugriva",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "search",
+   "number": 27,
+   "kanda": "Kishkindha Kanda",
+   "title": "The Search",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "leap",
+   "number": 28,
+   "kanda": "Sundara Kanda",
+   "title": "Hanuman's Leap",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "night",
+   "number": 29,
+   "kanda": "Sundara Kanda",
+   "title": "Lanka by Night",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "ashoka",
+   "number": 30,
+   "kanda": "Sundara Kanda",
+   "title": "The Ashoka Grove",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "court",
+   "number": 31,
+   "kanda": "Sundara Kanda",
+   "title": "In Ravana's Court",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "burn",
+   "number": 32,
+   "kanda": "Sundara Kanda",
+   "title": "Lanka Burns",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l3",
+   "number": 33,
+   "kanda": "Sundara Kanda",
+   "title": "The War Council",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "bridge",
+   "number": 34,
+   "kanda": "Yuddha Kanda",
+   "title": "The Bridge",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "angada",
+   "number": 35,
+   "kanda": "Yuddha Kanda",
+   "title": "Angada's Foot",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l4",
+   "number": 36,
+   "kanda": "Yuddha Kanda",
+   "title": "Waking the Brother",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "kumbhakarna",
+   "number": 37,
+   "kanda": "Yuddha Kanda",
+   "title": "Kumbhakarna",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "indrajit",
+   "number": 38,
+   "kanda": "Yuddha Kanda",
+   "title": "Indrajit",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l5",
+   "number": 39,
+   "kanda": "Yuddha Kanda",
+   "title": "A Father",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "falls",
+   "number": 40,
+   "kanda": "Yuddha Kanda",
+   "title": "Lakshmana Falls",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "sanjeevani",
+   "number": 41,
+   "kanda": "Yuddha Kanda",
+   "title": "The Sanjeevani Mountain",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "l6",
+   "number": 42,
+   "kanda": "Yuddha Kanda",
+   "title": "The Last Morning",
+   "kind": "lanka",
+   "lanka": true,
+   "status": "planned"
+  },
+  {
+   "id": "ravana",
+   "number": 43,
+   "kanda": "Yuddha Kanda",
+   "title": "Ravana",
+   "kind": "battle",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "after",
+   "number": 44,
+   "kanda": "Yuddha Kanda",
+   "title": "After the Battle",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "agni",
+   "number": 45,
+   "kanda": "Yuddha Kanda",
+   "title": "Sita's trial by fire (not yet painted)",
+   "kind": "scene",
+   "lanka": false,
+   "status": "undecided"
+  },
+  {
+   "id": "lighting",
+   "number": 46,
+   "kanda": "Yuddha Kanda",
+   "title": "Lighting Ayodhya",
+   "kind": "trial",
+   "lanka": false,
+   "status": "planned"
+  },
+  {
+   "id": "coronation",
+   "number": 47,
+   "kanda": "Yuddha Kanda",
+   "title": "The Coronation",
+   "kind": "scene",
+   "lanka": false,
+   "status": "planned"
+  }
+ ]
+}

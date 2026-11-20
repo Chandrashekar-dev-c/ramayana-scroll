@@ -28,32 +28,34 @@ await p.keyboard.down('D'); await wait(2200); await p.keyboard.up('D');
 await p.evaluate(() => { const s = window.__game.scene.getScene('Walk'); const m = s.marks[1]; s.wx = m.x - 120; });
 await wait(300);
 // game coords -> page coords (the 1280x720 canvas is fitted and centred in 844x390)
-const k = Math.min(844 / 1280, 390 / 720), ox = (844 - 1280 * k) / 2, page = (gx, gy) => [ox + gx * k, gy * k];
+const k = 390 / 720, page = (gx, gy) => [gx * k, gy * k]; // EXPAND: height fits, width fills
 const mx = await p.evaluate(() => { const s = window.__game.scene.getScene('Walk'); return s.marks[1].x - s.scroll; });
 await p.mouse.click(...page(Math.max(700, mx), 560)); await wait(600); await shot('05-walk-mark');
 await p.keyboard.down('D'); await until('Story', 30000); await p.keyboard.up('D'); await wait(800); await shot('06-story-dust');
 for (let i = 0; i < 8 && !(await scene()).includes('Battle'); i++) { await p.keyboard.press('Enter'); await wait(250); await p.keyboard.press('Enter'); await wait(300); }
 await until('Battle'); await wait(2500); await shot('07-battle');
 // show the aim arc for a screenshot, then fight: aim at her head with the real launch maths
-await p.evaluate(() => { const s = window.__game.scene.getScene('Battle'); s.controls.aim = { dx: 320, dy: 150, power: 0.75 }; });
-await wait(150); await shot('08-aim');
-await p.evaluate(() => { window.__game.scene.getScene('Battle').controls.aim = null; });
+// hold the bow thumb (J key) to show the charge ring filling and the full-draw path
+await p.keyboard.down('J'); await wait(300); await shot('08a-drawing'); await wait(700); await shot('08b-full-draw'); await p.keyboard.up('J');
 await wait(4200); await shot('09-battle-move');
 const hp0 = await p.evaluate(() => window.__game.scene.getScene('Battle').b.hp);
 const fight = await p.evaluate(async () => {
   const s = window.__game.scene.getScene('Battle'); const sleep = ms => new Promise(r => setTimeout(r, ms));
   s.h.invuln = 999; let shots = 0, phase2 = false;
   while (!s.over && shots < 200) {
-    if (!s.b.gone) {
-      const p = s.bowPoint(), box = s.bossBox(), tx = box.head.centerX, ty = box.head.centerY + 10;
-      // solve for a launch angle with power 0.85 by trying angles
-      const v = s.cfg.arrow.speed_min + (s.cfg.arrow.speed_max - s.cfg.arrow.speed_min) * 0.85, g = s.cfg.arrow.gravity;
+    if (!s.b.gone && s.h.cool <= 0) {
+      // aim like a player at full draw: pick the angle whose flight passes through her head
+      const box = s.bossBox(), tx = box.head.centerX, ty = box.head.centerY + 10;
+      s.h.dir = tx >= s.h.x ? 'right' : 'left';
       let best = null;
-      for (let a = -1.2; a < 0.6; a += 0.01) { const vx = Math.cos(a) * v * Math.sign(tx - p.x || 1), vy = Math.sin(a) * v, t = (tx - p.x) / vx; if (t <= 0) continue; const y = p.y + vy * t + 0.5 * g * t * t; if (!best || Math.abs(y - ty) < best.e) best = { e: Math.abs(y - ty), vx, vy }; }
-      if (best) { s.h.cool = 0; s.fire({ dx: best.vx, dy: best.vy, power: 0.85 }); shots++; }
+      for (let a = -28; a <= 72; a += 0.5) {
+        s.h.angle = a; const p = s.bowPoint(), L = s.launch(1), t = (tx - p.x) / L.vx; if (t <= 0) continue;
+        const y = p.y + L.vy * t + 0.5 * L.g * t * t; if (!best || Math.abs(y - ty) < best.e) best = { e: Math.abs(y - ty), a };
+      }
+      if (best) { s.h.angle = best.a; s.h.drawT = s.cfg.bow.fullDraw; s.release(); shots++; }
     }
     if (s.b.phase === 1) phase2 = true;
-    await sleep(380);
+    await sleep(420);
   }
   return { shots, over: s.over, hp: s.b.hp, phase2 };
 }).catch(e => ({ err: e.message }));

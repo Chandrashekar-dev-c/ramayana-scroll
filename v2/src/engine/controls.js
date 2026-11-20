@@ -1,10 +1,13 @@
-// One control scheme for every mode (see the design plan):
-//   left half  — press and slide to walk; flick up to jump
-//   right half — tap to touch or advance; press, pull back and release to draw and loose the bow
-// Keyboard and mouse map onto the same actions: A/D or arrows walk, W/Up/Space jump,
-// mouse drag on the right half aims, click taps.
+// One control scheme for every mode, carried over from the first game:
+//   move thumb (left half)  — press and slide to walk; flick up to jump, flick down to roll
+//   bow thumb (right half)  — tap to touch or advance; HOLD to draw the bow: a ring fills as it
+//                             draws, drag up or down to angle the shot, release to loose
+// The halves swap when settings.lefty is on. Keyboard: A/D walk, W/Space jump, S roll,
+// J or mouse button held to draw (mouse position aims), Enter advances. Esc pauses.
 import Phaser from 'phaser';
-import { W } from './layout.js';
+import { settings } from './settings.js';
+
+const DEAD = 10, FULL = 52, FLICK = 46;
 
 export class Controls extends Phaser.Events.EventEmitter {
   constructor(scene, { bow = false } = {}) {
@@ -12,37 +15,53 @@ export class Controls extends Phaser.Events.EventEmitter {
     this.scene = scene;
     this.bow = bow;
     this.moveX = 0;
-    this.aim = null; // { dx, dy, power } while the bow is drawn
     this.stick = null;
-    this.draw = null;
+    this.draw = null;    // { id, x, y, dx, dy, t } while the bow thumb is down
     this.enabled = true;
 
     const kb = scene.input.keyboard;
-    this.keys = kb.addKeys('A,D,W,LEFT,RIGHT,UP,SPACE,ENTER');
-    kb.on('keydown-W', () => this.jump());
-    kb.on('keydown-UP', () => this.jump());
-    kb.on('keydown-SPACE', () => this.jump());
-    kb.on('keydown-ENTER', () => this.enabled && this.emit('tap', W * 0.75, 360));
+    this.keys = kb.addKeys('A,D,W,S,J,LEFT,RIGHT,UP,DOWN,SPACE,ENTER,ESC');
+    const on = (k, f) => kb.on(`keydown-${k}`, f);
+    on('W', () => this.jump()); on('UP', () => this.jump()); on('SPACE', () => this.jump());
+    on('S', () => this.roll()); on('DOWN', () => this.roll());
+    on('ENTER', () => this.enabled && this.emit('tap', scene.scale.width * 0.75, 360));
+    on('ESC', () => this.emit('pause'));
 
     scene.input.on('pointerdown', this.down, this);
     scene.input.on('pointermove', this.move, this);
     scene.input.on('pointerup', this.up, this);
     scene.input.on('pointerupoutside', this.up, this);
 
-    this.ring = scene.add.circle(0, 0, 62).setStrokeStyle(4, 0xf2e4c3, 0.6).setDepth(900).setVisible(false).setScrollFactor(0);
-    this.knob = scene.add.circle(0, 0, 26, 0xf2e4c3, 0.5).setDepth(900).setVisible(false).setScrollFactor(0);
+    this.ring = scene.add.circle(0, 0, 62).setStrokeStyle(4, 0xf2e4c3, 0.5).setDepth(900).setVisible(false).setScrollFactor(0);
+    this.knob = scene.add.circle(0, 0, 26, 0xf2e4c3, 0.45).setDepth(900).setVisible(false).setScrollFactor(0);
     scene.events.once('shutdown', () => this.destroy());
   }
 
+  /** Is this screen x on the move-thumb side? */
+  moveSide(x) { const left = x < this.scene.scale.width / 2; return settings.lefty ? !left : left; }
+
   jump() { if (this.enabled) this.emit('jump'); }
+  roll() { if (this.enabled) this.emit('roll'); }
+
+  /** The bow thumb is down (touch, J key or mouse). */
+  get drawing() { return !!this.draw || (this.enabled && this.keys.J.isDown); }
+
+  /** Aim angle in degrees (up is positive) and facing hint from the bow thumb's drag. */
+  aimFromDrag() {
+    if (!this.draw) return { angle: this.keys.UP.isDown ? 30 : 0, flip: 0 };
+    if (this.draw.mouse) return { mouse: { x: this.draw.px, y: this.draw.py } };
+    return { angle: -this.draw.dy * 0.4, flip: this.draw.dx < -56 ? -1 : this.draw.dx > 56 ? 1 : 0 };
+  }
 
   down(p) {
     if (!this.enabled) return;
-    if (p.x < W / 2 && !this.stick) {
-      this.stick = { id: p.id, x: p.x, y: p.y, t: p.downTime };
+    if (this.moveSide(p.x) && !this.stick) {
+      this.stick = { id: p.id, x: p.x, y: p.y };
       this.ring.setPosition(p.x, p.y).setVisible(true); this.knob.setPosition(p.x, p.y).setVisible(true);
-    } else if (p.x >= W / 2 && !this.draw) {
-      this.draw = { id: p.id, x: p.x, y: p.y, t: p.downTime };
+    } else if (!this.moveSide(p.x) && !this.draw) {
+      const mouse = !p.wasTouch; // a mouse aims by pointing
+      this.draw = { id: p.id, x: p.x, y: p.y, dx: 0, dy: 0, px: p.x, py: p.y, t: p.downTime, mouse };
+      if (this.bow) this.emit('drawStart');
     }
   }
 
@@ -50,39 +69,38 @@ export class Controls extends Phaser.Events.EventEmitter {
     if (this.stick && p.id === this.stick.id) {
       const dx = Phaser.Math.Clamp(p.x - this.stick.x, -62, 62), dy = Phaser.Math.Clamp(p.y - this.stick.y, -62, 62);
       this.knob.setPosition(this.stick.x + dx, this.stick.y + dy);
-      if (dy < -48 && Math.abs(dy) > Math.abs(dx) && !this.stick.jumped) { this.stick.jumped = true; this.jump(); }
-      if (dy > -20) this.stick.jumped = false;
+      const vertical = Math.abs(dy) > Math.abs(dx) * 1.2;
+      if (dy < -FLICK && vertical && !this.stick.flicked) { this.stick.flicked = true; this.jump(); }
+      if (dy > FLICK && vertical && !this.stick.flicked) { this.stick.flicked = true; this.roll(); }
+      if (Math.abs(dy) < 20) this.stick.flicked = false;
     }
-    if (this.draw && p.id === this.draw.id && this.bow) {
-      const dx = this.draw.x - p.x, dy = this.draw.y - p.y, len = Math.hypot(dx, dy);
-      this.aim = len > 18 ? { dx, dy, power: Phaser.Math.Clamp(len / 220, 0, 1) } : null;
+    if (this.draw && p.id === this.draw.id) {
+      this.draw.dx = p.x - this.draw.x; this.draw.dy = p.y - this.draw.y; this.draw.px = p.x; this.draw.py = p.y;
     }
   }
 
   up(p) {
-    if (this.stick && p.id === this.stick.id) {
-      this.stick = null; this.ring.setVisible(false); this.knob.setVisible(false);
-    }
+    if (this.stick && p.id === this.stick.id) { this.stick = null; this.ring.setVisible(false); this.knob.setVisible(false); }
     if (this.draw && p.id === this.draw.id) {
-      const moved = Math.hypot(p.x - this.draw.x, p.y - this.draw.y), quick = p.upTime - this.draw.t < 300;
-      if (this.enabled) {
-        if (this.aim && this.bow) this.emit('fire', this.aim);
-        else if (moved < 20 && quick) this.emit('tap', p.x, p.y);
-      }
-      this.draw = null; this.aim = null;
+      const d = this.draw, moved = Math.hypot(d.dx, d.dy), quick = p.upTime - d.t < 280;
+      this.draw = null;
+      if (!this.enabled) return;
+      if (this.bow) this.emit('release');
+      else if (moved < 24 && quick) this.emit('tap', p.x, p.y);
     }
   }
 
   update() {
     let x = 0;
-    if (this.stick) {
-      const dx = this.knob.x - this.stick.x;
-      x = Math.abs(dx) < 10 ? 0 : Phaser.Math.Clamp(dx / 52, -1, 1);
-    }
+    if (this.stick) { const dx = this.knob.x - this.stick.x; x = Math.abs(dx) < DEAD ? 0 : Phaser.Math.Clamp(dx / FULL, -1, 1); }
     const k = this.keys;
     if (k.A.isDown || k.LEFT.isDown) x = -1;
     if (k.D.isDown || k.RIGHT.isDown) x = 1;
     this.moveX = this.enabled ? x : 0;
+    if (this.bow) { // J key acts as the bow thumb
+      if (Phaser.Input.Keyboard.JustDown(k.J) && this.enabled) this.emit('drawStart');
+      if (Phaser.Input.Keyboard.JustUp(k.J) && this.enabled) this.emit('release');
+    }
   }
 
   destroy() {

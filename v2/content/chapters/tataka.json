@@ -7,42 +7,145 @@
   "ink": "tataka",
   "source": "Valmiki, Bala Kanda, sargas 24-26 (verify)",
   "note": "In Valmiki's telling, Tataka was born a yakshini, strong as a thousand elephants, and was cursed to become a rakshasi. She emptied the lands around her of people. When Rama faced her she raised dust, rained stones and made herself invisible.",
-  "hero": { "id": "rama", "stage": "prince", "height": 1.08 },
-
+  "hero": {
+    "id": "rama",
+    "stage": "prince",
+    "height": 1.08
+  },
   "walk": {
     "backdrop": "bg.tataka",
     "length": 3400,
     "speed": 260,
     "hint": "Hold the left side to walk. Tap a glowing mark.",
     "hotspots": [
-      { "x": 700,  "glyph": "lotus", "text": "A dry well. The rope still hangs, frayed to nothing." },
-      { "x": 1500, "glyph": "lotus", "text": "Huts with their roofs torn off. Pots lie where they were dropped." },
-      { "x": 2400, "glyph": "lotus", "text": "A giant's footprint, pressed deep into the cracked earth." }
+      {
+        "x": 700,
+        "glyph": "lotus",
+        "text": "A dry well. The rope still hangs, frayed to nothing."
+      },
+      {
+        "x": 1500,
+        "glyph": "lotus",
+        "text": "Huts with their roofs torn off. Pots lie where they were dropped."
+      },
+      {
+        "x": 2400,
+        "glyph": "lotus",
+        "text": "A giant's footprint, pressed deep into the cracked earth."
+      }
     ],
-    "end": { "x": 3200, "dust": true }
+    "end": {
+      "x": 3200,
+      "dust": true
+    }
   },
-
   "battle": {
     "backdrop": "bg.tataka",
     "boss": "tataka",
     "rule": "Watch the ground: a shadow-star means danger is coming there.",
     "heroHearts": 5,
     "boss_hp": 42,
-    "weakSpot": { "label": "head", "multiplier": 2 },
+    "weakSpot": {
+      "label": "head",
+      "multiplier": 2
+    },
     "duskTimer": 150,
-    "dusk": "Before the sun sets, Rama!",
     "phases": [
-      { "from": 1.0, "moves": ["stomp", "stones", "swipe"], "pause": [1.6, 2.6] },
-      { "from": 0.5, "moves": ["vanish", "stones", "stomp", "swipe"], "pause": [1.2, 2.0],
-        "say": { "speaker": "vishvamitra", "text": "She hides in her own dust. Watch for where she rises!" } }
+      {
+        "from": 1.0,
+        "moves": [
+          "stomp",
+          "stones",
+          "swipe"
+        ],
+        "pause": [
+          1.6,
+          2.6
+        ],
+        "say": {
+          "speaker": "rama",
+          "text": "I will stop her, not kill her. She is a woman."
+        }
+      },
+      {
+        "from": 0.5,
+        "moves": [
+          "vanish",
+          "stones",
+          "stomp",
+          "swipe"
+        ],
+        "pause": [
+          1.2,
+          2.0
+        ],
+        "dusk": true,
+        "say": {
+          "speaker": "vishvamitra",
+          "text": "Enough mercy, Rama! At dusk rakshasas grow unbeatable. End this before the sun sets!"
+        }
+      }
     ],
     "moves": {
-      "stomp":  { "telegraph": 0.8, "damage": 1, "wave_speed": 620 },
-      "stones": { "telegraph": 0.9, "damage": 1, "count": [3, 5] },
-      "swipe":  { "telegraph": 0.6, "damage": 1, "reach": 360 },
-      "vanish": { "telegraph": 1.4, "damage": 1, "vulnerable": 2.2 }
+      "stomp": {
+        "telegraph": 0.8,
+        "damage": 1,
+        "wave_speed": 620
+      },
+      "stones": {
+        "telegraph": 0.9,
+        "damage": 1,
+        "count": [
+          3,
+          5
+        ]
+      },
+      "swipe": {
+        "telegraph": 0.6,
+        "damage": 1,
+        "reach": 360
+      },
+      "vanish": {
+        "telegraph": 1.4,
+        "damage": 1,
+        "vulnerable": 2.2
+      }
     },
-    "arrow": { "speed_min": 650, "speed_max": 1500, "gravity": 900, "damage": 1, "cooldown": 0.35 },
-    "heal": { "treeCount": 9 }
+    "heal": {
+      "treeCount": 9
+    },
+    "intro": "The yakshini comes roaring out of the dust",
+    "hint": "Hold the right side to draw the bow, drag up or down to aim, release to loose. Left side: walk, flick up to jump, flick down to roll.",
+    "healTitle": "The land heals",
+    "bow": {
+      "$comment": "From the first game's tuning.json. Full draw = heavy arrow that flies flatter.",
+      "fullDraw": 0.75,
+      "quickDamage": 1,
+      "fullDamage": 3,
+      "minSpeed": 760,
+      "maxSpeed": 1650,
+      "minGravity": 900,
+      "maxGravity": 90,
+      "cooldown": 0.16,
+      "aimUp": 72,
+      "aimDown": 28
+    },
+    "tuning": {
+      "$comment": "Hero movement and game feel, from the first game's tuning.json, scaled to this resolution.",
+      "walk": 300,
+      "drawWalk": 180,
+      "jumpVelocity": 900,
+      "gravity": 2300,
+      "coyoteTime": 0.1,
+      "inputBuffer": 0.12,
+      "hurtInvulnerable": 1.1,
+      "hitPause": 0.04,
+      "hitPauseFull": 0.07,
+      "roll": {
+        "time": 0.42,
+        "speed": 560,
+        "invulnerable": 0.32
+      }
+    }
   }
 }

@@ -2,11 +2,12 @@
 // `# walk` and `# battle` hand control to those scenes, which come back here when they finish.
 import Phaser from 'phaser';
 import { Story } from 'inkjs';
-import { W, H } from '../engine/layout.js';
+import { view, H } from '../engine/layout.js';
 import { Dialogue } from '../engine/ui.js';
 import { Controls } from '../engine/controls.js';
 import { setDrone } from '../engine/audio.js';
 import { applyFinish } from '../fx/finish.js';
+import { pauseButton } from '../engine/ui.js';
 import { inkFor } from '../engine/chapters.js';
 
 const MODES = { walk: 'Walk', battle: 'Battle' };
@@ -23,6 +24,7 @@ export class StoryScene extends Phaser.Scene {
   }
 
   create() {
+    const W = this.scale.width;
     this.panel = this.add.image(W / 2, H / 2, '__DEFAULT').setVisible(false);
     this.cm = this.cameras.main.filters.internal.addColorMatrix();
     this.dialogue = new Dialogue(this);
@@ -33,12 +35,15 @@ export class StoryScene extends Phaser.Scene {
       if (panel) this.setPanel(panel);
       if (mood) this.look(mood);
     }
+    const pause = () => { this.scene.launch('Pause', { from: this.scene.key, chapter: this.chapterId ?? this.ch.id, data: { chapter: this.chapterId ?? this.ch.id } }); this.scene.pause(); };
+    pauseButton(this, pause); this.controls.on('pause', pause);
     applyFinish(this);
     this.cameras.main.fadeIn(500, 29, 22, 19);
     this.run();
   }
 
   setPanel(id) {
+    const W = this.scale.width;
     if (!this.textures.exists(`panel.${id}`)) return;
     this.registry.set('story.panel', id);
     this.panel.setTexture(`panel.${id}`).setVisible(true);

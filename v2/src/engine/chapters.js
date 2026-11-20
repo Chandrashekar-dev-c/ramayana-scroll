@@ -20,6 +20,8 @@ export const chapterIds = () => Object.keys(byId);
 
 // Progress lives on the device.
 const KEY = 'ramayana-scroll.v2.progress';
+export function progress() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } }
+
 export function markDone(id) {
   try { const p = JSON.parse(localStorage.getItem(KEY) || '{}'); p[id] = { done: true, at: Date.now() }; localStorage.setItem(KEY, JSON.stringify(p)); } catch { /* storage blocked */ }
 }

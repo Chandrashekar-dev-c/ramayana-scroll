@@ -106,7 +106,7 @@ function front(g, h, healed) {
 }
 
 export function tree(healed, seed = 5) {
-  const [c, g] = canvas(300, 360); const r = rng(seed);
+  const [c, g] = canvas(340, 440); const r = rng(seed);
   const branch = (x, y, ang, len, w, depth) => {
     const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len;
     g.strokeStyle = INK; g.lineWidth = w + 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x, y); g.lineTo(x2, y2); g.stroke();
@@ -117,7 +117,7 @@ export function tree(healed, seed = 5) {
       if (r() > 0.5) { g.beginPath(); g.arc(x2 + 8, y2 - 6, 6, 0, 7); g.fillStyle = '#cf2a1c'; g.fill(); outline(g, 1.5); }
     }
   };
-  branch(150, 355, -Math.PI / 2, 110, 16, 4);
+  branch(170, 435, -Math.PI / 2, 110, 16, 4);
   return c;
 }
 
