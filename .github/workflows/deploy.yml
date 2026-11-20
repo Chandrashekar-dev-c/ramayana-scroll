@@ -1,5 +1,7 @@
 name: Deploy to GitHub Pages
 
+# master is the live game at the site root; the overhaul branch is built into /next/ as a
+# preview until it is merged.
 on:
   push:
     branches: [master]
@@ -19,12 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: master
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Build the overhaul preview into /next/
+        run: |
+          if git ls-remote --exit-code --heads origin overhaul >/dev/null; then
+            git fetch --depth 1 origin overhaul
+            git worktree add ../next origin/overhaul
+            cd ../next && npm ci && npm run build
+            mkdir -p "$GITHUB_WORKSPACE/dist/next" && cp -r dist/. "$GITHUB_WORKSPACE/dist/next/"
+          fi
       - uses: actions/configure-pages@v5
         with:
           enablement: true

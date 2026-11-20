@@ -1,0 +1,102 @@
+{
+ "id": "indrajit",
+ "backdrop": "grove",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "lakshmana",
+  "stage": "exile"
+ },
+ "astras": true,
+ "tips": {
+  "roll": "indrajit.tip",
+  "shoot": "indrajit.tip"
+ },
+ "painted": true,
+ "allies": [],
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1700,
+   "steps": [
+    {
+     "timer": {
+      "dur": 110,
+      "label": "indrajit.rite",
+      "fail": "lose.rite"
+     }
+    },
+    {
+     "say": "indrajit.naga",
+     "wait": 0.2
+    },
+    {
+     "wave": "indrajit.o1",
+     "groups": [
+      {
+       "type": "naga",
+       "n": 2,
+       "side": "right",
+       "gap": 1.5
+      },
+      {
+       "type": "grunt",
+       "n": 3,
+       "side": "right",
+       "gap": 1.5
+      }
+     ]
+    },
+    {
+     "say": "indrajit.banner",
+     "wait": 0.2
+    },
+    {
+     "wave": "indrajit.o2",
+     "groups": [
+      {
+       "type": "standard",
+       "n": 1,
+       "side": "right",
+       "gap": 1.6
+      },
+      {
+       "type": "shield",
+       "n": 2,
+       "side": "right",
+       "gap": 1.6
+      },
+      {
+       "type": "archer",
+       "n": 2,
+       "side": "right",
+       "gap": 1.6
+      }
+     ]
+    },
+    {
+     "timerStop": true
+    },
+    {
+     "checkpoint": "indrajit.cp"
+    }
+   ]
+  },
+  {
+   "left": 1950,
+   "right": 3900,
+   "steps": [
+    {
+     "boss": "indrajit",
+     "intro": "indrajit.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.indrajit.title",
+ "kandaTitle": "kanda.yuddha",
+ "timerTip": "indrajit.riteTip",
+ "end": [
+  "indrajit.end.1",
+  "indrajit.end.2"
+ ]
+}

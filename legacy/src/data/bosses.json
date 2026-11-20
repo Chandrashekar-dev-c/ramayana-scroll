@@ -1,0 +1,613 @@
+[
+ {
+  "id": "tataka",
+  "character": "tataka",
+  "hp": 42,
+  "rule": "boss.tataka.rule",
+  "weakSpot": "head",
+  "zoom": 0.74,
+  "contact": 0,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "stomp",
+     "swipe",
+     "boulder"
+    ],
+    "adds": {
+     "every": 11,
+     "from": [
+      "grunt",
+      "runner"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.5,
+    "moves": [
+     "vanish",
+     "stomp",
+     "swipe"
+    ],
+    "adds": {
+     "every": 9,
+     "from": [
+      "grunt",
+      "runner"
+     ],
+     "max": 3
+    },
+    "speed": 1.25,
+    "mood": "dusk",
+    "line": "tataka.dusk"
+   }
+  ],
+  "moves": {
+   "stomp": {
+    "telegraph": "lotusOpen",
+    "windup": 0.9,
+    "answer": "jump",
+    "damage": 18,
+    "opensWeak": 2.0
+   },
+   "swipe": {
+    "telegraph": "star",
+    "windup": 0.6,
+    "answer": "roll",
+    "damage": 14
+   },
+   "boulder": {
+    "telegraph": "redHatchCircle",
+    "windup": 1.1,
+    "answer": "move",
+    "damage": 16
+   },
+   "vanish": {
+    "telegraph": "shadowStar",
+    "windup": 1.2,
+    "answer": "move",
+    "damage": 20,
+    "opensWeak": 1.4
+   }
+  }
+ },
+ {
+  "id": "subahu",
+  "character": "subahu",
+  "hp": 32,
+  "rule": "boss.subahu.rule",
+  "weakSpot": "head",
+  "zoom": 0.9,
+  "flies": true,
+  "partner": "maricha",
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "fireRain",
+     "dive"
+    ],
+    "adds": {
+     "every": 12,
+     "from": [
+      "flyer"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.5,
+    "moves": [
+     "fireRain",
+     "dive",
+     "dive"
+    ],
+    "adds": {
+     "every": 10,
+     "from": [
+      "flyer",
+      "grunt"
+     ],
+     "max": 3
+    },
+    "speed": 1.2
+   }
+  ],
+  "moves": {
+   "fireRain": {
+    "telegraph": "flameTongue",
+    "windup": 1.0,
+    "answer": "move",
+    "damage": 12,
+    "count": 3
+   },
+   "dive": {
+    "telegraph": "star",
+    "windup": 0.8,
+    "answer": "roll",
+    "damage": 14,
+    "opensWeak": 1.6
+   }
+  }
+ },
+ {
+  "id": "maricha",
+  "character": "maricha",
+  "hp": 30,
+  "rule": "boss.maricha.rule",
+  "weakSpot": "head",
+  "flies": true,
+  "fleeAt": 0.5,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "dive",
+     "bolt"
+    ]
+   }
+  ],
+  "moves": {
+   "dive": {
+    "telegraph": "star",
+    "windup": 0.8,
+    "answer": "roll",
+    "damage": 12,
+    "opensWeak": 1.4
+   },
+   "bolt": {
+    "telegraph": "redPath",
+    "windup": 0.9,
+    "answer": "move",
+    "damage": 10
+   }
+  }
+ },
+ {
+  "id": "viradha",
+  "character": "viradha",
+  "hp": 2,
+  "rule": "boss.viradha.rule",
+  "weakSpot": "shoulders",
+  "zoom": 0.76,
+  "parts": {
+   "armF": 22,
+   "armB": 22
+  },
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "swing",
+     "stomp",
+     "spearThrow"
+    ],
+    "adds": {
+     "every": 12,
+     "from": [
+      "grunt",
+      "shield"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.5,
+    "moves": [
+     "swing",
+     "swing",
+     "stomp"
+    ],
+    "adds": {
+     "every": 10,
+     "from": [
+      "grunt",
+      "shield"
+     ],
+     "max": 2
+    },
+    "speed": 1.2
+   }
+  ],
+  "moves": {
+   "swing": {
+    "telegraph": "star",
+    "windup": 0.8,
+    "answer": "roll",
+    "damage": 16,
+    "opensWeak": 1.8
+   },
+   "stomp": {
+    "telegraph": "lotusOpen",
+    "windup": 1.0,
+    "answer": "jump",
+    "damage": 16
+   },
+   "spearThrow": {
+    "telegraph": "redPath",
+    "windup": 1.0,
+    "answer": "move",
+    "damage": 16
+   }
+  }
+ },
+ {
+  "id": "khara",
+  "character": "khara",
+  "hp": 48,
+  "rule": "boss.khara.rule",
+  "weakSpot": "head",
+  "zoom": 0.85,
+  "parts": {
+   "chariot": 30
+  },
+  "finisher": "fullDraw",
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "charge",
+     "volley"
+    ],
+    "adds": {
+     "every": 12,
+     "from": [
+      "grunt",
+      "archer"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.6,
+    "moves": [
+     "swipe",
+     "volley",
+     "swipe"
+    ],
+    "adds": {
+     "every": 10,
+     "from": [
+      "shield",
+      "archer"
+     ],
+     "max": 3
+    }
+   },
+   {
+    "from": 0.25,
+    "moves": [
+     "swipe",
+     "volley"
+    ],
+    "speed": 1.25
+   }
+  ],
+  "moves": {
+   "charge": {
+    "telegraph": "dustLine",
+    "windup": 0.9,
+    "answer": "jump",
+    "damage": 18,
+    "opensWeak": 1.2
+   },
+   "volley": {
+    "telegraph": "redPath",
+    "windup": 0.9,
+    "answer": "move",
+    "damage": 12,
+    "count": 3
+   },
+   "swipe": {
+    "telegraph": "star",
+    "windup": 0.6,
+    "answer": "roll",
+    "damage": 16,
+    "opensWeak": 1.4
+   }
+  }
+ },
+ {
+  "id": "deer",
+  "character": "maricha",
+  "hp": 6,
+  "rule": "boss.deer.rule",
+  "weakSpot": "body",
+  "custom": "deer",
+  "noVine": false,
+  "passive": true,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": []
+   }
+  ],
+  "moves": {}
+ },
+ {
+  "id": "kumbhakarna",
+  "character": "kumbhakarna",
+  "hp": 60,
+  "rule": "boss.kumbhakarna.rule",
+  "weakSpot": "eyes",
+  "zoom": 0.6,
+  "strictWeak": true,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "breath",
+     "stomp",
+     "breath",
+     "swipe"
+    ],
+    "adds": {
+     "every": 12,
+     "from": [
+      "grunt",
+      "naga"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.66,
+    "moves": [
+     "grab",
+     "breath",
+     "stomp"
+    ],
+    "adds": {
+     "every": 11,
+     "from": [
+      "naga",
+      "standard"
+     ],
+     "max": 2
+    },
+    "line": "kumbha.grab"
+   },
+   {
+    "from": 0.33,
+    "moves": [
+     "stomp",
+     "breath",
+     "swipe",
+     "breath"
+    ],
+    "speed": 1.25,
+    "adds": {
+     "every": 10,
+     "from": [
+      "grunt",
+      "naga"
+     ],
+     "max": 3
+    }
+   }
+  ],
+  "moves": {
+   "breath": {
+    "telegraph": "inhale",
+    "windup": 1.7,
+    "answer": "shoot",
+    "damage": 0,
+    "opensWeak": 1.7
+   },
+   "stomp": {
+    "telegraph": "lotusOpen",
+    "windup": 1.1,
+    "answer": "jump",
+    "damage": 22
+   },
+   "swipe": {
+    "telegraph": "star",
+    "windup": 0.8,
+    "answer": "roll",
+    "damage": 20
+   },
+   "grab": {
+    "telegraph": "star",
+    "windup": 0.9,
+    "answer": "shoot",
+    "damage": 0,
+    "hold": 6
+   }
+  }
+ },
+ {
+  "id": "indrajit",
+  "character": "indrajit",
+  "hp": 44,
+  "rule": "boss.indrajit.rule",
+  "weakSpot": "body",
+  "zoom": 0.82,
+  "flies": true,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "hide",
+     "noose",
+     "bolts"
+    ],
+    "adds": {
+     "every": 12,
+     "from": [
+      "naga",
+      "archer"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.66,
+    "moves": [
+     "hide",
+     "bolts",
+     "noose"
+    ],
+    "adds": {
+     "every": 11,
+     "from": [
+      "naga",
+      "standard"
+     ],
+     "max": 2
+    },
+    "speed": 1.15
+   },
+   {
+    "from": 0.33,
+    "moves": [
+     "hide",
+     "noose",
+     "bolts",
+     "noose"
+    ],
+    "speed": 1.3
+   }
+  ],
+  "moves": {
+   "hide": {
+    "telegraph": "none",
+    "windup": 0.6,
+    "answer": "shoot",
+    "damage": 0,
+    "opensWeak": 2.4
+   },
+   "noose": {
+    "telegraph": "nagaCoil",
+    "windup": 1.0,
+    "answer": "roll",
+    "damage": 16
+   },
+   "bolts": {
+    "telegraph": "redHatchCircle",
+    "windup": 1.0,
+    "answer": "move",
+    "damage": 14,
+    "count": 3
+   }
+  }
+ },
+ {
+  "id": "ravana",
+  "character": "ravana",
+  "hp": 70,
+  "rule": "boss.ravana.rule",
+  "weakSpot": "activeHead",
+  "zoom": 0.74,
+  "strictWeak": true,
+  "needsBoon": true,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": [
+     "spear",
+     "charge",
+     "spear"
+    ],
+    "mount": "chariot"
+   },
+   {
+    "from": 0.75,
+    "moves": [
+     "swipe",
+     "volley",
+     "stomp"
+    ],
+    "adds": {
+     "every": 13,
+     "from": [
+      "naga",
+      "standard",
+      "shield"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.4,
+    "moves": [
+     "swipe",
+     "volley",
+     "stomp",
+     "spear"
+    ],
+    "speed": 1.2,
+    "adds": {
+     "every": 11,
+     "from": [
+      "naga",
+      "archer"
+     ],
+     "max": 2
+    }
+   },
+   {
+    "from": 0.12,
+    "moves": [
+     "swipe",
+     "volley"
+    ],
+    "speed": 1.3,
+    "line": "ravana.matali"
+   }
+  ],
+  "moves": {
+   "spear": {
+    "telegraph": "redPath",
+    "windup": 0.9,
+    "answer": "move",
+    "damage": 16
+   },
+   "charge": {
+    "telegraph": "dustLine",
+    "windup": 0.9,
+    "answer": "jump",
+    "damage": 18,
+    "opensWeak": 1.2
+   },
+   "swipe": {
+    "telegraph": "star",
+    "windup": 0.6,
+    "answer": "roll",
+    "damage": 18,
+    "opensWeak": 1.2
+   },
+   "volley": {
+    "telegraph": "redPath",
+    "windup": 0.9,
+    "answer": "move",
+    "damage": 12,
+    "count": 3
+   },
+   "stomp": {
+    "telegraph": "lotusOpen",
+    "windup": 0.9,
+    "answer": "jump",
+    "damage": 18,
+    "opensWeak": 1.5
+   }
+  }
+ },
+ {
+  "id": "vali",
+  "character": "vali",
+  "hp": 9,
+  "rule": "boss.vali.rule",
+  "weakSpot": "body",
+  "zoom": 1,
+  "duel": true,
+  "phases": [
+   {
+    "from": 1.0,
+    "moves": []
+   }
+  ],
+  "moves": {}
+ }
+]

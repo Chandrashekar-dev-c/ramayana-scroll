@@ -1,0 +1,91 @@
+{
+ "id": "kumbhakarna",
+ "backdrop": "battlefield",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "rama",
+  "stage": "exile"
+ },
+ "astras": true,
+ "tips": {
+  "shoot": "kumbha.tip",
+  "jump": "kumbha.tip"
+ },
+ "painted": true,
+ "allies": [
+  {
+   "id": "lakshmana",
+   "stage": "exile",
+   "fire": true
+  }
+ ],
+ "arenas": [
+  {
+   "left": -300,
+   "right": 3000,
+   "steps": [
+    {
+     "say": "kumbha.fire",
+     "wait": 0.2
+    },
+    {
+     "wave": "kumbha.o1",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 3,
+       "side": "right",
+       "gap": 1.6
+      },
+      {
+       "type": "firethrower",
+       "n": 2,
+       "side": "right",
+       "gap": 1.6
+      }
+     ]
+    },
+    {
+     "say": "kumbha.elephant",
+     "wait": 0.2
+    },
+    {
+     "wave": "kumbha.o2",
+     "groups": [
+      {
+       "type": "elephant",
+       "n": 1,
+       "side": "right",
+       "gap": 3
+      },
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "right",
+       "gap": 3
+      },
+      {
+       "type": "elephant",
+       "n": 1,
+       "side": "right",
+       "gap": 3
+      }
+     ]
+    },
+    {
+     "checkpoint": "kumbha.cp"
+    },
+    {
+     "boss": "kumbhakarna",
+     "intro": "kumbha.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.kumbhakarna.title",
+ "kandaTitle": "kanda.yuddha",
+ "end": [
+  "kumbha.end.1",
+  "kumbha.end.2"
+ ]
+}

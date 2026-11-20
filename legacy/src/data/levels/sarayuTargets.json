@@ -1,0 +1,51 @@
+{
+ "id": "sarayuTargets",
+ "backdrop": "riverbank",
+ "style": "bharni-bright",
+ "hero": {
+  "id": "rama",
+  "stage": "prince"
+ },
+ "astras": false,
+ "practice": true,
+ "painted": true,
+ "allies": [],
+ "arenas": [
+  {
+   "left": 0,
+   "right": 1500,
+   "steps": [
+    {
+     "targets": [
+      {
+       "kind": "pot",
+       "x": 760,
+       "y": 428,
+       "r": 38
+      },
+      {
+       "kind": "mango",
+       "x": 900,
+       "y": 248,
+       "r": 38
+      },
+      {
+       "kind": "lotus",
+       "x": 1000,
+       "y": 398,
+       "r": 38
+      },
+      {
+       "kind": "lotus",
+       "x": 1130,
+       "y": 398,
+       "r": 38
+      }
+     ],
+     "objective": "sarayu.o1",
+     "hint": "hint.holdDraw"
+    }
+   ]
+  }
+ ]
+}

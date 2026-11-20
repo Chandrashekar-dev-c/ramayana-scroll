@@ -143,7 +143,7 @@ function paintExtras(ctx, look, x0, o, seed) {
 /** The near band: a low row of plants, water or pattern in front of the figures. */
 function paintNear(id, colour, index) {
   const def = BACKDROPS[id] || BACKDROPS.road, look = lookOf(id);
-  const s = Math.min(1, Math.max(0.5, app.scale));
+  const s = Math.min(1.5, Math.max(0.5, app.scale));
   const H = 720 - (GROUND - 30);
   const cv = makeCanvas(CHUNK * s, H * s);
   const ctx = cv.getContext('2d'); ctx.scale(s, s); ctx.translate(0, -(GROUND - 30));
@@ -187,6 +187,13 @@ function paintNear(id, colour, index) {
 }
 
 const nearCache = new Map();
+/** One painted chunk of the near band (index * CHUNK .. + CHUNK), top at GROUND - 30. */
+export function nearChunk(id, colour, i) {
+  if (!lookOf(id).near) return null;
+  const key = `${id}|${colour ? 1 : 0}|${i}`; let c = nearCache.get(key);
+  if (!c) { c = paintNear(id, colour, i); nearCache.set(key, c); if (nearCache.size > 16) nearCache.delete(nearCache.keys().next().value); }
+  return c;
+}
 export function drawNear(ctx, id, camX, W, o = {}) {
   if (!lookOf(id).near) return;
   const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK), top = GROUND - 30, H = 720 - top;
@@ -376,7 +383,7 @@ function paintMithilaTree(ctx, x, y, h, colour, night, seed) {
 function paintChunk(id, style, colour, index, regrow, density = '') {
   const def = BACKDROPS[id] || BACKDROPS.road;
   const dp = DENSITY[density] || null;
-  const s = Math.min(1, Math.max(0.5, app.scale));
+  const s = Math.min(1.5, Math.max(0.5, app.scale));
   const cv = makeCanvas(CHUNK * s, 720 * s);
   const ctx = cv.getContext('2d');
   ctx.scale(s, s);
@@ -421,7 +428,7 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
 export function backdropChunk(id, style, colour, index, regrow = false, density = '') {
   const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}`;
   let c = cache.get(key);
-  if (!c) { c = paintChunk(id, style, colour, index, regrow, density); cache.set(key, c); if (cache.size > 16) cache.delete(cache.keys().next().value); }
+  if (!c) { c = paintChunk(id, style, colour, index, regrow, density); cache.set(key, c); if (cache.size > 24) cache.delete(cache.keys().next().value); }
   return c;
 }
 

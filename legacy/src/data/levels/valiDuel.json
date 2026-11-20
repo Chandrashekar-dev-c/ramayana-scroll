@@ -1,0 +1,26 @@
+{
+ "id": "valiDuel",
+ "backdrop": "kishkindha",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "rama",
+  "stage": "exile"
+ },
+ "astras": false,
+ "painted": true,
+ "arenas": [
+  {
+   "left": 0,
+   "right": 1500,
+   "steps": [
+    {
+     "boss": "vali",
+     "x": 980,
+     "intro": "valiDuel.o1"
+    }
+   ]
+  }
+ ],
+ "par": 120,
+ "gentleHits": 0
+}

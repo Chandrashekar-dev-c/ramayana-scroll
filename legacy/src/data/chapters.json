@@ -1,0 +1,899 @@
+[
+ {
+  "id": "sage",
+  "n": "1",
+  "type": "scene",
+  "kanda": "bala",
+  "place": "ayodhya",
+  "win": [
+   "sage.win.1"
+  ],
+  "gentle": null,
+  "par": 240,
+  "paint": [
+   "ayodhya"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 0
+ },
+ {
+  "id": "sarayu",
+  "n": "2",
+  "type": "scene",
+  "kanda": "bala",
+  "place": "sarayu",
+  "win": [
+   "sarayu.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "sarayu"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 1
+ },
+ {
+  "id": "tataka",
+  "n": "3",
+  "type": "battle",
+  "kanda": "bala",
+  "place": "tatakaWaste",
+  "win": [
+   "tataka.win.1",
+   "tataka.win.2"
+  ],
+  "gentle": null,
+  "par": 540,
+  "paint": [
+   "tatakaWaste"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 2
+ },
+ {
+  "id": "yajna",
+  "n": "4",
+  "type": "battle",
+  "kanda": "bala",
+  "place": "siddhashrama",
+  "win": [
+   "yajna.win.1",
+   "yajna.win.2"
+  ],
+  "gentle": "protect",
+  "par": 600,
+  "paint": [
+   "siddhashrama"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 3
+ },
+ {
+  "id": "ahalya",
+  "n": "5",
+  "type": "scene",
+  "kanda": "bala",
+  "place": "gautamaAshram",
+  "win": [
+   "ahalya.win.1"
+  ],
+  "gentle": null,
+  "par": 200,
+  "paint": [
+   "gautamaAshram"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 4
+ },
+ {
+  "id": "bow",
+  "n": "6",
+  "type": "scene",
+  "kanda": "bala",
+  "place": "mithila",
+  "win": [
+   "bow.win.1"
+  ],
+  "gentle": null,
+  "par": 240,
+  "paint": [
+   "mithila"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 5
+ },
+ {
+  "id": "wedding",
+  "n": "7",
+  "type": "trial",
+  "kanda": "bala",
+  "place": "mithila",
+  "win": [
+   "wedding.win.1"
+  ],
+  "gentle": null,
+  "par": 330,
+  "paint": [
+   "mithila"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 6
+ },
+ {
+  "id": "kaikeyi",
+  "n": "8",
+  "type": "scene",
+  "kanda": "ayodhya",
+  "place": "palace",
+  "win": [
+   "kaikeyi.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "palace"
+  ],
+  "kachni": [],
+  "unpaint": [
+   "ayodhya"
+  ],
+  "seq": 7
+ },
+ {
+  "id": "exile",
+  "n": "9",
+  "type": "scene",
+  "kanda": "ayodhya",
+  "place": "tamasa",
+  "win": [
+   "exile.win.1"
+  ],
+  "gentle": null,
+  "par": 330,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 8
+ },
+ {
+  "id": "boat",
+  "n": "10",
+  "type": "trial",
+  "kanda": "ayodhya",
+  "place": "shringaverapura",
+  "win": [
+   "boat.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "shringaverapura"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 9
+ },
+ {
+  "id": "dasharatha",
+  "n": "11",
+  "type": "scene",
+  "kanda": "ayodhya",
+  "place": "palace",
+  "win": [
+   "dasharatha.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 10
+ },
+ {
+  "id": "bharata",
+  "n": "12",
+  "type": "trial",
+  "kanda": "ayodhya",
+  "place": "chitrakuta",
+  "win": [
+   "bharata.win.1"
+  ],
+  "gentle": null,
+  "par": 420,
+  "paint": [
+   "chitrakuta"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 11
+ },
+ {
+  "id": "viradha",
+  "n": "13",
+  "type": "battle",
+  "kanda": "aranya",
+  "place": "dandaka",
+  "win": [
+   "viradha.win.1"
+  ],
+  "gentle": "ally",
+  "par": 600,
+  "paint": [
+   "dandaka"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 12
+ },
+ {
+  "id": "shurpanakha",
+  "n": "14",
+  "type": "scene",
+  "kanda": "aranya",
+  "place": "panchavati",
+  "win": [
+   "shurpanakha.win.1"
+  ],
+  "gentle": null,
+  "par": 200,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 13
+ },
+ {
+  "id": "janasthana",
+  "n": "15",
+  "type": "battle",
+  "kanda": "aranya",
+  "place": "janasthana",
+  "win": [
+   "janasthana.win.1",
+   "janasthana.win.2"
+  ],
+  "gentle": null,
+  "par": 780,
+  "paint": [
+   "janasthana"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 14
+ },
+ {
+  "id": "l1",
+  "n": "L1",
+  "type": "lanka",
+  "kanda": "aranya",
+  "place": "ravanaCourt",
+  "win": [
+   "l1.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [],
+  "kachni": [
+   "ravanaCourt"
+  ],
+  "unpaint": [],
+  "seq": 15
+ },
+ {
+  "id": "deer",
+  "n": "16",
+  "type": "battle",
+  "kanda": "aranya",
+  "place": "panchavati",
+  "win": [
+   "deer.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 16
+ },
+ {
+  "id": "rekha",
+  "n": "17",
+  "type": "scene",
+  "kanda": "aranya",
+  "place": "panchavati",
+  "win": [
+   "rekha.win.1"
+  ],
+  "gentle": null,
+  "par": 280,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [
+   "panchavati"
+  ],
+  "seq": 17
+ },
+ {
+  "id": "jatayu",
+  "n": "18",
+  "type": "battle",
+  "kanda": "aranya",
+  "place": "southSky",
+  "win": [
+   "jatayu.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 18
+ },
+ {
+  "id": "jewels",
+  "n": "19",
+  "type": "trial",
+  "kanda": "aranya",
+  "place": "southSky",
+  "win": [
+   "jewels.win.1"
+  ],
+  "gentle": null,
+  "par": 150,
+  "paint": [
+   "southSky"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 19
+ },
+ {
+  "id": "l2",
+  "n": "L2",
+  "type": "lanka",
+  "kanda": "aranya",
+  "place": "ashokaGrove",
+  "win": [
+   "l2.win.1"
+  ],
+  "gentle": null,
+  "par": 220,
+  "paint": [],
+  "kachni": [
+   "ashokaGrove"
+  ],
+  "unpaint": [],
+  "seq": 20
+ },
+ {
+  "id": "hut",
+  "n": "20",
+  "type": "scene",
+  "kanda": "aranya",
+  "place": "panchavati",
+  "win": [
+   "hut.win.1"
+  ],
+  "gentle": null,
+  "par": 280,
+  "paint": [
+   "panchavati"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 21
+ },
+ {
+  "id": "shabari",
+  "n": "21",
+  "type": "trial",
+  "kanda": "aranya",
+  "place": "pampa",
+  "win": [
+   "shabari.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "pampa"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 22
+ },
+ {
+  "id": "friends",
+  "n": "22",
+  "type": "scene",
+  "kanda": "kishkindha",
+  "place": "rishyamukha",
+  "win": [
+   "friends.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [
+   "rishyamukha"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 23
+ },
+ {
+  "id": "sala",
+  "n": "23",
+  "type": "trial",
+  "kanda": "kishkindha",
+  "place": "rishyamukha",
+  "win": [
+   "sala.win.1"
+  ],
+  "gentle": null,
+  "par": 160,
+  "paint": [
+   "rishyamukha"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 24
+ },
+ {
+  "id": "vali",
+  "n": "24",
+  "type": "battle",
+  "kanda": "kishkindha",
+  "place": "kishkindhaCity",
+  "win": [
+   "vali.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "kishkindhaCity"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 25
+ },
+ {
+  "id": "search",
+  "n": "25",
+  "type": "scene",
+  "kanda": "kishkindha",
+  "place": "southShore",
+  "win": [
+   "search.win.1"
+  ],
+  "gentle": null,
+  "par": 330,
+  "paint": [
+   "southShore"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 26
+ },
+ {
+  "id": "leap",
+  "n": "26",
+  "type": "trial",
+  "kanda": "sundara",
+  "place": "mahendra",
+  "win": [
+   "leap.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [
+   "mahendra"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 27
+ },
+ {
+  "id": "night",
+  "n": "27",
+  "type": "trial",
+  "kanda": "sundara",
+  "place": "lankaGate",
+  "win": [
+   "night.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [],
+  "kachni": [
+   "lankaGate"
+  ],
+  "unpaint": [],
+  "seq": 28
+ },
+ {
+  "id": "ashoka",
+  "n": "28",
+  "type": "trial",
+  "kanda": "sundara",
+  "place": "ashokaGrove",
+  "win": [
+   "ashoka.win.1"
+  ],
+  "gentle": null,
+  "par": 330,
+  "paint": [
+   "ashokaGrove",
+   "ashokaGrove"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 29
+ },
+ {
+  "id": "court",
+  "n": "29",
+  "type": "scene",
+  "kanda": "sundara",
+  "place": "ravanaCourt",
+  "win": [
+   "court.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [],
+  "kachni": [
+   "ravanaCourt"
+  ],
+  "unpaint": [],
+  "seq": 30
+ },
+ {
+  "id": "burn",
+  "n": "30",
+  "type": "trial",
+  "kanda": "sundara",
+  "place": "lankaRoofs",
+  "win": [
+   "burn.win.1"
+  ],
+  "gentle": null,
+  "par": 330,
+  "paint": [],
+  "kachni": [
+   "lankaRoofs"
+  ],
+  "unpaint": [],
+  "seq": 31
+ },
+ {
+  "id": "l3",
+  "n": "L3",
+  "type": "lanka",
+  "kanda": "yuddha",
+  "place": "ravanaCourt",
+  "win": [
+   "l3.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [],
+  "kachni": [
+   "ravanaCourt"
+  ],
+  "unpaint": [],
+  "seq": 32
+ },
+ {
+  "id": "bridge",
+  "n": "31",
+  "type": "scene",
+  "kanda": "yuddha",
+  "place": "bridge",
+  "win": [
+   "bridge.win.1"
+  ],
+  "gentle": null,
+  "par": 280,
+  "paint": [
+   "bridge"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 33
+ },
+ {
+  "id": "angada",
+  "n": "32",
+  "type": "scene",
+  "kanda": "yuddha",
+  "place": "lankaWalls",
+  "win": [
+   "angada.win.1"
+  ],
+  "gentle": null,
+  "par": 240,
+  "paint": [],
+  "kachni": [
+   "lankaWalls"
+  ],
+  "unpaint": [],
+  "seq": 34
+ },
+ {
+  "id": "l4",
+  "n": "L4",
+  "type": "lanka",
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "win": [
+   "l4.win.1"
+  ],
+  "gentle": null,
+  "par": 280,
+  "paint": [],
+  "kachni": [
+   "lankaPalace"
+  ],
+  "unpaint": [],
+  "seq": 35
+ },
+ {
+  "id": "kumbhakarna",
+  "n": "33",
+  "type": "battle",
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "win": [
+   "kumbha.win.1"
+  ],
+  "gentle": null,
+  "par": 600,
+  "paint": [
+   "battlefield"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 36
+ },
+ {
+  "id": "indrajit",
+  "n": "34",
+  "type": "battle",
+  "kanda": "yuddha",
+  "place": "nikumbhila",
+  "win": [
+   "indrajit.win.1"
+  ],
+  "gentle": null,
+  "par": 660,
+  "paint": [
+   "nikumbhila"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 37
+ },
+ {
+  "id": "l5",
+  "n": "L5",
+  "type": "lanka",
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "win": [
+   "l5.win.1"
+  ],
+  "gentle": null,
+  "par": 220,
+  "paint": [],
+  "kachni": [
+   "lankaPalace"
+  ],
+  "unpaint": [],
+  "seq": 38
+ },
+ {
+  "id": "falls",
+  "n": "35",
+  "type": "trial",
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "win": [
+   "falls.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 39
+ },
+ {
+  "id": "sanjeevani",
+  "n": "36",
+  "type": "trial",
+  "kanda": "yuddha",
+  "place": "himalaya",
+  "win": [
+   "sanjeevani.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "himalaya"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 40
+ },
+ {
+  "id": "l6",
+  "n": "L6",
+  "type": "lanka",
+  "kanda": "yuddha",
+  "place": "lankaPalace",
+  "win": [
+   "l6.win.1"
+  ],
+  "gentle": null,
+  "par": 260,
+  "paint": [],
+  "kachni": [
+   "lankaPalace"
+  ],
+  "unpaint": [],
+  "seq": 41
+ },
+ {
+  "id": "ravana",
+  "n": "37",
+  "type": "battle",
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "win": [
+   "ravana.win.1",
+   "ravana.win.2"
+  ],
+  "gentle": null,
+  "par": 780,
+  "paint": [
+   "battlefield"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 42
+ },
+ {
+  "id": "after",
+  "n": "38",
+  "type": "scene",
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "win": [
+   "after.win.1"
+  ],
+  "gentle": null,
+  "par": 240,
+  "paint": [
+   "battlefield",
+   "lankaGate",
+   "ravanaCourt",
+   "lankaRoofs",
+   "lankaWalls",
+   "lankaPalace",
+   "battlefield"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 43
+ },
+ {
+  "id": "agni",
+  "n": "—",
+  "type": "scene",
+  "kanda": "yuddha",
+  "place": "battlefield",
+  "playable": false,
+  "win": [],
+  "paint": [],
+  "kachni": [],
+  "unpaint": [],
+  "placeholder": true
+ },
+ {
+  "id": "lighting",
+  "n": "39",
+  "type": "trial",
+  "kanda": "yuddha",
+  "place": "ayodhyaHome",
+  "win": [
+   "lighting.win.1"
+  ],
+  "gentle": null,
+  "par": 300,
+  "paint": [
+   "ayodhyaHome",
+   "sarayu",
+   "tatakaWaste",
+   "siddhashrama",
+   "gautamaAshram",
+   "mithila",
+   "palace",
+   "tamasa",
+   "shringaverapura",
+   "chitrakuta",
+   "dandaka",
+   "janasthana",
+   "southSky",
+   "pampa",
+   "rishyamukha",
+   "kishkindhaCity",
+   "southShore",
+   "mahendra",
+   "ashokaGrove",
+   "bridge",
+   "battlefield",
+   "nikumbhila",
+   "himalaya",
+   "ayodhyaHome"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 44
+ },
+ {
+  "id": "coronation",
+  "n": "40",
+  "type": "scene",
+  "kanda": "yuddha",
+  "place": "ayodhyaHome",
+  "win": [
+   "coronation.win.1"
+  ],
+  "gentle": null,
+  "par": 240,
+  "paint": [
+   "ayodhyaHome",
+   "ayodhya",
+   "panchavati",
+   "ayodhya",
+   "sarayu",
+   "tatakaWaste",
+   "siddhashrama",
+   "gautamaAshram",
+   "mithila",
+   "palace",
+   "tamasa",
+   "shringaverapura",
+   "chitrakuta",
+   "dandaka",
+   "panchavati",
+   "janasthana",
+   "southSky",
+   "pampa",
+   "rishyamukha",
+   "kishkindhaCity",
+   "southShore",
+   "mahendra",
+   "lankaGate",
+   "ashokaGrove",
+   "ravanaCourt",
+   "lankaRoofs",
+   "bridge",
+   "lankaWalls",
+   "battlefield",
+   "nikumbhila",
+   "lankaPalace",
+   "himalaya",
+   "ayodhyaHome"
+  ],
+  "kachni": [],
+  "unpaint": [],
+  "seq": 45
+ }
+]

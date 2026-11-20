@@ -1,0 +1,98 @@
+{
+ "id": "viradha",
+ "backdrop": "deepForest",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "rama",
+  "stage": "exile"
+ },
+ "astras": true,
+ "tips": {
+  "roll": "viradha.tip"
+ },
+ "density": "full",
+ "painted": true,
+ "allies": [
+  {
+   "id": "lakshmana",
+   "stage": "exile",
+   "fire": true
+  },
+  {
+   "id": "sita",
+   "stage": "exile",
+   "fire": true
+  }
+ ],
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1500,
+   "steps": [
+    {
+     "say": "viradha.archer",
+     "wait": 0.2
+    },
+    {
+     "wave": "viradha.o1",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 3,
+       "side": "right",
+       "gap": 1.7
+      },
+      {
+       "type": "archer",
+       "n": 1,
+       "side": "right",
+       "gap": 1.7
+      }
+     ]
+    },
+    {
+     "wave": "viradha.o2",
+     "groups": [
+      {
+       "type": "shield",
+       "n": 2,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "archer",
+       "n": 1,
+       "side": "both",
+       "gap": 1.9
+      }
+     ]
+    },
+    {
+     "checkpoint": "viradha.cp"
+    }
+   ]
+  },
+  {
+   "left": 1750,
+   "right": 3300,
+   "steps": [
+    {
+     "boss": "viradha",
+     "intro": "viradha.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.viradha.title",
+ "kandaTitle": "kanda.aranya",
+ "end": [
+  "viradha.end.1",
+  "viradha.end.2"
+ ]
+}

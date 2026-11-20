@@ -1,0 +1,1920 @@
+[
+ {
+  "id": "rama",
+  "body": "human",
+  "build": {
+   "height": 1.08,
+   "width": 0.95,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "indigo",
+   "accent": "gold"
+  },
+  "skin": "indigoLight",
+  "pattern": "lotusRow",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": "vaishnava"
+  },
+  "walk": "steady",
+  "signature": "kodanda",
+  "headdress": "tallCrown",
+  "garment": "dhoti",
+  "stages": {
+   "prince": {
+    "headdress": "tallCrown",
+    "garment": "dhoti",
+    "jewels": "princely"
+   },
+   "exile": {
+    "headdress": "tallJata",
+    "garment": "bark",
+    "jewels": "none",
+    "uttariya": {
+     "main": "saffron",
+     "border": "indigo"
+    }
+   },
+   "king": {
+    "headdress": "tallestCrown",
+    "garment": "royal",
+    "jewels": "full"
+   }
+  }
+ },
+ {
+  "id": "lakshmana",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 1.06,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "gold",
+   "accent": "indigo"
+  },
+  "skin": "skin",
+  "pattern": "zigzag",
+  "face": {
+   "eye": "long",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "stride",
+  "signature": "bowLeft",
+  "headdress": "lowCrown",
+  "garment": "dhoti",
+  "stages": {
+   "prince": {
+    "headdress": "lowCrown",
+    "garment": "dhoti",
+    "jewels": "princely"
+   },
+   "exile": {
+    "headdress": "tallJata",
+    "garment": "bark",
+    "jewels": "none",
+    "uttariya": {
+     "main": "ochre",
+     "border": "leaf"
+    }
+   },
+   "king": {
+    "headdress": "lowCrown",
+    "garment": "royal",
+    "jewels": "full",
+    "signature": "whisk"
+   }
+  }
+ },
+ {
+  "id": "sita",
+  "body": "human",
+  "build": {
+   "height": 0.94,
+   "width": 0.8,
+   "stance": "bowed"
+  },
+  "colour": {
+   "main": "turmeric",
+   "accent": "madder"
+  },
+  "skin": "skinPale",
+  "pattern": "flowerDots",
+  "face": {
+   "eye": "wide",
+   "brow": "arched",
+   "beard": null,
+   "tilak": "dot"
+  },
+  "walk": "glide",
+  "signature": "flower",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true,
+  "stages": {
+   "bride": {
+    "headdress": "veil",
+    "garment": "sari",
+    "colour": {
+     "main": "madder",
+     "accent": "turmeric"
+    },
+    "jewels": "full"
+   },
+   "exile": {
+    "headdress": "flowerBun",
+    "garment": "sari",
+    "colour": {
+     "main": "ochre",
+     "accent": "madder"
+    },
+    "jewels": "none"
+   },
+   "queen": {
+    "headdress": "queenCrown",
+    "garment": "sari",
+    "colour": {
+     "main": "turmeric",
+     "accent": "madder"
+    },
+    "jewels": "full",
+    "signature": "lotusHand"
+   }
+  }
+ },
+ {
+  "id": "bharata",
+  "body": "human",
+  "build": {
+   "height": 1.07,
+   "width": 0.95,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "indigo"
+  },
+  "skin": "skin",
+  "pattern": "singleBorder",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "steady",
+  "signature": "sandals",
+  "headdress": "jataKnot",
+  "garment": "robe"
+ },
+ {
+  "id": "shatrughna",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "gold"
+  },
+  "skin": "skin",
+  "pattern": "leafSprays",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "stride",
+  "signature": "spear",
+  "headdress": "lowCrown",
+  "garment": "dhoti"
+ },
+ {
+  "id": "dasharatha",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 1.3,
+   "stance": "heavy"
+  },
+  "colour": {
+   "main": "madder",
+   "accent": "gold"
+  },
+  "skin": "skin",
+  "pattern": "royalChecks",
+  "face": {
+   "eye": "long",
+   "brow": "heavy",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "lumber",
+  "signature": "parasol",
+  "headdress": "heavyCrown",
+  "garment": "royal"
+ },
+ {
+  "id": "kaushalya",
+  "body": "human",
+  "build": {
+   "height": 0.86,
+   "width": 0.82,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "indigo",
+   "accent": "white"
+  },
+  "skin": "skinPale",
+  "pattern": "waveLines",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 0.6
+  },
+  "walk": "glide",
+  "signature": "lamp",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "kaikeyi",
+  "body": "human",
+  "build": {
+   "height": 1.04,
+   "width": 0.8,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "madder",
+   "accent": "black"
+  },
+  "skin": "skinPale",
+  "pattern": "flames",
+  "face": {
+   "eye": "narrow",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "proud",
+  "signature": "brooch",
+  "headdress": "queenCrown",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "sumitra",
+  "body": "human",
+  "build": {
+   "height": 0.92,
+   "width": 0.92,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "turmeric"
+  },
+  "skin": "skinPale",
+  "pattern": "vine",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 0.5
+  },
+  "walk": "glide",
+  "signature": "waterPot",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "manthara",
+  "body": "human",
+  "build": {
+   "height": 0.72,
+   "width": 0.9,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "brown",
+   "accent": "madder"
+  },
+  "skin": "skinDark",
+  "pattern": "coiledSpiral",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "staff",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "vishvamitra",
+  "body": "human",
+  "build": {
+   "height": 1.1,
+   "width": 0.85,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "saffron",
+   "accent": "black"
+  },
+  "skin": "skinDark",
+  "pattern": "fireTriangles",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": "long",
+   "tilak": "shaiva"
+  },
+  "walk": "stride",
+  "signature": "bowJata",
+  "headdress": "mattedCrown",
+  "garment": "robe"
+ },
+ {
+  "id": "vasishtha",
+  "body": "human",
+  "build": {
+   "height": 0.95,
+   "width": 1.2,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "saffron"
+  },
+  "skin": "skin",
+  "pattern": "sunRays",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": "vaishnava",
+   "age": 0.8
+  },
+  "walk": "steady",
+  "signature": "kamandalu",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "janaka",
+  "body": "human",
+  "build": {
+   "height": 0.98,
+   "width": 0.82,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "gold"
+  },
+  "skin": "skin",
+  "pattern": "grainStalks",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "moustache": true
+  },
+  "walk": "steady",
+  "signature": "plough",
+  "headdress": "tallCrown",
+  "garment": "royal"
+ },
+ {
+  "id": "ahalya",
+  "body": "human",
+  "build": {
+   "height": 0.92,
+   "width": 0.8,
+   "stance": "bowed"
+  },
+  "colour": {
+   "main": "pink",
+   "accent": "grey"
+  },
+  "skin": "skinPale",
+  "pattern": "crackedStone",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true,
+  "stages": {
+   "unseen": {
+    "ghost": true
+   },
+   "freed": {
+    "pattern": "drops"
+   }
+  }
+ },
+ {
+  "id": "guha",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 1.3,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "river",
+   "accent": "brown"
+  },
+  "skin": "skinDark",
+  "pattern": "fishScale",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "moustache": true
+  },
+  "walk": "stride",
+  "signature": "oar",
+  "headdress": "headband",
+  "garment": "bare"
+ },
+ {
+  "id": "shabari",
+  "body": "human",
+  "build": {
+   "height": 0.66,
+   "width": 0.85,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "earth",
+   "accent": "madder"
+  },
+  "skin": "skinDark",
+  "pattern": "berryDots",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "basket",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "jatayu",
+  "body": "bird",
+  "build": {
+   "height": 1.5,
+   "width": 1.6,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "brown",
+   "accent": "white"
+  },
+  "skin": "brown",
+  "pattern": "featherChevrons",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "hop",
+  "signature": "beak",
+  "headdress": "none",
+  "garment": "none"
+ },
+ {
+  "id": "hanuman",
+  "body": "monkey",
+  "build": {
+   "height": 1.06,
+   "width": 1.15,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "orange",
+   "accent": "gold"
+  },
+  "skin": "orange",
+  "pattern": "flameRows",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": "vaishnava"
+  },
+  "walk": "stride",
+  "signature": "mace",
+  "headdress": "lowCrown",
+  "garment": "loin"
+ },
+ {
+  "id": "sugriva",
+  "body": "monkey",
+  "build": {
+   "height": 0.98,
+   "width": 0.85,
+   "stance": "anxious"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "gold"
+  },
+  "skin": "ochre",
+  "pattern": "leaf",
+  "face": {
+   "eye": "wide",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "anxious",
+  "signature": "garland",
+  "headdress": "lowCrown",
+  "garment": "loin"
+ },
+ {
+  "id": "vali",
+  "body": "monkey",
+  "build": {
+   "height": 1.08,
+   "width": 1.35,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "gold",
+   "accent": "madder"
+  },
+  "skin": "ochre",
+  "pattern": "sunDiscs",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "proud",
+  "signature": "necklace",
+  "headdress": "tallCrown",
+  "garment": "loin"
+ },
+ {
+  "id": "angada",
+  "body": "monkey",
+  "build": {
+   "height": 0.88,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "turmeric",
+   "accent": "leaf"
+  },
+  "skin": "ochre",
+  "pattern": "smallChecks",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "stride",
+  "signature": "armlets",
+  "headdress": "headband",
+  "garment": "loin"
+ },
+ {
+  "id": "jambavan",
+  "body": "bear",
+  "build": {
+   "height": 1.15,
+   "width": 1.6,
+   "stance": "heavy"
+  },
+  "colour": {
+   "main": "black",
+   "accent": "white"
+  },
+  "skin": "black",
+  "pattern": "furStrokes",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "lumber",
+  "signature": "beardStaff",
+  "headdress": "none",
+  "garment": "fur"
+ },
+ {
+  "id": "nala",
+  "body": "monkey",
+  "build": {
+   "height": 0.8,
+   "width": 1.1,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "storm",
+   "accent": "turmeric"
+  },
+  "skin": "grey",
+  "pattern": "stoneBlocks",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "stride",
+  "signature": "stone",
+  "headdress": "headband",
+  "garment": "loin"
+ },
+ {
+  "id": "ravana",
+  "body": "tenHeads",
+  "build": {
+   "height": 1.45,
+   "width": 1.35,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "black",
+   "accent": "gold"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "peacockEyes",
+  "face": {
+   "eye": "long",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": "shaiva",
+   "moustache": true
+  },
+  "walk": "proud",
+  "signature": "chandrahasa",
+  "headdress": "tenCrowns",
+  "garment": "royal",
+  "stages": {
+   "king": {},
+   "ascetic": {
+    "body": "human",
+    "headdress": "jataKnot",
+    "garment": "robe",
+    "colour": {
+     "main": "saffron",
+     "accent": "black"
+    },
+    "signature": "kamandalu",
+    "skin": "skinDark",
+    "height": 1,
+    "width": 1
+   }
+  }
+ },
+ {
+  "id": "mandodari",
+  "body": "human",
+  "build": {
+   "height": 1.06,
+   "width": 0.82,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "deepBlue",
+   "accent": "gold"
+  },
+  "skin": "skinPale",
+  "pattern": "moonCrescents",
+  "face": {
+   "eye": "long",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "foldedQueen",
+  "headdress": "pearlCrown",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "kumbhakarna",
+  "body": "human",
+  "build": {
+   "height": 2.6,
+   "width": 1.5,
+   "stance": "heavy"
+  },
+  "colour": {
+   "main": "earth",
+   "accent": "madder"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "mountainTriangles",
+  "face": {
+   "eye": "sleepy",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "moustache": true,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "giantSpear",
+  "headdress": "horns2",
+  "garment": "bare"
+ },
+ {
+  "id": "indrajit",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 0.78,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "storm",
+   "accent": "gold"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "cloudSpirals",
+  "face": {
+   "eye": "narrow",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "bowCloud",
+  "headdress": "spikeCrown",
+  "garment": "armour"
+ },
+ {
+  "id": "vibhishana",
+  "body": "human",
+  "build": {
+   "height": 1.1,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "indigo"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "lotus",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": "vaishnava"
+  },
+  "walk": "steady",
+  "signature": "foldedHands",
+  "headdress": "lowCrown",
+  "garment": "robe"
+ },
+ {
+  "id": "shurpanakha",
+  "body": "human",
+  "build": {
+   "height": 1.08,
+   "width": 0.8,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "pink",
+   "accent": "madder"
+  },
+  "skin": "skinPale",
+  "pattern": "fanShapes",
+  "face": {
+   "eye": "wide",
+   "brow": "arched",
+   "beard": null,
+   "tilak": "dot",
+   "fangs": false
+  },
+  "walk": "glide",
+  "signature": "flower",
+  "headdress": "flowerBun",
+  "garment": "sari",
+  "female": true,
+  "jewels": "full"
+ },
+ {
+  "id": "maricha",
+  "body": "human",
+  "build": {
+   "height": 0.95,
+   "width": 0.7,
+   "stance": "anxious"
+  },
+  "colour": {
+   "main": "gold",
+   "accent": "black"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "deerSpots",
+  "face": {
+   "eye": "wide",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "anxious",
+  "signature": "deerEars",
+  "headdress": "tuftedEars",
+  "garment": "bare"
+ },
+ {
+  "id": "subahu",
+  "body": "human",
+  "build": {
+   "height": 1.15,
+   "width": 1.35,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "madder",
+   "accent": "black"
+  },
+  "skin": "rakshasa",
+  "pattern": "batRibs",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "stride",
+  "signature": "firePot",
+  "headdress": "horns2",
+  "garment": "bare",
+  "wings": true
+ },
+ {
+  "id": "tataka",
+  "body": "human",
+  "build": {
+   "height": 2.3,
+   "width": 1.3,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "ochre",
+   "accent": "black"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "crackedEarth",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "boneNecklace",
+  "headdress": "wildHair",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "viradha",
+  "body": "human",
+  "build": {
+   "height": 2.1,
+   "width": 1.4,
+   "stance": "heavy"
+  },
+  "colour": {
+   "main": "iron",
+   "accent": "madder"
+  },
+  "skin": "rakshasa",
+  "pattern": "rustStripes",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "bellSpear",
+  "headdress": "horns1",
+  "garment": "bare"
+ },
+ {
+  "id": "khara",
+  "body": "human",
+  "build": {
+   "height": 1.2,
+   "width": 1.2,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "green",
+   "accent": "madder"
+  },
+  "skin": "rakshasa",
+  "pattern": "scaleArmour",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "moustache": true,
+   "fangs": true
+  },
+  "walk": "proud",
+  "signature": "kharaSword",
+  "headdress": "spikeCrown",
+  "garment": "armour"
+ },
+ {
+  "id": "malyavan",
+  "body": "human",
+  "build": {
+   "height": 0.8,
+   "width": 0.8,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "grey",
+   "accent": "gold"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "fadedFlames",
+  "face": {
+   "eye": "narrow",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "staffScroll",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "trijata",
+  "body": "human",
+  "build": {
+   "height": 0.78,
+   "width": 0.9,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "indigo",
+   "accent": "white"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "dreamSpirals",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "dreamLamp",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "urmila",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.8,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "madder"
+  },
+  "skin": "skinPale",
+  "pattern": "dots",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "mandavi",
+  "body": "human",
+  "build": {
+   "height": 0.92,
+   "width": 0.8,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "indigo",
+   "accent": "turmeric"
+  },
+  "skin": "skinPale",
+  "pattern": "dotsBig",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "shrutakirti",
+  "body": "human",
+  "build": {
+   "height": 0.86,
+   "width": 0.8,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "pink",
+   "accent": "leaf"
+  },
+  "skin": "skinPale",
+  "pattern": "ringDots",
+  "face": {
+   "eye": "wide",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "parashurama",
+  "body": "human",
+  "build": {
+   "height": 1.18,
+   "width": 1.1,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "terracotta",
+   "accent": "white"
+  },
+  "skin": "skinDark",
+  "pattern": "axes",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": "long",
+   "tilak": "shaiva"
+  },
+  "walk": "stride",
+  "signature": "axe",
+  "headdress": "mattedCrown",
+  "garment": "bark"
+ },
+ {
+  "id": "sumantra",
+  "body": "human",
+  "build": {
+   "height": 0.95,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "ochre",
+   "accent": "brown"
+  },
+  "skin": "skin",
+  "pattern": "reins",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "moustache": true,
+   "age": 0.6
+  },
+  "walk": "steady",
+  "signature": "whipReins",
+  "headdress": "turban",
+  "garment": "dhoti"
+ },
+ {
+  "id": "atri",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.85,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "ochre",
+   "accent": "white"
+  },
+  "skin": "skinDark",
+  "pattern": "herbs",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "staffPlain",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "anasuya",
+  "body": "human",
+  "build": {
+   "height": 0.8,
+   "width": 0.85,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "leaf"
+  },
+  "skin": "skinPale",
+  "pattern": "pearls",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "glide",
+  "signature": "jewelBox",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "youngAscetic",
+  "body": "human",
+  "build": {
+   "height": 0.75,
+   "width": 0.75,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "earth",
+   "accent": "white"
+  },
+  "skin": "skin",
+  "pattern": "reeds",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "steady",
+  "signature": "pitcher",
+  "headdress": "topknot",
+  "garment": "bark"
+ },
+ {
+  "id": "blindFather",
+  "body": "human",
+  "build": {
+   "height": 0.8,
+   "width": 0.85,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "grey",
+   "accent": "brown"
+  },
+  "skin": "skinDark",
+  "pattern": "stripesV",
+  "face": {
+   "eye": "closed",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "none",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "blindMother",
+  "body": "human",
+  "build": {
+   "height": 0.74,
+   "width": 0.85,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "grey",
+   "accent": "white"
+  },
+  "skin": "skinDark",
+  "pattern": "stripesH",
+  "face": {
+   "eye": "closed",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "none",
+  "headdress": "bun",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "gautama",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "saffron",
+   "accent": "brown"
+  },
+  "skin": "skin",
+  "pattern": "knots",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": "long",
+   "tilak": null
+  },
+  "walk": "steady",
+  "signature": "rosary",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "sharabhanga",
+  "body": "human",
+  "build": {
+   "height": 0.85,
+   "width": 0.8,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "ochre"
+  },
+  "skin": "skinDark",
+  "pattern": "stars",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "fireBowl",
+  "headdress": "mattedCrown",
+  "garment": "robe"
+ },
+ {
+  "id": "agastya",
+  "body": "human",
+  "build": {
+   "height": 0.7,
+   "width": 1.1,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "saffron",
+   "accent": "leaf"
+  },
+  "skin": "skinDark",
+  "pattern": "waves",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": "long",
+   "tilak": null,
+   "age": 0.8
+  },
+  "walk": "steady",
+  "signature": "agastyaBow",
+  "headdress": "topknot",
+  "garment": "robe"
+ },
+ {
+  "id": "dushana",
+  "body": "human",
+  "build": {
+   "height": 1.2,
+   "width": 1.25,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "rakshasa",
+   "accent": "ochre"
+  },
+  "skin": "rakshasa",
+  "pattern": "chevrons",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "stride",
+  "signature": "ironClub",
+  "headdress": "horns1",
+  "garment": "armour"
+ },
+ {
+  "id": "trishiras",
+  "body": "human",
+  "build": {
+   "height": 1.25,
+   "width": 1.1,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "rakshasa",
+   "accent": "terracotta"
+  },
+  "skin": "rakshasa",
+  "pattern": "tridents",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "proud",
+  "signature": "trident",
+  "headdress": "threeHeads",
+  "garment": "armour"
+ },
+ {
+  "id": "akampana",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.8,
+   "stance": "anxious"
+  },
+  "colour": {
+   "main": "rakshasaLight",
+   "accent": "grey"
+  },
+  "skin": "rakshasa",
+  "pattern": "footprints",
+  "face": {
+   "eye": "wide",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "anxious",
+  "signature": "none",
+  "headdress": "horns1",
+  "garment": "bare"
+ },
+ {
+  "id": "kabandha",
+  "body": "human",
+  "build": {
+   "height": 1.9,
+   "width": 1.8,
+   "stance": "heavy"
+  },
+  "colour": {
+   "main": "earth",
+   "accent": "black"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "claws",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "longArms",
+  "headdress": "headless",
+  "garment": "bare"
+ },
+ {
+  "id": "tara",
+  "body": "monkey",
+  "build": {
+   "height": 0.9,
+   "width": 0.8,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "pink",
+   "accent": "gold"
+  },
+  "skin": "ochre",
+  "pattern": "diamonds",
+  "face": {
+   "eye": "long",
+   "brow": "arched",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "veil",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "sampati",
+  "body": "bird",
+  "build": {
+   "height": 1.4,
+   "width": 1.3,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "grey",
+   "accent": "brown"
+  },
+  "skin": "grey",
+  "pattern": "wings",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "hop",
+  "signature": "wingless",
+  "headdress": "none",
+  "garment": "none",
+  "wingless": true
+ },
+ {
+  "id": "svayamprabha",
+  "body": "human",
+  "build": {
+   "height": 0.95,
+   "width": 0.8,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "turmeric"
+  },
+  "skin": "skinPale",
+  "pattern": "ripples",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "fruitBowl",
+  "headdress": "bun",
+  "garment": "robe",
+  "female": true
+ },
+ {
+  "id": "surasa",
+  "body": "human",
+  "build": {
+   "height": 1.8,
+   "width": 1.4,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "leaf",
+   "accent": "black"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "tongues",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "glide",
+  "signature": "none",
+  "headdress": "serpentHood",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "simhika",
+  "body": "human",
+  "build": {
+   "height": 1.6,
+   "width": 1.5,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "deepBlue",
+   "accent": "black"
+  },
+  "skin": "rakshasa",
+  "pattern": "shells",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "none",
+  "headdress": "wildHair",
+  "garment": "sari",
+  "female": true
+ },
+ {
+  "id": "lankini",
+  "body": "human",
+  "build": {
+   "height": 1.3,
+   "width": 1.2,
+   "stance": "proud"
+  },
+  "colour": {
+   "main": "gold",
+   "accent": "black"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "gates",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "proud",
+  "signature": "gateKey",
+  "headdress": "spikeCrown",
+  "garment": "armour",
+  "female": true
+ },
+ {
+  "id": "aksha",
+  "body": "human",
+  "build": {
+   "height": 0.88,
+   "width": 0.8,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "terracotta",
+   "accent": "gold"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "arrows",
+  "face": {
+   "eye": "wide",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "stride",
+  "signature": "akshaBow",
+  "headdress": "lowCrown",
+  "garment": "armour"
+ },
+ {
+  "id": "garuda",
+  "body": "bird",
+  "build": {
+   "height": 1.7,
+   "width": 1.6,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "gold",
+   "accent": "white"
+  },
+  "skin": "gold",
+  "pattern": "zigzagDouble",
+  "face": {
+   "eye": "round",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "hop",
+  "signature": "garudaBeak",
+  "headdress": "none",
+  "garment": "none"
+ },
+ {
+  "id": "sushena",
+  "body": "monkey",
+  "build": {
+   "height": 0.84,
+   "width": 1,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "white",
+   "accent": "leaf"
+  },
+  "skin": "grey",
+  "pattern": "moss",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": "white",
+   "tilak": null,
+   "age": 1
+  },
+  "walk": "stoop",
+  "signature": "herbBundle",
+  "headdress": "topknot",
+  "garment": "loin"
+ },
+ {
+  "id": "matali",
+  "body": "human",
+  "build": {
+   "height": 1,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "turmeric",
+   "accent": "white"
+  },
+  "skin": "skinPale",
+  "pattern": "steps",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "steady",
+  "signature": "reinsGold",
+  "headdress": "turban",
+  "garment": "dhoti"
+ },
+ {
+  "id": "ocean",
+  "body": "human",
+  "build": {
+   "height": 1.4,
+   "width": 1.2,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "river",
+   "accent": "white"
+  },
+  "skin": "river",
+  "pattern": "seaFoam",
+  "face": {
+   "eye": "long",
+   "brow": "soft",
+   "beard": "long",
+   "tilak": null
+  },
+  "walk": "glide",
+  "signature": "conch",
+  "headdress": "shellCrown",
+  "garment": "robe"
+ },
+ {
+  "id": "citizen",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.9,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "ochre",
+   "accent": "brown"
+  },
+  "skin": "skin",
+  "pattern": "weave",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "steady",
+  "signature": "none",
+  "headdress": "turban",
+  "garment": "dhoti",
+  "crowd": true
+ },
+ {
+  "id": "sage",
+  "body": "human",
+  "build": {
+   "height": 0.9,
+   "width": 0.85,
+   "stance": "stooped"
+  },
+  "colour": {
+   "main": "saffron",
+   "accent": "brown"
+  },
+  "skin": "skinDark",
+  "pattern": "bark",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": "long",
+   "tilak": null
+  },
+  "walk": "stoop",
+  "signature": "staffPlain2",
+  "headdress": "topknot",
+  "garment": "robe",
+  "crowd": true
+ },
+ {
+  "id": "rakshasi",
+  "body": "human",
+  "build": {
+   "height": 1.05,
+   "width": 1.1,
+   "stance": "forward"
+  },
+  "colour": {
+   "main": "rakshasaLight",
+   "accent": "terracotta"
+  },
+  "skin": "rakshasa",
+  "pattern": "thorns",
+  "face": {
+   "eye": "wide",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "lumber",
+  "signature": "rakClub",
+  "headdress": "wildHair",
+  "garment": "sari",
+  "female": true,
+  "crowd": true
+ },
+ {
+  "id": "minister",
+  "body": "human",
+  "build": {
+   "height": 0.95,
+   "width": 0.95,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "terracotta",
+   "accent": "gold"
+  },
+  "skin": "rakshasaLight",
+  "pattern": "checks",
+  "face": {
+   "eye": "narrow",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null,
+   "moustache": true
+  },
+  "walk": "steady",
+  "signature": "none",
+  "headdress": "turban",
+  "garment": "robe",
+  "crowd": true
+ },
+ {
+  "id": "vanara",
+  "body": "monkey",
+  "build": {
+   "height": 0.85,
+   "width": 0.95,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "ochre",
+   "accent": "leaf"
+  },
+  "skin": "ochre",
+  "pattern": "crosshatch",
+  "face": {
+   "eye": "round",
+   "brow": "soft",
+   "beard": null,
+   "tilak": null
+  },
+  "walk": "hop",
+  "signature": "none",
+  "headdress": "none",
+  "garment": "loin",
+  "crowd": true
+ },
+ {
+  "id": "guard",
+  "body": "human",
+  "build": {
+   "height": 1.05,
+   "width": 1.05,
+   "stance": "upright"
+  },
+  "colour": {
+   "main": "rakshasa",
+   "accent": "gold"
+  },
+  "skin": "rakshasa",
+  "pattern": "stripesDiag",
+  "face": {
+   "eye": "narrow",
+   "brow": "heavy",
+   "beard": null,
+   "tilak": null,
+   "fangs": true
+  },
+  "walk": "steady",
+  "signature": "lantern",
+  "headdress": "horns1",
+  "garment": "armour",
+  "crowd": true
+ }
+]

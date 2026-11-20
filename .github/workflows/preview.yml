@@ -1,0 +1,19 @@
+# The overhaul is previewed at /next/ on the same GitHub Pages site. Deploys always run from
+# master (its workflow builds master at the root and this branch at /next/), so a push here
+# just asks master's deploy workflow to run again.
+name: Preview the overhaul
+
+on:
+  push:
+    branches: [overhaul]
+
+permissions:
+  actions: write
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh workflow run deploy.yml --ref master --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}

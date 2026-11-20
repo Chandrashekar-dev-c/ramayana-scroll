@@ -2,8 +2,8 @@
 // blocked the game runs from memory.
 import { bus } from './events.js';
 
-const KEY = 'ramayana-scroll';
-const SETTINGS_KEY = 'ramayana-settings';
+const KEY = 'ramayana-scroll-next';
+const SETTINGS_KEY = 'ramayana-settings-next';
 export const SAVE_VERSION = 1;
 
 export function defaultSettings() {

@@ -1,0 +1,143 @@
+{
+ "id": "tataka",
+ "backdrop": "waste",
+ "style": "bharni-bright",
+ "hero": {
+  "id": "rama",
+  "stage": "prince"
+ },
+ "astras": false,
+ "shelves": [
+  {
+   "x1": 1980,
+   "x2": 2300,
+   "h": 70
+  }
+ ],
+ "tips": {
+  "jump": "tataka.lose.tip",
+  "move": "tataka.lose.tip"
+ },
+ "regrow": true,
+ "allies": [
+  {
+   "id": "lakshmana",
+   "stage": "prince",
+   "fire": true
+  }
+ ],
+ "arenas": [
+  {
+   "left": -140,
+   "right": 1250,
+   "steps": [
+    {
+     "wave": "tataka.o1",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 3,
+       "side": "right",
+       "gap": 1.6
+      }
+     ]
+    },
+    {
+     "wave": "tataka.o2",
+     "teach": "jump",
+     "groups": [
+      {
+       "type": "runner",
+       "n": 3,
+       "side": "right",
+       "gap": 2
+      }
+     ]
+    },
+    {
+     "wave": "tataka.o3",
+     "teach": "roll",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 1,
+       "side": "both",
+       "gap": 1.8
+      },
+      {
+       "type": "runner",
+       "n": 1,
+       "side": "both",
+       "gap": 1.8
+      },
+      {
+       "type": "grunt",
+       "n": 1,
+       "side": "both",
+       "gap": 1.8
+      }
+     ]
+    },
+    {
+     "checkpoint": "tataka.cp1"
+    }
+   ]
+  },
+  {
+   "left": 1500,
+   "right": 2800,
+   "steps": [
+    {
+     "wave": "tataka.o4",
+     "teach": "kick",
+     "groups": [
+      {
+       "type": "grunt",
+       "n": 2,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "runner",
+       "n": 1,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "brute",
+       "n": 1,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "grunt",
+       "n": 1,
+       "side": "both",
+       "gap": 1.9
+      },
+      {
+       "type": "runner",
+       "n": 1,
+       "side": "both",
+       "gap": 1.9
+      }
+     ]
+    },
+    {
+     "checkpoint": null
+    },
+    {
+     "boss": "tataka",
+     "intro": "tataka.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.tataka.title",
+ "kandaTitle": "kanda.bala",
+ "heal": true,
+ "end": [
+  "tataka.end.1",
+  "tataka.end.2"
+ ]
+}

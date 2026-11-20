@@ -28,10 +28,13 @@ export function button(label, onClick, o = {}) {
 const dlg = { full: '', shown: 0, typing: false, onDone: null };
 export function showLine(who, text, o = {}) {
   const box = $('dialogue');
+  const fresh = box.classList.contains('hidden');
   box.classList.remove('hidden');
-  box.classList.toggle('top', !!o.top);
-  box.querySelector('.who').textContent = who || '';
-  box.querySelector('.who').style.display = who ? '' : 'none';
+  if (fresh) { box.classList.add('enter'); requestAnimationFrame(() => requestAnimationFrame(() => box.classList.remove('enter'))); }
+  const w = box.querySelector('.who');
+  w.innerHTML = '';
+  if (who) { const dot = document.createElement('i'); if (o.colour) dot.style.setProperty('--c', o.colour); w.append(dot, document.createTextNode(who)); }
+  w.style.display = who ? '' : 'none';
   const say = box.querySelector('.say');
   say.classList.toggle('narr', !who);
   dlg.full = text; dlg.shown = 0; dlg.typing = true; dlg.el = say;
@@ -78,8 +81,8 @@ export function choose(prompt, options, o = {}) {
   });
 }
 
-export function showBusy(text) { const b = $('busy'); b.textContent = text; b.classList.remove('hidden'); }
-export function hideBusy() { $('busy').classList.add('hidden'); }
+export function showBusy() {}
+export function hideBusy() {}
 
 /** A new build has taken over: offer a reload, never force one mid-chapter. */
 export function updateReady(text, label) {
@@ -122,7 +125,8 @@ export function touchControls(set) {
   if (!set || !set.length || !app.isTouch) { box.classList.add('hidden'); return; }
   box.classList.remove('hidden');
   const vh = window.innerHeight, vw = window.innerWidth;
-  const s = Math.max(56, Math.min(96, vh * 0.17)), big = Math.max(84, Math.min(140, vh * 0.27)), m = 10;
+  // small, low buttons: the ground line sits above them, so they never cover a fight
+  const s = Math.max(50, Math.min(76, vh * 0.15)), big = Math.max(66, Math.min(104, vh * 0.21)), m = 8;
   const lh = save.data.settings.leftHanded;
   const place = (name, side, x, y, size, kind) => {
     const b = el('div', { class: 'tb', role: 'button', 'aria-label': t(LABEL_KEYS[name]), html: ICONS[name] });
@@ -139,7 +143,7 @@ export function touchControls(set) {
   if (set.includes('up')) place('up', 'left', m + s * 0.5, m * 2 + s, s, 'hold');
   if (set.includes('down') && !set.includes('left')) place('down', 'left', m + s * 0.5, m, s, 'hold');
   if (set.includes('draw')) place('draw', 'right', m, m, big, 'draw');
-  if (set.includes('jump')) place('jump', 'right', m + (big - s) / 2, m * 2 + big, s, 'tap');
+  if (set.includes('jump')) place('jump', 'right', m * 2 + big, m * 2 + s * 0.85, s, 'tap');
   if (set.includes('roll')) place('roll', 'right', m * 2 + big, m, s, 'tap');
   if (set.includes('action')) place('action', 'right', set.includes('draw') ? m * 2 + big : m, set.includes('draw') ? m * 2 + s : m, set.includes('draw') ? s : big, 'tap');
   void vw;
@@ -164,22 +168,19 @@ export function flashButton(name, dur = 1.6) {
 }
 bus.on('hint', (h) => { if (h.button) flashButton(h.button, h.dur); });
 
-export function setDraftNote(show) { const d = $('draftNote'); d.textContent = t('lang.draft'); d.classList.toggle('hidden', !show); }
 export function setLoading(k) { const b = $('loadbar'); if (b) b.style.width = Math.round(k * 100) + '%'; }
-export function hideLoading() { const l = $('loading'); if (l) l.remove(); }
+export function hideLoading() { const l = $('loading'); if (!l) return; l.style.opacity = '0'; setTimeout(() => l.remove(), 500); }
 
-/** Show the "Grinding the colours…" plate while the next scene loads, for at least minMs. */
-export async function withGrinding(work, minMs = 700) {
-  const plate = document.createElement('div');
-  plate.id = 'grinding';
-  plate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--cream);font:400 26px "Yatra One",serif;color:var(--madder);z-index:55';
-  plate.innerHTML = '<div style="text-align:center"><div>Grinding the colours…</div><div style="width:220px;height:12px;border:2px solid var(--black);margin:12px auto 0;background:var(--paper)"><i style="display:block;height:100%;width:0;background:var(--madder);animation:rs-grind 1.1s ease-in-out infinite"></i></div></div>';
-  document.body.append(plate);
-  const started = Date.now();
-  try { return await work(); }
-  finally {
-    const wait = Math.max(0, minMs - (Date.now() - started));
-    setTimeout(() => plate.remove(), wait);
+/** Fade the whole screen to dark and back: resolves when fully dark. */
+export function fadeOut(ms = 450) { const f = $('fade'); f.style.transitionDuration = ms + 'ms'; f.classList.add('on'); return new Promise((r) => setTimeout(r, ms)); }
+export function fadeIn(ms = 450) { const f = $('fade'); f.style.transitionDuration = ms + 'ms'; f.classList.remove('on'); return new Promise((r) => setTimeout(r, ms)); }
+
+/** Dim touch buttons that sit over something worth seeing (screen rect in logical units). */
+export function dimControlsOver(rects) {
+  for (const b of document.querySelectorAll('#touch .tb')) {
+    const p = controlPoint(b.dataset.name); if (!p) continue;
+    const r = (parseFloat(b.style.width) || 60) * (720 / window.innerHeight) * 0.6;
+    b.classList.toggle('dim', rects.some((q) => p[0] + r > q.x && p[0] - r < q.x + q.w && p[1] + r > q.y && p[1] - r < q.y + q.h));
   }
 }
 export function showRotate(on) { $('rotate').classList.toggle('hidden', !on); }

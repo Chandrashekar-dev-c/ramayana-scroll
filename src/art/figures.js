@@ -28,46 +28,8 @@ export function character(id, stage) {
   return s;
 }
 
-// ---------------------------------------------------------------- poses
-// Angles in degrees from straight down; positive swings toward the facing side.
-// arm: [shoulder, elbow bend]; leg: [thigh, knee bend].
-export const POSES = {
-  stand: { armF: [8, 12], armB: [-8, -12], legF: [5, 0], legB: [-5, 0] },
-  stand2: { armF: [13, 20], armB: [-4, -18], legF: [6, 0], legB: [-4, 0], head: 3 },
-  walk0: { armF: [28, 18], armB: [-26, -8], legF: [26, -4], legB: [-22, -16], y: 0 },
-  walk1: { armF: [10, 14], armB: [-10, -12], legF: [6, 0], legB: [4, -42], y: -3 },
-  walk2: { armF: [-22, 10], armB: [24, 16], legF: [-22, -16], legB: [26, -4], y: 0 },
-  walk3: { armF: [-8, 12], armB: [10, 14], legF: [4, -42], legB: [6, 0], y: -3 },
-  draw0: { armF: [84, 4], armB: [58, 30], legF: [14, 0], legB: [-14, 0], bow: 0.15 },
-  draw1: { armF: [90, 0], armB: [-16, 112], legF: [16, 0], legB: [-16, 0], bow: 0.55 },
-  draw2: { armF: [90, 0], armB: [-78, 152], legF: [18, 0], legB: [-18, 0], bow: 1, lean: -4 },
-  shoot: { armF: [90, 0], armB: [-104, 70], legF: [18, 0], legB: [-18, 0], lean: 3 },
-  jump: { armF: [70, 25], armB: [-60, -20], legF: [42, -62], legB: [-12, -52], air: true },
-  crouch: { lean: 58, armF: [45, 70], armB: [20, 60], legF: [82, -128], legB: [48, -118] },
-  hurt: { lean: -16, armF: [-34, -20], armB: [-66, -10], legF: [-8, 0], legB: [-22, -12], head: -12 },
-  kneel: { armF: [20, 30], armB: [-10, 20], legF: [84, -96], legB: [-6, -88], lean: 6 },
-  sit: { armF: [30, 40], armB: [10, 40], legF: [86, -84], legB: [78, -100] },
-  namaste: { armF: [10, -128], armB: [-10, 128], legF: [5, 0], legB: [-5, 0], lean: 5, fold: true },
-  bow: { armF: [10, -128], armB: [-10, 128], legF: [5, 0], legB: [-5, 0], lean: 30, head: 14, fold: true },
-  hold: { armF: [72, 22], armB: [52, 34], legF: [8, 0], legB: [-8, 0] },
-  give: { armF: [84, 8], armB: [-8, -12], legF: [10, 0], legB: [-10, 0], lean: 6 },
-  raise: { armF: [158, 12], armB: [-158, -12], legF: [8, 0], legB: [-8, 0] },
-  point: { armF: [96, 0], armB: [-8, -12], legF: [8, 0], legB: [-8, 0] },
-  carry: { armF: [168, -24], armB: [-168, 24], legF: [8, 0], legB: [-8, 0] },
-  kick: { armF: [-30, 10], armB: [-50, -10], legF: [84, -8], legB: [-6, 0], lean: -12 },
-  swing0: { armF: [166, 26], armB: [-30, -20], legF: [16, 0], legB: [-16, 0], lean: -8, obj: -34 },
-  swing1: { armF: [62, 6], armB: [-40, -20], legF: [24, -6], legB: [-20, 0], lean: 18, obj: 78 },
-  charge: { lean: 44, armF: [-40, -20], armB: [-70, -10], legF: [38, -20], legB: [-34, -30], head: -20 },
-  charge2: { lean: 44, armF: [-60, -10], armB: [-30, -20], legF: [-30, -34], legB: [36, -16], head: -20 },
-  fly: { lean: 82, armF: [96, 0], armB: [80, 10], legF: [-66, 0], legB: [-78, -12], air: true, head: -60 },
-  fly2: { lean: 78, armF: [100, 0], armB: [70, 14], legF: [-74, -10], legB: [-64, 0], air: true, head: -58 },
-  climb: { armF: [160, 20], armB: [-120, -60], legF: [50, -90], legB: [-10, -40], air: true },
-  grieve: { lean: 24, armF: [30, 100], armB: [-20, 120], legF: [84, -96], legB: [-6, -88], head: 26 },
-  hide: { lean: 40, armF: [40, 90], armB: [20, 80], legF: [80, -130], legB: [50, -120], head: -10 },
-  cast: { armF: [120, 10], armB: [-30, -30], legF: [16, 0], legB: [-16, 0], lean: -6 },
-  dead: { armF: [20, 10], armB: [-20, -10], legF: [8, 0], legB: [-8, 0] },
-};
-export const WALK = ['walk0', 'walk1', 'walk2', 'walk3'];
+import { POSES, WALK, blendPose } from './poses.js';
+export { POSES, WALK, blendPose };
 
 const STANCE = { upright: 0, forward: 8, bowed: 4, heavy: 2, proud: -6, stooped: 24, anxious: 7 };
 const BODY = {
@@ -86,11 +48,15 @@ function ang(a) { return [Math.sin(a * D), Math.cos(a * D)]; }
  */
 export function drawFigure(ctx, spec, poseName, o = {}) {
   if (spec.body === 'bird') return drawBird(ctx, spec, poseName, o);
-  const pose = POSES[poseName] || POSES.stand;
+  const pose = o.pose || POSES[poseName] || POSES.stand;
   const mode = o.mode || 'colour';
   const U = BASE_U * spec.build.height, Wd = spec.build.width;
-  const B = BODY[spec.body] || BODY.human;
-  let seed = (o.seed ?? hashStr(spec.id)) + hashStr(poseName) % 97;
+  const B0 = BODY[spec.body] || BODY.human;
+  // breathing lifts the chest and head a hair; the hips and feet stay planted
+  const br = o.breath || 0;
+  const B = br ? { ...B0, sh: B0.sh + br * 0.009, head: B0.head + br * 0.011 } : B0;
+  // a live figure keeps one ink seed, so its lines hold still while it moves between poses
+  let seed = o.stableSeed ?? ((o.seed ?? hashStr(spec.id)) + hashStr(poseName) % 97);
   const lw = Math.max(1.6, Math.min(4.2, U * 0.014));
   const main = col(spec.colour.main), accent = col(spec.colour.accent), skin = col(spec.skin || 'skin');
   const ghost = spec.ghost;
@@ -120,7 +86,7 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
     return [p0, j, e, a1 + a2];
   };
   const leanDeg = lean / D;
-  const aimed = poseName.startsWith('draw') || poseName === 'shoot' || poseName === 'cast';
+  const aimed = o.aimed ?? (poseName.startsWith('draw') || poseName === 'shoot' || poseName === 'cast');
   const aF = pose.armF, aB = pose.armB;
   const armLen = sig.long ? 1.5 : spec.signature === 'longArms' ? 1.7 : 1;
   const shF = up(sw * 0.92, -B.sh * U), shB = up(-sw * 0.92, -B.sh * U);
@@ -264,14 +230,14 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
   // --- head
   const hc = up(0.012 * U, -B.head * U);
   const r = 0.1 * U * (spec.body === 'bear' ? 1.15 : 1);
-  if (spec.body === 'tenHeads' && spec.headdress === 'tenCrowns') drawTenHeads(ctx, spec, hc, r, lean, { S, L, mode, lw, skin, main, accent, heads: o.heads, seedBase: seed });
+  if (spec.body === 'tenHeads' && spec.headdress === 'tenCrowns') drawTenHeads(ctx, spec, hc, r, lean, { S, L, mode, lw, skin, main, accent, heads: o.heads, seedBase: seed, blink: o.blink });
   else if (spec.headdress !== 'headless') {
     if (spec.headdress === 'threeHeads') for (const sgn of [-1, 1]) drawHead(ctx, spec, [hc[0] + sgn * r * 1.7, hc[1] + r * 0.3], r * 0.8, lean + sgn * 0.25 + (pose.head || 0) * D, { S, L, mode, lw, skin, main, accent, crown: 'horns1' });
-    drawHead(ctx, spec, hc, r, lean + (pose.head || 0) * D, { S, L, mode, lw, skin, main, accent, crown: spec.headdress, female, sig });
+    drawHead(ctx, spec, hc, r, lean + ((pose.head || 0) + (o.head || 0)) * D, { S, L, mode, lw, skin, main, accent, crown: spec.headdress, female, sig, blink: o.blink });
   }
 
   // --- front arm and the thing it holds
-  const foldDefault = sig.fold && (poseName === 'stand');
+  const foldDefault = sig.fold && (poseName === 'stand' || poseName === 'stand2');
   let fa = armF;
   if (foldDefault) {
     fa = limb(shF, 10 + leanDeg * 0.5, B.upper * U, -128, B.fore * U);
@@ -330,7 +296,7 @@ function drawHead(ctx, spec, hc, r, rot, h) {
     }
     if (spec.body === 'monkey' || spec.body === 'bear') S(ellipsePts(-r * 0.5, -r * 0.95, r * 0.28, r * 0.28, 7), { fill: skin, smooth: true });
     // the frontal almond eye, running nearly to the ear
-    const e = face.eye || 'long';
+    const e = h.blink && face.eye !== 'closed' ? 'closed' : face.eye || 'long';
     const ex = r * 0.18, ey = -r * 0.12;
     const el = e === 'round' ? r * 0.42 : e === 'wide' ? r * 0.56 : e === 'narrow' ? r * 0.6 : r * 0.62;
     const eh = e === 'round' ? r * 0.3 : e === 'wide' ? r * 0.32 : e === 'narrow' ? r * 0.13 : e === 'sleepy' ? r * 0.12 : e === 'closed' ? 0.01 : r * 0.21;

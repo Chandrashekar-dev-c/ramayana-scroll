@@ -1,899 +1,915 @@
 [
  {
   "id": "sage",
-  "n": "1",
-  "type": "scene",
   "kanda": "bala",
-  "place": "ayodhya",
+  "type": "scene",
+  "title": "chapter.sage.title",
+  "note": "note.sage",
   "win": [
    "sage.win.1"
   ],
-  "gentle": null,
-  "par": 240,
-  "paint": [
-   "ayodhya"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 0
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "18-22 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": true
  },
  {
   "id": "sarayu",
-  "n": "2",
-  "type": "scene",
   "kanda": "bala",
-  "place": "sarayu",
+  "type": "scene",
+  "title": "chapter.sarayu.title",
+  "note": "note.sarayu",
   "win": [
    "sarayu.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "sarayu"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 1
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "22-25 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": true
  },
  {
   "id": "tataka",
-  "n": "3",
-  "type": "battle",
   "kanda": "bala",
-  "place": "tatakaWaste",
-  "win": [
-   "tataka.win.1",
-   "tataka.win.2"
-  ],
-  "gentle": null,
-  "par": 540,
-  "paint": [
-   "tatakaWaste"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 2
+  "type": "battle",
+  "title": "chapter.tataka.title",
+  "note": "note.tataka",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "24-26 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": true
  },
  {
   "id": "yajna",
-  "n": "4",
-  "type": "battle",
   "kanda": "bala",
-  "place": "siddhashrama",
-  "win": [
-   "yajna.win.1",
-   "yajna.win.2"
-  ],
-  "gentle": "protect",
-  "par": 600,
-  "paint": [
-   "siddhashrama"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 3
+  "type": "battle",
+  "title": "chapter.yajna.title",
+  "note": "note.yajna",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "27-30 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": true
  },
  {
   "id": "ahalya",
-  "n": "5",
-  "type": "scene",
   "kanda": "bala",
-  "place": "gautamaAshram",
+  "type": "scene",
+  "title": "chapter.ahalya.title",
+  "note": "note.ahalya",
   "win": [
    "ahalya.win.1"
   ],
-  "gentle": null,
-  "par": 200,
-  "paint": [
-   "gautamaAshram"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 4
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "48-49 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "bow",
-  "n": "6",
-  "type": "scene",
   "kanda": "bala",
-  "place": "mithila",
+  "type": "scene",
+  "title": "chapter.bow.title",
+  "note": "note.bow",
   "win": [
    "bow.win.1"
   ],
-  "gentle": null,
-  "par": 240,
-  "paint": [
-   "mithila"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 5
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "66-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "wedding",
-  "n": "7",
-  "type": "trial",
   "kanda": "bala",
-  "place": "mithila",
+  "type": "trial",
+  "title": "chapter.wedding.title",
+  "note": "note.wedding",
   "win": [
    "wedding.win.1"
   ],
-  "gentle": null,
-  "par": 330,
-  "paint": [
-   "mithila"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 6
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Bala",
+   "sargas": "69-77 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "kaikeyi",
-  "n": "8",
-  "type": "scene",
   "kanda": "ayodhya",
-  "place": "palace",
+  "type": "scene",
+  "title": "chapter.kaikeyi.title",
+  "note": "note.kaikeyi",
   "win": [
    "kaikeyi.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "palace"
-  ],
-  "kachni": [],
-  "unpaint": [
-   "ayodhya"
-  ],
-  "seq": 7
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "7-19 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "exile",
-  "n": "9",
-  "type": "scene",
   "kanda": "ayodhya",
-  "place": "tamasa",
+  "type": "scene",
+  "title": "chapter.exile.title",
+  "note": "note.exile",
   "win": [
    "exile.win.1"
   ],
-  "gentle": null,
-  "par": 330,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 8
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "20-46 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "boat",
-  "n": "10",
-  "type": "trial",
   "kanda": "ayodhya",
-  "place": "shringaverapura",
+  "type": "trial",
+  "title": "chapter.boat.title",
+  "note": "note.boat",
   "win": [
    "boat.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "shringaverapura"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 9
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "50-52 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "dasharatha",
-  "n": "11",
-  "type": "scene",
   "kanda": "ayodhya",
-  "place": "palace",
+  "type": "scene",
+  "title": "chapter.dasharatha.title",
+  "note": "note.dasharatha",
   "win": [
    "dasharatha.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 10
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "57-64 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "bharata",
-  "n": "12",
-  "type": "trial",
   "kanda": "ayodhya",
-  "place": "chitrakuta",
+  "type": "trial",
+  "title": "chapter.bharata.title",
+  "note": "note.bharata",
   "win": [
    "bharata.win.1"
   ],
-  "gentle": null,
-  "par": 420,
-  "paint": [
-   "chitrakuta"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 11
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Ayodhya",
+   "sargas": "67-119 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "viradha",
-  "n": "13",
-  "type": "battle",
   "kanda": "aranya",
-  "place": "dandaka",
-  "win": [
-   "viradha.win.1"
-  ],
-  "gentle": "ally",
-  "par": 600,
-  "paint": [
-   "dandaka"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 12
+  "type": "battle",
+  "title": "chapter.viradha.title",
+  "note": "note.viradha",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "1-15 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "shurpanakha",
-  "n": "14",
-  "type": "scene",
   "kanda": "aranya",
-  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.shurpanakha.title",
+  "note": "note.shurpanakha",
   "win": [
    "shurpanakha.win.1"
   ],
-  "gentle": null,
-  "par": 200,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 13
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "17-18 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "janasthana",
-  "n": "15",
-  "type": "battle",
   "kanda": "aranya",
-  "place": "janasthana",
-  "win": [
-   "janasthana.win.1",
-   "janasthana.win.2"
-  ],
-  "gentle": null,
-  "par": 780,
-  "paint": [
-   "janasthana"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 14
+  "type": "battle",
+  "title": "chapter.janasthana.title",
+  "note": "note.janasthana",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "19-31 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l1",
-  "n": "L1",
-  "type": "lanka",
   "kanda": "aranya",
-  "place": "ravanaCourt",
+  "type": "lanka",
+  "title": "chapter.l1.title",
+  "note": "note.l1",
   "win": [
    "l1.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [],
-  "kachni": [
-   "ravanaCourt"
-  ],
-  "unpaint": [],
-  "seq": 15
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "31-41 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "deer",
-  "n": "16",
-  "type": "battle",
   "kanda": "aranya",
-  "place": "panchavati",
-  "win": [
-   "deer.win.1"
-  ],
-  "gentle": null,
-  "par": 300,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 16
+  "type": "battle",
+  "title": "chapter.deer.title",
+  "note": "note.deer",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "42-44 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "rekha",
-  "n": "17",
-  "type": "scene",
   "kanda": "aranya",
-  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.rekha.title",
+  "note": "note.rekha",
   "win": [
    "rekha.win.1"
   ],
-  "gentle": null,
-  "par": 280,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [
-   "panchavati"
-  ],
-  "seq": 17
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "45-49 (verify)",
+   "later": true,
+   "laterNote": "The line itself is later tradition; the abduction is Valmiki.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "jatayu",
-  "n": "18",
-  "type": "battle",
   "kanda": "aranya",
-  "place": "southSky",
+  "type": "battle",
+  "title": "chapter.jatayu.title",
+  "note": "note.jatayu",
   "win": [
    "jatayu.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 18
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "50-51 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "jewels",
-  "n": "19",
-  "type": "trial",
   "kanda": "aranya",
-  "place": "southSky",
+  "type": "trial",
+  "title": "chapter.jewels.title",
+  "note": "note.jewels",
   "win": [
    "jewels.win.1"
   ],
-  "gentle": null,
-  "par": 150,
-  "paint": [
-   "southSky"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 19
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "54 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l2",
-  "n": "L2",
-  "type": "lanka",
   "kanda": "aranya",
-  "place": "ashokaGrove",
+  "type": "lanka",
+  "title": "chapter.l2.title",
+  "note": "note.l2",
   "win": [
    "l2.win.1"
   ],
-  "gentle": null,
-  "par": 220,
-  "paint": [],
-  "kachni": [
-   "ashokaGrove"
-  ],
-  "unpaint": [],
-  "seq": 20
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "55-56 (verify)",
+   "later": true,
+   "laterNote": "The curse is from the Uttara Kanda.",
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "hut",
-  "n": "20",
-  "type": "scene",
   "kanda": "aranya",
-  "place": "panchavati",
+  "type": "scene",
+  "title": "chapter.hut.title",
+  "note": "note.hut",
   "win": [
    "hut.win.1"
   ],
-  "gentle": null,
-  "par": 280,
-  "paint": [
-   "panchavati"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 21
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "57-68 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "shabari",
-  "n": "21",
-  "type": "trial",
   "kanda": "aranya",
-  "place": "pampa",
+  "type": "trial",
+  "title": "chapter.shabari.title",
+  "note": "note.shabari",
   "win": [
    "shabari.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "pampa"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 22
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Aranya",
+   "sargas": "69-75 (verify)",
+   "later": true,
+   "laterNote": "The tasting of the berries is later tradition.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "friends",
-  "n": "22",
-  "type": "scene",
   "kanda": "kishkindha",
-  "place": "rishyamukha",
+  "type": "scene",
+  "title": "chapter.friends.title",
+  "note": "note.friends",
   "win": [
    "friends.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [
-   "rishyamukha"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 23
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "1-8 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "sala",
-  "n": "23",
-  "type": "trial",
   "kanda": "kishkindha",
-  "place": "rishyamukha",
+  "type": "trial",
+  "title": "chapter.sala.title",
+  "note": "note.sala",
   "win": [
    "sala.win.1"
   ],
-  "gentle": null,
-  "par": 160,
-  "paint": [
-   "rishyamukha"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 24
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "11-12 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "vali",
-  "n": "24",
-  "type": "battle",
   "kanda": "kishkindha",
-  "place": "kishkindhaCity",
+  "type": "battle",
+  "title": "chapter.vali.title",
+  "note": "note.vali",
   "win": [
    "vali.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "kishkindhaCity"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 25
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "12-26 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "search",
-  "n": "25",
-  "type": "scene",
   "kanda": "kishkindha",
-  "place": "southShore",
+  "type": "scene",
+  "title": "chapter.search.title",
+  "note": "note.search",
   "win": [
    "search.win.1"
   ],
-  "gentle": null,
-  "par": 330,
-  "paint": [
-   "southShore"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 26
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Kishkindha",
+   "sargas": "27-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "leap",
-  "n": "26",
-  "type": "trial",
   "kanda": "sundara",
-  "place": "mahendra",
+  "type": "trial",
+  "title": "chapter.leap.title",
+  "note": "note.leap",
   "win": [
    "leap.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [
-   "mahendra"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 27
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "1 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "night",
-  "n": "27",
-  "type": "trial",
   "kanda": "sundara",
-  "place": "lankaGate",
+  "type": "trial",
+  "title": "chapter.night.title",
+  "note": "note.night",
   "win": [
    "night.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [],
-  "kachni": [
-   "lankaGate"
-  ],
-  "unpaint": [],
-  "seq": 28
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "2-13 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "ashoka",
-  "n": "28",
-  "type": "trial",
   "kanda": "sundara",
-  "place": "ashokaGrove",
+  "type": "trial",
+  "title": "chapter.ashoka.title",
+  "note": "note.ashoka",
   "win": [
    "ashoka.win.1"
   ],
-  "gentle": null,
-  "par": 330,
-  "paint": [
-   "ashokaGrove",
-   "ashokaGrove"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 29
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "14-40 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "court",
-  "n": "29",
-  "type": "scene",
   "kanda": "sundara",
-  "place": "ravanaCourt",
+  "type": "scene",
+  "title": "chapter.court.title",
+  "note": "note.court",
   "win": [
    "court.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [],
-  "kachni": [
-   "ravanaCourt"
-  ],
-  "unpaint": [],
-  "seq": 30
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "41-52 (verify)",
+   "later": true,
+   "laterNote": "The tail-seat is later tradition.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "burn",
-  "n": "30",
-  "type": "trial",
   "kanda": "sundara",
-  "place": "lankaRoofs",
+  "type": "trial",
+  "title": "chapter.burn.title",
+  "note": "note.burn",
   "win": [
    "burn.win.1"
   ],
-  "gentle": null,
-  "par": 330,
-  "paint": [],
-  "kachni": [
-   "lankaRoofs"
-  ],
-  "unpaint": [],
-  "seq": 31
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Sundara",
+   "sargas": "53-65 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l3",
-  "n": "L3",
-  "type": "lanka",
   "kanda": "yuddha",
-  "place": "ravanaCourt",
+  "type": "lanka",
+  "title": "chapter.l3.title",
+  "note": "note.l3",
   "win": [
    "l3.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [],
-  "kachni": [
-   "ravanaCourt"
-  ],
-  "unpaint": [],
-  "seq": 32
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "6-19 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "bridge",
-  "n": "31",
-  "type": "scene",
   "kanda": "yuddha",
-  "place": "bridge",
+  "type": "scene",
+  "title": "chapter.bridge.title",
+  "note": "note.bridge",
   "win": [
    "bridge.win.1"
   ],
-  "gentle": null,
-  "par": 280,
-  "paint": [
-   "bridge"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 33
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "21-22 (verify)",
+   "later": true,
+   "laterNote": "The squirrel is later tradition.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "angada",
-  "n": "32",
-  "type": "scene",
   "kanda": "yuddha",
-  "place": "lankaWalls",
+  "type": "scene",
+  "title": "chapter.angada.title",
+  "note": "note.angada",
   "win": [
    "angada.win.1"
   ],
-  "gentle": null,
-  "par": 240,
-  "paint": [],
-  "kachni": [
-   "lankaWalls"
-  ],
-  "unpaint": [],
-  "seq": 34
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "41 (verify)",
+   "later": true,
+   "laterNote": "The immovable foot is later tradition.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l4",
-  "n": "L4",
-  "type": "lanka",
   "kanda": "yuddha",
-  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l4.title",
+  "note": "note.l4",
   "win": [
    "l4.win.1"
   ],
-  "gentle": null,
-  "par": 280,
-  "paint": [],
-  "kachni": [
-   "lankaPalace"
-  ],
-  "unpaint": [],
-  "seq": 35
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "35, 59-65 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "kumbhakarna",
-  "n": "33",
-  "type": "battle",
   "kanda": "yuddha",
-  "place": "battlefield",
-  "win": [
-   "kumbha.win.1"
-  ],
-  "gentle": null,
-  "par": 600,
-  "paint": [
-   "battlefield"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 36
+  "type": "battle",
+  "title": "chapter.kumbhakarna.title",
+  "note": "note.kumbhakarna",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "65-67 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "indrajit",
-  "n": "34",
-  "type": "battle",
   "kanda": "yuddha",
-  "place": "nikumbhila",
-  "win": [
-   "indrajit.win.1"
-  ],
-  "gentle": null,
-  "par": 660,
-  "paint": [
-   "nikumbhila"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 37
+  "type": "battle",
+  "title": "chapter.indrajit.title",
+  "note": "note.indrajit",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "44-50, 84-91 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l5",
-  "n": "L5",
-  "type": "lanka",
   "kanda": "yuddha",
-  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l5.title",
+  "note": "note.l5",
   "win": [
    "l5.win.1"
   ],
-  "gentle": null,
-  "par": 220,
-  "paint": [],
-  "kachni": [
-   "lankaPalace"
-  ],
-  "unpaint": [],
-  "seq": 38
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "92-93 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "falls",
-  "n": "35",
-  "type": "trial",
   "kanda": "yuddha",
-  "place": "battlefield",
+  "type": "trial",
+  "title": "chapter.falls.title",
+  "note": "note.falls",
   "win": [
    "falls.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 39
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "100-101 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "sanjeevani",
-  "n": "36",
-  "type": "trial",
   "kanda": "yuddha",
-  "place": "himalaya",
+  "type": "trial",
+  "title": "chapter.sanjeevani.title",
+  "note": "note.sanjeevani",
   "win": [
    "sanjeevani.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "himalaya"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 40
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "74, 101 (verify)",
+   "later": true,
+   "laterNote": "The race against dawn is later tradition, used as a timer only.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "l6",
-  "n": "L6",
-  "type": "lanka",
   "kanda": "yuddha",
-  "place": "lankaPalace",
+  "type": "lanka",
+  "title": "chapter.l6.title",
+  "note": "note.l6",
   "win": [
    "l6.win.1"
   ],
-  "gentle": null,
-  "par": 260,
-  "paint": [],
-  "kachni": [
-   "lankaPalace"
-  ],
-  "unpaint": [],
-  "seq": 41
+  "source": {
+   "text": "Uttara Kanda",
+   "kanda": "Uttara",
+   "sargas": "10, 16 (verify)",
+   "later": true,
+   "laterNote": "The flashbacks are from the Uttara Kanda.",
+   "reviewedBy": null
+  },
+  "lanka": true,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "ravana",
-  "n": "37",
-  "type": "battle",
   "kanda": "yuddha",
-  "place": "battlefield",
-  "win": [
-   "ravana.win.1",
-   "ravana.win.2"
-  ],
-  "gentle": null,
-  "par": 780,
-  "paint": [
-   "battlefield"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 42
+  "type": "battle",
+  "title": "chapter.ravana.title",
+  "note": "note.ravana",
+  "win": [],
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "102-108 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "after",
-  "n": "38",
-  "type": "scene",
   "kanda": "yuddha",
-  "place": "battlefield",
+  "type": "scene",
+  "title": "chapter.after.title",
+  "note": "note.after",
   "win": [
    "after.win.1"
   ],
-  "gentle": null,
-  "par": 240,
-  "paint": [
-   "battlefield",
-   "lankaGate",
-   "ravanaCourt",
-   "lankaRoofs",
-   "lankaWalls",
-   "lankaPalace",
-   "battlefield"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 43
- },
- {
-  "id": "agni",
-  "n": "—",
-  "type": "scene",
-  "kanda": "yuddha",
-  "place": "battlefield",
-  "playable": false,
-  "win": [],
-  "paint": [],
-  "kachni": [],
-  "unpaint": [],
-  "placeholder": true
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "109-113 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "lighting",
-  "n": "39",
-  "type": "trial",
   "kanda": "yuddha",
-  "place": "ayodhyaHome",
+  "type": "trial",
+  "title": "chapter.lighting.title",
+  "note": "note.lighting",
   "win": [
    "lighting.win.1"
   ],
-  "gentle": null,
-  "par": 300,
-  "paint": [
-   "ayodhyaHome",
-   "sarayu",
-   "tatakaWaste",
-   "siddhashrama",
-   "gautamaAshram",
-   "mithila",
-   "palace",
-   "tamasa",
-   "shringaverapura",
-   "chitrakuta",
-   "dandaka",
-   "janasthana",
-   "southSky",
-   "pampa",
-   "rishyamukha",
-   "kishkindhaCity",
-   "southShore",
-   "mahendra",
-   "ashokaGrove",
-   "bridge",
-   "battlefield",
-   "nikumbhila",
-   "himalaya",
-   "ayodhyaHome"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 44
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "122-127 (verify)",
+   "later": true,
+   "laterNote": "The lamps are popular tradition.",
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  },
  {
   "id": "coronation",
-  "n": "40",
-  "type": "scene",
   "kanda": "yuddha",
-  "place": "ayodhyaHome",
+  "type": "scene",
+  "title": "chapter.coronation.title",
+  "note": "note.coronation",
   "win": [
    "coronation.win.1"
   ],
-  "gentle": null,
-  "par": 240,
-  "paint": [
-   "ayodhyaHome",
-   "ayodhya",
-   "panchavati",
-   "ayodhya",
-   "sarayu",
-   "tatakaWaste",
-   "siddhashrama",
-   "gautamaAshram",
-   "mithila",
-   "palace",
-   "tamasa",
-   "shringaverapura",
-   "chitrakuta",
-   "dandaka",
-   "panchavati",
-   "janasthana",
-   "southSky",
-   "pampa",
-   "rishyamukha",
-   "kishkindhaCity",
-   "southShore",
-   "mahendra",
-   "lankaGate",
-   "ashokaGrove",
-   "ravanaCourt",
-   "lankaRoofs",
-   "bridge",
-   "lankaWalls",
-   "battlefield",
-   "nikumbhila",
-   "lankaPalace",
-   "himalaya",
-   "ayodhyaHome"
-  ],
-  "kachni": [],
-  "unpaint": [],
-  "seq": 45
+  "source": {
+   "text": "Valmiki",
+   "kanda": "Yuddha",
+   "sargas": "128 (verify)",
+   "later": false,
+   "reviewedBy": null
+  },
+  "lanka": false,
+  "playable": true,
+  "ready": false
  }
 ]

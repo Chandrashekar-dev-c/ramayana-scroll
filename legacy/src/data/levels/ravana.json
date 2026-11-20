@@ -1,0 +1,96 @@
+{
+ "id": "ravana",
+ "backdrop": "battlefield",
+ "style": "bharni-earth",
+ "hero": {
+  "id": "rama",
+  "stage": "exile"
+ },
+ "astras": true,
+ "tips": {
+  "move": "ravana.tip",
+  "roll": "ravana.tip",
+  "jump": "ravana.tip"
+ },
+ "painted": true,
+ "allies": [],
+ "arenas": [
+  {
+   "left": -100,
+   "right": 1700,
+   "steps": [
+    {
+     "wave": "ravana.o1",
+     "groups": [
+      {
+       "type": "standard",
+       "n": 1,
+       "side": "right",
+       "gap": 1.5
+      },
+      {
+       "type": "shield",
+       "n": 2,
+       "side": "right",
+       "gap": 1.5
+      },
+      {
+       "type": "naga",
+       "n": 2,
+       "side": "right",
+       "gap": 1.5
+      }
+     ]
+    },
+    {
+     "wave": "ravana.o2",
+     "groups": [
+      {
+       "type": "elephant",
+       "n": 1,
+       "side": "both",
+       "gap": 2
+      },
+      {
+       "type": "archer",
+       "n": 2,
+       "side": "both",
+       "gap": 2
+      },
+      {
+       "type": "standard",
+       "n": 1,
+       "side": "both",
+       "gap": 2
+      },
+      {
+       "type": "brute",
+       "n": 1,
+       "side": "both",
+       "gap": 2
+      }
+     ]
+    },
+    {
+     "checkpoint": "ravana.cp"
+    }
+   ]
+  },
+  {
+   "left": 1950,
+   "right": 4000,
+   "steps": [
+    {
+     "boss": "ravana",
+     "intro": "ravana.bossIntro"
+    }
+   ]
+  }
+ ],
+ "title": "chapter.ravana.title",
+ "kandaTitle": "kanda.yuddha",
+ "end": [
+  "ravana.end.1",
+  "ravana.end.2"
+ ]
+}
