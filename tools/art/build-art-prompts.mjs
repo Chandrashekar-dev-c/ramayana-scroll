@@ -19,11 +19,11 @@ const characters = read('src/data/characters.json');
 const identity = read('tools/art/identity.json');
 const en = read('src/i18n/en.json');
 
-const MANIFEST_VERSION = 2; // v2: pilot fixes (texture, no ground line, Ravana heads, single weapon)
+const MANIFEST_VERSION = 3; // v3: clean art (finish added in code), Ravana drawn with one head + extraHead sprites
 
 // ---------------------------------------------------------------- shared style (never edit per asset)
-const STYLE = 'STYLE: match the attached reference painting exactly in surface and finish. Traditional Mithila (Madhubani) painting from Bihar, in the manner of old village wall paintings, hand-painted with natural pigments: lampblack, indigo, turmeric yellow, saffron, madder red, leaf green, ochre and terracotta. Thick black double outlines on every shape with a thin coloured band between the two lines. Solid pigment fills with visible hand-painted brush and pigment grain, and dense fine line-hatching, dots, small triangles and lotus or fish motifs covering every garment area. No smooth shading, no gradients, no glow, no 3D rendering. Not clean vector art, not clip art, not a cartoon. Figures with body, head and feet in strict side profile, never turned toward the viewer, one large almond-shaped eye, stylised elongated bodies, ornamented clothing. Reverent, dignified, storybook clarity. No text, no letters, no signature, no watermark.';
-const NEGATIVE = 'clean vector art, clip art, flat digital illustration, thin uniform lines, photorealistic, 3D render, anime, cartoon, film still, modern digital art, gradient shading, glow, lens flare, blurry, extra fingers, extra limbs, fused hands, deformed face, both eyes visible in profile, text, letters, watermark, signature, cropped figure, cast shadow on background, floor, ground line, scenery, front-facing face, duplicated weapon';
+const STYLE = 'STYLE: follow the attached reference painting for drawing style, proportions, ornament and colour. Traditional Mithila (Madhubani) painting from Bihar, in the manner of old village wall paintings, hand-painted with natural pigments: lampblack, indigo, turmeric yellow, saffron, madder red, leaf green, ochre and terracotta. Thick black double outlines on every shape with a thin coloured band between the two lines. Clean, even pigment fills (the painted grain is added later by the game, so keep surfaces clean), with dense fine line-hatching, dots, small triangles and lotus or fish motifs covering every garment area. No smooth shading, no gradients, no glow, no 3D rendering, not a cartoon. Figures with body, head and feet in strict side profile, never turned toward the viewer, one large almond-shaped eye, stylised elongated bodies, ornamented clothing. Reverent, dignified, storybook clarity. No text, no letters, no signature, no watermark.';
+const NEGATIVE = 'thin uniform lines, paper texture, grain, noise, photorealistic, 3D render, anime, cartoon, film still, modern digital art, gradient shading, glow, lens flare, blurry, extra fingers, extra limbs, fused hands, deformed face, both eyes visible in profile, text, letters, watermark, signature, cropped figure, cast shadow on background, floor, ground line, scenery, front-facing face, duplicated weapon';
 const BG = 'Background: one flat, perfectly uniform solid magenta (#FF00FF) colour filling the whole image, no texture, no floor, no shadow, nothing else.';
 
 // ---------------------------------------------------------------- vocabulary: data codes -> words
@@ -43,7 +43,7 @@ const BODY = {
   monkey: 'a vanara: an upright monkey-person with a monkey face, fur and a long curling tail, standing on two legs',
   bear: 'an upright bear-person with a bear face and shaggy fur, standing on two legs',
   bird: 'a giant bird drawn in Mithila style, with large patterned wings, standing on its two feet',
-  tenHeads: 'a figure with exactly ten crowned heads (count: ten, never eight or nine) in one row side by side across the shoulders, the central head largest, every one of the ten heads in strict side profile facing right, none facing the viewer',
+  tenHeads: 'a human figure drawn with ONLY ONE crowned head on a normal neck (his other nine heads are added separately later, so draw exactly one head)',
 };
 const STANCE = { upright: 'standing upright', forward: 'leaning slightly forward, alert', bowed: 'head gently bowed', heavy: 'heavy, weighty posture', proud: 'chest out, proud and commanding', stooped: 'stooped with age', anxious: 'tense and anxious' };
 const WALK = { steady: 'walking steadily', stride: 'walking with a long purposeful stride', glide: 'gliding gracefully', lumber: 'lumbering with a heavy step', proud: 'striding proudly', stoop: 'walking slowly, stooped', hop: 'hopping forward', anxious: 'hurrying anxiously' };
@@ -55,7 +55,7 @@ const HEAD = {
   tallCrown: 'tall ornate golden crown', tallestCrown: 'very tall magnificent royal crown', lowCrown: 'low golden crown', veil: 'a veil over the hair',
   jataKnot: 'matted hair tied in a topknot', tallJata: 'matted hair piled high in an ascetic topknot', heavyCrown: 'heavy jewelled crown',
   queenCrown: "queen's crown", bun: 'hair in a bun', mattedCrown: 'matted hair piled into a crown', topknot: 'hair in a topknot',
-  headband: 'a simple headband', none: 'bare head', tenCrowns: 'a golden crown on each of the ten heads', pearlCrown: 'crown strung with pearls',
+  headband: 'a simple headband', none: 'bare head', tenCrowns: 'tall ornate golden crown', pearlCrown: 'crown strung with pearls',
   horns2: 'two horns', horns1: 'a single horn', spikeCrown: 'spiked dark crown', flowerBun: 'hair in a bun decorated with forest flowers',
   tuftedEars: 'tufted ears', wildHair: 'wild long black hair flying out', turban: 'a simple turban', threeHeads: 'three heads side by side',
   headless: 'no head: a face set in the middle of the belly', serpentHood: 'a hood of serpent heads rising behind the head', shellCrown: 'crown of shells and coral',
@@ -100,7 +100,7 @@ const RIG = {
   monkey: ['head', 'torso', 'upperArmNear', 'foreArmNear', 'upperArmFar', 'foreArmFar', 'waist', 'thighNear', 'shinNear', 'thighFar', 'shinFar', 'tailBase', 'tailTip'],
   bear: ['head', 'torso', 'upperArmNear', 'foreArmNear', 'upperArmFar', 'foreArmFar', 'waist', 'thighNear', 'shinNear', 'thighFar', 'shinFar'],
   bird: ['head', 'neck', 'body', 'wingNear', 'wingFar', 'tail', 'legNear', 'legFar'],
-  tenHeads: ['headCentre', 'headsNear', 'headsFar', 'torso', 'upperArmNear', 'foreArmNear', 'upperArmFar', 'foreArmFar', 'waist', 'thighNear', 'shinNear', 'thighFar', 'shinFar'],
+  tenHeads: ['head', 'torso', 'upperArmNear', 'foreArmNear', 'upperArmFar', 'foreArmFar', 'waist', 'thighNear', 'shinNear', 'thighFar', 'shinFar'],
 };
 const RASAS = {
   shanta: 'serene and calm, eye gently open, relaxed brow, lips closed',
@@ -192,7 +192,7 @@ for (const base of characters) {
         : `Character design sheet of ${label}, the same figure three times side by side: (1) ${word(STANCE, c.build.stance)}, at rest, (2) ${word(WALK, c.walk)}, mid-step, (3) a characteristic action pose. ${subject} ${facing} ${frame} ${BG}\n${STYLE}`,
     });
     add({
-      id: `char.${base.id}.${stage}.rig`, kind: 'rig', ...meta, file: `${dir}/rig.png`, aspectRatio: rigKey === 'bird' || rigKey === 'tenHeads' ? '1:1' : '3:4', size: '2K',
+      id: `char.${base.id}.${stage}.rig`, kind: 'rig', ...meta, file: `${dir}/rig.png`, aspectRatio: rigKey === 'bird' ? '1:1' : '3:4', size: '2K',
       dependsOn: [sheetId], references: [sheetId], rigParts: RIG[rigKey],
       prompt: `${label}, exactly as in the attached character sheet, one single figure in a neutral rig pose for cut-out animation: strict side profile facing RIGHT, ${rigKey === 'bird' ? 'wings half open and held away from the body, legs straight, tail spread' : 'arms hanging slightly away from the body, legs slightly apart, every limb fully visible'}, nothing overlapping, held props removed. The figure fills the frame from near the top edge to an invisible baseline near the bottom edge (do not draw any ground line), centred. ${BG}\n${STYLE}`,
     });
@@ -200,8 +200,19 @@ for (const base of characters) {
       add({
         id: `char.${base.id}.${stage}.head.${rasa}`, kind: 'head', rasa, ...meta, file: `${dir}/head-${rasa}.png`, aspectRatio: '1:1', size: '2K',
         dependsOn: [sheetId], references: [sheetId],
-        prompt: `${c.body === 'tenHeads' ? 'The central head and crown' : 'Head and headdress'} of ${label}, exactly as in the attached character sheet, strict side profile facing RIGHT, from the top of the headdress to the base of the neck, centred, the neck base touching the bottom centre of the image, same size and position in every expression. Expression: ${RASAS[rasa]}. The emotion is shown through the eye, brow and mouth, in the restrained style of traditional Mithila painting. ${BG}\n${STYLE}`,
+        prompt: `Head and headdress of ${label}, exactly as in the attached character sheet, strict side profile facing RIGHT, from the top of the headdress to the base of the neck, centred, the neck base touching the bottom centre of the image, same size and position in every expression. Expression: ${RASAS[rasa]}. The emotion is shown through the eye, brow and mouth, in the restrained style of traditional Mithila painting. ${BG}\n${STYLE}`,
       });
+    }
+    if (c.body === 'tenHeads') {
+      // The other nine heads are separate sprites; code arranges exactly ten in a fan and can cut
+      // and regrow each one (see src/data/heads.json). Three variants give the ring some variety.
+      for (const [v, mood] of Object.entries({ a: 'stern and calm', b: 'snarling, fangs bared', c: 'laughing scornfully, mouth open' })) {
+        add({
+          id: `char.${base.id}.${stage}.extraHead.${v}`, kind: 'extraHead', variant: v, ...meta, file: `${dir}/extra-head-${v}.png`, aspectRatio: '1:1', size: '2K',
+          dependsOn: [sheetId], references: [sheetId],
+          prompt: `One extra head of ${label} for his ring of ten heads: the same face, skin, crown and ornaments as the head in the attached character sheet, strict side profile facing RIGHT, from the top of the crown to a short neck stub, the neck stub touching the bottom centre of the image, no shoulders or body. Expression: ${mood}. ${BG}\n${STYLE}`,
+        });
+      }
     }
     if (c.signature && SIGNATURE[c.signature] && !['beak', 'garudaBeak', 'longArms', 'wingless', 'deerEars', 'necklace', 'armlets', 'brooch', 'boneNecklace', 'foldedHands', 'foldedQueen'].includes(c.signature)) {
       add({
@@ -222,7 +233,7 @@ const out = {
   style: STYLE,
   negativePrompt: NEGATIVE,
   styleReferences: { 'style:reference-frame': 'art/reference/tataka-frame.png' },
-  order: ['sheet', 'rig', 'head', 'prop'],
+  order: ['sheet', 'rig', 'head', 'extraHead', 'prop'],
   counts: { total: assets.length, ...counts },
   assets,
 };

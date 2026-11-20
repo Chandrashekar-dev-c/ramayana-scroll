@@ -5,7 +5,7 @@
 //   GEMINI_API_KEY=... node tools/art/run-gemini.mjs --kind sheet            # step 1: sheets
 //   open art/review/index.html, then pick the best candidate of each job:
 //   node tools/art/pick.mjs char.rama.prince.sheet 3                          # step 2: choose
-//   GEMINI_API_KEY=... node tools/art/run-gemini.mjs --kind rig,head,prop    # step 3: the rest
+//   GEMINI_API_KEY=... node tools/art/run-gemini.mjs --kind rig,head,extraHead,prop    # step 3: the rest
 //
 // Options:  --only rama,sita    limit to some characters
 //           --candidates 4      images per job (default 4)

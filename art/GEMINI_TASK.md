@@ -4,14 +4,14 @@ You are generating the character art for a game. Work through `prompts.jsonl` (o
 
 ## Inputs
 
-- `prompts.jsonl` — 549 image jobs for 70 characters. The same data with shared settings is in `prompts.json`.
+- `prompts.jsonl` — 552 image jobs for 70 characters. The same data with shared settings is in `prompts.json`.
 - `reference/tataka-frame.png` — the style reference. Attach it to every job whose `references` contains `style:reference-frame`.
 
 ## Order (important)
 
 1. Generate every `kind: "sheet"` job first.
 2. **Stop and wait for my approval of the sheets.** Every other image copies the approved sheet, so a wrong sheet would spoil all of them.
-3. After approval, generate `rig`, then `head`, then `prop` jobs. For each, attach the image named in its `references` (the approved sheet for that character and stage), so the character looks identical.
+3. After approval, generate `rig`, then `head`, then `extraHead`, then `prop` jobs. For each, attach the image named in its `references` (the approved sheet for that character and stage), so the character looks identical.
 
 ## For every job
 
@@ -25,10 +25,10 @@ You are generating the character art for a game. Work through `prompts.jsonl` (o
 1. Five fingers on every hand; correct number of arms, legs and heads; no fused or extra limbs.
 2. Matches the description: skin colour, garment colour, headdress, forehead mark, held object.
 3. Facing **right**, strict side profile, one eye visible.
-4. Whole figure inside the frame: top of the headdress near the top edge, feet near the bottom edge with **no drawn ground line**. Heads: neck base at the bottom centre.
+4. Whole figure inside the frame: top of the headdress near the top edge, feet near the bottom edge. Heads: neck base at the bottom centre. (A thin drawn ground line is tolerated; the build removes it.)
 5. Background is one flat, uniform magenta (#FF00FF) everywhere: no floor, shadow, texture or scenery.
-6. Matches the reference painting's finish: thick double outlines, hand-painted pigment grain and dense patterning. Reject clean vector or clip-art looks, smooth shading, text or watermarks.
-7. Each held object appears once per figure (no duplicated swords or bows); Ravana has exactly ten heads, all in profile.
+6. Matches the reference painting's drawing style: thick double outlines and dense patterning, with clean, even fills (the game adds the painted grain later). Reject smooth shading, gradients, text or watermarks.
+7. Each held object appears once per figure (no duplicated swords or maces). Ravana is drawn with exactly ONE head; his other heads are separate `extraHead` images.
 8. Deities and revered figures (Rama, Sita, Lakshmana, Hanuman, the sages) look dignified, never comic or distorted.
 
 If a job fails all 4 candidates, try 4 more; if it still fails, mark it `failed` with a note and move on.

@@ -23,6 +23,7 @@ tools/art/identity.json   ─┴─► tools/art/build-art-prompts.mjs ─► ar
 | `tools/art/identity.json` | Who each character is, and their tier |
 | `tools/art/build-art-prompts.mjs` | Builds the manifest from the game data |
 | `tools/art/run-gemini.mjs` | Runs jobs through the Gemini API: 4 candidates per job into `art/review/` |
+| `tools/art/clean.mjs` | Keys magenta to transparency and strips drawn ground lines: `art/raw/` to `art/clean/` |
 | `tools/art/pick.mjs` | Picks the best candidate into the game's path (or rejects all to regenerate) |
 | `art/review/index.html` | Local contact sheet of candidates with the rejection checklist |
 
@@ -33,9 +34,14 @@ tools/art/identity.json   ─┴─► tools/art/build-art-prompts.mjs ─► ar
 | `sheet` | 3 poses of the same figure (tier C: 3 different individuals) | Locks the design; reference for everything else |
 | `rig` | 1 neutral pose, limbs apart | Cut into the parts listed in `rigParts` for puppet animation |
 | `head` | 9 rasas (tier A), 3 (tier B: shanta, raudra, karuna), none (tier C) | Swappable expression heads |
+| `extraHead` | Ravana only: 3 variants of a single extra head | Code arranges exactly ten heads in a fan; each can be cut and regrow (`src/data/heads.json`) |
 | `prop` | The held object, alone | A separate sprite attached to the hand |
 
 Stages come from `stages` in `characters.json` (Rama prince, exile, king; Sita bride, exile, queen; and so on). A stage marked `ghost` (Ahalya unseen) is a code effect, not art.
+
+## The painted finish is added in code
+
+The art is generated clean on purpose. The game applies one shared paint-finish filter at runtime: paper and pigment grain, slight colour mottling and warmth, matching `art/reference/tataka-frame.png`. Every asset gets an identical finish, cut-out parts stay easy to separate, and the look can be tuned without regenerating anything.
 
 ## Contract with the game code
 
@@ -53,7 +59,8 @@ These rules are in `conventions` in the manifest and in every prompt. The game r
 1. `GEMINI_API_KEY=... node tools/art/run-gemini.mjs --kind sheet`
 2. Open `art/review/index.html` and look at every candidate yourself.
 3. `node tools/art/pick.mjs <job id> <n>`, or `... <job id> reject "reason"` to regenerate.
-4. `node tools/art/run-gemini.mjs --kind rig,head,prop`; each job waits until its sheet is picked.
+4. `node tools/art/run-gemini.mjs --kind rig,head,extraHead,prop`; each job waits until its sheet is picked.
+5. `node tools/art/clean.mjs` writes transparent, game-ready copies to `art/clean/`.
 
 ## Keeping it future-proof
 
