@@ -5,7 +5,7 @@
 import { app, makeCanvas } from '../core/app.js';
 import { noise, hashStr } from '../core/rng.js';
 import { PAL } from './palette.js';
-import { line, shape, hatch, rectPts, ellipsePts, dots } from './ink.js';
+import { line, shape, hatch, dryHatch, rectPts, ellipsePts, dots } from './ink.js';
 import * as M from './motifs.js';
 import { pattern } from './patterns.js';
 import { GROUND } from './layout.js';
@@ -27,7 +27,7 @@ export const BACKDROPS = {
   hermitage: { ground: 'earth', sky: ['dots', 'flower'], layers: [['hut', 700, 0, 160, { off: 320 }], T('ashoka', 330, 220), T('bare', 500, 170, { off: 160 })] },
   forest: { ground: 'earth', sky: ['bird', 'leaf', 'dots'], layers: [T('sala', 170, 300), T('banyan', 330, 270, { off: 80 }), ['bush', 150, 0, 36, { off: 30 }], ['anthill', 620, 0, 50, { off: 300 }]] },
   deepForest: { ground: 'earth', sky: ['leaf', 'dots'], layers: [T('sala', 130, 340), T('banyan', 260, 300, { off: 60 }), T('bamboo', 340, 240, { off: 170 }), ['bush', 120, 0, 40, { off: 30 }]] },
-  panchavati: { ground: 'earth', sky: ['bird', 'flower', 'leaf'], band: 'river', layers: [T('banyan', 420, 280), T('ashoka', 300, 210, { off: 150 }), ['bush', 170, 0, 34, { off: 40 }]] },
+  panchavati: { ground: 'earth', brush: true, sky: ['bird', 'flower', 'leaf'], band: 'river', layers: [T('banyan', 420, 280), T('ashoka', 300, 210, { off: 150 }), ['bush', 170, 0, 34, { off: 40 }]] },
   chitrakuta: { ground: 'earth', sky: ['bird', 'flower'], layers: [['hill', 430, 0, 250, {}], T('mango', 300, 200, { off: 100 }), T('sala', 380, 170, { off: 230 })] },
   ridge: { ground: 'rock', sky: ['bird', 'dots'], layers: [['hill', 380, 0, 210, { fill: PAL.stone }], ['rock', 240, 0, 80, { off: 70 }], T('bare', 430, 160, { off: 180 })] },
   kishkindha: { ground: 'rock', sky: ['bird', 'leaf', 'dots'], layers: [['hill', 340, 0, 280, { fill: PAL.ochre }], ['cave', 680, 0, 130, { off: 200 }], T('palm', 410, 230, { off: 90 }), ['rock', 300, 0, 60, { off: 150 }]] },
@@ -263,7 +263,9 @@ function paintGround(ctx, def, x0, o, seed) {
     }
     line(ctx, [[0, GROUND + 76], [CHUNK, GROUND + 76]], { w: 1, color: c, seed: 4, amp: 0.4, flat: true });
   } else if (!o.colour) {
-    hatch(ctx, rectPts(0, GROUND + 34, CHUNK, 720 - GROUND), { color: second, spacing: kind === 'rock' ? 9 : 13, angle: kind === 'sand' ? 0.12 : 0.9, seed: seed + Math.floor(x0 / CHUNK), w: 0.7 });
+    const hp = { color: second, spacing: kind === 'rock' ? 9 : 13, angle: kind === 'sand' ? 0.12 : 0.9, seed: seed + Math.floor(x0 / CHUNK), w: 0.7 };
+    if (def.brush) dryHatch(ctx, rectPts(0, GROUND + 34, CHUNK, 720 - GROUND), { ...hp, spacing: 11 });
+    else hatch(ctx, rectPts(0, GROUND + 34, CHUNK, 720 - GROUND), hp);
   }
   void band;
   // the ground line and the vine band beneath it (Rule G)
@@ -307,10 +309,30 @@ function paintItem(ctx, kind, x, y, size, k, o, lo) {
   }
 }
 
+// A brushed wash: three or four translucent passes, each with a dry, uneven top and
+// bottom edge, so the colour sits on the paper unevenly the way a brush leaves it.
+function seedOf(x0) { return Math.floor(x0 / CHUNK) * 13 + 7; }
+function brushWash(ctx, x0, top, h, colour, seed) {
+  ctx.save();
+  for (let pass = 0; pass < 3; pass++) {
+    const dy = pass * 4 - 4;
+    ctx.globalAlpha = 0.16 + pass * 0.03;
+    ctx.fillStyle = colour;
+    ctx.beginPath();
+    ctx.moveTo(0, top + dy);
+    for (let x = 0; x <= CHUNK; x += 32) ctx.lineTo(x, top + dy + noise(seed + pass, Math.round(x / 32)) * 3);
+    for (let x = CHUNK; x >= 0; x -= 32) ctx.lineTo(x, top + h + dy * 0.5 + noise(seed + 9 + pass, Math.round(x / 32)) * 3);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 function paintBand(ctx, def, x0, o) {
   if (!def.band) return;
   const y0 = GROUND - (def.band === 'sea' ? 70 : 46), y1 = GROUND - 8;
-  if (o.colour) { ctx.fillStyle = PAL.river; ctx.globalAlpha = 0.4; ctx.fillRect(0, y0 - 8, CHUNK, y1 - y0 + 12); ctx.globalAlpha = 1; }
+  if (o.colour && def.brush) brushWash(ctx, x0, y0 - 8, y1 - y0 + 12, PAL.river, seedOf(x0));
+  else if (o.colour) { ctx.fillStyle = PAL.river; ctx.globalAlpha = 0.4; ctx.fillRect(0, y0 - 8, CHUNK, y1 - y0 + 12); ctx.globalAlpha = 1; }
   ctx.save(); ctx.translate(-x0, 0);
   M.waves(ctx, x0, x0 + CHUNK, y0, y1, { colour: o.colour, night: o.night, gap: 13, w: 1.1 });
   if (def.band === 'lake') for (let x = Math.floor(x0 / 150) * 150; x < x0 + CHUNK + 150; x += 150) M.lotusBud(ctx, x + 40, y1 - 6, 13, { colour: o.colour, seed: x | 0, lineColor: o.night ? PAL.nightLine : PAL.black });

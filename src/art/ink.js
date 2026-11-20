@@ -111,6 +111,45 @@ export function hatch(ctx, pts, o = {}) {
   ctx.restore();
 }
 
+/**
+ * Dry-brush hatching: each hatch line is laid down as a few bristle strokes with
+ * uneven pressure, and the brush lifts partway along, so the lines break and thin
+ * the way a loaded brush does on paper. Same clip and angle as `hatch`.
+ */
+export function dryHatch(ctx, pts, o = {}) {
+  const seed = o.seed ?? 3, sp = o.spacing ?? 9, ang = o.angle ?? 0.9, w = o.w ?? 0.8;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const [x, y] of pts) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = Math.hypot(x1 - x0, y1 - y0) / 2;
+  const cs = Math.cos(ang), sn = Math.sin(ang);
+  const at = (t, d) => [cx + cs * t - sn * d, cy + sn * t + cs * d];
+  ctx.save();
+  trace(ctx, pts, true, o.smooth); ctx.clip();
+  ctx.strokeStyle = o.color || PAL.black; ctx.lineCap = 'round';
+  let i = 0;
+  for (let d = -r; d <= r; d += sp, i++) {
+    const bristles = 2 + (i % 2);
+    for (let b = 0; b < bristles; b++) {
+      const off = (b - (bristles - 1) / 2) * 1.5 + noise(seed, i * 7 + b) * sp * 0.2;
+      const start = -r + ((noise(seed, i * 5 + b) + 1) / 2) * r * 0.5;
+      const end = r - ((noise(seed, i * 9 + b) + 1) / 2) * r * 0.45;
+      const lift = (start + end) / 2 + noise(seed, i * 3 + b) * r * 0.2;
+      const gap = r * 0.05;
+      const parts = [[start, lift - gap], [lift + gap, end]];
+      for (let s = 0; s < parts.length; s++) {
+        const [a, z] = parts[s];
+        if (z <= a) continue;
+        // pressure: the stroke swells in the middle and thins at both ends
+        const press = 0.55 + (noise(seed, i * 13 + b * 2 + s) + 1) * 0.25;
+        ctx.lineWidth = w * press;
+        const [ax, ay] = at(a, d + off), [bx, by] = at(z, d + off);
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+      }
+    }
+  }
+  ctx.restore();
+}
+
 export function ellipsePts(cx, cy, rx, ry, n = 14, a0 = 0, a1 = Math.PI * 2) {
   const pts = [];
   const full = Math.abs(a1 - a0) >= Math.PI * 2 - 1e-6;
