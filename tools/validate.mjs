@@ -23,7 +23,7 @@ for (const f of fs.readdirSync(path.join(ROOT, 'src/data/levels'))) {
 for (const c of J('src/data/chapters.json')) {
   for (const k of [c.title, c.note]) if (!(k in en)) problems.push(`${c.id}: missing text ${k}`);
   if (!c.source || !c.source.text) problems.push(`${c.id}: no source`);
-  if (c.ready && !fs.readFileSync(path.join(ROOT, 'content/ink', c.id + '.ink'), 'utf8').includes('Staged for the Ramlila stage')) problems.push(`${c.id}: marked ready but not staged`);
+  if (c.ready && !fs.readFileSync(path.join(ROOT, 'content/ink', c.id + '.ink'), 'utf8').includes('Staged for the')) problems.push(`${c.id}: marked ready but not staged`);
 }
 if (problems.length) { console.error('data problems:\n  ' + problems.join('\n  ')); process.exit(1); }
 console.log('data: ok');

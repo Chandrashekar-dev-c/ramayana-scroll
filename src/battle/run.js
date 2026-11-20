@@ -31,7 +31,7 @@ export class BattleRun {
 
   start(cp) {
     this.b = createBattle(this.level, { kanda: this.o.kanda, seed: app.seed, checkpoint: cp, hp: cp ? cp.hp : undefined, boon: cp ? cp.boon : 0 });
-    this.view = new BattleView(this.b);
+    this.view = new BattleView(this.b, { night: this.o.night });
     this.shake = { x: 0, y: 0 };
     this.lastMood = null;
   }
@@ -70,7 +70,9 @@ export class BattleRun {
     const b = this.b;
     if (b.shakeT > 0 && b.shakeA > 0) { this.shake.x = (Math.random() - 0.5) * b.shakeA * 2.2; this.shake.y = (Math.random() - 0.5) * b.shakeA * 2.2; } else { this.shake.x = 0; this.shake.y = 0; }
     this.view.sync(this.shake);
-    renderBattleInk(ctx, b, this.shake);
+    // keep the ink layer under the same crash zoom as the painted picture
+    const v = this.view.view;
+    renderBattleInk(ctx, b, this.shake, { x: v.pivot.x, y: v.pivot.y, z: v.scale.x });
     // dim any touch button with an enemy behind it
     if (app.isTouch && app.frame % 6 === 0) {
       const rects = [];

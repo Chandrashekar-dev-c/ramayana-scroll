@@ -9,7 +9,7 @@ import { PAL } from '../art/palette.js';
 import { line, plate } from '../art/ink.js';
 import * as M from '../art/motifs.js';
 import { gfx, setScene } from '../gfx/gfx.js';
-import { StageView } from '../stage/stage.js';
+import { SceneView } from '../stage/scene.js';
 import { Director, loadStory } from './director.js';
 import { CHAPTERS, chapterById, nextChapter } from './chapters.js';
 import { BattleRun } from '../battle/run.js';
@@ -33,18 +33,18 @@ class ChapterMode {
   label() { return t(this.sub ? 'aria.battle' : 'aria.scene'); }
 
   enter() {
-    this.stage = new StageView();
+    this.stage = new SceneView();
     setScene(this.stage.view);
     this.stage.setTitle(t(this.ch.title), t('kanda.' + this.ch.kanda));
     this.stage.curtainOpen = 0;
     this.director = new Director(this.ch, this.json, this.stage, {
-      battle: (level) => this.battle(level),
+      battle: (level, o) => this.battle(level, o),
       astra: (symbol) => this.traceAstra(symbol),
     });
     setMood(this.ch.lanka ? 'lanka' : this.ch.kanda, 'calm');
     bus.emit('chapter:start', this.ch);
     this.ui();
-    // let the title hang on the curtain a moment, then play
+    // let the title rest on the folded page a moment, then play
     this.director.wait(1.4).then(() => this.director.run()).then(() => { if (!this.director.cancelled) this.finish(); }).catch((e) => { console.error(e); });
   }
 
@@ -61,7 +61,7 @@ class ChapterMode {
   }
 
   // ---------------------------------------------------------------- the open field
-  async battle(levelId) {
+  async battle(levelId, o = {}) {
     if (!save.data.difficulty) {
       const opts = ['story', 'normal', 'hard'];
       const i = await choose(t('diff.ask'), opts.map((d) => ({ label: t('diff.' + d), small: t('diff.' + d + '.sub'), main: d === 'normal' })));
@@ -69,7 +69,7 @@ class ChapterMode {
     }
     await fadeOut(380);
     if (this.left) return;
-    const run = await BattleRun.create(levelId, { kanda: this.ch.lanka ? 'lanka' : this.ch.kanda });
+    const run = await BattleRun.create(levelId, { kanda: this.ch.lanka ? 'lanka' : this.ch.kanda, night: !!o.night });
     if (this.left) { fadeIn(300); return; }
     this.sub = run;
     setScene(run.view.view, { vignette: 0.32, grain: 0.22 });
@@ -95,8 +95,11 @@ class ChapterMode {
       this.astra = { symbol, pts: [], t: 0, tracing: false, tries: 0, done: (strength) => {
         this.astra = null; cue('astra');
         this.stage.festive = 20;
-        const { x, y } = { x: app.W / 2, y: 330 };
-        this.stage.sparks.burst(x, y, 60, { speed: 520, life: 1.2, size: 9, color: 0xffd36a, blend: 'add', drag: 0.5, g: 120 });
+        const { x, y } = { x: app.W / 2, y: 340 };
+        this.stage.sparks.burst(x, y, 40, { speed: 420, life: 1, size: 8, color: 0xffd36a, blend: 'add', drag: 0.5, g: 80 });
+        // the sign's light flows into the prince, and gold leaf rises behind him
+        const rama = this.stage.actors.get('rama');
+        if (this.stage.bestow) { this.stage.bestow(x, y, rama, 80); this.stage.gild(rama, 3); }
         setTimeout(() => { this.stage.festive = 1; }, 1800);
         resolve(strength);
       } };
@@ -122,12 +125,18 @@ class ChapterMode {
     const a = this.astra, cx = app.W / 2, cy = 340, size = 140;
     plate(ctx, t('astra.first') + '\n' + t(app.isTouch ? 'hint.astraTrace' : 'hint.astraTraceMouse'), cx, 136, { size: 21, gap: PAL.indigo });
     const pts = symbolPoints(a.symbol, cx, cy, size);
-    ctx.save(); ctx.globalAlpha = 0.85;
-    line(ctx, pts, { w: 18, color: PAL.black, smooth: false, seed: 1, amp: 0, flat: true });
-    ctx.setLineDash([2, 18]); line(ctx, pts, { w: 11, color: PAL.turmeric, seed: 1, amp: 0, flat: true }); ctx.setLineDash([]);
+    // the sign in gold leaf: a dark bed, a gold line that shimmers along its length
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const trace = (w, style) => { ctx.strokeStyle = style; ctx.lineWidth = w; ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); };
+    ctx.globalAlpha = 0.55; trace(22, '#2a1810');
+    const g = ctx.createLinearGradient(cx - size, cy - size, cx + size, cy + size);
+    const sh = (a.t * 0.35) % 1;
+    g.addColorStop(0, '#9a6a12'); g.addColorStop(Math.max(0, sh - 0.12), '#c8921f'); g.addColorStop(sh, '#fff1b8'); g.addColorStop(Math.min(1, sh + 0.12), '#e6ac17'); g.addColorStop(1, '#9a6a12');
+    ctx.globalAlpha = 0.9; trace(10, g);
+    for (let i = 0; i < pts.length; i += 4) { const tw = Math.sin(a.t * 4 + i) * 0.5 + 0.5; ctx.globalAlpha = 0.4 + tw * 0.6; ctx.fillStyle = '#fff6d0'; ctx.beginPath(); ctx.arc(pts[i][0], pts[i][1], 1.5 + tw * 1.8, 0, 7); ctx.fill(); }
     ctx.restore();
     M.usableRing(ctx, pts[0][0], pts[0][1], 24, a.t);
-    if (a.pts.length > 1) { line(ctx, a.pts, { w: 10, color: PAL.black, seed: 2, amp: 0, flat: true }); line(ctx, a.pts, { w: 6, color: PAL.turmeric, seed: 2, amp: 0, flat: true }); }
+    if (a.pts.length > 1) { line(ctx, a.pts, { w: 12, color: '#2a1810', seed: 2, amp: 0, flat: true }); line(ctx, a.pts, { w: 7, color: '#fff1b8', seed: 2, amp: 0, flat: true }); }
     if (app.isTouch && !a.tracing && a.pts.length === 0) drawHand(ctx, pts[0][0] + 10, pts[0][1] + 52, a.t);
   }
 
@@ -155,6 +164,7 @@ class ChapterMode {
   async finish() {
     if (this.left) return;
     hideLine();
+    await this.director.pullBack();
     await this.director.curtain('close');
     topbar(null); touchControls(null);
     save.data.done[this.ch.id] = true;

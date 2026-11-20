@@ -9,15 +9,30 @@ import { WALK } from '../art/figures.js';
 import { drawGrowingTree } from '../art/backdrops.js';
 import { BackdropView, NearView, PropView, Painted, Particles, Glow } from '../gfx/world.js';
 import { LiveFigure } from '../gfx/live.js';
-import { softDisc } from '../gfx/tex.js';
+import { softDisc, retain } from '../gfx/tex.js';
+import { makeCanvas } from '../core/app.js';
 import { heroLook } from './hero.js';
 import { enemyLook } from './enemies.js';
 import { bossLook } from './bosses.js';
 
+/** Carved gouge marks for the woodcut beat. */
+let gouges = null;
+function gougeCanvas() {
+  if (gouges) return gouges;
+  const c = makeCanvas(1200, 360), x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, 1200, 360);
+  x.strokeStyle = '#1d1613'; x.lineCap = 'round';
+  let s = 5; const r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+  for (let i = 0; i < 520; i++) { const y = r() * 360, x0 = r() * 1200, l = 20 + r() * 90; x.lineWidth = 0.6 + r() * 1.6; x.globalAlpha = 0.25 + r() * 0.4; x.beginPath(); x.moveTo(x0, y); x.quadraticCurveTo(x0 + l / 2, y - 3 + r() * 6, x0 + l, y + (r() - 0.5) * 8); x.stroke(); }
+  gouges = c; return c;
+}
+const solids = new Map();
+function solidCanvas(color) { if (!solids.has(color)) { const c = makeCanvas(8, 8), x = c.getContext('2d'); x.fillStyle = color; x.fillRect(0, 0, 8, 8); solids.set(color, c); } return solids.get(color); }
+
 const hex = (c) => (typeof c === 'number' ? c : parseInt(String(c).replace('#', ''), 16));
 
 export class BattleView {
-  constructor(b) {
+  constructor(b, opts = {}) {
     this.b = b;
     this.view = new Container();
     const L = b.level;
@@ -36,10 +51,25 @@ export class BattleView {
     this.flashes = [];
     // the dusk of Tataka's second phase, and other moods
     this.grade = new ColorMatrixFilter();
-    this.view.filters = [this.grade];
-    this.gradeK = 0;
+    // a woodcut frame: for a beat on a heavy blow the picture becomes carved black and paper
+    this.woodcut = new ColorMatrixFilter(); this.woodcut.enabled = false;
+    // a near-binary cut: dark and mid tones go to ink, light tones to warm paper
+    this.woodcut.matrix = [2.8, 2.8, 2.8, 0, -3.6, 2.8, 2.8, 2.8, 0, -3.66, 2.5, 2.5, 2.5, 0, -3.38, 0, 0, 0, 1, 0];
+    this.view.filters = [this.grade, this.woodcut];
+    this.gradeK = 0; this.cutT = 0;
+    this.gouge = new Sprite(retain(gougeCanvas())); this.gouge.blendMode = 'multiply'; this.gouge.alpha = 0; this.gouge.width = 2400; this.gouge.height = 720;
+    // night: the scene is lit by its fires (darkness multiplied, light added back)
+    this.night = !!(b.level.nightLook || opts.night);
+    if (this.night) {
+      this.darkFill = new Sprite(retain(solidCanvas('#2a1a22'))); this.darkFill.blendMode = 'multiply'; this.darkFill.alpha = 0.72; this.darkFill.width = 4000; this.darkFill.height = 720;
+      this.view.addChild(this.darkFill);
+      this.nightLights = new Container(); this.view.addChild(this.nightLights);
+      this.heroLight = new Glow(0, 0, 240, 0xffc070, { alpha: 0.32, flicker: 0.05 }); this.nightLights.addChild(this.heroLight.view);
+    }
+    this.view.addChild(this.gouge);
     // the altar or anything else the battle protects
     if (b.protect) { this.protect = new PropView(b.protect.kind || 'altar', {}); this.protect.view.position.set(b.protect.x, GROUND); this.groundFx.addChild(this.protect.view); this.protectGlow = new Glow(b.protect.x, GROUND - 60, 160, 0xffa040, { alpha: 0.4 }); this.light.addChild(this.protectGlow.view); }
+    if (this.night && this.protectGlow) { this.protectGlow.r = 420; this.protectGlow.base = 0.6; this.nightLights.addChild(this.protectGlow.view); }
     // regrowing trees, each with its own small canvas while it grows
     if (b.regrow) this.trees = b.regrow.map((tr) => ({ tr, p: null, last: -1 }));
     // hook the model's feedback into GPU effects
@@ -52,6 +82,11 @@ export class BattleView {
       bus.on('cue', (c) => { if (c === 'jump' || c === 'roll') this.dust(b.hero.x, GROUND, c === 'roll' ? 10 : 6); }),
       bus.on('hero:shoot', (s) => { if (s.full) this.flash(b.hero.x + b.hero.facing * 40, b.hero.y - 118, 0xffd27a, 70, 0.18); }),
       bus.on('checkpoint', () => this.petalRain(b.hero.x, 22)),
+      bus.on('cue', (c) => { if (c === 'stompLand') this.cut(0.12); }),
+      bus.on('boss:intro', () => { this.cut(0.1); this.crash(0.14, 'boss'); }),
+      // the demon falls: a carved frame, the camera crashes in, and the whole fight holds still
+      bus.on('boss:die', () => { this.cut(0.2); this.crash(0.2, 'boss'); b.hitStop = Math.max(b.hitStop || 0, 0.55); }),
+      bus.on('arrow:hit', (d) => { if (d.head) this.crash(0.035, 'hero'); }),
     ];
     this.lastHeroGround = true;
   }
@@ -68,10 +103,21 @@ export class BattleView {
     const s = new Sprite(softDisc()); s.anchor.set(0.5); s.blendMode = 'add'; s.tint = color; s.position.set(x, y); s.width = s.height = r * 2;
     this.light.addChild(s); this.flashes.push({ s, t: 0, dur, r });
   }
+  /** A crash zoom: the camera lunges toward someone on a hit, then settles back. */
+  crash(k, on) {
+    if (app.reducedMotion) return;
+    const b = this.b, q = on === 'boss' ? b.bosses[0] : null;
+    const x = q ? q.x : b.hero.x, y = q ? q.y - (q.U || 160) * 0.6 : b.hero.y - 100;
+    this.punch = { k: Math.max(k, this.punch ? this.punch.k : 0), x, y };
+  }
+  /** Hold a woodcut frame for a moment. */
+  cut(s = 0.08) { if (!this.b.level.noCut) this.cutT = Math.max(this.cutT, s); }
+
   onKill(d) {
     const e = this.b.enemies.find((q) => q.type === d.type && q.dying && !q._fxDone) || null;
     if (!e) return;
     e._fxDone = true;
+    this.cut(d.how === 'head' ? 0.1 : 0.07);
     // a demon falls: ink dust and a scatter of lampblack and petals
     this.fx.burst(e.x, e.y - 70, 14, { speed: 260, life: 0.7, size: 9, color: 0x26382c, g: 500, drag: 0.5, spread: Math.PI * 2 });
     this.fx.burst(e.x, e.y - 90, 8, { speed: 200, life: 1.2, size: 10, color: 0xe58a1f, g: 160, drag: 0.6, spin: 6, spread: Math.PI * 1.2, angle: -Math.PI / 2 });
@@ -105,7 +151,7 @@ export class BattleView {
   }
   place(f, x, y, pose, look = {}) {
     // battle poses change fast: a short blend keeps every action readable
-    const quick = pose.startsWith('walk') || pose.startsWith('fly') || pose.startsWith('charge') ? 0.07 : pose === 'hurt' || pose === 'kick' ? 0.04 : pose === 'shoot' ? 0.03 : 0.1;
+    const quick = pose.startsWith('walk') || pose.startsWith('fly') || pose.startsWith('charge') ? 0.12 : pose === 'hurt' || pose === 'kick' ? 0.05 : pose === 'shoot' ? 0.04 : 0.16;
     if (f.to !== pose) f.setPose(pose, quick);
     f.x = x + (look.dx || 0); f.y = y + (look.sink || 0);
     f.rot = look.rot || 0; f.alpha = look.alpha ?? 1; f.drain = look.drain || 0; f.pivotK = look.pivot ?? 0.3;
@@ -129,7 +175,7 @@ export class BattleView {
     // allies
     for (const a of b.allies) {
       const f = this.figFor(a, a.spec);
-      const pose = a.shootAnim > 0 ? 'shoot' : a.walkT > 0 ? WALK[Math.floor(a.walkT * 9) % 4] : 'stand';
+      const pose = a.shootAnim > 0 ? 'shoot' : a.walkT > 0 ? WALK[Math.floor(a.walkT * 6) % 4] : 'stand';
       this.place(f, a.x, GROUND, pose, { facing: a.facing === 1 ? h.facing : a.facing, z: 1 });
     }
     if (b.protected) { const f = this.figFor(b.protected, b.protected.spec); this.place(f, b.protected.x, GROUND, b.protected.hurt ? 'hurt' : 'stand', { facing: h.x > b.protected.x ? 1 : -1 }); }
@@ -152,7 +198,7 @@ export class BattleView {
     for (const [k, f] of this.live) if (!f.seen) { f.destroy(); this.live.delete(k); }
     for (const f of this.live.values()) f.update(dt);
     // the protected altar
-    if (this.protect) { this.protect.set({ state: b.protect.hp / b.protect.max }); this.protect.update(dt); this.protectGlow.base = 0.15 + 0.35 * (b.protect.hp / b.protect.max); this.protectGlow.sync(b.time); }
+    if (this.protect) { this.protect.set({ state: b.protect.hp / b.protect.max }); this.protect.update(dt); this.protectGlow.base = (this.night ? 0.25 : 0.15) + (this.night ? 0.45 : 0.35) * (b.protect.hp / b.protect.max); this.protectGlow.sync(b.time); }
     // regrowing trees
     if (this.trees) for (const t of this.trees) {
       const g = Math.round(t.tr.grow * 20) / 20;
@@ -174,6 +220,21 @@ export class BattleView {
       this.backdrop.setHeal(b.healX, r);
       if (b.healT > b.healDur && !this.healed) { this.healed = true; this.backdrop.clearHeal(); this.backdrop.setColour(true); this.near.setColour(true); this.petalRain(b.hero.x, 50); }
     }
+    // the crash zoom settles back
+    if (this.punch) { this.punch.k *= Math.pow(0.012, dt); if (this.punch.k < 0.002) this.punch = null; }
+    // the woodcut beat
+    if (this.cutT > 0) this.cutT -= dt;
+    this.woodcut.enabled = this.cutT > 0; this.gouge.alpha = this.cutT > 0 ? 0.55 : 0;
+    // watercolour blooms bleed out along the edge of the healing
+    if (b.healT >= 0 && !this.healed && b.healT < b.healDur) {
+      const r = b.healT * b.healSpeed / b.zoom;
+      for (let i = 0; i < 3; i++) {
+        const a = Math.PI + Math.random() * Math.PI, x = b.healX / b.zoom + Math.cos(a) * r, y = GROUND - 40 - Math.random() * 300;
+        this.fx.emit({ x, y, vx: 0, vy: 0, life: 2.2, size: 70 + Math.random() * 90, grow: 0.8, color: [0x8cc56f, 0xf2c86a, 0xd9788d, 0x7fb3c8][Math.floor(Math.random() * 4)], alpha: 0.18, drag: 0, tex: softDisc() });
+      }
+    }
+    // night light: the hero carries a little warmth; the altar burns brightest
+    if (this.night) { this.heroLight.x = b.hero.x; this.heroLight.y = b.hero.y - 90; this.heroLight.sync(b.time); }
     // dusk
     const wantGrade = b.mood === 'dusk' ? 1 : 0;
     this.gradeK += (wantGrade - this.gradeK) * Math.min(1, dt * 1.5);
@@ -202,6 +263,12 @@ export class BattleView {
     this.near.view.position.set(-b.camX * z + sx, sy);
     this.world.scale.set(z);
     this.world.position.set(-b.camX * z + sx, GROUND * (1 - z) + sy);
+    if (this.nightLights) { this.nightLights.scale.set(z); this.nightLights.position.copyFrom(this.world.position); }
+    // the crash zoom works on the whole picture, about the point that was hit
+    if (this.punch) {
+      const px = (this.punch.x - b.camX) * z + sx, py = GROUND + (this.punch.y - GROUND) * z + sy;
+      this.view.pivot.set(px, py); this.view.position.set(px, py); this.view.scale.set(1 + this.punch.k);
+    } else if (this.view.scale.x !== 1) { this.view.pivot.set(0, 0); this.view.position.set(0, 0); this.view.scale.set(1); }
     for (const f of this.live.values()) f.sync();
     for (const fl of this.flashes) void fl;
   }

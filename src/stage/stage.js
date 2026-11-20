@@ -271,6 +271,15 @@ export class StageView {
     this.placeCurtain();
   }
 
+  // the director's coordinate calls (shared with the scene)
+  x(at) { return stageX(at); }
+  offstage(side) { const b = stageBox(); return side === 'left' ? b.pl - 110 : b.pr + 110; }
+  get floor() { return FLOOR; }
+  get act() { return ACT; }
+  setLook() {}
+  setLamps() {}
+  mantra() {}
+
   // ------------------------------------------------------------ the painted cloth
   /** Hang a backdrop on the cloth. */
   setCloth(id, style = 'bharni-bright', colour = true) {

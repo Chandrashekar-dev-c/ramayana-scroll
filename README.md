@@ -32,9 +32,22 @@ npm run migrate    # (one-time) rebuilds content/ink from the old scripts; keeps
 - **Live figures** (`src/gfx/live.js`). Poses are joint angles (`src/art/poses.js`); a figure
   blends between them, breathes, blinks and nods while it speaks. Each in-between is painted
   once and cached as a texture.
-- **The Ramlila stage** (`src/stage/stage.js`): canopy, posts with banana leaves and marigold,
-  a painted cloth that rolls up and down between scenes, a curtain, oil lamps along the edge,
-  torches, drifting petals, and the audience in silhouette.
+- **The painted scene** (`src/stage/scene.js`) takes the best technique from several traditions,
+  each where it serves the moment:
+  - *Mithila* line and figures: the character designs, double outline and patterns
+  - a *Pahari miniature* folio: the page frame with its floral margin and red rules
+  - *pop-up paper book* depth: the place is three cut-paper planes that rise from the fold and
+    slide at different speeds as the eye moves
+  - *shadow-theatre* light and motion: brightness is the number of lamps lit, never a blue
+    filter; figures hold 12 fps drawings, tremble slightly in the puppeteer's hand, and freeze
+    on a drum stroke
+  - *watercolour* washes for dawn, river and distance; *firefly* points of gold for mantras;
+    *gilded illumination* (a gold-leaf nimbus) for the divine
+  - a director's camera: crash zooms on percussion (`>> strike`), slow pans for journeys
+    (`>> pan`), and a pull back into the dark at a chapter's end
+  - in battle, a *woodcut* frame (carved black on paper) for a beat on heavy blows and the
+    fall of a boss
+  The old Ramlila stage (`src/stage/stage.js`) is kept for reference.
 - **Chapters are Ink screenplays** (`content/ink/*.ink`), compiled at build time:
 
   ```

@@ -220,7 +220,7 @@ export function bossPose(boss) {
     case 'charging': return Math.floor(boss.walkT * 10) % 2 ? 'charge' : 'charge2';
     case 'weak': return boss.move === 'stomp' || boss.move === 'vanish' ? 'raise' : 'hurt';
     case 'recover': return boss.t < 0.25 && (boss.move === 'swipe' || boss.move === 'swing' || boss.move === 'stomp') ? 'swing1' : 'stand';
-    case 'idle': return boss.def.flies ? (Math.floor(boss.t * 6) % 2 ? 'fly' : 'fly2') : boss.walkT > 0 ? WALK[Math.floor(boss.walkT * 5) % 4] : 'stand';
+    case 'idle': return boss.def.flies ? (Math.floor(boss.t * 6) % 2 ? 'fly' : 'fly2') : boss.walkT > 0 ? WALK[Math.floor(boss.walkT * 3.5) % 4] : 'stand';
     default: return 'stand';
   }
 }

@@ -2,14 +2,15 @@
 //   plain line         narration
 //   NAME: line         dialogue (NAME is a character id in capitals)
 //   >> verb args       a stage direction:
-//      scene <backdrop> [clear] [style=..]   hang a painted cloth (rolls up and down if the curtain is open)
+//      scene <backdrop> [clear] [style=..]   set the place (the pop-up page folds and rises again if it is open)
 //      cast <id[:stage]> at <0..1> [pose= face=left y= scale=]   place someone before the curtain opens
 //      enter <id[:stage]> from left|right to <0..1> [in <s>] [nowait] [pose=]
 //      exit <id> to left|right [in <s>] [nowait]
 //      move <id> to <0..1> [in <s>] [nowait] [keepface]
 //      pose <id> <pose>         face <id> left|right        set <id> key=value ...
 //      prop <key> <name> at <0..1> [state= front=true y=]   prop <key> remove
-//      curtain open|close       light dim|full|night        wait <s>      shake <n>
+//      curtain open|close       raise or fold the page       light dim|full|night   wait <s>   shake <n>
+//      look folio|evening|dawn|dusk|night   lamps <n>   mantra <from> <to,to>   (gold lights travel)
 //      sound <cue>              music <mood> [kanda]        title <text> [/ sub]
 //      prompt <text>            (the question shown with the next choices)
 //      battle <level>           (leave the stage for the open field; returns when won)
@@ -25,7 +26,6 @@ import { save } from '../core/save.js';
 import { t, has } from '../core/i18n.js';
 import { showLine, tickLine, lineTyping, finishTyping, hideLine, choose, toast } from '../ui/dom.js';
 import { cue, setMood } from '../audio/music.js';
-import { stageX, stageBox, FLOOR, ACT } from '../stage/stage.js';
 import chars from '../data/characters.json';
 
 const stories = import.meta.glob('./compiled/*.json');
@@ -144,17 +144,23 @@ export class Director {
   tween(target, vars) {
     if (this.cancelled) return Promise.resolve();
     return new Promise((resolve) => {
-      const tw = gsap.to(target, { ...vars, onComplete: () => { this.tweens.delete(tw); resolve(); } });
+      // a zero-length tween completes inside gsap.to, before `tw` is assigned, so the
+      // handler must not depend on it
+      let tw = null, finished = false;
+      tw = gsap.to(target, { ...vars, onComplete: () => { finished = true; if (tw) this.tweens.delete(tw); resolve(); } });
+      if (finished) return;
       this.tweens.add(tw);
       if (this.skipping) tw.progress(1);
     });
   }
   wait(s) { return this.tween({ k: 0 }, { k: 1, duration: s, ease: 'none' }); }
 
-  offstage(side) { const b = stageBox(); return side === 'left' ? b.pl - 110 : b.pr + 110; }
+  // positions come from whatever the chapter is shown on (the scene or the old stage)
+  offstage(side) { return this.stage.offstage(side); }
   actorAt(id) { return this.stage.actors.get(id); }
 
   verb(verb, w, kv, json, st) {
+    const stageX = (at) => st.x(at), FLOOR = st.floor, ACT = st.act;
     switch (verb) {
       case 'together': this.group = []; return null;
       case 'scene': return this.scene(w[0], w.includes('clear'), kv);
@@ -213,12 +219,25 @@ export class Director {
       }
       case 'curtain': return this.curtain(w[0] || 'open');
       case 'light': return this.light(w[0]);
+      case 'look': {
+        // on a folded page the light is simply set; on an open one it changes slowly, lamp by lamp
+        const from = st.dark; st.setLook(w[0]); const to = st.dark;
+        if (st.curtainOpen <= 0 || this.skipping) return null;
+        st.dark = from;
+        return this.tween(st, { dark: to, duration: 1.6, ease: 'sine.inOut' });
+      }
+      case 'lamps': st.setLamps(+w[0] || 0); return null;
+      case 'strike': return this.strike(w[0], w[1], kv);
+      case 'freeze': { const a = this.actorAt(w[0]); if (a && a.freeze) a.freeze(w[1] || a.hold); return null; }
+      case 'pan': return this.pan(w, kv);
+      case 'gild': { const a = this.actorAt(w[0]); if (a && st.gild && !this.skipping) { st.gild(a, kv.hold ?? 3.5); cue('chime'); } return null; }
+      case 'mantra': { const from = this.actorAt(w[0]); const tos = (w[1] || '').split(',').map((k) => this.actorAt(k)).filter(Boolean); if (!this.skipping) { st.mantra(from, tos); cue('chime'); } return this.wait(this.skipping ? 0 : 2.6); }
       case 'wait': return this.wait(+w[0] || 1);
       case 'shake': { if (!this.skipping) this.shake(+w[0] || 3); return null; }
       case 'sound': cue(w[0]); return null;
       case 'title': { const [a, b] = [w.join(' ').split(' / ')[0], w.join(' ').split(' / ')[1]]; this.overlay = { kind: 'title', title: a, sub: b || '', t: 0, dur: 2.6 }; return this.wait(2.6); }
       case 'prompt': this.prompt = w.join(' '); return null;
-      case 'battle': return this.battle(w[0]);
+      case 'battle': return this.battle(w[0], { night: w.includes('night') });
       case 'astra': return this.host.astra(w[0]);
       case 'wash': { this.stage.festive = 14; cue('wash'); return this.wait(1.6).then(() => { this.stage.festive = 1; }); }
       case 'play': case 'heads': { toast('This scene’s game arrives in a later phase', 2.4); return null; }
@@ -231,8 +250,11 @@ export class Director {
     const st = this.stage;
     if (this.cancelled) return;
     if (st.curtainOpen <= 0 || this.skipping) {
+      // while the page is folded, set the place and leave it folded: it rises with the cast
+      // already standing in it, when the first line is spoken
       if (clear) { st.clearActors(); st.clearProps(); }
-      st.setCloth(id, kv.style || 'bharni-bright', kv.colour !== false); st.clothDrop = 1;
+      st.setCloth(id, kv.style || 'bharni-bright', kv.colour !== false);
+      if (this.skipping && st.curtainOpen > 0) st.clothDrop = 1;
       return;
     }
     // the cloth rolls up, the stagehands change it, and it rolls down again
@@ -247,6 +269,42 @@ export class Director {
     await this.tween(st, { clothDrop: 1, duration: 1.2, ease: 'bounce.out' });
   }
 
+  /** A drum stroke: the camera crashes in on someone, they snap into a pose and hold it. */
+  strike(id, pose, kv = {}) {
+    const st = this.stage, a = this.actorAt(id);
+    if (!a || !('zoom' in st)) { cue('drum'); return null; }
+    if (pose) a.freeze(pose);
+    cue(kv.sound || 'drum');
+    if (this.skipping || app.reducedMotion) return null;
+    st.zoomX = a.x - (st.cam + st.panX); st.zoomY = a.y - 120 * (st.act || 1);
+    st.tremor = 0;
+    const amount = kv.zoom || 1.2;
+    return this.tween(st, { zoom: amount, duration: 0.09, ease: 'power4.out' })
+      .then(() => this.wait(kv.hold ?? 0.75))
+      .then(() => { st.tremor = 1; return this.tween(st, { zoom: 1, duration: 1.1, ease: 'sine.inOut' }); });
+  }
+
+  /** A journey: the eye travels slowly across the painted place. pan to <0..1> [in s] | pan home */
+  pan(w, kv) {
+    const st = this.stage;
+    if (!('panX' in st)) return null;
+    const home = w[0] === 'home';
+    const at = home ? 0.5 : +w[w.indexOf('to') + 1];
+    const target = home ? 0 : (st.x(at) - st.x(0.5)) * 0.9;
+    const dur = w.includes('in') ? +w[w.indexOf('in') + 1] * TEMPO : 4 * TEMPO;
+    st.panning = true; st.camTo = 0;
+    const p = this.tween(st, { panX: target, duration: dur, ease: 'sine.inOut' }).then(() => { st.panning = !home; });
+    return w.includes('nowait') ? null : p;
+  }
+
+  /** The end of a chapter: the picture recedes into the dark before the page folds. */
+  pullBack() {
+    const st = this.stage;
+    if (!('recede' in st) || this.cancelled) return Promise.resolve();
+    st.speaker(null);
+    return this.tween(st, { recede: 1, duration: 2.2, ease: 'sine.inOut' });
+  }
+
   curtain(which) {
     const st = this.stage, open = which === 'open';
     if ((open && st.curtainOpen >= 1) || (!open && st.curtainOpen <= 0)) return Promise.resolve();
@@ -257,7 +315,9 @@ export class Director {
   light(which) {
     const st = this.stage;
     const dark = which === 'dim' ? 0.45 : which === 'night' ? 0.85 : 0;
-    return Promise.all([this.tween(st, { dark, duration: 1.4, ease: 'sine.inOut' }), this.tween(st.wash, { base: which === 'night' ? 0.22 : 0.15, duration: 1.4 })]);
+    const tw = [this.tween(st, { dark, duration: 1.4, ease: 'sine.inOut' })];
+    if (st.wash && 'base' in st.wash) tw.push(this.tween(st.wash, { base: which === 'night' ? 0.22 : 0.15, duration: 1.4 }));
+    return Promise.all(tw);
   }
 
   shake(n) {
@@ -267,13 +327,13 @@ export class Director {
     tl.to(v, { x: ox, y: oy, duration: 0.05 });
   }
 
-  async battle(level) {
+  async battle(level, o = {}) {
     await this.flushGroup();
     hideLine(); this.stage.speaker(null);
     this.skipping = false;
     await this.curtain('close');
     if (this.cancelled) return;
-    await this.host.battle(level);
+    await this.host.battle(level, o);
     if (this.cancelled) return;
     await this.curtain('open');
   }

@@ -380,7 +380,13 @@ function paintMithilaTree(ctx, x, y, h, colour, night, seed) {
   ctx.restore();
 }
 
-function paintChunk(id, style, colour, index, regrow, density = '') {
+/**
+ * part: '' (everything, one flat plane), or one plane of a pop-up scene:
+ * 'back' (wall, sky, distance), 'mid' (trees, buildings, the place's details) or 'front' (the ground).
+ * The mid and front planes are painted on transparent canvases.
+ */
+function paintChunk(id, style, colour, index, regrow, density = '', part = '') {
+  const want = (p) => !part || part === p;
   const def = BACKDROPS[id] || BACKDROPS.road;
   const dp = DENSITY[density] || null;
   const s = Math.min(1.5, Math.max(0.5, app.scale));
@@ -390,10 +396,11 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   const x0 = index * CHUNK;
   const seed = hashStr(id) + index * 31;
   const o = { colour, night: !!def.night, style, far: dp ? dp.far : null, tree: dp ? dp.tree : 1 };
+  const look = lookOf(id);
+  if (want('back')) {
   // the wall itself: a mottled wash that differs slightly every time
   ctx.fillStyle = def.night ? PAL.night : PAL.cream;
   ctx.fillRect(0, 0, CHUNK, 720);
-  const look = lookOf(id);
   // the sky pattern: faint by default, but a bold kachni tapestry when a density is set
   ctx.save(); ctx.globalAlpha = dp ? (def.night ? dp.sky + 0.06 : dp.sky) : (def.night ? 0.16 : colour ? 0.13 : 0.1);
   ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, dp ? dp.skyScale : 1.5);
@@ -406,6 +413,8 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   ctx.restore();
   paintFar(ctx, def, look, x0, o, seed);
   paintBand(ctx, def, x0, o);
+  }
+  if (want('mid')) {
   const skip = new Set(regrow && look.regrow ? look.regrow.map((r) => r[0]) : []);
   for (let li = 0; li < def.layers.length; li++) {
     if (skip.has(li)) continue;
@@ -421,14 +430,15 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
     }
   }
   paintExtras(ctx, look, x0, o, seed);
-  paintGround(ctx, def, x0, o, seed);
+  }
+  if (want('front')) paintGround(ctx, def, x0, o, seed);
   return cv;
 }
 
-export function backdropChunk(id, style, colour, index, regrow = false, density = '') {
-  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}`;
+export function backdropChunk(id, style, colour, index, regrow = false, density = '', part = '') {
+  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}|${part}`;
   let c = cache.get(key);
-  if (!c) { c = paintChunk(id, style, colour, index, regrow, density); cache.set(key, c); if (cache.size > 24) cache.delete(cache.keys().next().value); }
+  if (!c) { c = paintChunk(id, style, colour, index, regrow, density, part); cache.set(key, c); if (cache.size > 24) cache.delete(cache.keys().next().value); }
   return c;
 }
 

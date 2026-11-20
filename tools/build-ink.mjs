@@ -14,7 +14,7 @@ const levels = new Set(fs.readdirSync(path.join(ROOT, 'src/data/levels')).map((f
 const src = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const poses = new Set([...src('src/art/poses.js').matchAll(/^\s{2}(\w+): \{ /gm)].map((m) => m[1]));
 const backdrops = new Set([...src('src/art/backdrops.js').matchAll(/^\s{2}(\w+): \{ ground/gm)].map((m) => m[1]));
-const VERBS = new Set(['scene', 'music', 'cast', 'enter', 'exit', 'move', 'pose', 'face', 'set', 'prop', 'sound', 'wait', 'shake', 'wash', 'title', 'prompt', 'battle', 'astra', 'play', 'heads', 'curtain', 'light', 'clear', 'speak', 'together', 'cloth']);
+const VERBS = new Set(['scene', 'music', 'cast', 'enter', 'exit', 'move', 'pose', 'face', 'set', 'prop', 'sound', 'wait', 'shake', 'wash', 'title', 'prompt', 'battle', 'astra', 'play', 'heads', 'curtain', 'light', 'clear', 'speak', 'together', 'cloth', 'strike', 'freeze', 'pan', 'gild', 'look', 'lamps', 'mantra']);
 const STAGED = new Set(['sage', 'sarayu', 'tataka', 'yajna']); // fully checked; the rest still carry old directions
 
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -45,7 +45,7 @@ for (const f of fs.readdirSync(IN).filter((x) => x.endsWith('.ink')).sort()) {
       const where = `${f}:${i + 1}`;
       if (!VERBS.has(verb)) problems.push(`${where} unknown direction "${verb}"`);
       if (['cast', 'enter'].includes(verb) && !chars.has(args[0].split(':')[0])) problems.push(`${where} unknown character ${args[0]}`);
-      if (verb === 'pose' && !poses.has(args[1])) problems.push(`${where} unknown pose ${args[1]}`);
+      if ((verb === 'pose' || ((verb === 'strike' || verb === 'freeze') && args[1] && !args[1].includes('='))) && !poses.has(args[1])) problems.push(`${where} unknown pose ${args[1]}`);
       if (verb === 'scene' && !backdrops.has(args[0])) problems.push(`${where} unknown backdrop ${args[0]}`);
       if (verb === 'battle' && !levels.has(args[0])) problems.push(`${where} unknown level ${args[0]}`);
       for (const a of args) { const kv = a.match(/^pose=(\w+)$/); if (kv && !poses.has(kv[1])) problems.push(`${where} unknown pose ${kv[1]}`); }

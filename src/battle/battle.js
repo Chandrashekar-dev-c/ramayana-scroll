@@ -505,11 +505,13 @@ function updateFx(b, dt) {
 // The painted world and the figures are drawn on the GPU by battle/view.js. This draws
 // what sits on top as ink: warnings on the ground, targets, arrows, shots, small marks,
 // and the HUD. Same camera as the GPU view.
-export function renderBattleInk(ctx, b, shake) {
+export function renderBattleInk(ctx, b, shake, lens) {
   const z = b.zoom;
   ctx.save();
   if (shake) ctx.translate(shake.x, shake.y);
   ctx.save();
+  // a crash zoom moves the world, never the HUD
+  if (lens && lens.z !== 1) { ctx.translate(lens.x, lens.y); ctx.scale(lens.z, lens.z); ctx.translate(-lens.x, -lens.y); }
   ctx.translate(0, GROUND); ctx.scale(z, z); ctx.translate(-b.camX, -GROUND);
   drawZones(ctx, b);
   for (const c of b.checkpoints) { const k = Math.min(1, c.t / 0.8); M.lotusBud(ctx, c.x, GROUND - 2, 18 * k + 2, { wilt: 0, seed: 3 }); line(ctx, [[c.x, GROUND], [c.x, GROUND - 4]], { w: 2 }); }

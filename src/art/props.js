@@ -223,6 +223,15 @@ export function drawProp(ctx, name, x, y, o = {}) {
     case 'fireRite': { S([[-46, 0], [-36, -24], [36, -24], [46, 0]], { fill: PAL.black, gap: PAL.gold }); M.flame(ctx, 0, -24, 30 + (o.state || 0) * 70, { t, seed: 8, tongues: 5 }); break; }
     case 'pot': M.pot(ctx, 0, 0, 60, { colour: m === 'colour', night: o.night }); break;
     case 'bigPot': M.pot(ctx, 0, 0, 96, { colour: m === 'colour', night: o.night, fill: PAL.gold }); break;
+    case 'lampStand': {
+      // a tall brass deepa stambha: a round foot, a ringed stem, an oil cup with a living flame
+      S([[-22, 0], [22, 0], [14, -10], [-14, -10]], { fill: PAL.gold, gap: PAL.brown });
+      for (let y = -10; y > -84; y -= 12) S(rectPts(-4.5, y - 12, 9, 12), { fill: PAL.gold, seed: y });
+      S([[-8, -30], [8, -30], [6, -36], [-6, -36]], { fill: PAL.gold, seed: 7 });
+      S([[-16, -84], [16, -84], [10, -94], [-10, -94]], { fill: PAL.gold, gap: PAL.brown, seed: 9 });
+      if (m === 'colour') M.flame(ctx, 0, -94, 22, { t, seed: 5 });
+      break;
+    }
     case 'lamp': M.diya(ctx, 0, -8, 12, o.state !== 0, t, { colour: true, night: o.night }); break;
     case 'grassBlade': L([[0, 0], [4, -26], [10, -40]], { w: 2, color: m === 'colour' ? PAL.leaf : c, smooth: true }); break;
     case 'ring': { S(ellipsePts(0, -14, 12, 12, 10), { fill: PAL.gold, gap: PAL.madder, smooth: true }); break; }
