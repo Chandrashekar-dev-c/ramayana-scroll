@@ -1,0 +1,20 @@
+{
+  "$comment": "Every image the game uses, by id. Ids match art/prompts.json where the asset comes from the art pipeline. 'facing' is the way the image faces; the game mirrors as needed. Stand-ins are cut from the pilot sheets and the reference frame; replace a file (or its path here) when the real art arrives.",
+  "images": {
+    "char.rama.prince.stand":  { "file": "art/standin/rama-1.png", "facing": "right", "standin": true },
+    "char.rama.prince.walk":   { "file": "art/standin/rama-2.png", "facing": "right", "standin": true },
+    "char.rama.prince.draw":   { "file": "art/standin/rama-3.png", "facing": "right", "standin": true },
+    "char.tataka.default.stand":  { "file": "art/standin/tataka-1.png", "facing": "right", "standin": true },
+    "char.tataka.default.walk":   { "file": "art/standin/tataka-2.png", "facing": "right", "standin": true },
+    "char.tataka.default.attack": { "file": "art/standin/tataka-3.png", "facing": "left", "standin": true },
+    "portrait.vishvamitra": { "file": "art/standin/portrait-vishvamitra.jpg", "standin": true },
+    "portrait.rama":        { "file": "art/standin/portrait-rama.jpg", "standin": true },
+    "portrait.lakshmana":   { "file": "art/standin/portrait-lakshmana.jpg", "standin": true },
+    "portrait.tataka":      { "file": "art/standin/portrait-tataka.jpg", "standin": true },
+    "panel.tataka":         { "file": "art/standin/panel-tataka.jpg", "standin": true }
+  },
+  "$generated": "Backdrop layers without a file are painted in code at boot (src/art/backdrops.js) until real layers exist.",
+  "backdrops": {
+    "bg.tataka": { "layers": ["sky", "hills", "ruins", "ground", "front"], "healed": ["ruins", "ground"] }
+  }
+}

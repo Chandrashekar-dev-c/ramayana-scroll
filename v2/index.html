@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1d1613">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Ramayana Scroll</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html, body { margin: 0; height: 100%; background: #1d1613; overflow: hidden; touch-action: none; overscroll-behavior: none; }
+    #game { position: fixed; inset: 0; }
+    #rotate { display: none; position: fixed; inset: 0; z-index: 10; background: #1d1613; color: #f2e4c3;
+      font: 600 18px/1.4 Georgia, serif; text-align: center; align-items: center; justify-content: center; padding: 24px; }
+    @media (orientation: portrait) and (max-width: 900px) { #rotate { display: flex; } }
+  </style>
+</head>
+<body>
+  <div id="game"></div>
+  <div id="rotate"><div>Turn your phone sideways<br>to open the scroll.</div></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
