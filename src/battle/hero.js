@@ -131,7 +131,7 @@ export function heroPose(h) {
   if (!h.onGround) return 'jump';
   if (h.drawT > 0) return h.drawT < 0.18 ? 'draw0' : h.drawT < 0.5 ? 'draw1' : 'draw2';
   if (h.shootAnim > 0) return 'shoot';
-  if (Math.abs(h.vx) > 1) return WALK[Math.floor(h.walkT * 9) % 4];
+  if (Math.abs(h.vx) > 1) return WALK[Math.floor(h.walkT * 6) % 4];
   return 'stand';
 }
 

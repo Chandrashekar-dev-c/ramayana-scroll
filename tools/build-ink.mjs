@@ -14,7 +14,7 @@ const levels = new Set(fs.readdirSync(path.join(ROOT, 'src/data/levels')).map((f
 const src = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const poses = new Set([...src('src/art/poses.js').matchAll(/^\s{2}(\w+): \{ /gm)].map((m) => m[1]));
 const backdrops = new Set([...src('src/art/backdrops.js').matchAll(/^\s{2}(\w+): \{ ground/gm)].map((m) => m[1]));
-const VERBS = new Set(['scene', 'music', 'cast', 'enter', 'exit', 'move', 'pose', 'face', 'set', 'prop', 'sound', 'wait', 'shake', 'wash', 'title', 'prompt', 'battle', 'astra', 'play', 'heads', 'curtain', 'light', 'clear', 'speak', 'together', 'cloth']);
+const VERBS = new Set(['scene', 'music', 'cast', 'enter', 'exit', 'move', 'pose', 'face', 'set', 'prop', 'sound', 'wait', 'shake', 'wash', 'title', 'prompt', 'battle', 'astra', 'play', 'heads', 'curtain', 'light', 'clear', 'speak', 'together', 'cloth', 'look', 'lamps', 'mantra']);
 const STAGED = new Set(['sage', 'sarayu', 'tataka', 'yajna']); // fully checked; the rest still carry old directions
 
 fs.rmSync(OUT, { recursive: true, force: true });

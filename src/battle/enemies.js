@@ -151,7 +151,7 @@ export function enemyPose(e) {
   if (e.state === 'windup') return k === 'shoot' ? (e.t < 0.4 ? 'draw1' : 'draw2') : k === 'charge' ? 'crouch' : k === 'lob' || k === 'bolt' || k === 'heal' ? 'raise' : 'swing0';
   if (e.state === 'attack') return k === 'charge' ? (Math.floor(e.walkT * 10) % 2 ? 'charge' : 'charge2') : 'swing1';
   if (e.state === 'recover' && e.t < 0.25) return k === 'shoot' ? 'shoot' : k === 'melee' ? 'swing1' : 'stand';
-  if (e.state === 'approach') return WALK[Math.floor(e.walkT * Math.max(4, Math.min(11, e.def.speed / 16))) % 4];
+  if (e.state === 'approach') return WALK[Math.floor(e.walkT * Math.max(3, Math.min(7, e.def.speed / 24))) % 4];
   return 'stand';
 }
 

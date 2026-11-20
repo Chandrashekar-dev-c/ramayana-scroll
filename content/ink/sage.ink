@@ -1,21 +1,22 @@
 // The Sage at the Gate — Bala Kanda
 // Source: Valmiki, Bala Kanda, sargas 18-22 (verify)
-// Staged for the Ramlila stage.
+// Staged for the painted scene: a lamp-lit court, a Pahari folio, pop-up paper depth.
 VAR sage_choice = ""
 
+>> look evening
 >> scene court
 >> prop throne throne at 0.34
 >> cast dasharatha at 0.34 pose=sit y=-56
->> cast vasishtha at 0.5 face=left
->> cast shatrughna at 0.02
->> cast bharata at 0.08 scale=0.94
+>> cast vasishtha at 0.52 face=left
+>> cast shatrughna at 0.0
+>> cast bharata at 0.07 scale=0.94
 >> cast lakshmana:prince at 0.14
 >> cast rama:prince at 0.21
-Ayodhya, on the river Sarayu. King Dasharatha sits in his court, his four sons beside him.
+Ayodhya, on the river Sarayu. Evening. King Dasharatha sits in his court, his four sons beside him.
 >> sound bellLow
 A guard runs in. The sage Vishvamitra is at the gate.
 >> pose vasishtha namaste
->> enter vishvamitra from right to 0.78 in 2.4
+>> enter vishvamitra from right to 0.82 in 3
 >> pose vasishtha stand
 >> pose dasharatha namaste
 DASHARATHA: Great sage, your coming is like rain on a dry field. Ask, and it is yours.
@@ -40,7 +41,7 @@ DASHARATHA: He is not yet sixteen. He has never seen a battle. I will come mysel
 >> shake 4
 >> sound bellLow
 VISHVAMITRA: You gave your word and now you take it back. That is not the way of your house.
->> move vasishtha to 0.44
+>> move vasishtha to 0.46
 >> pose vasishtha give
 VASISHTHA: Keep your promise, my king. This sage knows every weapon the gods have made. Rama will be safer with him than here.
 >> pose vasishtha stand
@@ -60,25 +61,25 @@ VASISHTHA: Well spoken. This sage knows every weapon the gods have made. No harm
 >> pose vasishtha stand
 >> pose dasharatha sit
 >> together
->> move rama to 0.6
->> move lakshmana to 0.53
->> wait 0.2
+>> move rama to 0.64
+>> move lakshmana to 0.57
+>> wait 0.3
 >> face rama left
 >> face lakshmana left
 >> together
 >> pose rama bow
 >> pose lakshmana bow
->> wait 0.5
+>> wait 0.8
 LAKSHMANA: Where my brother goes, I go.
 >> pose dasharatha give
 DASHARATHA: Go, both of you. Do as he tells you.
 >> pose rama stand
 >> pose lakshmana stand
->> exit vishvamitra to right in 2.6 nowait
->> wait 0.5
->> exit rama to right in 2.4 nowait
->> wait 0.3
->> exit lakshmana to right in 2.6 nowait
+>> exit vishvamitra to right in 3 nowait
+>> wait 0.8
+>> exit rama to right in 2.8 nowait
+>> wait 0.4
+>> exit lakshmana to right in 3 nowait
 They leave the city on foot, the sage in front, the two princes behind with their bows.
 >> wash
 -> END

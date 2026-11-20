@@ -1,11 +1,11 @@
-// Screens: the title (painted on the closed curtain), the chapter list, pause, settings,
+// Screens: the title (on a folded page), the chapter list, pause, settings,
 // the end of a chapter and a lost fight.
 import { app, setMode } from '../core/app.js';
 import { save } from '../core/save.js';
 import { t, has } from '../core/i18n.js';
 import { el, button, panel, closePanel, touchControls, topbar, hideLine, fadeOut, fadeIn } from './dom.js';
 import { setScene } from '../gfx/gfx.js';
-import { StageView } from '../stage/stage.js';
+import { SceneView } from '../stage/scene.js';
 import { READY, CHAPTERS, isUnlocked, resumeChapter } from '../story/chapters.js';
 import { initAudio, applyVolumes, setMood, cue } from '../audio/music.js';
 import { gsap } from 'gsap';
@@ -17,11 +17,13 @@ async function play(id) { await fadeOut(400); const m = await import('../story/c
 class TitleMode {
   label() { return 'Ramayana Scroll'; }
   enter() {
-    this.stage = new StageView();
+    this.stage = new SceneView({ look: 'evening' });
     setScene(this.stage.view);
     this.stage.setCloth('court');
     this.stage.curtainOpen = 0;
-    this.stage.setTitle('Ramayana', 'A Ramlila in Mithila colours');
+    this.stage.setTitle('Ramayana', 'Told after Valmiki');
+    // the page rises behind the title, slowly
+    this.rise = 0;
     setMood('bala', 'calm');
     this.paint();
   }
@@ -38,7 +40,7 @@ class TitleMode {
       el('div', { class: 'credit' }, t('title.credit')),
     );
   }
-  update(dt) { this.stage.update(dt); }
+  update(dt) { this.stage.update(dt); if (this.rise < 1) { this.rise = Math.min(1, this.rise + dt / 3.2); this.stage.curtainOpen = this.rise * 0.999; this.stage.titleCard.alpha = 1; } }
   render() { this.stage.sync(); }
   resize() { this.stage.rebuild(); }
   exit() { $('title').classList.add('hidden'); this.stage.destroy(); }

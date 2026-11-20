@@ -31,7 +31,7 @@ export class BattleRun {
 
   start(cp) {
     this.b = createBattle(this.level, { kanda: this.o.kanda, seed: app.seed, checkpoint: cp, hp: cp ? cp.hp : undefined, boon: cp ? cp.boon : 0 });
-    this.view = new BattleView(this.b);
+    this.view = new BattleView(this.b, { night: this.o.night });
     this.shake = { x: 0, y: 0 };
     this.lastMood = null;
   }

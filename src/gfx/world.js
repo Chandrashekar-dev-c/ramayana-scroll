@@ -12,7 +12,8 @@ import { app, makeCanvas } from '../core/app.js';
 /** A backdrop plane: line world underneath, colour world above, revealed by a soft mask. */
 export class BackdropView {
   constructor(id, style, o = {}) {
-    this.id = id; this.style = style; this.regrow = !!o.regrow; this.density = o.density || '';
+    this.id = id; this.style = style; this.regrow = !!o.regrow; this.density = o.density || ''; this.part = o.part || '';
+    this.shadow = !!o.shadow;
     this.view = new Container();
     this.base = new Container();
     this.colourLayer = new Container();
@@ -39,13 +40,20 @@ export class BackdropView {
     const map = this.sprites[layer];
     let sp = map.get(i);
     if (sp) return sp;
-    const cv = backdropChunk(this.id, this.style, colour, i, this.regrow, this.density);
+    const cv = backdropChunk(this.id, this.style, colour, i, this.regrow, this.density, this.part);
     if (!this.made.has(cv)) { this.made.add(cv); retain(cv); }
     sp = new Sprite(canvasTexture(cv));
     // overlap neighbours by a unit so no seam shows where two chunks meet
     sp.width = CHUNK + 1.5; sp.height = 720;
     sp.position.set(i * CHUNK - 0.5, 0);
-    (layer === 'base' ? this.base : this.colourLayer).addChild(sp);
+    const parent = layer === 'base' ? this.base : this.colourLayer;
+    if (this.shadow) {
+      // a cut-paper plane throws a soft dark copy of itself onto the plane behind
+      const sh = new Sprite(sp.texture); sh.width = sp.width; sh.height = sp.height;
+      sh.position.set(sp.x + 7, 6); sh.tint = 0x1d1613; sh.alpha = 0.22;
+      parent.addChild(sh); sp.shadowSprite = sh;
+    }
+    parent.addChild(sp);
     map.set(i, sp);
     return sp;
   }
@@ -54,7 +62,7 @@ export class BackdropView {
     const showColour = this.colour;
     const healing = !this.colour && this.heal;
     for (const layer of ['base', 'colour']) {
-      for (const [i, sp] of this.sprites[layer]) if (i < i0 - 1 || i > i1 + 1) { sp.destroy(); this.sprites[layer].delete(i); }
+      for (const [i, sp] of this.sprites[layer]) if (i < i0 - 1 || i > i1 + 1) { if (sp.shadowSprite) sp.shadowSprite.destroy(); sp.destroy(); this.sprites[layer].delete(i); }
     }
     for (let i = i0; i <= i1; i++) {
       this.chunkSprite('base', showColour, i);
@@ -66,7 +74,7 @@ export class BackdropView {
   setColour(c) {
     if (this.colour === c) return;
     this.colour = c;
-    for (const sp of this.sprites.base.values()) sp.destroy();
+    for (const sp of this.sprites.base.values()) { if (sp.shadowSprite) sp.shadowSprite.destroy(); sp.destroy(); }
     this.sprites.base.clear();
   }
   destroy() { this.view.destroy({ children: true }); for (const cv of this.made) dropTexture(cv); }
