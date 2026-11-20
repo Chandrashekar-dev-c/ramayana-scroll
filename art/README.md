@@ -22,7 +22,9 @@ tools/art/identity.json   ─┴─► tools/art/build-art-prompts.mjs ─► ar
 | `art/raw/characters/<id>/<stage>/` | Generated images: `sheet.png`, `rig.png`, `head-<rasa>.png`, `prop.png` |
 | `tools/art/identity.json` | Who each character is, and their tier |
 | `tools/art/build-art-prompts.mjs` | Builds the manifest from the game data |
-| `tools/art/run-gemini.mjs` | Optional: runs the jobs through the Gemini API from your machine |
+| `tools/art/run-gemini.mjs` | Runs jobs through the Gemini API: 4 candidates per job into `art/review/` |
+| `tools/art/pick.mjs` | Picks the best candidate into the game's path (or rejects all to regenerate) |
+| `art/review/index.html` | Local contact sheet of candidates with the rejection checklist |
 
 ## What gets generated
 
@@ -45,6 +47,13 @@ These rules are in `conventions` in the manifest and in every prompt. The game r
 - **Pivots.** Figures pivot at the feet centre; heads pivot at the neck base, bottom centre.
 - **Stable ids.** For example, `char.rama.exile.head.karuna`. Code references images by id, never by prompt text.
 - **Rig part names.** Each body type has a fixed part list (`rigParts`), so one animation setup per body type works for every character of that type.
+
+## Running a batch
+
+1. `GEMINI_API_KEY=... node tools/art/run-gemini.mjs --kind sheet`
+2. Open `art/review/index.html` and look at every candidate yourself.
+3. `node tools/art/pick.mjs <job id> <n>`, or `... <job id> reject "reason"` to regenerate.
+4. `node tools/art/run-gemini.mjs --kind rig,head,prop`; each job waits until its sheet is picked.
 
 ## Keeping it future-proof
 

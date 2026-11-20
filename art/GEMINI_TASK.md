@@ -25,10 +25,11 @@ You are generating the character art for a game. Work through `prompts.jsonl` (o
 1. Five fingers on every hand; correct number of arms, legs and heads; no fused or extra limbs.
 2. Matches the description: skin colour, garment colour, headdress, forehead mark, held object.
 3. Facing **right**, strict side profile, one eye visible.
-4. Whole figure inside the frame: top of the headdress near the top edge, feet on a level line near the bottom edge. Heads: neck base at the bottom centre.
+4. Whole figure inside the frame: top of the headdress near the top edge, feet near the bottom edge with **no drawn ground line**. Heads: neck base at the bottom centre.
 5. Background is one flat, uniform magenta (#FF00FF) everywhere: no floor, shadow, texture or scenery.
-6. Bold black outlines, flat patterned fills, no photographic shading, no text or watermark.
-7. Deities and revered figures (Rama, Sita, Lakshmana, Hanuman, the sages) look dignified, never comic or distorted.
+6. Matches the reference painting's finish: thick double outlines, hand-painted pigment grain and dense patterning. Reject clean vector or clip-art looks, smooth shading, text or watermarks.
+7. Each held object appears once per figure (no duplicated swords or bows); Ravana has exactly ten heads, all in profile.
+8. Deities and revered figures (Rama, Sita, Lakshmana, Hanuman, the sages) look dignified, never comic or distorted.
 
 If a job fails all 4 candidates, try 4 more; if it still fails, mark it `failed` with a note and move on.
 

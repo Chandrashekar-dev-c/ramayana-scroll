@@ -19,11 +19,11 @@ const characters = read('src/data/characters.json');
 const identity = read('tools/art/identity.json');
 const en = read('src/i18n/en.json');
 
-const MANIFEST_VERSION = 1;
+const MANIFEST_VERSION = 2; // v2: pilot fixes (texture, no ground line, Ravana heads, single weapon)
 
 // ---------------------------------------------------------------- shared style (never edit per asset)
-const STYLE = 'STYLE: traditional Mithila (Madhubani) painting from Bihar, in the manner of old village wall paintings, hand-painted with natural pigments: lampblack, indigo, turmeric yellow, saffron, madder red, leaf green, ochre and terracotta. Bold black double outlines on every shape, flat colour fills filled with fine hand-drawn patterns (lines, dots, small triangles, lotus and fish motifs), slight pigment texture, no photographic shading, no gradients, no glow, no 3D rendering. Figures in strict side profile with one large almond-shaped eye, stylised elongated bodies, ornamented clothing. Reverent, dignified, storybook clarity. No text, no letters, no signature, no watermark.';
-const NEGATIVE = 'photorealistic, 3D render, anime, cartoon, film still, modern digital art, gradient shading, glow, lens flare, blurry, extra fingers, extra limbs, fused hands, deformed face, both eyes visible in profile, text, letters, watermark, signature, cropped figure, cast shadow on background, floor, scenery';
+const STYLE = 'STYLE: match the attached reference painting exactly in surface and finish. Traditional Mithila (Madhubani) painting from Bihar, in the manner of old village wall paintings, hand-painted with natural pigments: lampblack, indigo, turmeric yellow, saffron, madder red, leaf green, ochre and terracotta. Thick black double outlines on every shape with a thin coloured band between the two lines. Solid pigment fills with visible hand-painted brush and pigment grain, and dense fine line-hatching, dots, small triangles and lotus or fish motifs covering every garment area. No smooth shading, no gradients, no glow, no 3D rendering. Not clean vector art, not clip art, not a cartoon. Figures with body, head and feet in strict side profile, never turned toward the viewer, one large almond-shaped eye, stylised elongated bodies, ornamented clothing. Reverent, dignified, storybook clarity. No text, no letters, no signature, no watermark.';
+const NEGATIVE = 'clean vector art, clip art, flat digital illustration, thin uniform lines, photorealistic, 3D render, anime, cartoon, film still, modern digital art, gradient shading, glow, lens flare, blurry, extra fingers, extra limbs, fused hands, deformed face, both eyes visible in profile, text, letters, watermark, signature, cropped figure, cast shadow on background, floor, ground line, scenery, front-facing face, duplicated weapon';
 const BG = 'Background: one flat, perfectly uniform solid magenta (#FF00FF) colour filling the whole image, no texture, no floor, no shadow, nothing else.';
 
 // ---------------------------------------------------------------- vocabulary: data codes -> words
@@ -43,7 +43,7 @@ const BODY = {
   monkey: 'a vanara: an upright monkey-person with a monkey face, fur and a long curling tail, standing on two legs',
   bear: 'an upright bear-person with a bear face and shaggy fur, standing on two legs',
   bird: 'a giant bird drawn in Mithila style, with large patterned wings, standing on its two feet',
-  tenHeads: 'a figure with ten crowned heads in a row side by side across the shoulders, the central head largest, all in profile facing the same way',
+  tenHeads: 'a figure with exactly ten crowned heads (count: ten, never eight or nine) in one row side by side across the shoulders, the central head largest, every one of the ten heads in strict side profile facing right, none facing the viewer',
 };
 const STANCE = { upright: 'standing upright', forward: 'leaning slightly forward, alert', bowed: 'head gently bowed', heavy: 'heavy, weighty posture', proud: 'chest out, proud and commanding', stooped: 'stooped with age', anxious: 'tense and anxious' };
 const WALK = { steady: 'walking steadily', stride: 'walking with a long purposeful stride', glide: 'gliding gracefully', lumber: 'lumbering with a heavy step', proud: 'striding proudly', stoop: 'walking slowly, stooped', hop: 'hopping forward', anxious: 'hurrying anxiously' };
@@ -67,7 +67,7 @@ const SIGNATURE = {
   sandals: "carries Rama's wooden sandals on his head", spear: 'carries a spear', parasol: 'carries a royal parasol', lamp: 'holds an oil lamp', brooch: 'wears a large brooch',
   waterPot: 'carries a water pot', staff: 'holds a wooden staff', bowJata: 'holds a wooden staff', kamandalu: 'carries an ascetic water pot (kamandalu)', plough: 'holds a golden plough',
   none: null, oar: 'holds a boat oar', basket: 'carries a basket of berries', beak: 'great hooked beak', mace: 'carries a large mace (gada)', garland: 'holds a flower garland',
-  necklace: 'wears a heavy necklace', armlets: 'wears heavy armlets', beardStaff: 'leans on a staff', stone: 'carries a large stone', chandrahasa: 'holds the Chandrahasa, a curved crescent sword',
+  necklace: 'wears a heavy necklace', armlets: 'wears heavy armlets', beardStaff: 'leans on a staff', stone: 'carries a large stone', chandrahasa: 'holds one single curved crescent sword, the Chandrahasa, in one hand (never two swords)',
   foldedQueen: 'hands folded', giantSpear: 'carries a giant spear', bowCloud: 'holds a dark bow wreathed in cloud', foldedHands: 'hands folded in respect', deerEars: 'deer ears',
   firePot: 'holds a fire pot', boneNecklace: 'necklace of bones and small skulls', bellSpear: 'spear hung with bells', kharaSword: 'holds a broad sword', staffScroll: 'holds a staff and a palm-leaf scroll',
   dreamLamp: 'holds a small lamp', axe: 'carries a great battle axe (parashu)', whipReins: "holds a charioteer's whip and reins", staffPlain: 'holds a plain staff', staffPlain2: 'holds a plain staff',
@@ -180,7 +180,7 @@ for (const base of characters) {
     const stageNote = stage === 'default' ? '' : ` Shown in the ${stage} stage of the story.`;
     const subject = `${idn.who}.${stageNote} Appearance: ${d.body}${d.female ? ', female' : ''}, ${d.traits}.`;
     const facing = 'All figures face RIGHT in strict side profile.';
-    const frame = 'Each figure is whole: top of head or crown near the top edge, feet resting on one shared level ground line near the bottom edge, nothing cropped, nothing overlapping.';
+    const frame = 'Each figure is whole: top of head or crown near the top edge, feet aligned on an invisible horizontal baseline near the bottom edge (do not draw any ground line or floor), nothing cropped, nothing overlapping. Any held object appears only once per figure, in one hand.';
     const crowd = idn.tier === 'C';
     const meta = { character: base.id, name, stage, tier: idn.tier, body: c.body, height: c.build.height, width: c.build.width };
     const sheetId = `char.${base.id}.${stage}.sheet`;
@@ -194,7 +194,7 @@ for (const base of characters) {
     add({
       id: `char.${base.id}.${stage}.rig`, kind: 'rig', ...meta, file: `${dir}/rig.png`, aspectRatio: rigKey === 'bird' || rigKey === 'tenHeads' ? '1:1' : '3:4', size: '2K',
       dependsOn: [sheetId], references: [sheetId], rigParts: RIG[rigKey],
-      prompt: `${label}, exactly as in the attached character sheet, one single figure in a neutral rig pose for cut-out animation: strict side profile facing RIGHT, ${rigKey === 'bird' ? 'wings half open and held away from the body, legs straight, tail spread' : 'arms hanging slightly away from the body, legs slightly apart, every limb fully visible'}, nothing overlapping, held props removed. The figure fills the frame from near the top edge to a level ground line near the bottom edge, centred. ${BG}\n${STYLE}`,
+      prompt: `${label}, exactly as in the attached character sheet, one single figure in a neutral rig pose for cut-out animation: strict side profile facing RIGHT, ${rigKey === 'bird' ? 'wings half open and held away from the body, legs straight, tail spread' : 'arms hanging slightly away from the body, legs slightly apart, every limb fully visible'}, nothing overlapping, held props removed. The figure fills the frame from near the top edge to an invisible baseline near the bottom edge (do not draw any ground line), centred. ${BG}\n${STYLE}`,
     });
     for (const rasa of c.headdress === 'headless' ? [] : RASA_SET[idn.tier]) {
       add({
