@@ -5,7 +5,7 @@
 import { app, makeCanvas } from '../core/app.js';
 import { noise, hashStr } from '../core/rng.js';
 import { PAL } from './palette.js';
-import { line, shape, hatch, dryHatch, rectPts, ellipsePts, dots } from './ink.js';
+import { line, shape, hatch, dryHatch, setBrushMode, rectPts, ellipsePts, dots } from './ink.js';
 import * as M from './motifs.js';
 import { pattern } from './patterns.js';
 import { GROUND } from './layout.js';
@@ -18,9 +18,9 @@ export const BACKDROPS = {
   court: { ground: 'floor', sky: ['flower', 'dots'], layers: [['pillar', 250, 0, 330, {}], ['arch', 250, 0, 330, {}], ['lampStand', 500, 0, 90, { off: 125 }]] },
   chamber: { ground: 'floor', sky: ['dots'], layers: [['pillar', 330, 0, 300, { fill: PAL.madder }], ['curtain', 330, 0, 300, { off: 165 }]] },
   kingRoom: { ground: 'floor', night: true, sky: ['star'], moon: true, layers: [['pillar', 360, 0, 310, {}], ['lampStand', 180, 0, 100, { off: 60 }]] },
-  city: { ground: 'earth', sky: ['bird', 'flower', 'dots'], layers: [['building', 300, 0, 250, { banner: true, tiers: 3 }], ['building', 300, 0, 150, { off: 150, tiers: 2 }], T('mango', 420, 150, { off: 60 })] },
+  city: { ground: 'earth', brush: true, sky: ['bird', 'flower', 'dots'], layers: [['building', 300, 0, 250, { banner: true, tiers: 3 }], ['building', 300, 0, 150, { off: 150, tiers: 2 }], T('mango', 420, 150, { off: 60 })] },
   mithila: { ground: 'earth', sky: ['fish', 'bird', 'flower'], layers: [['building', 340, 0, 240, { banner: true, tiers: 3, fill: PAL.pink }], T('bamboo', 340, 170, { off: 170 }), ['pond', 680, 0, 60, { off: 250 }]] },
-  riverbank: { ground: 'earth', sky: ['bird', 'fish', 'flower'], band: 'river', layers: [T('mango', 310, 210), T('palm', 470, 260, { off: 130 }), ['bush', 180, 0, 34, { off: 40 }]] },
+  riverbank: { ground: 'earth', brush: true, sky: ['bird', 'fish', 'flower'], band: 'river', layers: [T('mango', 310, 210), T('palm', 470, 260, { off: 130 }), ['bush', 180, 0, 34, { off: 40 }]] },
   road: { ground: 'earth', sky: ['bird', 'dots', 'flower'], layers: [['hill', 520, 0, 150, {}], T('banyan', 380, 240, { off: 90 }), T('sala', 300, 170, { off: 200 })] },
   waste: { ground: 'cracked', sky: ['dots'], layers: [T('bare', 260, 190), ['post', 340, 0, 110, { off: 120 }], ['bones', 300, 0, 16, { off: 60 }], ['rock', 560, 0, 60, { off: 280 }]] },
   ashram: { ground: 'earth', sky: ['bird', 'flower', 'dots'], layers: [['hut', 520, 0, 150, {}], T('banyan', 400, 260, { off: 240 }), T('sala', 300, 180, { off: 100 }), ['bush', 200, 0, 30, { off: 30 }]] },
@@ -409,6 +409,7 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   ctx.fillStyle = def.night ? PAL.night : PAL.cream;
   ctx.fillRect(0, 0, CHUNK, 720);
   const look = lookOf(id);
+  setBrushMode(!!def.brush);
   // the sky pattern: faint by default, but a bold kachni tapestry when a density is set
   ctx.save(); ctx.globalAlpha = dp ? (def.night ? dp.sky + 0.06 : dp.sky) : (def.night ? 0.16 : colour ? 0.13 : 0.1);
   ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, dp ? dp.skyScale : 1.5);
@@ -437,6 +438,7 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   }
   paintExtras(ctx, look, x0, o, seed);
   paintGround(ctx, def, x0, o, seed);
+  setBrushMode(false);
   return cv;
 }
 

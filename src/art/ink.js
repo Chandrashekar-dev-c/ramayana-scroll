@@ -90,7 +90,12 @@ export function shape(ctx, pts, o = {}) {
 }
 
 /** Parallel hatching clipped to a closed shape. */
+// While a brushed backdrop is being painted, every hatch in it uses the dry-brush stroke.
+let brushMode = false;
+export function setBrushMode(on) { brushMode = !!on; }
+
 export function hatch(ctx, pts, o = {}) {
+  if (brushMode) return dryHatch(ctx, pts, o);
   const seed = o.seed ?? 3, sp = o.spacing ?? 7, ang = o.angle ?? 0.7;
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (const [x, y] of pts) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
