@@ -91,7 +91,8 @@ async function boot() {
   app.loop.start();
   setLoading(1);
   document.addEventListener('visibilitychange', () => { if (document.hidden) input.releaseAll(); });
-  if (q.get('chapter')) { const m = await import('./story/chapter.js'); m.startChapter(q.get('chapter')); }
+  if (q.has('diorama') || location.hash === '#diorama') { const m = await import('./stage/diorama.js'); const { setMode } = await import('./core/app.js'); setMode('diorama', new m.DioramaMode()); }
+  else if (q.get('chapter')) { const m = await import('./story/chapter.js'); m.startChapter(q.get('chapter')); }
   else openTitle();
   exposeTestHooks();
 }
