@@ -1,0 +1,137 @@
+RAMAYANA SCROLL — TATAKA LEVEL: EVERYTHING TO GENERATE
+For Gemini. 45 images in 7 groups. Generate in this order; each group builds on the one before.
+
+HOW TO USE (read first)
+- Attach tataka-frame.png (the reference painting) to every image.
+- Groups 2 and 3: also attach that character's approved sheet from Group 1.
+- Save each image with the exact file name given. The game finds images by these names.
+- Use each prompt as written, then add the STYLE block below at the end (except the story panels, which have their own).
+- Make 2-4 candidates of each and keep the best. Reject: wrong finger count, figure not facing right, a figure turned to the viewer, cropped figure, background not flat magenta, a held object drawn twice.
+- Pose strips: all poses of one character in one image, side by side, the SAME scale, with wide empty magenta gaps between them so they can be cut apart. Feet of standing poses on one invisible line.
+
+STYLE BLOCK (paste after every prompt in Groups 1-3, 5-7)
+STYLE: follow the attached reference painting for drawing style, proportions, ornament and colour. Traditional Mithila (Madhubani) painting from Bihar, in the manner of old village wall paintings, hand-painted with natural pigments: lampblack, indigo, turmeric yellow, saffron, madder red, leaf green, ochre and terracotta. Thick black double outlines on every shape with a thin coloured band between the two lines. Clean, even pigment fills (the painted grain is added later by the game, so keep surfaces clean), with dense fine line-hatching, dots, small triangles and lotus or fish motifs covering every garment area. No smooth shading, no gradients, no glow, no 3D rendering, not a cartoon. Figures with body, head and feet in strict side profile, never turned toward the viewer, one large almond-shaped eye, stylised elongated bodies, ornamented clothing. Reverent, dignified, storybook clarity. No text, no letters, no signature, no watermark.
+
+AVOID (for tools that take a negative prompt)
+thin uniform lines, paper texture, grain, noise, photorealistic, 3D render, anime, cartoon, film still, modern digital art, gradient shading, glow, lens flare, blurry, extra fingers, extra limbs, fused hands, deformed face, both eyes visible in profile, text, letters, watermark, signature, cropped figure, cast shadow on background, floor, ground line, scenery, front-facing face, duplicated weapon
+
+BACKGROUND RULE (Groups 1-3, 5-7)
+Background: one flat, perfectly uniform solid magenta (#FF00FF) colour filling the whole image, no texture, no floor, no shadow, nothing else.
+
+
+=====================================================================
+GROUP 1 — CHARACTER SHEETS (4 images, 16:9) — approve these before anything else
+=====================================================================
+Use the four "sheet" prompts already in art/prompts.json, unchanged:
+1. char.rama.prince.sheet        -> sheet-rama.png
+2. char.lakshmana.prince.sheet   -> sheet-lakshmana.png
+3. char.vishvamitra.default.sheet -> sheet-vishvamitra.png
+4. char.tataka.default.sheet     -> sheet-tataka.png
+
+
+=====================================================================
+GROUP 2 — POSE STRIPS (8 images, 21:9 or widest available)
+Attach the character's approved sheet. Every figure faces RIGHT.
+=====================================================================
+
+5. poses-rama-move.png
+Prince Rama exactly as in the attached sheet, five poses side by side at the same scale, all facing right in strict side profile: (1) standing at rest, bow held upright beside him; (2) walking, left foot forward; (3) walking, right foot forward; (4) leaping upward, knees bent, feet off the ground; (5) crouching low and dashing forward, one knee down. [BACKGROUND RULE]
+
+6. poses-rama-bow.png
+Prince Rama exactly as in the attached sheet, four poses side by side at the same scale, all facing right: (1) bow raised, arrow nocked, string half drawn; (2) string drawn fully back to the ear, aiming level; (3) the moment of release, string snapping forward, arrow gone; (4) aiming steeply upward at full draw. [BACKGROUND RULE]
+
+7. poses-rama-story.png
+Prince Rama exactly as in the attached sheet, four poses side by side at the same scale, all facing right: (1) recoiling as if struck, body bent back, one arm raised; (2) fallen to one knee, head bowed, bow resting on the ground; (3) standing with palms joined in namaste, bow on his shoulder; (4) standing still, head lowered in hesitation, bow held loosely. [BACKGROUND RULE]
+
+8. poses-lakshmana.png
+Prince Lakshmana exactly as in the attached sheet, five poses side by side at the same scale, all facing right: (1) standing alert; (2) walking, left foot forward; (3) walking, right foot forward; (4) drawing his bow at full draw, aiming level; (5) crouched, one hand touching the ground, listening to the earth. [BACKGROUND RULE]
+
+9. poses-vishvamitra.png
+The sage Vishvamitra exactly as in the attached sheet, five poses side by side at the same scale, all facing right: (1) standing with his staff; (2) walking, left foot forward; (3) walking, right foot forward; (4) pointing forward with an outstretched arm, commanding; (5) both hands raised in blessing, staff in the crook of his arm. [BACKGROUND RULE]
+
+10. poses-tataka-move.png
+The demoness Tataka exactly as in the attached sheet, four poses side by side at the same scale, all facing right: (1) looming, hunched forward, breathing; (2) one huge foot raised high before a stamp; (3) foot slammed down, knees bent, arms flung out; (4) lumbering stride. [BACKGROUND RULE]
+
+11. poses-tataka-attack.png
+The demoness Tataka exactly as in the attached sheet, four poses side by side at the same scale, all facing right: (1) both arms raised high above her head, summoning stones; (2) lunging forward with clawed hands outstretched, mouth open in a roar; (3) bursting upward out of the ground, arms thrown wide, hair flying; (4) staggering, dazed, one hand to her head. [BACKGROUND RULE]
+
+12. poses-tataka-fall.png
+The demoness Tataka exactly as in the attached sheet, three poses side by side at the same scale, all facing right: (1) struck, reeling backward; (2) toppling, falling to one side; (3) lying still on the ground, eyes closed, peaceful. Dignified, not gory. [BACKGROUND RULE]
+
+
+=====================================================================
+GROUP 3 — DIALOGUE PORTRAITS (11 images, 1:1)
+Attach the character's approved sheet. Head and shoulders, strict side profile facing right, centred, the same size and position in every image of that character.
+=====================================================================
+13. portrait-rama-calm.png — Prince Rama, serene and calm.
+14. portrait-rama-hesitant.png — Prince Rama, troubled and hesitant, eye lowered, brows drawn together.
+15. portrait-rama-resolute.png — Prince Rama, resolute and fearless, steady gaze, chin raised.
+16. portrait-rama-relieved.png — Prince Rama, quietly relieved, a faint gentle smile.
+17. portrait-lakshmana-alert.png — Prince Lakshmana, alert and wary, eye wide, listening.
+18. portrait-vishvamitra-stern.png — The sage Vishvamitra, stern and grave.
+19. portrait-vishvamitra-urgent.png — The sage Vishvamitra, urgent and commanding, brows hard down, mouth open mid-command.
+20. portrait-vishvamitra-pleased.png — The sage Vishvamitra, pleased and warm, eyes softened.
+21. portrait-tataka-roar.png — The demoness Tataka, roaring, fangs bared, eye wide and red-rimmed.
+22. portrait-tataka-cursed.png — The demoness Tataka, a flicker of sorrow in her eye, the yakshini she once was.
+23. portrait-narrator.png — A small lit oil lamp (diya) on a lotus, used when no one is speaking. (Not a person; centred.)
+Each: [BACKGROUND RULE]
+
+
+=====================================================================
+GROUP 4 — STORY PANELS (5 images, 16:9) — full paintings, no magenta
+These are whole scenes, so they keep the reference painting's full hand-painted texture and fish-and-lotus border.
+=====================================================================
+Paste this after each panel prompt instead of the STYLE block:
+PANEL STYLE: match the attached reference painting exactly: same characters, same Mithila style, same hand-painted pigment texture, same fish-and-lotus border around the whole image. Figures in strict side profile. No text, no letters, no signature.
+
+24. panel-arrival.png
+Dusk in an emptied land. Vishvamitra leads Rama and Lakshmana along a cracked earth path between dead trees and ruined huts; bones lie by the path; a red sun sinks behind grey hills. Far ahead, a cloud of dust rises. (The opening; the existing reference frame can stand in for this one.)
+
+25. panel-hesitation.png
+Close two-figure scene at dusk: Rama, troubled, lowers his bow and looks at Vishvamitra; the sage faces him, one hand raised in counsel. Ruins and dead trees behind them, the sky darkening.
+
+26. panel-dust.png
+Lakshmana kneels with one hand on the cracked ground, listening; Rama and Vishvamitra stand behind him, alert. Ahead, a huge cloud of brown dust rolls toward them and the dead trees bend in its wind.
+
+27. panel-dawn.png
+Sunrise over the same land, now healed: green trees in leaf and flower, mended thatched huts, grass and lotus pools, villagers returning in the distance. Vishvamitra, Rama and Lakshmana stand together in the foreground, peaceful. Bright turmeric, leaf green and lotus pink.
+
+28. panel-astras.png
+Vishvamitra seated on a deerskin under a flowering tree, hands raised as he gives Rama the divine astras: small golden weapon-spirits with folded hands appear in a circle of light before Rama, who kneels with palms joined. Lakshmana kneels behind. (Gold is used only for the astras.)
+
+
+=====================================================================
+GROUP 5 — BACKDROP LAYERS (11 images, 21:9 or widest; tileable left to right)
+Attach the reference painting. Each layer alone, nothing else. To make it tile: shift it half its width in an editor and inpaint the seam.
+=====================================================================
+29. layer-sky-dusk.png — Wide sky only, no land: dusk, rows of small textured strokes, deep orange and saffron near the horizon fading to smoky grey-violet above, a round red sun low in the centre. (No magenta: this layer fills the whole image.)
+30. layer-hills.png — Only a band of low rolling hills along the bottom third, layered muted grey-violet and dusty blue, fine pattern lines on the slopes. Flat solid magenta above.
+31. layer-ruins-dead.png — Only the middle ground of a ruined village: broken thatched huts with torn roofs, collapsed wooden scaffolding, a dry well. Dark brown and soot. NO trees. Flat solid magenta above and below.
+32. layer-ruins-healed.png — The same village as the attached ruins layer, healed: huts mended with fresh golden thatch, a well with a new rope and a pot. NO trees. Flat solid magenta above and below.
+33. layer-ground-dead.png — Only a strip of flat ground seen from the side: cracked dry ochre earth, cracks drawn as bold black woodcut lines, a clean level top edge to walk on. Flat solid magenta above.
+34. layer-ground-healed.png — The same ground strip as the attached image, healed: soft grass and small red and yellow flowers through the cracks, earth darker and warmer. Flat solid magenta above.
+35. layer-front-dead.png — Only a low strip along the bottom edge: scattered bones, a skull, broken pots, dry thorny shrubs, black woodcut style. Flat solid magenta above.
+36. layer-front-healed.png — Only a low strip along the bottom edge: lotus buds, grasses and small flowering shrubs. Flat solid magenta above.
+37. trees-dead.png — Three separate bare, leafless trees with twisting branches, side by side with wide gaps, each whole from roots to tips. Flat solid magenta background.
+38. trees-healed.png — The same three trees as the attached image, now in full green leaf with red and pink flowers, same trunks and branches, same positions. Flat solid magenta background.
+39. layer-sky-dawn.png — Wide sky only: sunrise, turmeric and soft pink near the horizon rising to clear pale blue, a golden sun just above the horizon, a few white cloud strokes. (Fills the whole image.)
+
+
+=====================================================================
+GROUP 6 — EFFECTS AND OBJECTS (5 images, 1:1)
+=====================================================================
+40. fx-dust.png — Three separate billowing dust clouds of different shapes, drawn as curling patterned swirls in dusty ochre, brown and grey with bold black outlines, side by side with gaps. [BACKGROUND RULE]
+41. fx-stones.png — Three separate jagged boulders of different shapes, grey stone with black outline and crack lines, side by side with gaps. [BACKGROUND RULE]
+42. fx-arrows.png — Two arrows drawn horizontally, pointing right, one above the other with a gap: (1) a plain wooden arrow with an iron head and red-and-white fletching; (2) the same arrow glowing with a gold aura for a full-draw shot. [BACKGROUND RULE]
+43. fx-marks.png — Two ground marks seen at a low angle, side by side: (1) a lotus with eight petals in turmeric and pink, flat on the ground (means: jump here); (2) a dark eight-pointed star shadow with a thin red edge (means: danger lands here). [BACKGROUND RULE]
+44. fx-heal.png — Four small things side by side: a lotus bloom opening, a sprouting green shoot, a cluster of red flowers, a small bird in flight. [BACKGROUND RULE]
+
+
+=====================================================================
+GROUP 7 — BORDER (1 image, 1:1)
+=====================================================================
+45. border-tiles.png — Four separate border pieces side by side with gaps: (1) a single lotus flower seen from the front; (2) a single fish swimming right, indigo with fine scales; (3) a square corner ornament, a lotus in a ring of petals; (4) a straight horizontal decorative band of two black-and-red lines with small triangles and dots between them. [BACKGROUND RULE]
+
+
+WHEN DONE
+Put all approved images in one Drive folder named "tataka-level-art" and send the folder link. The game's build cuts the strips into single poses, removes the magenta and slots each image in by name.
