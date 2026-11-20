@@ -4,14 +4,17 @@ import Phaser from 'phaser';
 import { view, PAL, FONT } from './layout.js';
 import { sfx } from './audio.js';
 import { settings } from './settings.js';
+import { pick } from './assets.js';
 
 const SPEAKERS = { VISHVAMITRA: 'vishvamitra', RAMA: 'rama', LAKSHMANA: 'lakshmana', TATAKA: 'tataka' };
+// The face each speaker shows when a line names no mood.
+const DEFAULT_MOOD = { rama: 'calm', lakshmana: 'alert', vishvamitra: 'stern', tataka: 'roar', narrator: 'calm' };
 const cap = s => s[0].toUpperCase() + s.slice(1).toLowerCase();
 
-/** Split "SPEAKER: words" into { speaker, text }. */
+/** Split "SPEAKER (mood): words" into { speaker, mood, text }. The mood picks the portrait. */
 export function parseLine(line) {
-  const m = /^([A-Z][A-Z ]+):\s*(.*)$/.exec(line.trim());
-  return m ? { speaker: m[1].trim(), text: m[2] } : { speaker: null, text: line.trim() };
+  const m = /^([A-Z][A-Z ]+?)\s*(?:\(([a-z]+)\))?:\s*(.*)$/.exec(line.trim());
+  return m ? { speaker: m[1].trim(), mood: m[2] || null, text: m[3] } : { speaker: null, mood: null, text: line.trim() };
 }
 
 export function plate(scene, x, y, w, h, depth) {
@@ -29,7 +32,7 @@ export class Dialogue {
     this.x0 = x0; this.bw = bw;
     this.box = scene.add.container(0, 0).setDepth(d).setScrollFactor(0).setVisible(false);
     this.box.add(plate(scene, x0, y, bw, 160, d));
-    this.portraitFrame = scene.add.rectangle(x0 + 70, y + 80, 128, 128, PAL.black).setStrokeStyle(4, PAL.gold);
+    this.portraitFrame = scene.add.rectangle(x0 + 70, y + 80, 128, 128, PAL.cream).setStrokeStyle(4, PAL.gold);
     this.portrait = scene.add.image(x0 + 70, y + 80, '__DEFAULT').setDisplaySize(120, 120);
     this.name = scene.add.text(0, y + 22, '', { fontFamily: FONT.serif, fontSize: '24px', fontStyle: 'bold', color: '#96283a' });
     this.text = scene.add.text(0, y + 56, '', { fontFamily: FONT.serif, fontSize: '27px', color: '#1d1613', lineSpacing: 6, wordWrap: { width: bw - 260 } });
@@ -41,11 +44,15 @@ export class Dialogue {
 
   /** Show one line; resolves when the reader taps past it. */
   say(line) {
-    const { speaker, text } = parseLine(line), { h } = view(this.scene);
-    const id = speaker && SPEAKERS[speaker];
-    const hasPortrait = id && this.scene.textures.exists(`portrait.${id}`);
-    this.portrait.setVisible(!!hasPortrait); this.portraitFrame.setVisible(!!hasPortrait);
-    if (hasPortrait) this.portrait.setTexture(`portrait.${id}`).setDisplaySize(120, 120);
+    const { speaker, mood, text } = parseLine(line), { h } = view(this.scene);
+    const id = speaker ? SPEAKERS[speaker] : 'narrator';
+    const key = id && pick(this.scene, `portrait.${id}.${mood}`, `portrait.${id}.${DEFAULT_MOOD[id]}`, `portrait.${id}`);
+    const hasPortrait = !!key;
+    this.portrait.setVisible(hasPortrait); this.portraitFrame.setVisible(hasPortrait);
+    if (hasPortrait) { // fit inside the frame, resting on its bottom edge
+      this.portrait.setTexture(key); const s = 120 / Math.max(this.portrait.width, this.portrait.height);
+      this.portrait.setScale(s).setOrigin(0.5, 1).setY(this.portraitFrame.y + 60);
+    }
     const x = this.x0 + (hasPortrait ? 156 : 40);
     this.name.setX(x).setText(speaker ? cap(speaker) : '');
     this.text.setX(x).setY(speaker ? h - 134 : h - 150).setWordWrapWidth(this.x0 + this.bw - x - 60).setFontStyle(speaker ? 'normal' : 'italic');
@@ -145,10 +152,12 @@ export const shake = (scene, ms, amt) => { if (settings.motion) scene.cameras.ma
 /** Lotus hearts for the hero. */
 export class Hearts {
   constructor(scene, max) {
-    this.icons = Array.from({ length: max }, (_, i) => scene.add.image(48 + i * 52, 46, 'glyph.lotus').setScale(0.36).setScrollFactor(0).setDepth(960));
+    const key = pick(scene, 'fx.mark.lotus', 'glyph.lotus');
+    this.icons = Array.from({ length: max }, (_, i) => scene.add.image(48 + i * 52, 46, key).setScrollFactor(0).setDepth(960));
+    this.full = 46 / this.icons[0].width;
     this.set(max);
   }
-  set(n) { this.icons.forEach((ic, i) => ic.setAlpha(i < n ? 1 : 0.18).setScale(i < n ? 0.36 : 0.28)); }
+  set(n) { this.icons.forEach((ic, i) => ic.setAlpha(i < n ? 1 : 0.18).setScale(i < n ? this.full : this.full * 0.78)); }
 }
 
 /** Boss health bar with name, and a notch where the next phase begins. */

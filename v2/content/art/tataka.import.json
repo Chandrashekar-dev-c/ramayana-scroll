@@ -1,0 +1,284 @@
+{
+ "$comment": "How each generated image becomes game sprites. Drop the full-size originals into content/art/source/tataka/ under the same names (any of .png/.jpg/.webp) and run: npm run art. split = cut a strip into named pieces along x (or y); ref = the piece in a strip that is a full upright figure; every other piece keeps its size relative to it; key = remove the background; border = crop the decorative border first; tolerance = how close a colour must be to the background to be removed (default 70; lower it when the art shares the background's hue); facing = the way the drawn figures face.",
+ "out": "public/art/tataka",
+ "manifest": "content/art/tataka.assets.json",
+ "items": [
+  {
+   "src": "poses-rama-move",
+   "key": true,
+   "split": [
+    "char.rama.prince.stand",
+    "char.rama.prince.walk",
+    "char.rama.prince.walk2",
+    "char.rama.prince.jump",
+    "char.rama.prince.roll"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "poses-rama-bow",
+   "key": true,
+   "split": [
+    "char.rama.prince.draw1",
+    "char.rama.prince.draw",
+    "char.rama.prince.release",
+    "char.rama.prince.drawUp"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "poses-rama-story",
+   "key": true,
+   "split": [
+    "char.rama.prince.hurt",
+    "char.rama.prince.kneel",
+    "char.rama.prince.namaste",
+    "char.rama.prince.hesitate"
+   ],
+   "ref": 2
+  },
+  {
+   "src": "poses-lakshmana",
+   "key": true,
+   "split": [
+    "char.lakshmana.prince.stand",
+    "char.lakshmana.prince.walk",
+    "char.lakshmana.prince.walk2",
+    "char.lakshmana.prince.draw",
+    "char.lakshmana.prince.listen"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "poses-vishvamitra",
+   "key": true,
+   "split": [
+    "char.vishvamitra.default.stand",
+    "char.vishvamitra.default.walk",
+    "char.vishvamitra.default.walk2",
+    "char.vishvamitra.default.point",
+    "char.vishvamitra.default.bless"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "poses-tataka-move",
+   "key": true,
+   "split": [
+    "char.tataka.default.stand",
+    "char.tataka.default.raise",
+    "char.tataka.default.slam",
+    "char.tataka.default.stride"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "poses-tataka-attack",
+   "key": true,
+   "split": [
+    "char.tataka.default.summon",
+    "char.tataka.default.lunge",
+    "char.tataka.default.rise",
+    "char.tataka.default.dazed"
+   ],
+   "ref": 3,
+   "keepAll": true
+  },
+  {
+   "src": "poses-tataka-fall",
+   "key": true,
+   "split": [
+    "char.tataka.default.struck",
+    "char.tataka.default.topple",
+    "char.tataka.default.lie"
+   ],
+   "ref": 0
+  },
+  {
+   "src": "portrait-rama-calm",
+   "key": true,
+   "id": "portrait.rama.calm"
+  },
+  {
+   "src": "portrait-rama-hesitant",
+   "key": true,
+   "id": "portrait.rama.hesitant"
+  },
+  {
+   "src": "portrait-rama-resolute",
+   "key": true,
+   "id": "portrait.rama.resolute"
+  },
+  {
+   "src": "portrait-rama-relieved",
+   "key": true,
+   "id": "portrait.rama.relieved"
+  },
+  {
+   "src": "portrait-lakshmana-alert",
+   "key": true,
+   "id": "portrait.lakshmana.alert"
+  },
+  {
+   "src": "portrait-vishvamitra-stern",
+   "key": true,
+   "id": "portrait.vishvamitra.stern"
+  },
+  {
+   "src": "portrait-vishvamitra-urgent",
+   "key": true,
+   "id": "portrait.vishvamitra.urgent"
+  },
+  {
+   "src": "portrait-vishvamitra-pleased",
+   "key": true,
+   "id": "portrait.vishvamitra.pleased"
+  },
+  {
+   "src": "portrait-tataka-roar",
+   "key": true,
+   "id": "portrait.tataka.roar"
+  },
+  {
+   "src": "portrait-tataka-cursed",
+   "key": true,
+   "id": "portrait.tataka.cursed"
+  },
+  {
+   "src": "portrait-narrator",
+   "key": true,
+   "id": "portrait.narrator.calm"
+  },
+  {
+   "src": "panel-arrival",
+   "id": "panel.arrival"
+  },
+  {
+   "src": "panel-hesitation",
+   "id": "panel.hesitation"
+  },
+  {
+   "src": "panel-dust",
+   "id": "panel.dust"
+  },
+  {
+   "src": "panel-dawn",
+   "id": "panel.dawn"
+  },
+  {
+   "src": "panel-astras",
+   "id": "panel.astras"
+  },
+  {
+   "src": "layer-sky-dusk",
+   "border": true,
+   "id": "bg.tataka.sky"
+  },
+  {
+   "src": "layer-sky-dawn",
+   "id": "bg.tataka.sky.dawn"
+  },
+  {
+   "src": "layer-hills",
+   "border": true,
+   "key": true,
+   "id": "bg.tataka.hills",
+   "tolerance": 38
+  },
+  {
+   "src": "layer-ruins-dead",
+   "key": true,
+   "id": "bg.tataka.ruins"
+  },
+  {
+   "src": "layer-ruins-healed",
+   "key": true,
+   "id": "bg.tataka.ruins.healed"
+  },
+  {
+   "src": "layer-ground-dead",
+   "key": true,
+   "id": "bg.tataka.ground"
+  },
+  {
+   "src": "layer-ground-healed",
+   "key": true,
+   "id": "bg.tataka.ground.healed"
+  },
+  {
+   "src": "layer-front-dead",
+   "key": true,
+   "id": "bg.tataka.front"
+  },
+  {
+   "src": "layer-front-healed",
+   "border": true,
+   "key": true,
+   "id": "bg.tataka.front.healed"
+  },
+  {
+   "src": "trees-dead",
+   "key": true,
+   "split": [
+    "tree.dead.1",
+    "tree.dead.2",
+    "tree.dead.3"
+   ]
+  },
+  {
+   "src": "trees-healed",
+   "key": true,
+   "split": [
+    "tree.healed.1",
+    "tree.healed.2",
+    "tree.healed.3"
+   ]
+  },
+  {
+   "src": "fx-dust",
+   "key": true,
+   "split": [
+    "fx.dust.1",
+    "fx.dust.2",
+    "fx.dust.3"
+   ]
+  },
+  {
+   "src": "fx-stones",
+   "key": true,
+   "split": [
+    "fx.stone.1",
+    "fx.stone.2",
+    "fx.stone.3"
+   ]
+  },
+  {
+   "src": "fx-arrows",
+   "key": true,
+   "split": [
+    "fx.arrow",
+    "fx.arrow.full"
+   ],
+   "axis": "y"
+  },
+  {
+   "src": "fx-marks",
+   "key": true,
+   "split": [
+    "fx.mark.lotus",
+    "fx.mark.star"
+   ]
+  },
+  {
+   "src": "fx-heal",
+   "key": true,
+   "split": [
+    "fx.bloom",
+    "fx.shoot",
+    "fx.flowers",
+    "fx.bird"
+   ],
+   "keepAll": true
+  }
+ ]
+}

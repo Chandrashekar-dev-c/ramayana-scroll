@@ -8,7 +8,8 @@ import Phaser from 'phaser';
 import { GROUND_Y, HUMAN_PX, PAL, view } from '../engine/layout.js';
 import { Stage } from '../art/stage.js';
 import { Controls } from '../engine/controls.js';
-import { face, sizeFor } from '../engine/assets.js';
+import { face, poseKey, setPose } from '../engine/assets.js';
+import { dust, stone, arrow, mark as groundMark } from '../art/fx.js';
 import { Hearts, BossBar, bark, clearBark, titleCard, prompt, impact, shake, pauseButton } from '../engine/ui.js';
 import { sfx, setMusic, healSwell } from '../engine/audio.js';
 import { settings, diff, buzz } from '../engine/settings.js';
@@ -28,10 +29,9 @@ export class BattleScene extends Phaser.Scene {
     this.ch = chapter(id); this.cfg = this.ch.battle; this.standalone = standalone;
     this.bossDef = BOSSES[this.cfg.boss];
     this.T = this.cfg.tuning; this.view = view(this);
-    const hero = this.ch.hero, hk = s => `char.${hero.id}.${hero.stage}.${s}`;
-    this.heroKeys = { stand: hk('stand'), walk: hk('walk'), draw: hk('draw') };
-    const bk = s => `char.${this.cfg.boss}.default.${s}`;
-    this.bossKeys = { stand: bk('stand'), walk: bk('walk'), attack: bk('attack') };
+    const hero = this.ch.hero;
+    this.heroKey = `char.${hero.id}.${hero.stage}`;
+    this.bossKey = `char.${this.cfg.boss}.default`;
     this.FEET = FEET; this.sfx = sfx;
     this.over = false; this.freeze = 0; this.slow = 1; this.seen = new Set();
 
@@ -39,9 +39,10 @@ export class BattleScene extends Phaser.Scene {
 
     // hero
     const hearts = Math.max(1, this.cfg.heroHearts + diff().hearts);
-    this.h = { x: 260, y: FEET, vy: 0, vx: 0, dir: 'right', hearts, max: hearts, invuln: 0, step: 0, cool: 0,
-      drawT: 0, angle: 0, fullCue: false, coyote: 0, jumpBuf: 0, rollT: 0, rollDir: 1 };
-    this.hero = this.add.image(this.h.x, FEET, this.heroKeys.stand).setOrigin(0.5, 1).setDepth(50);
+    this.h = { x: 330, y: FEET, vy: 0, vx: 0, dir: 'right', hearts, max: hearts, invuln: 0, step: 0, cool: 0,
+      drawT: 0, angle: 0, fullCue: false, coyote: 0, jumpBuf: 0, rollT: 0, rollDir: 1, hurtT: 0 };
+    this.hero = this.add.image(this.h.x, FEET, poseKey(this, this.heroKey, 'stand')).setOrigin(0.5, 1).setDepth(50);
+    this.makeAllies();
     this.heroH = hero.height;
     this.hearts = new Hearts(this, hearts);
     this.ring = this.add.graphics().setDepth(55);
@@ -51,7 +52,7 @@ export class BattleScene extends Phaser.Scene {
     this.home = this.view.w - 260;
     const startFrac = this.cfg.phases[fromPhase].from;
     this.b = { hp: Math.round(this.maxHp * startFrac), phase: fromPhase, busy: false, gone: false };
-    this.boss = this.add.image(this.home, FEET, this.bossKeys.stand).setOrigin(0.5, 1).setDepth(48);
+    this.boss = this.add.image(this.home, FEET, poseKey(this, this.bossKey, 'stand')).setOrigin(0.5, 1).setDepth(48);
     this.bossH = Math.min(MAX_BOSS_HEIGHT, 2.3);
     this.pose('idle');
     this.breath = this.tweens.add({ targets: this.boss, scaleY: this.boss.scaleY * 1.015, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
@@ -85,18 +86,16 @@ export class BattleScene extends Phaser.Scene {
   /** A telegraph time in seconds, scaled by difficulty (`pause` = a recovery window, scaled the other way). */
   t(s, recover = false) { const d = diff(); return recover ? s * d.pause : s * d.telegraph; }
   pose(name, dir) {
-    const key = this.bossKeys[this.bossDef.poses[name]] ?? this.bossKeys.stand;
-    this.boss.setTexture(key);
-    sizeFor(this.boss, this.bossH, HUMAN_PX);
-    face(this.boss, dir ?? (this.h.x > this.boss.x ? 'right' : 'left'));
+    setPose(this.boss, this.bossKey, this.bossDef.poses[name] ?? name, this.bossH, HUMAN_PX, dir ?? (this.h.x > this.boss.x ? 'right' : 'left'));
   }
   get home() { return this._home; }
   set home(v) { this._home = v; }
-  mark(x, key, seconds) {
-    const m = this.add.image(x, FEET - 4, key).setDepth(47).setAlpha(0);
+  /** A warning laid on the ground: 'lotus' (jump here) or 'star' (danger lands here). */
+  mark(x, kind, seconds) {
+    const m = groundMark(this, x, FEET - 4, kind).setDepth(47).setAlpha(0);
     (this.marks ??= new Set()).add(m); m.once('destroy', () => this.marks.delete(m));
     this.tweens.add({ targets: m, alpha: 1, duration: 150 });
-    this.tweens.add({ targets: m, scale: (m.scale || 1) * 1.15, yoyo: true, repeat: -1, duration: 160 });
+    this.tweens.add({ targets: m, scaleX: m.scaleX * 1.15, scaleY: m.scaleY * 1.15, yoyo: true, repeat: -1, duration: 160 });
     this.time.delayedCall(seconds * 1000, () => m.destroy());
     return m;
   }
@@ -109,10 +108,12 @@ export class BattleScene extends Phaser.Scene {
     this.time.delayedCall(450, () => { this.slow = 1; this.time.timeScale = 1; this.tweens.timeScale = 1; }); // 0.9s real time
   }
   hazard(update, sprite) { this.hazards.push({ update, sprite }); }
-  puff(x, y, scale = 0.5, ms = 500) {
-    const p = this.add.image(x, y, 'dust').setScale(scale).setDepth(57);
-    this.tweens.add({ targets: p, alpha: 0, scale: scale * 1.6, duration: ms, onComplete: () => p.destroy() });
+  puff(x, y, size = 0.5, ms = 500) {
+    const p = dust(this, x, y, size * 300).setDepth(57);
+    this.tweens.add({ targets: p, alpha: 0, scaleX: p.scaleX * 1.6, scaleY: p.scaleY * 1.6, duration: ms, onComplete: () => p.destroy() });
   }
+  dust(x, y, h) { return dust(this, x, y, h); }
+  stone(x, y) { return stone(this, x, y); }
   gone(v) { this.b.gone = v; }
   shake(ms, amt) { shake(this, ms, amt); }
   buzz(ms) { buzz(ms); }
@@ -160,8 +161,7 @@ export class BattleScene extends Phaser.Scene {
     const h = this.h, B = this.cfg.bow;
     if (this.over || h.drawT <= 0.04) { h.drawT = 0; return; }
     const power = Math.min(1, h.drawT / B.fullDraw), full = power >= 1, L = this.launch(power), p = this.bowPoint();
-    const s = this.add.image(p.x, p.y, 'arrow').setDepth(56).setScale(full ? 1.05 : 0.85);
-    if (full) s.setTint(0xffe9a8);
+    const s = arrow(this, p.x, p.y, full).setDepth(56);
     this.arrows.push({ s, vx: L.vx, vy: L.vy, g: L.g, full, dmg: full ? B.fullDamage : B.quickDamage, life: 2.4 });
     sfx.twang(power); if (full) buzz(15);
     h.drawT = 0; h.fullCue = false; h.cool = B.cooldown; h.shot = 0.16;
@@ -171,7 +171,7 @@ export class BattleScene extends Phaser.Scene {
     const h = this.h;
     if (h.invuln > 0 || this.over) return;
     h.hearts -= dmg; this.hearts.set(h.hearts); h.invuln = this.T.hurtInvulnerable;
-    h.vx = h.x < this.boss.x ? -420 : 420; h.vy = -420; h.drawT = 0;
+    h.vx = h.x < this.boss.x ? -420 : 420; h.vy = -420; h.drawT = 0; h.hurtT = 0.35;
     sfx.hurt(); buzz(120); shake(this, 250, 0.01);
     this.hero.setTint(0xff6a5a); this.time.delayedCall(180, () => this.hero.clearTint());
     if (h.hearts <= 0) this.lose();
@@ -197,7 +197,7 @@ export class BattleScene extends Phaser.Scene {
     const pi = this.phaseNow(), phase = this.cfg.phases[pi];
     if (pi !== this.b.phase) { // a new phase: the story speaks, then the fight resumes
       this.b.phase = pi;
-      if (phase.say) bark(this, phase.say.speaker, phase.say.text, 3600);
+      if (phase.say) { bark(this, phase.say.speaker, phase.say.text, 3600); if (phase.say.pose) this.allyPose(phase.say.speaker, phase.say.pose); }
       if (phase.dusk) this.duskSaid = true;
       sfx.roar(); this.time.delayedCall(1800, () => this.nextMove());
       return;
@@ -234,12 +234,16 @@ export class BattleScene extends Phaser.Scene {
   win() {
     this.over = true; this.controls.enabled = false; this.ring.clear();
     this.time.removeAllEvents(); this.time.timeScale = 1; this.tweens.timeScale = 1;
-    this.hero.setAlpha(1).setTexture(this.heroKeys.stand); sizeFor(this.hero, this.heroH, HUMAN_PX);
+    this.hero.setAlpha(1).setAngle(0); setPose(this.hero, this.heroKey, 'stand', this.heroH, HUMAN_PX);
     const fx = this.boss.x;
     this.freeze = 0.25; sfx.fall(); shake(this, 900, 0.02); buzz(200);
     impact(this, fx, FEET - 240, true);
-    this.tweens.killTweensOf(this.boss);
-    this.tweens.add({ targets: this.boss, angle: this.boss.flipX ? 18 : -18, y: FEET + 40, alpha: 0, duration: 1600, ease: 'Quad.easeIn' });
+    this.tweens.killTweensOf(this.boss); this.boss.setAlpha(1).setAngle(0);
+    // she reels, topples and lies still: the yakshini at peace
+    this.pose('struck');
+    this.time.delayedCall(450, () => { this.pose('topple'); this.tweens.add({ targets: this.boss, x: fx + (this.boss.flipX ? -40 : 40), duration: 400 }); });
+    this.time.delayedCall(1000, () => { this.pose('lie'); sfx.stomp(); shake(this, 300, 0.01); this.puff(this.boss.x, FEET - 30, 0.6, 900); });
+    this.time.delayedCall(3200, () => { setPose(this.hero, this.heroKey, 'namaste', this.heroH, HUMAN_PX); this.allyPose('vishvamitra', 'bless'); this.allyPose('lakshmana', 'stand'); });
     for (let i = 0; i < 10; i++) this.time.delayedCall(i * 80, () => this.puff(fx + Phaser.Math.Between(-160, 160), FEET - Phaser.Math.Between(20, 300), 0.6, 1800));
     this.hazards.forEach(h => h.sprite?.destroy()); this.hazards = [];
     this.marks?.forEach(m => m.destroy()); clearBark();
@@ -258,7 +262,8 @@ export class BattleScene extends Phaser.Scene {
     this.over = true; this.controls.enabled = false; this.ring.clear();
     this.marks?.forEach(m => m.destroy());
     this.time.removeAllEvents(); this.time.timeScale = 1; this.tweens.timeScale = 1;
-    this.tweens.add({ targets: this.hero, angle: this.h.dir === 'right' ? -80 : 80, y: FEET + 10, duration: 600 });
+    this.hero.setAlpha(1).setAngle(0); setPose(this.hero, this.heroKey, 'hurt', this.heroH, HUMAN_PX);
+    this.time.delayedCall(350, () => setPose(this.hero, this.heroKey, 'kneel', this.heroH, HUMAN_PX));
     const checkpoint = this.b.phase; // later phases resume where they began
     this.time.delayedCall(900, () => {
       bark(this, 'note', checkpoint > 0 ? 'Rama is struck down. Tap to rise again, at the falling of the dusk.' : 'Rama is struck down. Tap to rise again.', 60000);
@@ -270,6 +275,36 @@ export class BattleScene extends Phaser.Scene {
     if (this.over) return;
     this.scene.launch('Pause', { from: this.scene.key, chapter: this.ch.id, data: this.data0 });
     this.scene.pause();
+  }
+
+  // ---------------------------------------------------------------- companions
+  /** Companions stand behind the hero (chapter data `allies`); some loose their own arrows. */
+  makeAllies() {
+    this.allies = (this.cfg.allies ?? []).map(a => {
+      const key = `char.${a.id}.${a.stage ?? 'default'}`;
+      const s = this.add.image(a.x, FEET, poseKey(this, key, 'stand')).setOrigin(0.5, 1).setDepth(46);
+      setPose(s, key, 'stand', a.height, HUMAN_PX * 0.92, 'right');
+      return { ...a, key, s, t: a.fire ? Phaser.Math.FloatBetween(...a.fire.every) : Infinity };
+    });
+  }
+  allyPose(id, pose) { const a = this.allies.find(x => x.id === id); if (a) setPose(a.s, a.key, pose, a.height, HUMAN_PX * 0.92, 'right'); }
+  updateAllies(dt) {
+    for (const a of this.allies) {
+      if (!a.fire || a.drawn || this.over || this.b.gone) continue;
+      a.t -= dt;
+      if (a.t > 0) continue;
+      a.drawn = true; this.allyPose(a.id, 'draw');
+      this.time.delayedCall(500, () => { // draw, then loose one arrow at her body
+        a.drawn = false; a.t = Phaser.Math.FloatBetween(...a.fire.every);
+        if (this.over || this.b.gone) { this.allyPose(a.id, 'stand'); return; }
+        const box = this.bossBox().body, sx = a.s.x + a.s.displayWidth * 0.35, sy = a.s.y - a.s.displayHeight * 0.62;
+        const tx = box.centerX, ty = box.centerY, t = Math.abs(tx - sx) / 1300, g = 600;
+        const ar = arrow(this, sx, sy, false).setDepth(55); ar.setScale(ar.scaleX * 0.8);
+        this.arrows.push({ s: ar, vx: (tx - sx) / t, vy: (ty - sy) / t - 0.5 * g * t, g, full: false, dmg: a.fire.damage, life: 2, ally: true });
+        sfx.twang(0.3);
+        this.time.delayedCall(250, () => this.allyPose(a.id, 'stand'));
+      });
+    }
   }
 
   // ---------------------------------------------------------------- frame
@@ -302,17 +337,20 @@ export class BattleScene extends Phaser.Scene {
       if (h.drawT >= B.fullDraw && !h.fullCue) { h.fullCue = true; sfx.fullDraw(); buzz(10); }
     }
 
-    // hero sprite
+    // hero sprite: the pose follows what Rama is doing
+    h.hurtT -= dt;
     if (!this.over) {
-      const stride = Math.floor(h.step / 0.2) % 2;
-      this.hero.setTexture(h.drawT > 0 || h.shot > 0 ? this.heroKeys.draw : Math.abs(h.vx) > 30 && stride ? this.heroKeys.walk : this.heroKeys.stand);
-      sizeFor(this.hero, this.heroH, HUMAN_PX);
-      if (h.rollT > 0) this.hero.scaleY *= 0.72; // a low crouching dash
-      face(this.hero, h.dir);
+      const moving = Math.abs(h.vx) > 30, stride = Math.floor(h.step / 0.2) % 2, k = h.drawT / B.fullDraw;
+      const pose = h.rollT > 0 ? 'roll' : h.y < FEET - 4 ? (h.drawT > 0 ? 'draw' : 'jump') : h.hurtT > 0 ? 'hurt'
+        : h.drawT > 0 ? (k < 0.35 ? 'draw1' : h.angle > 35 ? 'drawUp' : 'draw') : h.shot > 0 ? 'release'
+        : moving ? (stride ? 'walk' : 'walk2') : 'stand';
+      setPose(this.hero, this.heroKey, pose, this.heroH, HUMAN_PX, h.dir);
+      if (h.rollT > 0 && !this.hero.texture.key.endsWith('.roll')) this.hero.scaleY *= 0.72; // no roll art yet: crouch
       this.hero.setPosition(h.x, h.y);
-      this.hero.setAngle(h.drawT > 0 ? (h.dir === 'right' ? -1 : 1) * h.angle * 0.12 : 0); // lean into the aim
+      this.hero.setAngle(h.drawT > 0 ? (h.dir === 'right' ? -1 : 1) * Math.max(0, h.angle - (pose === 'drawUp' ? 40 : 0)) * 0.12 : 0);
       this.hero.setAlpha(h.invuln > 0 && h.rollT <= 0 ? (Math.floor(h.invuln * 12) % 2 ? 0.4 : 1) : 1);
     }
+    this.updateAllies(dt);
 
     // the charge ring, and at full draw the flight in rice-paste dots
     this.ring.clear();

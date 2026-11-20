@@ -37,7 +37,21 @@
     "end": {
       "x": 3200,
       "dust": true
-    }
+    },
+    "followers": [
+      {
+        "id": "lakshmana",
+        "stage": "prince",
+        "height": 1.0,
+        "gap": 150,
+        "endPose": "listen"
+      },
+      {
+        "id": "vishvamitra",
+        "height": 1.1,
+        "gap": 290
+      }
+    ]
   },
   "battle": {
     "backdrop": "bg.tataka",
@@ -82,7 +96,8 @@
         "dusk": true,
         "say": {
           "speaker": "vishvamitra",
-          "text": "Enough mercy, Rama! At dusk rakshasas grow unbeatable. End this before the sun sets!"
+          "text": "Enough mercy, Rama! At dusk rakshasas grow unbeatable. End this before the sun sets!",
+          "pose": "point"
         }
       }
     ],
@@ -112,7 +127,7 @@
       }
     },
     "heal": {
-      "treeCount": 9
+      "treeCount": 5
     },
     "intro": "The yakshini comes roaring out of the dust",
     "hint": "Hold the right side to draw the bow, drag up or down to aim, release to loose. Left side: walk, flick up to jump, flick down to roll.",
@@ -146,6 +161,26 @@
         "speed": 560,
         "invulnerable": 0.32
       }
-    }
+    },
+    "allies": [
+      {
+        "id": "vishvamitra",
+        "height": 1.1,
+        "x": 60
+      },
+      {
+        "id": "lakshmana",
+        "stage": "prince",
+        "height": 1.0,
+        "x": 150,
+        "fire": {
+          "every": [
+            6,
+            9
+          ],
+          "damage": 1
+        }
+      }
+    ]
   }
 }

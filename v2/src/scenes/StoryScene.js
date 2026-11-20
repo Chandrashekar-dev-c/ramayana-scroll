@@ -9,6 +9,7 @@ import { setDrone } from '../engine/audio.js';
 import { applyFinish } from '../fx/finish.js';
 import { pauseButton } from '../engine/ui.js';
 import { inkFor } from '../engine/chapters.js';
+import { pick } from '../engine/assets.js';
 
 const MODES = { walk: 'Walk', battle: 'Battle' };
 
@@ -44,9 +45,15 @@ export class StoryScene extends Phaser.Scene {
 
   setPanel(id) {
     const W = this.scale.width;
-    if (!this.textures.exists(`panel.${id}`)) return;
+    const key = pick(this, `panel.${id}`, 'panel.tataka');
+    if (!key) return;
     this.registry.set('story.panel', id);
-    this.panel.setTexture(`panel.${id}`).setVisible(true);
+    if (this.panel.visible && this.panel.texture.key !== key) { // cross-fade from the previous panel
+      const old = this.add.image(this.panel.x, this.panel.y, this.panel.texture.key).setScale(this.panel.scale).setDepth(1);
+      this.tweens.add({ targets: old, alpha: 0, duration: 700, onComplete: () => old.destroy() });
+    }
+    this.tweens.killTweensOf(this.panel);
+    this.panel.setTexture(key).setVisible(true);
     this.panel.setScale(Math.max(W / this.panel.width, H / this.panel.height));
     this.panel.setY(H / 2 - 40); // keep faces above the dialogue box
     this.tweens.add({ targets: this.panel, scale: this.panel.scale * 1.06, duration: 24000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });

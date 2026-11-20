@@ -10,7 +10,7 @@ export class TitleScene extends Phaser.Scene {
   create() {
     const W = this.scale.width;
     const ch = chapter('tataka');
-    const bg = this.add.image(W / 2, H / 2, 'panel.tataka');
+    const bg = this.add.image(W / 2, H / 2, this.textures.exists('panel.arrival') ? 'panel.arrival' : 'panel.tataka');
     bg.setScale(Math.max(W / bg.width, H / bg.height)).setTint(0x8a7a6a);
     this.add.rectangle(W / 2, H / 2, W, H, 0x1d1613, 0.35);
     const style = (size, extra = {}) => ({ fontFamily: FONT.serif, fontSize: `${size}px`, color: '#f8efd9', stroke: '#1d1613', strokeThickness: Math.round(size / 6), ...extra });
