@@ -2,7 +2,7 @@
 // used for that and nothing else (Rule C): fish-scale band = shockwave, opening lotus =
 // stomp, painted star = a blow is coming, coiling naga = noose, rice-paste dots = arrow path,
 // ring of yellow dots = usable, flowering vine = healing, naina-jogins = low health.
-import { shape, line, hatch, ellipsePts, dots, rectPts } from './ink.js';
+import { shape, line, hatch, ellipsePts, dots, rectPts, hasTreat } from './ink.js';
 import { PAL } from './palette.js';
 import { noise } from '../core/rng.js';
 
@@ -14,14 +14,21 @@ const bg = (o) => (o.night ? PAL.night : PAL.cream);
 export function fish(ctx, x, y, s, o = {}) {
   const d = o.dir === -1 ? -1 : 1;
   const p = [[-s, 0], [-s * 0.4, -s * 0.42], [s * 0.4, -s * 0.3], [s * 0.75, 0], [s * 1.15, -s * 0.36], [s * 1.15, s * 0.36], [s * 0.75, 0], [s * 0.4, s * 0.3], [-s * 0.4, s * 0.42]].map(([a, b]) => [x - a * d, y + b]);
-  shape(ctx, p, { mode: md(o), fill: o.fill || PAL.turmeric, lineColor: lc(o), w: o.w ?? 1.2, seed: o.seed ?? 4, smooth: true, amp: 0.5 });
+  if (hasTreat('sumie')) { ctx.save(); ctx.globalAlpha *= 0.7; shape(ctx, p, { mode: 'sil', seed: o.seed ?? 4, smooth: true, amp: 0.6 }); ctx.restore(); shape(ctx, p, { mode: 'line', lineColor: PAL.black, w: (o.w ?? 1.2) * 1.3, seed: o.seed ?? 4, smooth: true, amp: 0.6 }); }
+  else shape(ctx, p, { mode: md(o), fill: o.fill || PAL.turmeric, lineColor: lc(o), w: o.w ?? 1.2, seed: o.seed ?? 4, smooth: true, amp: 0.5 });
   ctx.fillStyle = lc(o); ctx.beginPath(); ctx.arc(x + d * s * 0.6, y - s * 0.08, Math.max(0.8, s * 0.07), 0, TAU); ctx.fill();
 }
 
 export function bird(ctx, x, y, s, o = {}) {
   const d = o.dir === -1 ? -1 : 1;
   const P = (a) => a.map(([px, py]) => [x + px * d * s, y + py * s]);
-  shape(ctx, P([[-1, 0.1], [-0.3, -0.45], [0.5, -0.35], [0.8, -0.05], [0.4, 0.4], [-0.4, 0.35]]), { mode: md(o), fill: o.fill || PAL.leaf, lineColor: lc(o), w: o.w ?? 1.2, seed: o.seed ?? 5, smooth: true, amp: 0.5 });
+  if (hasTreat('sumie')) {
+    // Sumi-e: one loaded ink wash for the body, then a single bold brush line
+    ctx.save(); ctx.globalAlpha *= 0.7;
+    shape(ctx, P([[-1, 0.1], [-0.3, -0.45], [0.5, -0.35], [0.8, -0.05], [0.4, 0.4], [-0.4, 0.35]]), { mode: 'sil', seed: o.seed ?? 5, smooth: true, amp: 0.9 });
+    ctx.restore();
+    shape(ctx, P([[-1, 0.1], [-0.3, -0.45], [0.5, -0.35], [0.8, -0.05], [0.4, 0.4], [-0.4, 0.35]]), { mode: 'line', lineColor: PAL.black, w: (o.w ?? 1.2) * 1.4, seed: o.seed ?? 5, smooth: true, amp: 0.9 });
+  } else shape(ctx, P([[-1, 0.1], [-0.3, -0.45], [0.5, -0.35], [0.8, -0.05], [0.4, 0.4], [-0.4, 0.35]]), { mode: md(o), fill: o.fill || PAL.leaf, lineColor: lc(o), w: o.w ?? 1.2, seed: o.seed ?? 5, smooth: true, amp: 0.5 });
   line(ctx, P([[0.8, -0.05], [1.15, 0.05], [0.8, 0.12]]), { w: o.w ?? 1.2, color: o.colour ? PAL.madder : lc(o), seed: 2, amp: 0.3 });
   line(ctx, P([[-1, 0.1], [-1.6, 0.3]]), { w: o.w ?? 1.2, color: lc(o), seed: 3, amp: 0.3 });
   line(ctx, P([[-0.2, -0.05], [0.25, 0.12], [-0.1, 0.2]]), { w: (o.w ?? 1.2) * 0.7, color: lc(o), seed: 4, amp: 0.3, flat: true });
@@ -338,6 +345,17 @@ export function pillar(ctx, x, y, w, h, o = {}) {
   shape(ctx, rectPts(x - w / 2, y - h, w, h), { mode: m, fill: o.fill || PAL.madder, lineFill: bg(o), lineColor: c, gap: o.colour ? PAL.turmeric : null, w: 1.4, seed: o.seed ?? 1, amp: 0.6 });
   shape(ctx, rectPts(x - w * 0.8, y - h - 10, w * 1.6, 10), { mode: m, fill: PAL.turmeric, lineFill: bg(o), lineColor: c, w: 1.2, seed: 2, amp: 0.5 });
   shape(ctx, rectPts(x - w * 0.8, y - 10, w * 1.6, 10), { mode: m, fill: PAL.turmeric, lineFill: bg(o), lineColor: c, w: 1.2, seed: 3, amp: 0.5 });
+  if (hasTreat('mosaic')) {
+    // Roman mosaic: small tesserae in a checker of palette colours, clipped to the shaft
+    const tiles = [PAL.turmeric, PAL.indigo, PAL.madder, PAL.leaf, PAL.cream];
+    ctx.save(); ctx.beginPath(); ctx.rect(x - w / 2, y - h, w, h); ctx.clip();
+    const ts = 7;
+    for (let j = 0, yy = y - h; yy < y; yy += ts, j++) for (let i = 0, xx = x - w / 2; xx < x + w / 2; xx += ts, i++) {
+      ctx.globalAlpha = o.colour ? 0.85 : 0.35; ctx.fillStyle = o.colour ? tiles[(i * 3 + j * 2) % tiles.length] : c;
+      ctx.fillRect(xx + 0.6, yy + 0.6, ts - 1.2, ts - 1.2);
+    }
+    ctx.restore();
+  }
   for (let yy = y - h + 26; yy < y - 14; yy += 26) line(ctx, [[x - w / 2, yy], [x, yy - 9], [x + w / 2, yy]], { w: 1, color: o.colour ? PAL.turmeric : c, seed: yy | 0, amp: 0.4, flat: true });
 }
 

@@ -94,6 +94,11 @@ export function shape(ctx, pts, o = {}) {
 let brushMode = false;
 export function setBrushMode(on) { brushMode = !!on; }
 
+// Named treatments for one backdrop (Roman mosaic buildings, Sumi-e birds, golden-hour light).
+let treats = new Set();
+export function setTreatments(list) { treats = new Set(list || []); }
+export function hasTreat(name) { return treats.has(name); }
+
 export function hatch(ctx, pts, o = {}) {
   if (brushMode) return dryHatch(ctx, pts, o);
   const seed = o.seed ?? 3, sp = o.spacing ?? 7, ang = o.angle ?? 0.7;
