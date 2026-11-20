@@ -41,7 +41,7 @@ const FAUNA = {
   kailash: [['bird', 900, 9, 'air']],
 };
 // Interiors, desolation, night voids and open water get no ambient land life.
-const BARE = new Set(['court', 'chamber', 'kingRoom', 'cave', 'lankaCourt', 'lankaRoofs', 'ocean', 'nightSky', 'waste', 'battlefield', 'lanka', 'lankaNight']);
+const BARE = new Set(['court', 'courtBrush', 'chamber', 'kingRoom', 'cave', 'lankaCourt', 'lankaRoofs', 'ocean', 'nightSky', 'waste', 'battlefield', 'lanka', 'lankaNight']);
 
 function faunaFor(id) {
   if (FAUNA[id]) return FAUNA[id];

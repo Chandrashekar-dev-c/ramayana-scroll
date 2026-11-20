@@ -16,6 +16,7 @@ export const CHUNK = 1024;
 const T = (kind, sp, size, o = {}) => ['tree', sp, 0, size, { kind, ...o }];
 export const BACKDROPS = {
   court: { ground: 'floor', sky: ['flower', 'dots'], layers: [['pillar', 250, 0, 330, {}], ['arch', 250, 0, 330, {}], ['lampStand', 500, 0, 90, { off: 125 }]] },
+  courtBrush: { ground: 'floor', brush: true, sky: ['flower', 'dots'], layers: [['pillar', 250, 0, 330, {}], ['arch', 250, 0, 330, {}], ['lampStand', 500, 0, 90, { off: 125 }]] },
   chamber: { ground: 'floor', sky: ['dots'], layers: [['pillar', 330, 0, 300, { fill: PAL.madder }], ['curtain', 330, 0, 300, { off: 165 }]] },
   kingRoom: { ground: 'floor', night: true, sky: ['star'], moon: true, layers: [['pillar', 360, 0, 310, {}], ['lampStand', 180, 0, 100, { off: 60 }]] },
   city: { ground: 'earth', brush: true, sky: ['bird', 'flower', 'dots'], layers: [['building', 300, 0, 250, { banner: true, tiers: 3 }], ['building', 300, 0, 150, { off: 150, tiers: 2 }], T('mango', 420, 150, { off: 60 })] },
@@ -56,6 +57,7 @@ export const BACKDROPS = {
 // line weight, never from perspective or shading (brief, Rule G and the depth notes).
 const LOOK = {
   court: { skyPat: 'royalChecks', far: null, near: 'lotusBorder', sun: false },
+  courtBrush: { skyPat: 'royalChecks', far: null, near: 'lotusBorder', sun: false },
   chamber: { skyPat: 'smallChecks', far: null, near: 'lotusBorder', sun: false },
   kingRoom: { skyPat: 'stars', far: null, near: 'lotusBorder', sun: false },
   city: { skyPat: 'flowerDots', far: 'city', near: 'grass' },
