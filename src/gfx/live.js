@@ -75,8 +75,11 @@ export class LiveFigure {
     this.phase = (this.seed % 100) / 100 * Math.PI * 2;
     this.blinkT = 1 + (this.seed % 7) * 0.5; this.blinking = 0;
     this.steps = o.steps || 6;
+    // stepped motion: the figure's drawing changes on 12 fps steps, like a puppet or a
+    // hand-drawn film on twos; light, camera and particles still glide every frame (0 = smooth)
+    this.stepFps = o.stepFps ?? 0;
     this.talkT = 0; this.talking = false;
-    this.idleT = 2 + (this.seed % 5) * 0.4;
+    this.idleT = 3.5 + (this.seed % 5) * 0.6;
     this.heads = null;
     this.x = 0; this.y = 0;
   }
@@ -106,16 +109,17 @@ export class LiveFigure {
     // weight shifts while standing about: stand <-> stand2, slowly
     if (this.idle && this.k >= 1 && (this.to === 'stand' || this.to === 'stand2')) {
       this.idleT -= dt;
-      if (this.idleT <= 0) { this.idleT = 2.6 + (this.seed % 9) * 0.35; this.setPose(this.to === 'stand' ? 'stand2' : 'stand', 1.1); }
+      if (this.idleT <= 0) { this.idleT = 4.5 + (this.seed % 9) * 0.5; this.setPose(this.to === 'stand' ? 'stand2' : 'stand', 1.6); }
     }
   }
 
   texture(mode) {
     const spec = this.spec;
     const steps = this.dur > 0.6 ? 8 : this.steps;
-    const kq = this.k >= 1 ? 1 : Math.round(this.ease(this.k) * steps) / steps;
+    const kt = this.stepFps && this.k < 1 ? Math.min(1, (Math.floor(this.t * this.stepFps) / this.stepFps) / this.dur) : this.k;
+    const kq = kt >= 1 ? 1 : Math.round(this.ease(kt) * steps) / steps;
     const blink = this.blinking > 0 && mode === 'colour' && spec.body !== 'bird';
-    const nod = this.talking ? [0, 4, 1, -2][Math.floor(this.talkT * 7) % 4] : 0;
+    const nod = this.talking ? [0, 3, 0, -2][Math.floor(this.talkT * 2.6) % 4] : 0;
     const aim = Math.round(this.aim / 10) * 10;
     const poseName = kq >= 1 ? this.to : kq <= 0 ? this.from : this.to;
     const heads = this.heads ? JSON.stringify(this.heads) : '';

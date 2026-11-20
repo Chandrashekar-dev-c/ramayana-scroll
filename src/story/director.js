@@ -35,6 +35,9 @@ export async function loadStory(id) {
   const m = await f(); return m.default || m;
 }
 
+/** Stage pace: written times are scaled by this, so the whole play can breathe slower. */
+const TEMPO = 1.4;
+
 const SPEAKERS = Object.fromEntries(chars.map((c) => [c.id.toUpperCase(), c.id]));
 export function nameOf(id) { const k = 'name.' + id; return has(k) ? t(k) : id.replace(/^\w/, (c) => c.toUpperCase()); }
 
@@ -166,7 +169,7 @@ export class Director {
         const side = w[w.indexOf('from') + 1] || 'left', to = +w[w.indexOf('to') + 1];
         const a = st.addActor(id, id, stg, { x: this.offstage(side), pose: kv.pose, facing: side === 'left' ? 1 : -1, y: kv.y, scale: kv.scale });
         if (kv.pose) a.hold = kv.pose;
-        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] : Math.min(3.2, Math.max(1, Math.abs(stageX(to) - a.x) / 190));
+        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] * TEMPO : Math.min(4.5, Math.max(1.4, Math.abs(stageX(to) - a.x) / 120));
         const p = this.tween(a, { x: stageX(to), duration: dur, ease: 'sine.inOut' }).then(() => { if (kv.face) a.fig.facing = kv.face === 'left' ? -1 : 1; });
         return w.includes('nowait') ? null : p;
       }
@@ -174,7 +177,7 @@ export class Director {
         const a = this.actorAt(w[0]); if (!a) return null;
         const side = w[w.indexOf('to') + 1] || 'right';
         const x = this.offstage(side);
-        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] : Math.min(3.2, Math.max(0.9, Math.abs(x - a.x) / 210));
+        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] * TEMPO : Math.min(4.5, Math.max(1.3, Math.abs(x - a.x) / 130));
         const p = this.tween(a, { x, duration: dur, ease: 'sine.in' }).then(() => st.removeActor(w[0]));
         return w.includes('nowait') ? null : p;
       }
@@ -182,13 +185,13 @@ export class Director {
         const a = this.actorAt(w[0]); if (!a) return null;
         const to = stageX(+w[w.indexOf('to') + 1]);
         a.keepFace = w.includes('keepface');
-        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] : Math.min(3, Math.max(0.6, Math.abs(to - a.x) / 190));
+        const dur = w.includes('in') ? +w[w.indexOf('in') + 1] * TEMPO : Math.min(4, Math.max(0.9, Math.abs(to - a.x) / 120));
         const vars = { x: to, duration: dur, ease: 'sine.inOut' };
         if (kv.y !== undefined) vars.y = FLOOR + kv.y * ACT;
         const p = this.tween(a, vars).then(() => { a.keepFace = false; if (kv.face) a.fig.facing = kv.face === 'left' ? -1 : 1; });
         return w.includes('nowait') ? null : p;
       }
-      case 'pose': { const a = this.actorAt(w[0]); if (a) a.setPose(w[1], kv.in ?? 0.34); return null; }
+      case 'pose': { const a = this.actorAt(w[0]); if (a) a.setPose(w[1], kv.in ?? 0.7); return null; }
       case 'face': { const a = this.actorAt(w[0]); if (a) a.fig.facing = w[1] === 'left' ? -1 : 1; return null; }
       case 'set': {
         const a = this.actorAt(w[0]); if (!a) return null;
@@ -236,19 +239,19 @@ export class Director {
     hideLine(); st.speaker(null);
     cue('clothRoll');
     const fadeActors = clear ? [...st.actors.values()].map((a) => this.tween(a.fig, { alpha: 0, duration: 0.4 })) : [];
-    await Promise.all([this.tween(st, { clothDrop: 0, duration: 0.55, ease: 'power2.in' }), ...fadeActors]);
+    await Promise.all([this.tween(st, { clothDrop: 0, duration: 0.85, ease: 'power2.in' }), ...fadeActors]);
     if (this.cancelled) return;
     if (clear) { st.clearActors(); st.clearProps(); }
     st.setCloth(id, kv.style || 'bharni-bright', kv.colour !== false);
     cue('clothRoll');
-    await this.tween(st, { clothDrop: 1, duration: 0.8, ease: 'bounce.out' });
+    await this.tween(st, { clothDrop: 1, duration: 1.2, ease: 'bounce.out' });
   }
 
   curtain(which) {
     const st = this.stage, open = which === 'open';
     if ((open && st.curtainOpen >= 1) || (!open && st.curtainOpen <= 0)) return Promise.resolve();
     if (!this.skipping) cue('curtain');
-    return this.tween(st, { curtainOpen: open ? 1 : 0, duration: open ? 1.7 : 1.2, ease: open ? 'power2.inOut' : 'power2.in' });
+    return this.tween(st, { curtainOpen: open ? 1 : 0, duration: open ? 2.4 : 1.6, ease: open ? 'power2.inOut' : 'power2.in' });
   }
 
   light(which) {
@@ -285,7 +288,7 @@ export class Director {
   update(dt) {
     if (this.overlay) { this.overlay.t += dt; if (this.overlay.t > this.overlay.dur) this.overlay = null; }
     if (!this.lineActive) return;
-    tickLine(dt, 52);
+    tickLine(dt, 40);
     const tapped = input.pointer.justDown || input.consume('confirm') || input.consume('jump') || input.consume('action');
     if (!tapped) return;
     if (lineTyping()) { finishTyping(); return; }

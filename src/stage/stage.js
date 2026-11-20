@@ -144,14 +144,14 @@ export class Actor {
   constructor(id, stageName, o = {}) {
     const spec = character(id, stageName);
     this.id = id; this.charId = id;
-    this.fig = new LiveFigure(spec, { pose: o.pose || 'stand', facing: o.facing ?? 1, idle: true });
+    this.fig = new LiveFigure(spec, { pose: o.pose || 'stand', facing: o.facing ?? 1, idle: true, stepFps: 12 });
     this.fig.scale = ACT * (o.scale || 1);
     this.x = o.x ?? stageX(0.5); this.y = FLOOR + (o.y || 0) * ACT; this.lastX = this.x; this.walkD = 0; this.walking = false;
     this.hold = o.pose || 'stand';
     this.colour = col(spec.colour.main);
   }
   get view() { return this.fig.view; }
-  setPose(p, dur = 0.32) { this.hold = p; if (!this.walking) this.fig.setPose(p, dur); }
+  setPose(p, dur = 0.7) { this.hold = p; if (!this.walking) this.fig.setPose(p, dur); }
   update(dt) {
     const dx = this.x - this.lastX; this.lastX = this.x;
     const moving = Math.abs(dx) > 0.15;
@@ -159,9 +159,10 @@ export class Actor {
       if (!this.walking) { this.walking = true; this.walkD = 0; }
       if (!this.keepFace) this.fig.facing = dx > 0 ? 1 : -1;
       this.walkD += Math.abs(dx);
-      const step = WALK[Math.floor(this.walkD / 26) % 4];
-      if (this.fig.to !== step) this.fig.setPose(step, 0.11);
-    } else if (this.walking) { this.walking = false; this.fig.setPose(this.hold, 0.22); }
+      // a four-drawing walk, each drawing held: about seven steps a second at stage pace
+      const step = WALK[Math.floor(this.walkD / 17) % 4];
+      if (this.fig.to !== step) this.fig.setPose(step, 0, 'snap');
+    } else if (this.walking) { this.walking = false; this.fig.setPose(this.hold, 0.4); }
     this.fig.update(dt);
     this.fig.x = this.x; this.fig.y = this.y;
   }
@@ -351,6 +352,8 @@ export class StageView {
   // ------------------------------------------------------------ every frame
   update(dt) {
     this.t += dt;
+    // a faint hand-held drift: the frame never quite stops, so a held scene still breathes
+    if (!this.still) this.view.pivot.set(Math.sin(this.t * 0.37) * 1.1 + Math.sin(this.t * 0.11) * 0.8, Math.sin(this.t * 0.29) * 0.7);
     for (const a of this.actors.values()) a.update(dt);
     // sort by feet so nearer actors overlap farther ones
     for (const a of this.actors.values()) a.view.zIndex = a.y + (a.z || 0);
