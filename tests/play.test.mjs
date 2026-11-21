@@ -102,6 +102,10 @@ test('4. a full-draw arrow into a wall becomes a foothold for a few seconds; a c
   const weak = { x: 805, y: 380, vx: 1500, vy: 0, full: false, own: true, life: 2 };
   arrowMeetsWall(b, weak);
   assert.equal(b.footholds.length, 1, 'a quick shot just bounces off');
+  // a low arrow past the arena's edge flies on: foes waiting out there must still be reachable
+  assert.equal(arrowMeetsWall(b, { x: b.bounds.right + 20, y: GROUND - 90, vx: 1500, vy: 0, full: true, own: true, life: 2 }), false);
+  const flat = battle();
+  assert.equal(arrowMeetsWall(flat, { x: flat.bounds.right + 20, y: 200, vx: 1500, vy: 0, full: true, own: true, life: 2 }), false, 'and on a flat level the edge never stops arrows');
   tick(b, Math.ceil(tuning.hero.footholdLife / DT) + 2);
   assert.equal(b.footholds.length, 0, 'and it fades');
   const h = b.hero; h.x = 280; h.y = 380; h.vy = 0; h.onGround = false;

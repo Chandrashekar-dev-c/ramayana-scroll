@@ -40,7 +40,9 @@ export function arrowMeetsWall(b, a) {
   const T = b.tun.hero;
   let hitX = null;
   for (const w of b.walls) if (a.y > w.y1 && a.y < w.y2 && a.x > w.x1 && a.x < w.x2) hitX = a.vx > 0 ? w.x1 : w.x2;
-  if (hitX === null && a.y < GROUND - 70 && (a.x < b.bounds.left || a.x > b.bounds.right) && a.own) hitX = a.x < b.bounds.left ? b.bounds.left : b.bounds.right;
+  // the arena's edge takes a foothold only on a climbing level and only above any standing foe's head,
+  // so archers waiting just past the edge can still be shot
+  if (hitX === null && b.vertical && a.y < GROUND - 190 && (a.x < b.bounds.left || a.x > b.bounds.right) && a.own) hitX = a.x < b.bounds.left ? b.bounds.left : b.bounds.right;
   if (hitX === null) return false;
   a.x = hitX; a.life = 0; a.stuck = 0.6;
   if (a.full && a.own) {
