@@ -13,7 +13,12 @@
   "jump": "ravana.tip"
  },
  "painted": true,
- "allies": [],
+ "allies": [
+  {
+   "id": "hanuman",
+   "role": "vault"
+  }
+ ],
  "arenas": [
   {
    "left": -100,

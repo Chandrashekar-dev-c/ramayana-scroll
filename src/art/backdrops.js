@@ -510,8 +510,12 @@ export function drawBackdrop(ctx, id, style, camX, W, o = {}) {
       }
     }
   };
-  plane(camX * FAR_SPEED, 'far');
-  plane(camX, 'mid');
+  if (o.part !== 'mid') plane(camX * FAR_SPEED, 'far');
+  if (o.part !== 'far') plane(camX, 'mid');
 }
+/** Just the far plane (sky, sun, distant hills), so something can be drawn between it and the world. */
+export function drawBackdropFar(ctx, id, style, camX, W, o = {}) { drawBackdrop(ctx, id, style, camX, W, { ...o, part: 'far' }); }
+/** Just the mid plane (water, trees, buildings, ground). */
+export function drawBackdropMid(ctx, id, style, camX, W, o = {}) { drawBackdrop(ctx, id, style, camX, W, { ...o, part: 'mid' }); }
 
 export function isNight(id) { return !!(BACKDROPS[id] && BACKDROPS[id].night); }

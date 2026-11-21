@@ -10,15 +10,16 @@ import { t } from '../core/i18n.js';
 import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK } from '../art/figures.js';
-import { drawBackdrop, drawNear, isNight, regrowList, drawGrowingTree } from '../art/backdrops.js';
+import { drawBackdropFar, drawBackdropMid, drawNear, isNight, regrowList, drawGrowingTree } from '../art/backdrops.js';
 import { drawLife } from '../art/life.js';
 import { drawAtmosphere } from '../art/atmosphere.js';
 import { drawProp } from '../art/props.js';
 import { shape, line, hatch, ellipsePts, dots } from '../art/ink.js';
 import * as M from '../art/motifs.js';
-import { createHero, updateHero, drawHero, addRage, startRage, RAGE_MAX } from './hero.js';
-import { spawnEnemy, updateEnemies, drawEnemy, enemyBoxes } from './enemies.js';
-import { createBoss, updateBoss, drawBoss, bossBoxes, hitBoss, damageBoss } from './bosses.js';
+import { createHero, updateHero, drawHero, addRage, startRage, RAGE_MAX, onParrySuccess } from './hero.js';
+import { initArena, updateArena, drawArena, drawSkyAbove, arrowMeetsWall, arrowMeetsProp } from './arena.js';
+import { spawnEnemy, updateEnemies, drawEnemy, enemyBoxes, teleOf } from './enemies.js';
+import { createBoss, updateBoss, drawBoss, drawBossBg, bossBoxes, hitBoss, damageBoss, addBossStagger } from './bosses.js';
 import { drawHud, sunRect, rageRect } from './hud.js';
 import { grade } from './astra.js';
 
@@ -32,7 +33,10 @@ const TEACH = {
   climber: { key: 'hint.climber', button: null },
   stomp: { key: 'hint.stomp', button: 'jump' },
   kick: { key: 'hint.kick', button: null },
+  parry: { key: 'hint.parry', button: 'parry' },
 };
+// with manual parry (Normal and Hard) the old "kick" lesson teaches the parry instead
+const teachOf = (b, k) => (k === 'kick' && !b.diff.aimAssist ? 'parry' : k);
 
 export function createBattle(level, opts = {}) {
   const diffName = save.data.difficulty || 'normal';
@@ -72,6 +76,7 @@ export function createBattle(level, opts = {}) {
   if (!opts.checkpoint && level.title && !opts.retry) b.banner = { title: t(level.title), sub: level.kandaTitle ? t(level.kandaTitle) : '', t: 2.4 };
   else if (opts.checkpoint) b.stepT = 0.6;
   installApi(b);
+  initArena(b, level);
   // trees that come back to life when the boss falls (Tataka's wasteland, the Dandaka forest...)
   if (level.regrow) {
     const lo = Math.min(...level.arenas.map((a) => a.left)) - 900, hi = Math.max(...level.arenas.map((a) => a.right)) + 900;
@@ -116,6 +121,7 @@ function installApi(b) {
     let teach = null;
     if (kind === 'lotusOpen') teach = 'stomp';
     else if (step && step.teach === answer) teach = answer;
+    if (teach) teach = teachOf(b, teach);
     if (teach && TEACH[teach] && !b.teachDone[teach] && (!save.seen('teach.' + teach) || b.teachFails[teach] >= 2)) {
       b.teachDone[teach] = true; save.markSeen('teach.' + teach);
       b.slowT = b.tun.feel.teachTime; b.slow = b.tun.feel.teachSlow;
@@ -170,11 +176,45 @@ function installApi(b) {
   b.onBossDown = (boss) => { b.lastBossX = boss.x; };
   // the killing blow: time slows and the camera leans in on the falling boss
   b.onBossKilled = (boss) => { b.slowMo = { t: 0.45, scale: 0.22 }; b.camZoomTo = 1.07; b.zoomAt = boss.x; b.hitStop = 0; b.shake(7); if (b.scatter) b.scatter(boss.x); };
-  // a parried blow or shot: the attacker reels, a short freeze, boon and rage
-  b.parry = (x, y, e) => {
-    b.hitStop = 0.085; b.addBoon(5); addRage(b, 18); bus.emit('cue', 'parry');
-    b.fx.push({ kind: 'parry', x, y, t: 0, dur: 0.35 });
-    if (e) { e.stun = Math.max(e.stun || 0, 1.2); e.vx = Math.sign(e.x - b.hero.x || 1) * 160; e.state = 'approach'; e.t = 0; }
+  // a parried blow or shot: the attacker reels, a short freeze, boon and rage; a gold parry
+  // (a heavy blow turned) also readies a full draw in a moment of slow time
+  b.parry = (x, y, e, tele = 'normal') => {
+    onParrySuccess(b, b.hero, tele); bus.emit('cue', 'parry');
+    b.fx.push({ kind: 'parry', x, y, t: 0, dur: 0.35, gold: tele === 'gold' });
+    if (e) { e.stun = Math.max(e.stun || 0, tele === 'gold' ? 2 : 1.2); e.vx = Math.sign(e.x - b.hero.x || 1) * 160; e.state = 'approach'; e.t = 0; e.tele = null; }
+  };
+  b.damageEnemy = (e, dmg, head) => damageEnemy(b, e, dmg, head);
+  b.addStagger = (q, amt) => addBossStagger(b, q, amt);
+  // one frame of a close-combo swing: everything in front of Rama in reach, once per swing
+  b.meleeHit = (h, st) => {
+    const x0 = h.facing > 0 ? h.x : h.x - st.reach, x1 = h.facing > 0 ? h.x + st.reach : h.x;
+    const rect = { x: x0, y: h.y - 150, w: x1 - x0, h: 150 };
+    const overlap = (q) => q.x < rect.x + rect.w && q.x + q.w > rect.x && q.y < rect.y + rect.h && q.y + q.h > rect.y;
+    let landed = false;
+    for (const e of b.enemies) {
+      if (e.dead || e.dying || h.comboHit.has(e) || (e.def.flies && e.y < h.y - 220)) continue;
+      const bx = enemyBoxes(e);
+      if (!overlap(bx.body) && !overlap(bx.head)) continue;
+      h.comboHit.add(e); landed = true;
+      // a shield turns the light swings from the front; the heavy kick breaks the guard
+      if (e.def.blocksFront && Math.sign(h.x - e.x) === e.facing && e.stun <= 0 && st.name !== 'dharma') { b.tink(e.x - e.facing * 20, e.y - 90); continue; }
+      damageEnemy(b, e, h.rageT > 0 ? st.dmg * 2 : st.dmg, false, true);
+      if (!e.dying) { e.stun = Math.max(e.stun, st.stun); e.vx = h.facing * st.knock * 2.4; e.state = 'approach'; e.t = 0; if (st.pop && !e.def.custom) { e.pop = 1; e.popV = -st.pop; } }
+      b.burst(e.x, e.y - 90, st.name === 'dharma' ? PAL.madder : PAL.white, st.name === 'dharma' ? 12 : 7);
+    }
+    for (const q of b.bosses) {
+      if (q.dead || q.dying || q.hidden || q.plane === 'bg' || h.comboHit.has(q)) continue;
+      const box = bossBoxes(b, q).find((x) => overlap(x));
+      if (!box) continue;
+      h.comboHit.add(q); landed = true;
+      hitBoss(b, q, { x: box.x + box.w / 2, y: box.y + box.h / 2, vx: h.facing, vy: 0, dmg: (st.dmg / b.tun.bow.headMultiplier) * (box.weak ? 1 : 1.6), melee: true, own: true, power: 1 }, box);
+      addBossStagger(b, q, st.dmg * 6);
+    }
+    if (landed && !h.comboStruck) {
+      h.comboStruck = true; b.addBoon(st.boon); addRage(b, st.rage);
+      b.hitStop = st.name === 'dharma' ? 0.07 : 0.035; if (st.name === 'dharma') b.shake(3);
+      bus.emit('cue', st.name === 'dharma' ? 'kick' : 'thud');
+    }
   };
   // birds lift off and leaves fall near a big impact (life.js reads b.startle)
   b.scatter = (x) => { b.startle = { x, t: b.time }; };
@@ -437,6 +477,7 @@ export function updateBattle(b, dt) {
   b.waveDone = b.waveTotal ? Math.max(0, b.waveSpawned - b.enemies.filter((e) => !e.dead && !e.dying && !e.illusion).length) : 0;
   if (arenaSteps(b)[b.step] && arenaSteps(b)[b.step].targets) b.waveDone = b.targets.filter((q) => q.hit).length;
 
+  updateArena(b, dt);
   updateHero(b, dt);
   if (b.gust) { b.gust.t -= dt; b.hero.x += b.gust.dir * 420 * dt; if (b.gust.t <= 0) b.gust = null; }
   updateEnemies(b, dt);
@@ -530,6 +571,9 @@ function updateArrows(b, dt) {
     a.vy += a.g * dt; a.x += a.vx * dt; a.y += a.vy * dt;
     if (a.trail && (a.perfect || a.rage || a.full)) { a.trail.push([a.x, a.y]); if (a.trail.length > 8) a.trail.shift(); }
     if (a.y >= GROUND - 2) { a.y = GROUND - 2; a.stuck = 0.6; a.life = 0; continue; }
+    // walls (arrows there become footholds) and the arena's props
+    if (a.own && arrowMeetsProp(b, a)) { a.life = 0; continue; }
+    if (arrowMeetsWall(b, a)) continue;
     // practice targets
     for (const q of b.targets) {
       if (a.hit.has(q)) continue;
@@ -600,9 +644,14 @@ function updateShots(b, dt) {
     if (s.kind !== 'bolt') s.vy += 300 * dt;
     if (s.y > GROUND) { s.life = 0; continue; }
     // a shot Rama kicked back flies at the rakshasas instead
-    if (s.fromHero) { for (const e of b.enemies) { if (e.dead || e.dying) continue; const bx = enemyBoxes(e); if (inBox(s.x, s.y, bx.body) || inBox(s.x, s.y, bx.head)) { damageEnemy(b, e, 3, false); b.burst(s.x, s.y, PAL.turmeric, 8); s.life = 0; break; } } continue; }
-    // the kick's parry window turns a low shot around
-    if (h.parryT > 0 && s.kind !== 'bolt' && Math.abs(s.x - h.x) < b.tun.hero.kickReach + 30 && s.y > h.y - 100 && s.y < h.y) { s.vx = -s.vx * 1.4; s.vy = -Math.abs(s.vy) * 0.3 - 120; s.fromHero = true; s.life = 2; b.parry(s.x, s.y); continue; }
+    if (s.fromHero) {
+      for (const e of b.enemies) { if (e.dead || e.dying) continue; const bx = enemyBoxes(e); if (inBox(s.x, s.y, bx.body) || inBox(s.x, s.y, bx.head)) { damageEnemy(b, e, Math.max(3, s.dmg / 4), false); b.burst(s.x, s.y, PAL.turmeric, 8); s.life = 0; break; } }
+      if (s.life > 0) for (const q of b.bosses) { if (q.dead || q.dying || q.hidden) continue; const box = bossBoxes(b, q).find((x) => inBox(s.x, s.y, x)); if (box) { hitBoss(b, q, { x: s.x, y: s.y, vx: s.vx, vy: s.vy, dmg: 3, own: true, power: 1 }, box); addBossStagger(b, q, 15); s.life = 0; break; } }
+      continue;
+    }
+    // the parry window turns a shot around (not a crimson one: a sorcerer's bolt must be dodged)
+    const tl = s.tele || (s.kind === 'bolt' ? 'crimson' : s.kind === 'spear' ? 'gold' : 'normal');
+    if (h.parryT > 0 && tl !== 'crimson' && Math.hypot(s.x - h.x, s.y - (h.y - 80)) < b.tun.hero.kickReach + 40 && Math.sign(s.x - h.x) === h.facing) { s.vx = -s.vx * 1.45; s.vy = -Math.abs(s.vy) * 0.3 - 120; s.dmg *= 2; s.fromHero = true; s.life = 2; b.parry(s.x, s.y, null, tl); continue; }
     // the protected ally or the altar can be hit too
     if (b.protected && !b.protected.hurt && Math.abs(s.x - b.protected.x) < 26 && s.y > GROUND - 150) { s.life = 0; b.allyHurt(); continue; }
     if (Math.abs(s.x - h.x) < 24 && s.y > h.y - 150 && s.y < h.y) { s.life = 0; b.hurtHero(s.dmg, s.x - s.vx, s.answer, 'shot'); }
@@ -653,8 +702,14 @@ export function renderBattle(ctx, b) {
   const done = b.healT >= 0 && b.healT > b.healDur;
   const heal = b.healT >= 0 ? { x: b.healX, r: b.healT * b.healSpeed } : null;
   ctx.save();
-  
-  drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal, regrow: !!b.regrow, density: b.level.density });
+  // the vertical camera: rising after Rama moves the whole painted world down; the strip of sky
+  // it uncovers above the wall's top edge is filled in
+  if (b.camY < -0.5) { ctx.translate(0, -b.camY); drawSkyAbove(ctx, b, W); }
+  const bo = { colour: done || b.level.painted, heal, regrow: !!b.regrow, density: b.level.density };
+  drawBackdropFar(ctx, b.level.backdrop, style, b.camX * z, W, bo);
+  // a boss that has leapt into the far distance is drawn between the far plane and the near world
+  for (const q of b.bosses) if (q.plane === 'bg') drawBossBg(ctx, b, q, z);
+  drawBackdropMid(ctx, b.level.backdrop, style, b.camX * z, W, bo);
   if (b.regrow) { ctx.save(); ctx.translate(-b.camX * z, 0); const v0 = b.camX * z - 300, v1 = v0 + W + 600; for (const tr of b.regrow) if (tr.x > v0 && tr.x < v1) drawGrowingTree(ctx, tr, tr.grow); ctx.restore(); }
   ctx.restore();
   drawAtmosphere(ctx, b.level.backdrop, b.camX * z, W, b.time, { colour: done || b.level.painted || (heal && b.healT > 0.5), quiet: true, startle: b.startle && { x: b.startle.x * z, t: b.startle.t }, reducedMotion: save.data.settings.reducedMotion });
@@ -666,17 +721,21 @@ export function renderBattle(ctx, b) {
   // only: scaling the big backdrop images every frame is far too slow on a phone.
   ctx.save();
   if (b.camZoom > 1.001) { ctx.translate(W / 2, 360); ctx.scale(b.camZoom, b.camZoom); ctx.translate(-W / 2, -360); }
+  if (b.camY < -0.5) ctx.translate(0, -b.camY);
   ctx.translate(0, GROUND); ctx.scale(z, z); ctx.translate(-b.camX, -GROUND);
   drawLife(ctx, b.level.backdrop, b.camX, W / z, b.time, { colour: done || b.level.painted, quiet: true, startle: b.startle });
+  drawArena(ctx, b);
   drawZones(ctx, b);
   for (const c of b.checkpoints) { const k = Math.min(1, c.t / 0.8); M.lotusBud(ctx, c.x, GROUND - 2, 18 * k + 2, { wilt: 0, seed: 3 }); line(ctx, [[c.x, GROUND], [c.x, GROUND - 4]], { w: 2 }); }
   if (b.protect) drawProtect(ctx, b);
   for (const q of b.targets) drawTarget(ctx, q, b);
   if (b.protected) fig(ctx, b.protected.spec, b.protected.hurt ? 'hurt' : 'stand', b.protected.x, GROUND, { facing: b.hero.x > b.protected.x ? 1 : -1 });
-  for (const q of b.bosses) drawBoss(ctx, b, q);
+  for (const q of b.bosses) if (q.plane !== 'bg') drawBoss(ctx, b, q);
   for (const e of b.enemies) if (!e.dead) { drawEnemy(ctx, b, e); if (e.burnT > 0 && !e.dying) M.flame(ctx, e.x, e.y - e.def.height * 0.5, 26, { t: b.time, seed: e.seed % 7, tongues: 2 }); }
   drawGlints(ctx, b);
   for (const a of b.allies) fig(ctx, a.spec, a.shootAnim > 0 ? 'shoot' : a.walkT > 0 ? WALK[Math.floor(a.walkT * 9) % 4] : 'stand', a.x, GROUND, { facing: a.facing === 1 ? (b.hero.facing) : a.facing });
+  // Hanuman offers his hands: a jump from beside him throws Rama high
+  for (const a of b.allies) if (a.role === 'vault' && Math.abs(a.x - b.hero.x) < 90 && b.hero.onGround) M.usableRing(ctx, a.x, GROUND - 60, 34, b.time);
   drawHero(ctx, b);
   for (const a of b.arrows) drawArrow(ctx, a);
   for (const s of b.shots) if (!(s.delay > 0)) drawShot(ctx, s);
@@ -684,7 +743,9 @@ export function renderBattle(ctx, b) {
   if (app.dev && app.dev.hitboxes) drawHitboxes(ctx, b);
   ctx.restore();
 
+  if (b.camY < -0.5) { ctx.save(); ctx.translate(0, -b.camY); }
   drawNear(ctx, b.level.backdrop, b.camX * z, W, { colour: done || b.level.painted, heal });
+  if (b.camY < -0.5) ctx.restore();
   ctx.restore();
   // Rama's rage: the whole scene washes vermilion
   if (b.hero.rageT > 0) { const k = Math.min(1, b.hero.rageT * 2, (7 - b.hero.rageT) * 4); ctx.save(); ctx.globalAlpha = 0.18 * k; ctx.fillStyle = 'rgb(168,36,20)'; ctx.fillRect(0, 0, W, 720); ctx.restore(); }
@@ -693,9 +754,8 @@ export function renderBattle(ctx, b) {
 }
 
 // The three-colour language of a coming attack, as a glint at its source in its last quarter
-// second: crimson (jump or roll: it can't be blocked), gold (shoot now: a weak spot or a shot to
-// beat), ink-white (a plain blow the kick can turn).
-const GLINT = { jump: 'crimson', roll: 'crimson', move: 'crimson', shoot: 'gold', kick: 'ink' };
+// second: white (a blow or shot the parry turns), gold (a heavy blow: parry it for an instant full
+// draw), crimson (it can't be parried: jump, roll or dash).
 function drawGlints(ctx, b) {
   const tele = b.diff.telegraph;
   const glint = (x, y, kind, k) => {
@@ -708,13 +768,15 @@ function drawGlints(ctx, b) {
   };
   for (const e of b.enemies) {
     if (e.dead || e.dying || e.state !== 'windup' || e.illusion) continue;
-    const w = e.def.attack.windup * tele, left = w - e.t;
-    if (left < 0.25 && left > 0) glint(e.x + e.facing * 26, e.y - e.def.height * 0.75, GLINT[e.def.attack.answer] || 'ink', 1 - left / 0.25);
+    const w = e.def.attack.windup * tele * (e.windMul || 1), left = w - e.t;
+    const tl = e.tele || teleOf(e.def.attack);
+    if (tl && left < 0.25 && left > 0) glint(e.x + e.facing * 26, e.y - e.def.height * 0.75, tl, 1 - left / 0.25);
   }
   for (const q of b.bosses) {
     if (q.dead || q.dying || q.state !== 'windup' || q.hidden || !q.mv) continue;
     const left = q.windup - q.t;
-    if (left < 0.25 && left > 0) glint(q.x + q.facing * q.U * 0.3, q.y - q.U * 0.8, GLINT[q.mv.answer] || 'ink', 1 - left / 0.25);
+    const tl = teleOf(q.mv);
+    if (tl && left < 0.25 && left > 0) glint(q.x + q.facing * q.U * 0.3, q.y - q.U * 0.8, tl, 1 - left / 0.25);
   }
 }
 
@@ -804,6 +866,7 @@ function drawFx(ctx, b) {
       const x = f.x + f.vx * f.t, y = f.y - k * 18, r = 6 + k * 12;
       ctx.save(); ctx.globalAlpha = 0.6 * (1 - k); ctx.strokeStyle = PAL.brown; ctx.lineWidth = 2;
       ctx.beginPath(); for (let i = 0; i <= 16; i++) { const a = i * 0.7 + f.seed, rr = r * (i / 16); ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.6); } ctx.stroke(); ctx.restore();
+    } else if (f.kind === 'smoke') { ctx.save(); ctx.globalAlpha = 0.8 * (1 - k); for (let i = 0; i < 7; i++) { const a = i * 0.9, d = 10 + k * 50; ctx.fillStyle = i % 2 ? PAL.grey : PAL.cream; ctx.beginPath(); ctx.arc(f.x + Math.cos(a) * d, f.y + Math.sin(a) * d * 0.7, 16 + k * 10, 0, Math.PI * 2); ctx.fill(); } ctx.restore();
     } else if (f.kind === 'nib') { ctx.save(); ctx.globalAlpha = 1 - k; M.star(ctx, f.x, f.y, 10 + k * 26, { rot: k * 2, points: 8 }); ctx.restore(); }
     else if (f.kind === 'parry') { ctx.save(); ctx.globalAlpha = 1 - k; ctx.strokeStyle = f.gold ? PAL.gold : PAL.white; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, 14 + k * 50, 0, Math.PI * 2); ctx.stroke(); ctx.strokeStyle = PAL.black; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(f.x, f.y, 18 + k * 50, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
     else if (f.kind === 'shatter') { ctx.save(); ctx.globalAlpha = 1 - k; for (let i = 0; i < 9; i++) { const a = i * 0.7 + f.seed, d = 10 + k * 70; line(ctx, [[f.x + Math.cos(a) * d, f.y + Math.sin(a) * d], [f.x + Math.cos(a) * (d + 14), f.y + Math.sin(a) * (d + 14)]], { w: 3, color: i % 2 ? PAL.kusum : PAL.black }); } ctx.restore(); }

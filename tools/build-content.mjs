@@ -2,6 +2,7 @@
 //   content/legacy/*      chapter scripts, levels, chapter list, places and English text
 //   content/extra.json    text keys the engine itself uses (buttons, hints, trial lines)
 //   content/levels.json   levels written directly in the engine's format
+//   content/traversal.json platforms, walls, props, wind and ally roles laid over the levels
 // Writes src/data/{chapters,places,marks,notes}.json, src/data/scripts/*.json,
 // src/data/levels/*.json and src/i18n/en.json. Run: node tools/build-content.mjs
 import fs from 'node:fs';
@@ -21,6 +22,7 @@ const hubmarks = L('hubmarks.json');
 const en = L('en.json');
 const extra = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/extra.json'), 'utf8'));
 const ownLevels = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/levels.json'), 'utf8'));
+const traversal = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/traversal.json'), 'utf8'));
 const scriptFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/legacy/scripts')).map((f) => { const d = L('scripts/' + f); return [d.id, d]; }));
 const levelFiles = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'content/legacy/levels')).map((f) => { const d = L('levels/' + f); return [d.id, d]; }));
 const problems = [];
@@ -279,6 +281,21 @@ const marks = hubmarks.filter((m) => m.kind !== 'fade');
 const levels = {};
 for (const id in levelFiles) levels[id] = paintAll(convertLevel(levelFiles[id]));
 for (const id in ownLevels) levels[id] = ownLevels[id];
+// the vertical set-pieces: platforms, walls, props and wind per arena, extra foes, ally roles
+for (const id in traversal) {
+  if (id.startsWith('_')) continue;
+  const lv = levels[id], add = traversal[id];
+  if (!lv) { problems.push(`traversal.json: no level ${id}`); continue; }
+  const { arenas = [], waves = {}, allies = [], ...top } = add;
+  Object.assign(lv, top);
+  arenas.forEach((a, i) => { if (!lv.arenas[i]) problems.push(`traversal.json: ${id} has no arena ${i}`); else Object.assign(lv.arenas[i], a); });
+  for (const w in waves) {
+    const st = lv.arenas.flatMap((a) => a.steps).find((s) => s.wave === w);
+    if (st) st.groups.push(...waves[w]); else problems.push(`traversal.json: ${id} has no wave ${w}`);
+  }
+  lv.allies = lv.allies || [];
+  for (const a of allies) { const have = lv.allies.find((x) => x.id === a.id); if (have) Object.assign(have, a); else lv.allies.push(a); }
+}
 
 // ---------------------------------------------------------------- text and notes
 const strings = { ...en };

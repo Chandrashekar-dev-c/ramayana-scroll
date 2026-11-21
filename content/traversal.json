@@ -1,0 +1,21 @@
+{
+ "_about": "Platforms, walls, props, wind and ally roles laid over the converted levels by tools/build-content.mjs (src/data/levels/*.json is regenerated, so these live here). Per level: top-level fields are copied in; 'arenas' is a list of per-arena additions by index; 'waves' adds groups to a named wave; 'allies' sets fields on an ally by id, or adds one that is not there.",
+ "tataka": {
+  "wind": { "ax": -240, "every": 9, "gust": 3.5, "updraft": true, "x0": 1600, "x1": 1700, "lift": 2700 },
+  "minCamY": -220,
+  "arenas": [
+   {
+    "platforms": [{ "x": 300, "y": 430, "w": 170 }, { "x": 700, "y": 360, "w": 150, "crumble": true }],
+    "props": [{ "type": "dashRing", "x": 560, "y": 280, "r": 30 }, { "type": "brazier", "x": 1050, "y": 520 }]
+   },
+   {
+    "platforms": [{ "x": 2180, "y": 300, "w": 140 }, { "x": 1760, "y": 380, "w": 150, "bobAmp": 26, "speed": 1.3 }],
+    "walls": [{ "x": 2330, "y": 250, "w": 46, "h": 298 }],
+    "props": [{ "type": "bell", "x": 1960, "y": 230, "r": 28 }, { "type": "pillar", "x": 2650, "y": 330, "hp": 3 }, { "type": "dashRing", "x": 2080, "y": 240, "r": 30 }]
+   }
+  ],
+  "waves": { "tataka.o4": [{ "type": "ambusher", "n": 1, "side": "left", "gap": 1.9 }] }
+ },
+ "kumbhakarna": { "allies": [{ "id": "lakshmana", "role": "ward" }] },
+ "ravana": { "allies": [{ "id": "hanuman", "role": "vault" }] }
+}

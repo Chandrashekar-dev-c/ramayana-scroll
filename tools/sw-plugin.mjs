@@ -18,7 +18,8 @@ export function swPlugin() {
       };
       walk(outDir);
       // Language packs other than English are cached on demand, when chosen.
-      const shell = files.filter((f) => f !== 'sw.js' && !/i18n-(hi|kn|te|ta|sa)|\/(hi|kn|te|ta|sa)-[\w-]+\.js$/.test(f));
+      // .woff files are the fallback for browsers without WOFF2; every browser that runs the game has it
+      const shell = files.filter((f) => f !== 'sw.js' && !/\.woff$/.test(f) && !/i18n-(hi|kn|te|ta|sa)|\/(hi|kn|te|ta|sa)-[\w-]+\.js$/.test(f));
       const swPath = path.join(outDir, 'sw.js');
       if (!fs.existsSync(swPath)) return;
       const version = Date.now().toString(36);

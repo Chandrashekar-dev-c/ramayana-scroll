@@ -149,10 +149,12 @@ const ICONS = {
   draw: '<svg viewBox="0 0 24 24"><path d="M6 2c8 4 8 16 0 20" fill="none" stroke="#1d1613" stroke-width="2.6"/><path d="M6 2v20M4 12h16m-4-4 4 4-4 4" fill="none" stroke="#28367c" stroke-width="2.2" stroke-linecap="round"/></svg>',
   jump: '<svg viewBox="0 0 24 24"><path d="M12 20V5m-6 6 6-6 6 6" fill="none" stroke="#1d1613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   roll: '<svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-3-5.7" fill="none" stroke="#1d1613" stroke-width="3" stroke-linecap="round"/><path d="m14 3 3 3-3.5 2.5" fill="none" stroke="#1d1613" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  parry: '<svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z" fill="#a82414" stroke="#1c140d" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6v12M8 10h8" stroke="#e6ac17" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  strike: '<svg viewBox="0 0 24 24"><path d="M4 20C8 10 14 5 21 3" fill="none" stroke="#1c140d" stroke-width="3" stroke-linecap="round"/><path d="M6 21c5-2 10-7 13-14" fill="none" stroke="#a82414" stroke-width="1.6" stroke-linecap="round"/></svg>',
   rage: '<svg viewBox="0 0 24 24"><path d="M6 2c8 4 8 16 0 20" fill="none" stroke="#a82414" stroke-width="2.8"/><path d="M6 2v20" stroke="#1d1613" stroke-width="1.6"/><path d="m13 6 3 6-3 6m4-12 3 6-3 6" fill="none" stroke="#a82414" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   action: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="#1d1613" stroke-width="3"/><circle cx="12" cy="12" r="2.5" fill="#e6ac17"/></svg>',
 };
-const LABEL_KEYS = { rage: 'act.rage', draw: 'btn.draw', jump: 'btn.jump', roll: 'btn.roll', action: 'btn.action', left: 'btn.left', right: 'btn.right', up: 'btn.up', down: 'btn.down' };
+const LABEL_KEYS = { parry: 'act.parry', strike: 'act.strike', rage: 'act.rage', draw: 'btn.draw', jump: 'btn.jump', roll: 'btn.roll', action: 'btn.action', left: 'btn.left', right: 'btn.right', up: 'btn.up', down: 'btn.down' };
 
 /**
  * Show touch buttons. set: array of names among left, right, up, down, draw, jump, roll, action.
@@ -189,6 +191,9 @@ export function touchControls(set) {
   if (set.includes('jump')) place('jump', 'right', m + (big - s) / 2, m * 2 + big, s, 'tap');
   if (set.includes('roll')) place('roll', 'right', m * 2 + big, m, s, 'tap');
   if (set.includes('rage')) place('rage', 'right', m * 2 + big, m * 2 + s, s, 'tap');
+  // parry (a vermilion shield) and the close strike sit in a column beside roll and rage
+  if (set.includes('parry')) place('parry', 'right', m * 3 + big + s, m, s, 'tap');
+  if (set.includes('strike')) place('strike', 'right', m * 3 + big + s, m * 2 + s, s, 'tap');
   // action is held, not tapped: hiding in Lanka, rowing hard and flying fast all hold it
   if (set.includes('action')) place('action', 'right', set.includes('draw') ? m * 2 + big : m, set.includes('draw') ? m * 2 + s : m, set.includes('draw') ? s : big, 'hold');
   void vw;

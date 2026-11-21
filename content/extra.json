@@ -120,7 +120,7 @@
  "hint.jump": "Jump",
  "hint.roll": "Roll through the blow",
  "hint.stomp": "Jump the shockwave",
- "hint.shield": "Shield-bearers: roll past and shoot from behind",
+ "hint.shield": "The shield blocks the front. Break it with the third strike, or wait for the swing.",
  "hint.climber": "Climbers come up the cliff. Get close: the kick knocks them off.",
  "hint.shootUp": "Flyers: drag up to aim high",
  "hint.shootUp.mouse": "Flyers: aim high with the mouse",
@@ -236,7 +236,8 @@
   "stat.headshots",
   "stat.hits",
   "stat.kills",
-  "stat.time"
+  "stat.time",
+  "hint.shield"
  ],
  "set.dev": "Developer mode",
  "load.chapter": "Grinding the colours…",
@@ -286,5 +287,8 @@
  "ravana.end.shadow": "Pride held all ten heads to the end.",
  "scroll.wise": "The heads you let speak were the wiser ones. His side of the story, when it is told, will remember them.",
  "scroll.shadow": "The heads you let speak were the shadowed ones. His side of the story, when it is told, begins with them.",
- "hint.rage": "Rama's rage is full: tap the bow badge (R)"
+ "hint.rage": "Rama's rage is full: tap the bow badge (R)",
+ "act.parry": "Parry",
+ "act.strike": "Close strike",
+ "hint.parry": "Parry (Q) just as a white or gold blow lands. Crimson can't be parried: jump or roll."
 }

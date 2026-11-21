@@ -89,6 +89,13 @@ export function drawHud(ctx, b) {
     const ratioB = Math.max(0, boss.hp / boss.maxHp);
     ctx.fillStyle = PAL.black; ctx.fillRect(vx - 2, vy + 20, vw + 4, 9); ctx.fillStyle = PAL.gold; ctx.fillRect(vx - 1, vy + 21, vw + 2, 7);
     ctx.fillStyle = PAL.paper; ctx.fillRect(vx + 1, vy + 23, vw - 2, 3); ctx.fillStyle = PAL.madder; ctx.fillRect(vx + 1, vy + 23, (vw - 2) * ratioB, 3);
+    // the stagger bar: turmeric, pulsing gold when nearly full, flashing white while the boss reels
+    if (!boss.def.passive) {
+      const sk = boss.staggerT > 0 ? boss.staggerT / ((b.tun.boss && b.tun.boss.staggerPunishTime) || 2.2) : Math.min(1, boss.stagger / boss.staggerMax);
+      ctx.fillStyle = 'rgba(28,20,13,0.6)'; ctx.fillRect(vx + vw * 0.15, vy + 32, vw * 0.7, 4);
+      ctx.fillStyle = boss.staggerT > 0 ? PAL.white : sk > 0.75 ? (Math.floor(b.time * 6) % 2 ? PAL.gold : PAL.turmeric) : PAL.ochre;
+      ctx.fillRect(vx + vw * 0.15, vy + 32, vw * 0.7 * sk, 4);
+    }
     const pts = []; for (let i = 0; i <= 16; i++) pts.push([vx + (vw * i) / 16, vy + (i % 2 ? -5 : 5)]);
     line(ctx, pts, { w: 2.2, color: PAL.black, smooth: true, seed: 4, amp: 0.3, flat: true });
     line(ctx, pts, { w: 1, color: PAL.leaf, smooth: true, seed: 4, amp: 0.3, flat: true });

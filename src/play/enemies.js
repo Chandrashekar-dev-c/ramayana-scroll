@@ -12,6 +12,20 @@ import * as M from '../art/motifs.js';
 export const ENEMY = Object.fromEntries(defs.map((d) => [d.id, d]));
 const FLY_Y = GROUND - 300;
 
+/**
+ * The three-colour language of an attack: 'normal' (white) can be parried; 'gold' is a heavy blow
+ * that can be parried for a big reward (an instant full draw and a moment of slow time);
+ * 'crimson' can't be parried and must be jumped, rolled or dashed. An attack can name its own
+ * ("tele" in the data); otherwise its answer decides: jump, move and roll-only waves are crimson.
+ */
+export function teleOf(attack) {
+  if (!attack) return 'normal';
+  if (attack.tele) return attack.tele;
+  if (attack.answer === 'jump' || attack.answer === 'move') return 'crimson';
+  if (attack.answer === 'shoot') return null; // a window to shoot, not a blow
+  return 'normal';
+}
+
 export function spawnEnemy(b, type, side, o = {}) {
   let def = ENEMY[type], spec = null, elite = null;
   if (type.startsWith('elite:')) {
@@ -33,6 +47,7 @@ export function spawnEnemy(b, type, side, o = {}) {
     type, def, spec, seed, elite, x, y: def.flies ? FLY_Y - (seed % 5) * 14 : GROUND, vx: 0, vy: 0, facing: -dir,
     hp: def.hp, maxHp: def.hp, state: 'approach', t: 0, stun: 0, walkT: (seed % 10) / 10, drain: 0, dying: false, dead: false,
     hitFlash: 0, struck: false, target: o.target || 'hero', illusion: !!o.illusion, splitT: def.illusions ? 1.4 : 0, add: !!o.add,
+    flankT: def.flank ? 1.5 : 0, pop: 0, popV: 0,
   };
   if (def.climbs) { e.x = dir > 0 ? b.bounds.right - 26 : b.bounds.left + 26; e.y = GROUND + 150; e.state = 'climb'; }
   b.enemies.push(e);
@@ -62,8 +77,9 @@ function strike(b, e, tgt, dmg, reach) {
   // a blow or dive has height too: a hero high in a jump is clear of a club swung at the ground
   const ey = e.def.flies ? e.y + 70 : e.y;
   if (Math.abs(h.x - e.x) < reach + 12 && Math.abs(h.y - ey) < 95) {
-    // a blow that lands inside the kick's parry window is turned aside and the striker reels
-    if (h.parryT > 0 && !e.def.custom && Math.sign(e.x - h.x) === h.facing) { b.parry(e.x, e.y - 90, e); return; }
+    // a blow that lands inside the parry window is turned aside and the striker reels
+    const tl = e.tele || teleOf(e.def.attack);
+    if (h.parryT > 0 && tl !== 'crimson' && !e.def.custom && Math.sign(e.x - h.x) === h.facing) { b.parry(e.x, e.y - 90, e, tl); return; }
     b.hurtHero(dmg, e.x, e.def.attack.answer, e.def.attack.kind);
   }
 }
@@ -75,7 +91,15 @@ export function updateEnemies(b, dt) {
     e.hitFlash -= dt;
     if (e.dying) { e.t += dt; e.drain = Math.min(1, e.t / 0.3); if (e.t > 0.8) e.dead = true; continue; }
     const d = e.def, A = d.attack;
-    if (e.stun > 0) { e.stun -= dt; e.x += e.vx * dt; e.vx *= 0.86; if (!d.flies && !d.climbs) e.y = GROUND; if (d.climbs && (e.x < b.bounds.left + 8 || e.x > b.bounds.right - 8)) b.killEnemy(e, 'fall'); continue; }
+    // popped into the air by the rising strike: a short arc, then down
+    if (e.pop > 0 || e.popV < 0) { e.popV += 1800 * dt; e.pop = Math.max(0, e.pop - e.popV * dt); if (e.pop <= 0) e.popV = 0; }
+    if (e.stun > 0) {
+      e.stun -= dt; e.x += e.vx * dt; e.vx *= 0.86; if (!d.flies && !d.climbs) e.y = GROUND - e.pop;
+      // knocked into the arena's edge or a wall: a splat that stuns longer
+      if (Math.abs(e.vx) > 200 && !d.climbs && (e.x < b.bounds.left + 20 || e.x > b.bounds.right - 20)) { e.vx = 0; e.stun = Math.max(e.stun, 1.6); b.shake(3); b.burst(e.x, e.y - 80, PAL.white, 8); }
+      if (d.climbs && (e.x < b.bounds.left + 8 || e.x > b.bounds.right - 8)) b.killEnemy(e, 'fall');
+      continue;
+    }
     const tgt = targetOf(b, e);
     const dx = tgt.x - e.x, adx = Math.abs(dx), dir = Math.sign(dx) || 1;
     e.t += dt;
@@ -91,6 +115,22 @@ export function updateEnemies(b, dt) {
       }
       case 'approach': {
         e.facing = dir;
+        // the flank ambusher: when Rama keeps his distance, it vanishes in smoke and steps out
+        // behind him, already raising a heavy (gold) blow
+        if (d.flank && !e.illusion) {
+          e.flankT -= dt;
+          const h = b.hero;
+          if (e.flankT <= 0 && Math.abs(e.x - h.x) > 180) {
+            b.fx.push({ kind: 'smoke', x: e.x, y: e.y - 70, t: 0, dur: 0.5 });
+            e.x = Math.max(b.bounds.left + 40, Math.min(b.bounds.right - 40, h.x - h.facing * 140));
+            e.facing = Math.sign(h.x - e.x) || 1;
+            b.fx.push({ kind: 'smoke', x: e.x, y: e.y - 70, t: 0, dur: 0.5 });
+            bus.emit('cue', 'vanish');
+            e.flankT = 4.5; e.state = 'windup'; e.t = 0; e.struck = false; e.tele = 'gold'; e.windMul = 0.45 / A.windup;
+            b.telegraph(e, A.telegraph, A.answer);
+            break;
+          }
+        }
         let want = A.kind === 'shoot' || A.kind === 'bolt' || A.kind === 'lob' || A.kind === 'heal' ? d.reach : d.reach * 0.82;
         if (A.kind === 'melee' || A.kind === 'coil') want = d.reach * 0.8;
         let mv = 0;
@@ -109,8 +149,8 @@ export function updateEnemies(b, dt) {
       }
       case 'windup': {
         if (A.kind === 'shoot' || A.kind === 'bolt') { if (e.t < A.windup * tele * 0.6) { e.aimX = tgt.x; e.aimY = tgt.y - 90; } e.facing = Math.sign(e.aimX - e.x) || 1; }
-        if (e.t >= A.windup * tele) {
-          e.state = 'attack'; e.t = 0;
+        if (e.t >= A.windup * tele * (e.windMul || 1)) {
+          e.state = 'attack'; e.t = 0; e.windMul = 0;
           if (A.kind === 'melee') { strike(b, e, tgt, A.damage, d.reach); e.state = 'recover'; }
           else if (A.kind === 'charge') { e.dashDir = dir; e.dashFrom = e.x; }
           else if (A.kind === 'dive') { e.fromX = e.x; e.fromY = e.y; e.toX = tgt.x; e.toY = (tgt.y ?? GROUND) - 70; }
@@ -140,12 +180,12 @@ export function updateEnemies(b, dt) {
       }
       case 'recover': {
         if (d.flies) e.y += (FLY_Y - e.y) * dt * 2.2;
-        if (e.t >= A.recover / Math.max(0.8, sp)) { e.state = 'approach'; e.t = 0; }
+        if (e.t >= A.recover / Math.max(0.8, sp)) { e.state = 'approach'; e.t = 0; e.tele = null; }
         break;
       }
       default: break;
     }
-    if (!d.flies && e.state !== 'climb') e.y = GROUND;
+    if (!d.flies && e.state !== 'climb') e.y = GROUND - e.pop;
   }
   // remove the dead, keep the array small
   if (b.enemies.length > 40) b.enemies = b.enemies.filter((e) => !e.dead);

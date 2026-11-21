@@ -5,7 +5,9 @@ import { save } from './save.js';
 export const DEFAULT_KEYS = {
   left: ['KeyA', 'ArrowLeft'], right: ['KeyD', 'ArrowRight'], up: ['KeyW', 'ArrowUp'],
   // up aims and steers; Space jumps, so aiming up no longer makes Rama jump. J draws the bow.
-  down: ['KeyS', 'ArrowDown'], jump: ['Space'], roll: ['ShiftLeft', 'ShiftRight'], draw: ['KeyJ'],
+  down: ['KeyS', 'ArrowDown'], jump: ['Space'], roll: ['ShiftLeft', 'ShiftRight', 'KeyK'], draw: ['KeyJ'],
+  // Q parries (a blow or shot turned in its moment); C is the close three-hit combo
+  parry: ['KeyQ'], strike: ['KeyC'],
   astra: ['KeyE'], rage: ['KeyR'], pause: ['Escape'], confirm: ['Enter'], action: ['KeyF'],
 };
 
@@ -31,6 +33,7 @@ export const input = {
   releaseAll() {
     for (const k in this.held) this.held[k] = false;
     for (const k in this.keys) this.keys[k] = false;
+    for (const k in this.pressed) this.pressed[k] = false; // no buffered parry or strike left over
     pointers.clear(); pinchDist = 0; drawToggleOn = false;
     this.axis = 0; this.axisY = 0; this.pointer.down = false;
   },
@@ -177,11 +180,11 @@ export function pollGamepad() {
   input.held.up = input.axisY < 0; input.held.down = input.axisY > 0;
   if (rx || ry) { input.aim.source = 'pad'; input.aim.padX = rx; input.aim.padY = ry; }
   input.held.padDraw = b(7) || b(5);
-  const edge = (i, a, hold) => {
+  const edge = (i, a, hold, also) => {
     const now = b(i);
-    if (now && !padPrev[i]) { input.press(a); if (a === 'jump') input.press('confirm'); }
+    if (now && !padPrev[i]) { input.press(a); if (also) input.press(also); if (a === 'jump') input.press('confirm'); }
     if (hold) input.held[hold] = now;
     padPrev[i] = now;
   };
-  edge(0, 'jump', 'jump'); edge(1, 'roll', 'roll'); edge(3, 'astra'); edge(4, 'rage'); edge(9, 'pause'); edge(2, 'action', 'action');
+  edge(0, 'jump', 'jump'); edge(1, 'roll', 'roll'); edge(3, 'astra'); edge(4, 'rage'); edge(9, 'pause'); edge(2, 'action', 'action', 'strike'); edge(6, 'parry');
 }

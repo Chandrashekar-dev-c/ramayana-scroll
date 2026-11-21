@@ -1,5 +1,6 @@
 // Reports the shipped size and fails above the 400 KB budget (English, fonts included;
-// other language packs load on demand and are not counted).
+// other language packs load on demand and are not counted, nor are the .woff fallbacks, which a
+// WOFF2 browser never fetches and the service worker does not precache).
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
@@ -10,7 +11,7 @@ walk(DIST);
 let raw = 0, gz = 0; const rows = [];
 for (const f of files) {
   const rel = path.relative(DIST, f);
-  if (/(^|\/)(hi|kn|te|ta|sa)-[\w-]+\.js$/.test(rel)) continue;
+  if (/(^|\/)(hi|kn|te|ta|sa)-[\w-]+\.js$/.test(rel) || /\.woff$/.test(rel)) continue;
   const b = fs.readFileSync(f); const g = /\.(woff2|png)$/.test(f) ? b.length : zlib.gzipSync(b).length;
   raw += b.length; gz += g; rows.push([rel, b.length, g]);
 }

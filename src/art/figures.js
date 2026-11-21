@@ -55,6 +55,11 @@ export const POSES = {
   point: { armF: [96, 0], armB: [-8, -12], legF: [8, 0], legB: [-8, 0] },
   carry: { armF: [168, -24], armB: [-168, 24], legF: [8, 0], legB: [-8, 0] },
   kick: { armF: [-30, 10], armB: [-50, -10], legF: [84, -8], legB: [-6, 0], lean: -12 },
+  // the close combo: a low bow-sweep, a rising arc, the heavy Dharma kick; and sliding down a wall
+  strike1: { armF: [118, 18], armB: [-40, -20], legF: [24, 0], legB: [-22, 0], lean: 10, bow: 1 },
+  strike2: { armF: [168, -30], armB: [-70, 30], legF: [10, 0], legB: [-26, 0], lean: -8, bow: 1 },
+  strike3: { armF: [-40, 20], armB: [-70, -20], legF: [104, -20], legB: [-12, 0], lean: -20 },
+  wallSlide: { armF: [150, 20], armB: [70, 30], legF: [34, -50], legB: [-8, -26], lean: -6, air: true },
   swing0: { armF: [166, 26], armB: [-30, -20], legF: [16, 0], legB: [-16, 0], lean: -8, obj: -34 },
   swing1: { armF: [62, 6], armB: [-40, -20], legF: [24, -6], legB: [-20, 0], lean: 18, obj: 78 },
   charge: { lean: 44, armF: [-40, -20], armB: [-70, -10], legF: [38, -20], legB: [-34, -30], head: -20 },

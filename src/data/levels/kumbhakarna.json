@@ -16,7 +16,8 @@
   {
    "id": "lakshmana",
    "stage": "exile",
-   "fire": true
+   "fire": true,
+   "role": "ward"
   }
  ],
  "arenas": [

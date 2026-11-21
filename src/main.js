@@ -116,6 +116,8 @@ function exposeTestHooks() {
     hub: async () => (await import('./hub/hub.js')).openHub(),
     chapters: async () => (await import('./data/chapters.js')).CHAPTERS,
     step: (n) => app.loop.stepFrames(n),
+    enemies: async () => import('./play/enemies.js'),
+    bosses: async () => import('./play/bosses.js'),
     setMode,
   };
 }

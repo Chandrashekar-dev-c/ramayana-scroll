@@ -10,7 +10,7 @@ import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { drawProp } from '../art/props.js';
 import * as M from '../art/motifs.js';
-import { spawnEnemy } from './enemies.js';
+import { spawnEnemy, teleOf } from './enemies.js';
 
 export const BOSS = Object.fromEntries(defs.map((d) => [d.id, d]));
 const FLY_Y = GROUND - 310;
@@ -24,6 +24,11 @@ export function createBoss(b, id, x) {
   const boss = {
     id, def, spec, U, x, y: def.flies ? FLY_Y : GROUND, facing: -1, hp: def.hp, maxHp: def.hp, phase: 0, state: 'intro', t: 0,
     move: null, mv: null, moveIdx: 0, addT: 0, hidden: false, weakT: 0, walkT: 0, data: {}, dying: false, dead: false, hitFlash: 0, parts: def.parts ? { ...def.parts } : null,
+    // combos and stagger: a phase can string 2-3 moves together, then leave a punish window;
+    // hits and parries fill the stagger bar, and a full bar drops the boss for a moment
+    comboQueue: [], comboIdx: 0, inCombo: false,
+    stagger: 0, staggerMax: def.stagger || 100, staggerT: 0, staggerDecayT: 0,
+    plane: 'fg', bgTimer: 0, slamX: x,
   };
   if (boss.parts && id === 'viradha') { boss.maxHp = boss.parts.armF + boss.parts.armB; boss.hp = boss.maxHp; }
   const rule = RULES[id];
@@ -81,43 +86,88 @@ export function killBoss(b, boss) {
   b.zones = b.zones.filter((z) => z.src !== boss);
 }
 
+/** Fill a boss's stagger bar; full, it breaks: the boss reels, open, for the punish time. */
+export function addBossStagger(b, boss, amt) {
+  if (!boss || boss.staggerT > 0 || boss.dying || boss.dead || amt <= 0) return false;
+  const B = b.tun.boss || {};
+  boss.stagger += amt; boss.staggerDecayT = B.staggerDecayDelay ?? 4;
+  if (boss.stagger < boss.staggerMax) return false;
+  boss.stagger = 0; boss.comboQueue = []; boss.inCombo = false;
+  boss.staggerT = B.staggerPunishTime ?? 2.2;
+  if (boss.plane === 'bg') { boss.plane = 'fg'; boss.x = boss.slamX; }
+  boss.hidden = false; boss.state = 'weak'; boss.t = 0; boss.weakT = boss.staggerT;
+  b.hitStop = 0.1; b.shake(5);
+  bus.emit('cue', 'staggerBreak');
+  return true;
+}
+
 /** Returns true if the arrow is spent. */
 export function hitBoss(b, boss, arrow, box) {
+  if (boss.plane === 'bg') return false; // far off in the distance: arrows fall short
   const rule = RULES[boss.id];
   if (rule && rule.hit) { const r = rule.hit(b, boss, arrow, box); if (r !== undefined) return r; }
   if (boss.hidden) return false;
   const B = b.tun.bow;
   let mult = box.weak ? B.headMultiplier * (boss.state === 'weak' ? 1.5 : 1) : boss.def.strictWeak ? 0 : 0.75;
   if (mult === 0) { b.tink(arrow.x, arrow.y); return true; }
-  if (!arrow.ally && !arrow.astra) { if (box.weak) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else b.addBoon(b.tun.boon.perHit); }
+  if (!arrow.ally && !arrow.astra && !arrow.melee) { if (box.weak) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else b.addBoon(b.tun.boon.perHit); }
   b.burst(arrow.x, arrow.y, box.weak ? PAL.turmeric : PAL.white, box.weak ? 12 : 6);
-  damageBoss(b, boss, arrow.dmg * mult, { full: arrow.full, ally: arrow.ally });
+  // a staggered boss takes more from every blow
+  const st = boss.staggerT > 0 ? ((b.tun.boss && b.tun.boss.staggerDamageMult) || 1.6) : 1;
+  const dmg = arrow.dmg * mult * st;
+  damageBoss(b, boss, dmg, { full: arrow.full, ally: arrow.ally });
+  if (!arrow.ally && boss.staggerT <= 0) addBossStagger(b, boss, dmg * 1.2);
   return true;
 }
 
 function startMove(b, boss) {
   const ph = boss.def.phases[boss.phase];
-  if (!ph.moves.length) return;
-  const name = ph.moves[boss.moveIdx++ % ph.moves.length];
+  // a phase with combo strings plays them in turn, move by move; otherwise its moves cycle
+  let name;
+  if (ph.combos && ph.combos.length) {
+    if (!boss.comboQueue.length) { boss.comboQueue = [...ph.combos[boss.comboIdx++ % ph.combos.length]]; boss.inCombo = boss.comboQueue.length > 1; }
+    name = boss.comboQueue.shift();
+  } else {
+    if (!ph.moves.length) return;
+    name = ph.moves[boss.moveIdx++ % ph.moves.length];
+  }
   const mv = boss.def.moves[name];
-  boss.move = name; boss.mv = mv; boss.state = 'windup'; boss.t = 0; boss.did = false;
+  // a move can borrow another's behaviour ("as"), with its own windup, damage and telegraph
+  const kind = mv.as || name;
+  boss.move = name; boss.kind = kind; boss.mv = mv; boss.state = 'windup'; boss.t = 0; boss.did = false;
   const h = b.hero, U = boss.U;
   boss.facing = h.x >= boss.x ? 1 : -1;
   boss.windup = mv.windup * b.diff.telegraph / (ph.speed || 1);
   b.telegraph(boss, mv.telegraph, mv.answer);
   boss.aimX = h.x; boss.aimY = h.y - 90;
-  if (name === 'stomp') b.zones.push({ kind: 'lotus', x: boss.x, r: 130 + U * 0.3, t: 0, dur: boss.windup, src: boss });
-  else if (name === 'boulder') b.zones.push({ kind: 'redCircle', x: h.x, r: 74, t: 0, dur: boss.windup, dmg: mv.damage, src: boss, fall: 'boulder' });
-  else if (name === 'bolts') for (let i = 0; i < (mv.count || 3); i++) b.zones.push({ kind: 'redCircle', x: h.x + (i - 1) * 170 * (i % 2 ? 1 : -1) + (i === 0 ? 0 : h.vx * 0.4), r: 66, t: -i * 0.3, dur: boss.windup, dmg: mv.damage, src: boss, fall: 'bolt' });
-  else if (name === 'vanish') { boss.hidden = true; b.zones.push({ kind: 'shadowStar', follow: 0.55, x: h.x, r: 100, t: 0, dur: boss.windup, src: boss }); bus.emit('cue', 'vanish'); }
-  else if (name === 'fireRain') for (let i = 0; i < (mv.count || 3); i++) b.zones.push({ kind: 'fireWarn', x: Math.max(b.bounds.left + 50, Math.min(b.bounds.right - 50, h.x + (i - 1) * 190)), r: 56, t: -i * 0.22, dur: boss.windup, src: boss, then: { kind: 'fire', dur: 1.3, dmg: mv.damage } });
-  else if (name === 'noose') b.zones.push({ kind: 'coil', follow: true, x: h.x, r: 96, t: 0, dur: boss.windup, dmg: mv.damage, src: boss });
-  else if (name === 'hide') { boss.hidden = true; boss.data.slot = Math.floor(b.rng.next() * 3); bus.emit('cue', 'vanish'); }
-  else if (name === 'grab') { boss.data.grab = mv.hold; boss.data.grabHits = 0; }
+  if (kind === 'stomp') b.zones.push({ kind: 'lotus', x: boss.x, r: 130 + U * 0.3, t: 0, dur: boss.windup, src: boss });
+  else if (kind === 'boulder') b.zones.push({ kind: 'redCircle', x: h.x, r: 74, t: 0, dur: boss.windup, dmg: mv.damage, src: boss, fall: 'boulder' });
+  else if (kind === 'bolts') for (let i = 0; i < (mv.count || 3); i++) b.zones.push({ kind: 'redCircle', x: h.x + (i - 1) * 170 * (i % 2 ? 1 : -1) + (i === 0 ? 0 : h.vx * 0.4), r: 66, t: -i * 0.3, dur: boss.windup, dmg: mv.damage, src: boss, fall: 'bolt' });
+  else if (kind === 'vanish') { boss.hidden = true; b.zones.push({ kind: 'shadowStar', follow: 0.55, x: h.x, r: 100, t: 0, dur: boss.windup, src: boss }); bus.emit('cue', 'vanish'); }
+  else if (kind === 'fireRain') for (let i = 0; i < (mv.count || 3); i++) b.zones.push({ kind: 'fireWarn', x: Math.max(b.bounds.left + 50, Math.min(b.bounds.right - 50, h.x + (i - 1) * 190)), r: 56, t: -i * 0.22, dur: boss.windup, src: boss, then: { kind: 'fire', dur: 1.3, dmg: mv.damage } });
+  else if (kind === 'noose') b.zones.push({ kind: 'coil', follow: true, x: h.x, r: 96, t: 0, dur: boss.windup, dmg: mv.damage, src: boss });
+  else if (kind === 'hide') { boss.hidden = true; boss.data.slot = Math.floor(b.rng.next() * 3); bus.emit('cue', 'vanish'); }
+  else if (kind === 'grab') { boss.data.grab = mv.hold; boss.data.grabHits = 0; }
+  else if (kind === 'bgLeap') {
+    // the 2.5D leap: up and away into the far distance, then down on a crimson star where Rama stood
+    boss.state = 'bgLeap'; boss.plane = 'bg'; boss.bgTimer = 1.2 * b.diff.telegraph; boss.slamX = h.x; boss.fromX = boss.x;
+    b.zones.push({ kind: 'shadowStar', follow: 0.6, x: h.x, r: 110, t: 0, dur: boss.bgTimer, src: boss });
+    b.shake(3); b.burst(boss.x, GROUND - 40, PAL.ochre, 14); bus.emit('cue', 'jump');
+  }
+}
+
+/** A blow at Rama that the parry can turn (not crimson): true when it was turned. */
+function parried(b, boss) {
+  const h = b.hero, tl = teleOf(boss.mv);
+  if (!(h.parryT > 0) || tl === 'crimson' || !tl || Math.sign(boss.x - h.x) !== h.facing) return false;
+  b.parry(boss.x - boss.facing * 40, boss.y - boss.U * 0.7, null, tl);
+  addBossStagger(b, boss, tl === 'gold' ? 50 : 25);
+  if (tl === 'gold' && boss.state !== 'weak') { boss.comboQueue = []; boss.inCombo = false; boss.state = 'weak'; boss.t = 0; boss.weakT = boss.def.punish || 1.6; boss.parriedTo = true; }
+  return true;
 }
 
 function act(b, boss) {
-  const name = boss.move, mv = boss.mv, h = b.hero, U = boss.U;
+  const name = boss.kind || boss.move, mv = boss.mv, h = b.hero, U = boss.U;
   const sp = b.diff.enemySpeed;
   switch (name) {
     case 'stomp': {
@@ -128,7 +178,7 @@ function act(b, boss) {
       break;
     }
     case 'swipe': case 'swing':
-      if (Math.abs(h.x - boss.x) < U * 0.42 + 150 && Math.abs(h.y - boss.y) < U) b.hurtHero(mv.damage, boss.x, 'roll', 'swipe');
+      if (Math.abs(h.x - boss.x) < U * 0.42 + 150 && Math.abs(h.y - boss.y) < U) { if (parried(b, boss)) return; b.hurtHero(mv.damage, boss.x, 'roll', 'swipe'); }
       break;
     case 'vanish': {
       const z = b.zones.find((q) => q.kind === 'shadowStar' && q.src === boss);
@@ -143,7 +193,7 @@ function act(b, boss) {
       for (let i = 0; i < n; i++) {
         const ox = boss.x + boss.facing * U * 0.3, oy = boss.y - U * 0.8;
         const a = Math.atan2(boss.aimY + (i - (n - 1) / 2) * 70 - oy, boss.aimX - ox);
-        b.shots.push({ x: ox, y: oy, vx: Math.cos(a) * 820 * sp, vy: Math.sin(a) * 820 * sp, dmg: mv.damage, kind: name === 'volley' || name === 'bolt' ? 'arrow' : 'spear', life: 3, delay: i * 0.18, answer: 'move' });
+        b.shots.push({ x: ox, y: oy, vx: Math.cos(a) * 820 * sp, vy: Math.sin(a) * 820 * sp, dmg: mv.damage, kind: name === 'volley' || name === 'bolt' ? 'arrow' : 'spear', life: 3, delay: i * 0.18, answer: 'move', tele: mv.tele });
       }
       bus.emit('cue', 'enemyShot');
       break;
@@ -157,9 +207,22 @@ function act(b, boss) {
   else { boss.state = 'recover'; boss.t = 0; }
 }
 
+/** Land from the background leap: a shockwave where the star was. */
+function landLeap(b, boss) {
+  const h = b.hero, mv = boss.mv;
+  boss.plane = 'fg'; boss.x = Math.max(b.bounds.left + 60, Math.min(b.bounds.right - 60, boss.slamX)); boss.y = GROUND;
+  b.shake(8); bus.emit('cue', 'stompLand'); b.burst(boss.x, GROUND - 20, PAL.ochre, 20);
+  if (Math.abs(h.x - boss.x) < 110 && h.y > GROUND - 120) b.hurtHero(mv.damage, boss.x, 'move', 'slam');
+  for (const dir of [-1, 1]) b.zones.push({ kind: 'wave', x: boss.x + dir * 110, dir, speed: 520, t: 0, dur: 0.9, dmg: Math.round(mv.damage * 0.6), src: boss });
+  if (b.scatter) b.scatter(boss.x);
+  boss.state = mv.opensWeak ? 'weak' : 'recover'; boss.t = 0; boss.weakT = mv.opensWeak || 0;
+}
+
 export function updateBoss(b, boss, dt) {
   if (boss.dead) return;
   boss.hitFlash -= dt; boss.t += dt;
+  if (boss.staggerT > 0) boss.staggerT -= dt;
+  else if (boss.stagger > 0) { boss.staggerDecayT -= dt; if (boss.staggerDecayT <= 0) boss.stagger = Math.max(0, boss.stagger - ((b.tun.boss && b.tun.boss.staggerDecayPerSec) || 8) * dt); }
   const rule = RULES[boss.id];
   if (boss.dying) { if (boss.t > 2.4) { boss.dead = true; b.onBossDown(boss); } return; }
   if (boss.state === 'fled') { boss.x += 1500 * dt * (boss.data.fleeDir || 1); boss.y -= 500 * dt; if (boss.t > 1.2) { boss.dead = true; b.onBossDown(boss); } return; }
@@ -196,7 +259,15 @@ export function updateBoss(b, boss, dt) {
     case 'diving': {
       const k = Math.min(1, boss.t / 0.5);
       boss.x = boss.fromX + (boss.toX - boss.fromX) * k; boss.y = boss.fromY + (boss.toY - boss.fromY) * k * k;
-      if (k >= 1) { if (Math.abs(h.x - boss.x) < 90 && h.rollInv <= 0 && h.y > GROUND - 120) b.hurtHero(boss.mv.damage, boss.x, 'roll', 'dive'); boss.state = 'weak'; boss.t = 0; boss.weakT = boss.mv.opensWeak || 1.2; b.shake(3); }
+      if (k >= 1) { if (Math.abs(h.x - boss.x) < 90 && h.rollInv <= 0 && h.y > GROUND - 120 && !parried(b, boss)) b.hurtHero(boss.mv.damage, boss.x, 'roll', 'dive'); if (boss.state !== 'weak' || !boss.parriedTo) { boss.state = 'weak'; boss.t = 0; boss.weakT = boss.mv.opensWeak || 1.2; } boss.parriedTo = false; b.shake(3); }
+      break;
+    }
+    case 'bgLeap': {
+      boss.bgTimer -= dt;
+      const z = b.zones.find((q) => q.kind === 'shadowStar' && q.src === boss);
+      if (z) boss.slamX = z.x;
+      boss.x += (boss.slamX - boss.x) * Math.min(1, dt * 3);
+      if (boss.bgTimer <= 0) landLeap(b, boss);
       break;
     }
     case 'charging': {
@@ -205,9 +276,12 @@ export function updateBoss(b, boss, dt) {
       if (boss.x <= b.bounds.left + 90 || boss.x >= b.bounds.right - 90 || boss.t > 1.4) { boss.x = Math.max(b.bounds.left + 90, Math.min(b.bounds.right - 90, boss.x)); boss.state = boss.mv.opensWeak ? 'weak' : 'recover'; boss.weakT = boss.mv.opensWeak || 0; boss.t = 0; }
       break;
     }
-    case 'weak': if (boss.t >= boss.weakT) { boss.state = 'recover'; boss.t = 0; boss.hidden = false; } break;
+    case 'weak': if (boss.t >= boss.weakT) { boss.state = 'recover'; boss.t = 0; boss.hidden = false; boss.parriedTo = false; } break;
     case 'recover': {
       if (boss.def.flies) boss.y += (FLY_Y - boss.y) * dt * 3;
+      // inside a combo string the next move follows quickly; after the last, a punish window
+      if (boss.comboQueue.length) { if (boss.t > 0.22 / spd) startMove(b, boss); break; }
+      if (boss.inCombo) { boss.inCombo = false; if (boss.def.punish) { boss.state = 'weak'; boss.t = 0; boss.weakT = boss.def.punish; break; } }
       if (boss.t > 0.55 / spd) { boss.state = 'idle'; boss.t = 0; boss.hidden = false; }
       break;
     }
@@ -216,8 +290,19 @@ export function updateBoss(b, boss, dt) {
   if (!boss.def.flies && boss.state !== 'diving') boss.y = GROUND;
 }
 
+/** A boss away in the distance: small, in line only, between the far plane and the world. */
+export function drawBossBg(ctx, b, boss, z = 1) {
+  const sx = (boss.x - b.camX) * z, k = Math.min(1, Math.max(0, 1.2 - boss.bgTimer) * 2.5);
+  ctx.save(); ctx.globalAlpha = 0.75;
+  // a fixed on-screen size (a third of a man's height on the horizon), however big the boss is
+  const sc = Math.min(0.62, 150 / boss.U);
+  fig(ctx, boss.spec, boss.bgTimer > 0.4 ? 'raise' : 'jump', sx, GROUND - 160 + k * 24, { facing: boss.facing, scale: sc, mode: 'line' });
+  ctx.restore();
+}
+
 function bossPose(boss) {
   if (boss.dying) return 'hurt';
+  if (boss.staggerT > 0) return 'kneel';
   switch (boss.state) {
     case 'intro': return 'raise';
     case 'windup': return boss.move === 'stomp' ? 'raise' : boss.move === 'charge' ? 'crouch' : boss.move === 'breath' ? 'stand' : boss.move === 'spear' || boss.move === 'spearThrow' || boss.move === 'volley' || boss.move === 'bolt' ? 'cast' : 'swing0';
@@ -460,6 +545,7 @@ const RULES = {
       if (shadow.length >= 2) {
         const def = JSON.parse(JSON.stringify(boss.def));
         def.phases[0].moves.push('volley');
+        if (def.phases[0].combos) def.phases[0].combos.push(['volley', 'spear']);
         for (const ph of def.phases) ph.speed = (ph.speed || 1) + 0.04 * shadow.length;
         if (shadow.length >= 4) for (const ph of def.phases) if (ph.adds) ph.adds.max += 1;
         boss.def = def;

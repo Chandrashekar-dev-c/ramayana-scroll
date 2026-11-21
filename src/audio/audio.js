@@ -137,6 +137,14 @@ export const CUES = {
   thunder: () => { noise({ freq: 120, a: 0.02, dec: 1.6, peak: 0.6, type: 'lowpass' }); drum(50, { vol: 1, dec: 0.8 }); },
   fail: () => phrase([7, 5, 4, 1], 0.22, 0.12),
   coin: () => bell(hz(11, 2), { dec: 0.4, vol: 0.5 }),
+  // parry, combo and traversal sounds
+  swish: () => noise({ freq: 1800, a: 0.005, dec: 0.12, peak: 0.12, sweep: 0.5, type: 'highpass' }),
+  dash: () => noise({ freq: 900, a: 0.01, dec: 0.16, peak: 0.18, sweep: 2.4, type: 'highpass' }),
+  glint: () => { tone(1200, { dec: 0.08, peak: 0.12, glide: -0.5 }); tone(2400, { dec: 0.06, peak: 0.06, at: 0.04 }); },
+  clink: () => { bell(hz(9, 3), { dec: 0.18, vol: 0.45 }); drum(220, { vol: 0.12, dec: 0.05 }); },
+  crumble: () => { noise({ freq: 160, dec: 0.5, peak: 0.25, type: 'lowpass' }); drum(70, { vol: 0.25, dec: 0.3 }); },
+  vault: () => { tone(hz(0, 0), { type: 'triangle', dec: 0.3, peak: 0.2, glide: -0.4 }); noise({ freq: 700, dec: 0.25, peak: 0.12, sweep: 2, type: 'highpass' }); },
+  staggerBreak: () => { bell(110, { dec: 1.6, vol: 1 }); tone(3300, { type: 'square', dec: 0.05, peak: 0.05 }); drum(60, { vol: 0.6, dec: 0.5 }); },
   // tankaara: the thunder of Rama's bowstring as his rage rises
   tankaara: () => { tone(hz(0, -2), { type: 'sawtooth', a: 0.005, dec: 0.9, peak: 0.3, glide: 0.6, filter: 700 }); noise({ freq: 160, a: 0.01, dec: 1.2, peak: 0.45, type: 'lowpass' }); drum(55, { vol: 0.9, dec: 0.7 }); },
   perfect: () => { bell(hz(12, 2), { dec: 0.5, vol: 0.7 }); bell(hz(7, 3), { dec: 0.4, vol: 0.4, at: 0.05 }); },

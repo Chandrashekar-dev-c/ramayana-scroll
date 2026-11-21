@@ -1,15 +1,16 @@
 {
-  "hero": { "hp": 100, "walk": 230, "drawWalk": 150, "jumpVelocity": 820, "gravity": 2200, "rollTime": 0.42, "rollInvulnerable": 0.32, "rollSpeed": 520, "hurtInvulnerable": 0.9, "kickReach": 78, "kickCooldown": 0.9, "kickDamage": 1, "kickKnock": 150, "checkpointHeal": 0.35 },
-  "bow": { "fullDraw": 0.75, "quickDamage": 1, "fullDamage": 3, "headMultiplier": 2, "pierce": 2, "minSpeed": 760, "maxSpeed": 1650, "minGravity": 900, "maxGravity": 90, "cooldown": 0.16, "aimUp": 72, "aimDown": 28 },
-  "boon": { "max": 30, "perHit": 1, "perHeadshot": 3, "perKill": 2, "astraDamage": 10, "astraBossDamage": 14, "traceTime": 4.5, "traceSlow": 0.15 },
-  "feel": { "hitPause": 0.04, "knockback": 14, "stompShake": 6, "coyoteTime": 0.1, "inputBuffer": 0.12, "cameraLead": 0.18, "heroScreenX": 0.35, "teachSlow": 0.5, "teachTime": 0.5 },
-  "ally": { "fireEvery": 2.5, "damage": 1, "follow": 130 },
+  "hero": {"hp": 100, "walk": 230, "drawWalk": 150, "jumpVelocity": 820, "gravity": 2200, "rollTime": 0.42, "rollInvulnerable": 0.32, "rollSpeed": 520, "hurtInvulnerable": 0.9, "kickReach": 78, "kickCooldown": 0.9, "kickDamage": 1, "kickKnock": 150, "checkpointHeal": 0.35, "parryWindow": 0.22, "parryCooldown": 0.35, "parryBuffer": 0.1, "airDashSpeed": 760, "airDashTime": 0.16, "wallSlideMaxVy": 160, "wallJumpVx": 440, "wallJumpVy": 780, "comboWindow": 0.38, "footholdLife": 3.0, "vaultBoost": 1020},
+  "bow": {"fullDraw": 0.75, "quickDamage": 1, "fullDamage": 3, "headMultiplier": 2, "pierce": 2, "minSpeed": 760, "maxSpeed": 1650, "minGravity": 900, "maxGravity": 90, "cooldown": 0.16, "aimUp": 72, "aimDown": 28},
+  "boon": {"max": 30, "perHit": 1, "perHeadshot": 3, "perKill": 2, "astraDamage": 10, "astraBossDamage": 14, "traceTime": 4.5, "traceSlow": 0.15},
+  "feel": {"hitPause": 0.04, "knockback": 14, "stompShake": 6, "coyoteTime": 0.1, "inputBuffer": 0.12, "cameraLead": 0.18, "heroScreenX": 0.35, "teachSlow": 0.5, "teachTime": 0.5},
+  "ally": {"fireEvery": 2.5, "damage": 1, "follow": 130},
   "difficulty": {
-    "story": { "heroHp": 3.0, "enemySpeed": 0.75, "damageTaken": 0.4, "aimAssist": true, "restart": false, "telegraph": 1.5, "extraSpawn": 0 },
-    "normal": { "heroHp": 1.0, "enemySpeed": 1.0, "damageTaken": 1.0, "aimAssist": false, "restart": true, "telegraph": 1.0, "extraSpawn": 0 },
-    "hard": { "heroHp": 0.7, "enemySpeed": 1.2, "damageTaken": 1.3, "aimAssist": false, "restart": true, "telegraph": 0.85, "extraSpawn": 1, "bossCheckpointOnly": true }
+    "story": {"heroHp": 3.0, "enemySpeed": 0.75, "damageTaken": 0.4, "aimAssist": true, "restart": false, "telegraph": 1.5, "extraSpawn": 0},
+    "normal": {"heroHp": 1.0, "enemySpeed": 1.0, "damageTaken": 1.0, "aimAssist": false, "restart": true, "telegraph": 1.0, "extraSpawn": 0},
+    "hard": {"heroHp": 0.7, "enemySpeed": 1.2, "damageTaken": 1.3, "aimAssist": false, "restart": true, "telegraph": 0.85, "extraSpawn": 1, "bossCheckpointOnly": true}
   },
-  "trial": { "skipAfterFails": 2 },
-  "paywall": { "enabled": false, "freeKanda": "bala" },
-  "scene": { "typeSpeed": 46, "walkMarker": 1.6, "wash": 3.0 }
+  "trial": {"skipAfterFails": 2},
+  "paywall": {"enabled": false, "freeKanda": "bala"},
+  "scene": {"typeSpeed": 46, "walkMarker": 1.6, "wash": 3.0},
+  "boss": {"staggerDecayPerSec": 8, "staggerDecayDelay": 4.0, "staggerPunishTime": 2.2, "staggerDamageMult": 1.6}
 }

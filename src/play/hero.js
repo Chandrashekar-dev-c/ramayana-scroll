@@ -1,7 +1,9 @@
-// The hero: movement, the bow, jump, roll, the automatic kick (which also parries), and
-// Rama's rage. Feel: speed eases in and out, landings squash and raise dust, a bow drawn in the
-// air hangs for a moment, the arrow's path shows as rice-paste dots, and a release just after
-// the ring fills is a Perfect Draw.
+// The hero: movement, the bow, jump, roll, parry, a three-hit close combo, and Rama's rage.
+// Feel: speed eases in and out, landings squash and raise dust, a bow drawn in the air hangs for
+// a moment, the arrow's path shows as rice-paste dots, and a release just after the ring fills is
+// a Perfect Draw. Traversal: a roll in the air is an air-dash (Vayu step); Rama slides down and
+// kicks off walls, and vaults up onto a ledge he only just misses.
+// Parry is manual (Q, LT, the shield button); in Story mode the old automatic kick still parries.
 import { input } from '../core/input.js';
 import { bus } from '../core/events.js';
 import { save } from '../core/save.js';
@@ -21,7 +23,52 @@ export function createHero(b, def) {
     hp: maxHp, maxHp, onGround: true, drawT: 0, rollT: 0, rollDir: 1, inv: 0, kickT: 0, kickAnim: 0, coyote: 0, jumpBuf: 0,
     walkT: 0, shootCd: 0, shootAnim: 0, hurtAnim: 0, aim: 0, held: 0, dead: false, fullCue: false, w: 44, h: 150,
     rollInv: 0, dropT: 0, squash: 0, airHang: 0, parryT: 0, flashT: 0, rage: 0, rageT: 0, after: [],
+    parryCd: 0, parryBuf: 0,
+    airDash: 1, airDashT: 0, wallDir: 0, wallCoyote: 0, wallJumpLock: 0, vaultT: 0, vaultFrom: null, vaultTo: null,
+    comboStep: 0, comboT: 0, comboWin: 0, comboHit: new Set(), comboStruck: false,
   };
+}
+
+/** The three-hit close combo: a bow-sweep, a rising arc that pops a foe up, a heavy kick. */
+export const COMBO = [
+  null,
+  { name: 'sweep', pose: 'strike1', startup: 0.06, active: 0.10, dmg: 1.5, knock: 60, pop: 0, stun: 0.25, boon: 2, rage: 6, reach: 92 },
+  { name: 'rise', pose: 'strike2', startup: 0.08, active: 0.12, dmg: 2.0, knock: 80, pop: 320, stun: 0.6, boon: 3, rage: 8, reach: 96 },
+  { name: 'dharma', pose: 'strike3', startup: 0.11, active: 0.14, dmg: 3.5, knock: 260, pop: 0, stun: 1.2, boon: 4, rage: 14, reach: 112 },
+];
+const comboDur = (st) => st.startup + st.active + 0.06;
+
+/** A parry that met a blow or a shot: refreshes the parry and the air-dash, feeds boon and rage. */
+export function onParrySuccess(b, h, kind = 'normal') {
+  const gold = kind === 'gold';
+  h.parryCd = 0; h.airDash = 1;
+  b.addBoon(gold ? 10 : 6);
+  addRage(b, gold ? 30 : 18);
+  b.hitStop = gold ? 0.11 : 0.08;
+  b.camZoomTo = 1.06;
+  if (gold) { h.drawT = Math.max(h.drawT, b.tun.bow.fullDraw); h.fullCue = true; b.slowMo = { t: 0.25, scale: 0.3 }; }
+}
+
+/** -1 when Rama is pressed against a wall on his left, +1 on his right, 0 when not. */
+export function wallContact(b, h) {
+  if (h.onGround) return 0;
+  if (h.x <= b.bounds.left + 31) return -1;
+  if (h.x >= b.bounds.right - 31) return 1;
+  for (const w of b.walls || []) {
+    if (h.y - 120 > w.y2 || h.y < w.y1) continue;
+    if (h.x + 22 >= w.x1 - 2 && h.x < w.x1) return 1;
+    if (h.x - 22 <= w.x2 + 2 && h.x > w.x2) return -1;
+  }
+  return 0;
+}
+
+/** The surfaces Rama can stand on: shelves from the level, live platforms, arrow footholds. */
+export function surfaces(b) {
+  const out = [];
+  for (const s of b.level.shelves || []) out.push({ x1: s.x1, x2: s.x2, y: GROUND - s.h });
+  for (const p of b.platforms || []) if (!p.broken) out.push({ x1: p.x, x2: p.x + p.w, y: p.y, ref: p });
+  for (const f of b.footholds || []) out.push({ x1: f.x, x2: f.x + f.w, y: f.y, ref: f });
+  return out;
 }
 
 function nearestEnemy(b, h, dirOnly) {
@@ -66,8 +113,46 @@ export function updateHero(b, dt) {
   const ax = canAct ? input.axis : 0;
   const rage = h.rageT > 0, rageK = rage ? 1.25 : 1;
   if (canAct && input.consume('rage')) startRage(b);
+  h.parryCd -= dt; h.wallJumpLock -= dt; h.comboWin -= dt;
+
+  // manual parry: buffered a moment so a press a hair early still counts
+  if (input.consume('parry')) h.parryBuf = T.parryBuffer;
+  if (h.parryBuf > 0) h.parryBuf -= dt;
+  if (h.parryBuf > 0 && h.parryCd <= 0 && canAct && h.rollT <= 0) {
+    h.parryT = T.parryWindow; h.parryCd = T.parryCooldown; h.kickAnim = 0.22; h.parryBuf = 0;
+    h.drawT = 0; h.fullCue = false; h.comboT = 0;
+    bus.emit('cue', 'swish');
+  }
+
+  // the close combo; any of jump, roll, parry or the bow cancels a swing, and cancelling the
+  // third into the bow gives the draw a head start
+  if (canAct && input.consume('strike') && h.rollT <= 0 && h.vaultT <= 0) {
+    if (h.comboT <= 0) {
+      h.comboStep = h.comboWin > 0 ? (h.comboStep % 3) + 1 : 1;
+      h.comboT = comboDur(COMBO[h.comboStep]); h.comboWin = T.comboWindow + h.comboT;
+      h.comboHit.clear(); h.comboStruck = false; h.drawT = 0; h.fullCue = false;
+      bus.emit('cue', 'swish');
+    } else h.comboQueued = true;
+  }
+  if (h.comboT > 0) {
+    const P = input.pressed, cancel = P.jump || P.roll || P.parry || h.parryT > 0 || input.drawHeld();
+    if (cancel) { if (input.drawHeld() && h.comboStep === 3) h.drawT = 0.35; h.comboT = 0; h.comboQueued = false; }
+    else {
+      h.comboT -= dt;
+      const st = COMBO[h.comboStep], el = comboDur(st) - h.comboT;
+      if (el >= st.startup && el <= st.startup + st.active && b.meleeHit) b.meleeHit(h, st);
+      if (h.comboT <= 0 && h.comboQueued) { h.comboQueued = false; h.comboStep = (h.comboStep % 3) + 1; h.comboT = comboDur(COMBO[h.comboStep]); h.comboWin = T.comboWindow + h.comboT; h.comboHit.clear(); h.comboStruck = false; bus.emit('cue', 'swish'); }
+    }
+  }
 
   const rollTime = T.rollTime * (b.boon_vayu ? 1.3 : 1);
+  // a roll pressed in the air is the Vayu step: a short flat dash, one per jump
+  if (canAct && !h.onGround && h.airDash > 0 && h.airDashT <= 0 && h.vaultT <= 0 && input.consume('roll')) {
+    h.airDash = 0; h.airDashT = T.airDashTime; h.rollDir = ax || h.facing; h.facing = h.rollDir;
+    h.vx = h.rollDir * T.airDashSpeed; h.vy = 0; h.rollInv = T.airDashTime; h.rollStart = b.time; h.drawT = 0; h.comboT = 0;
+    for (let i = 0; i < 3; i++) h.after.push({ x: h.x - h.rollDir * i * 18, y: h.y, pose: 'jump', facing: h.facing, rot: 0, t: 0.18, gold: true });
+    bus.emit('cue', 'dash');
+  }
   if (canAct && input.consume('roll') && h.onGround && h.rollT <= 0) {
     // rollInv (not inv) protects the roll, so a shockwave, stomp or charge still has to be jumped
     h.rollT = rollTime * (rage ? 0.8 : 1); h.rollDir = ax || h.facing; h.drawT = 0; h.fullCue = false; h.rollStart = b.time;
@@ -75,20 +160,39 @@ export function updateHero(b, dt) {
   }
   if (h.rollInv > 0) h.rollInv -= dt;
 
-  if (h.rollT > 0) {
+  if (h.vaultT > 0) {
+    // vaulting onto a ledge: a short eased lift, no control until feet are on top
+    h.vaultT -= dt;
+    const k = 1 - Math.max(0, h.vaultT) / 0.14, e = k * k * (3 - 2 * k);
+    h.x = h.vaultFrom.x + (h.vaultTo.x - h.vaultFrom.x) * e; h.y = h.vaultFrom.y + (h.vaultTo.y - h.vaultFrom.y) * e;
+    h.vx = 0; h.vy = 0;
+    if (h.vaultT <= 0) { h.x = h.vaultTo.x; h.y = h.vaultTo.y; h.onGround = true; h.airDash = 1; }
+  } else if (h.airDashT > 0) {
+    h.airDashT -= dt; h.vx = h.rollDir * T.airDashSpeed; h.vy = 0;
+  } else if (h.rollT > 0) {
     h.rollT -= dt; h.vx = h.rollDir * T.rollSpeed * rageK; h.facing = h.rollDir;
   } else if (canAct) {
     const wantsDraw = b.canShoot !== false && input.drawHeld() && h.shootCd <= 0;
-    const speed = (wantsDraw ? T.drawWalk : T.walk) * rageK;
+    const speed = (wantsDraw ? T.drawWalk : T.walk) * rageK * (h.comboT > 0 ? 0.25 : 1);
     // ease in and out of a walk: quicker on the ground than in the air
     const accel = h.onGround ? 18 : 10;
-    h.vx += (ax * speed - h.vx) * Math.min(1, accel * dt);
+    // just after a wall-kick the push away from the wall can't be undone at once
+    if (h.wallJumpLock <= 0) h.vx += (ax * speed - h.vx) * Math.min(1, accel * dt);
     if (Math.abs(h.vx) < 2 && !ax) h.vx = 0;
-    if (ax && !wantsDraw) h.facing = Math.sign(ax);
+    if (ax && !wantsDraw && h.comboT <= 0) h.facing = Math.sign(ax);
     // jump, with a little buffering and coyote time
     if (input.consume('jump')) h.jumpBuf = F.inputBuffer;
     h.jumpBuf -= dt; h.coyote = h.onGround ? F.coyoteTime : h.coyote - dt;
+    // Hanuman's cupped hands: a jump from beside him throws Rama high
+    const vaulter = (b.allies || []).find((a) => a.role === 'vault' && Math.abs(a.x - h.x) < 60);
+    if (h.jumpBuf > 0 && h.coyote > 0 && vaulter) { h.vy = -T.vaultBoost; h.onGround = false; h.jumpBuf = 0; h.coyote = 0; h.airDash = 1; h.squash = -0.14; bus.emit('cue', 'vault'); }
     if (h.jumpBuf > 0 && h.coyote > 0) { h.vy = -T.jumpVelocity; h.onGround = false; h.jumpBuf = 0; h.coyote = 0; h.squash = -0.1; bus.emit('cue', 'jump'); }
+    // the wall-kick: a jump while touching (or just leaving) a wall springs away from it
+    if (h.jumpBuf > 0 && !h.onGround && h.wallCoyote > 0) {
+      h.vx = -h.wallDir * T.wallJumpVx; h.vy = -T.wallJumpVy; h.facing = -h.wallDir;
+      h.wallJumpLock = 0.12; h.airDash = 1; h.jumpBuf = 0; h.wallCoyote = 0; h.squash = -0.1;
+      bus.emit('cue', 'jump');
+    }
     if (wantsDraw) {
       if (h.drawT === 0) { const e = nearestEnemy(b, h); if (e && input.aim.source !== 'mouse' && !ax) h.facing = e.x >= h.x ? 1 : -1; bus.emit('cue', 'drawStart'); }
       h.drawT += dt;
@@ -102,19 +206,50 @@ export function updateHero(b, dt) {
     }
   } else h.vx = 0;
 
+  if (h.vaultTo) { if (h.vaultT <= 0) h.vaultTo = null; finishMove(b, h, dt, rage, rollTime); return; }
   // integrate; a bow drawn while falling hangs Rama in the air for a breath (at most 0.45s)
   let g = T.gravity;
   if (!h.onGround && h.drawT > 0 && h.vy > 0 && h.airHang < 0.45) { g *= 0.25; h.airHang += dt; }
+  if (h.airDashT > 0) g = 0;
+  if (b.updraft && !h.onGround) h.vy -= b.updraft * dt; // a thermal lifting him
   h.vy += g * dt;
+  // sliding down a wall he is pushing against: the fall is slowed and he can kick off
+  const wd = wallContact(b, h);
+  if (wd) { h.wallDir = wd; h.wallCoyote = 0.10; } else if (h.wallCoyote > 0) h.wallCoyote -= dt;
+  h.sliding = !!(wd && !h.onGround && h.vy > 0 && Math.sign(ax) === wd);
+  if (h.sliding) { h.vy = Math.min(h.vy, T.wallSlideMaxVy); if (Math.floor(b.time * 12) % 3 === 0) b.fx.push({ kind: 'dust', x: h.x + wd * 20, y: h.y - 70, vx: -wd * 20, t: 0, dur: 0.35, seed: b.time * 7 }); }
   const py = h.y, wasGround = h.onGround, fallV = h.vy;
   h.x += h.vx * dt; h.y += h.vy * dt;
-  let floor = GROUND;
+  // solid walls stop him from the side
+  for (const w of b.walls || []) {
+    if (h.y - 120 > w.y2 || h.y < w.y1) continue;
+    if (h.x + 22 > w.x1 && h.x < (w.x1 + w.x2) / 2) h.x = w.x1 - 22;
+    else if (h.x - 22 < w.x2 && h.x >= (w.x1 + w.x2) / 2) h.x = w.x2 + 22;
+  }
+  let floor = GROUND, standing = null;
   // down on a shelf drops through it; the short timer keeps the shelf from catching Rama again
   // on the next frame (onGround is already false by then)
   h.dropT -= dt;
   if (canAct && input.held.down && h.onGround && h.y < GROUND - 1) h.dropT = 0.22;
-  if (h.dropT <= 0) for (const s of b.level.shelves || []) if (h.x > s.x1 && h.x < s.x2 && py <= GROUND - s.h + 1 && h.vy >= 0) floor = Math.min(floor, GROUND - s.h);
+  if (h.dropT <= 0) for (const s of surfaces(b)) if (h.x > s.x1 && h.x < s.x2 && py <= s.y + 1 && h.vy >= 0 && s.y < floor) { floor = s.y; standing = s.ref || null; }
   if (h.y >= floor) { h.y = floor; h.vy = 0; h.onGround = true; } else h.onGround = false;
+  h.standing = h.onGround ? standing : null;
+  if (h.onGround) h.airDash = 1;
+  // a ledge just missed: falling past the lip of a surface while pushing toward it, he vaults up
+  if (!h.onGround && h.vy >= 0 && ax && h.vaultT <= 0 && h.airDashT <= 0) {
+    for (const s of surfaces(b)) {
+      const lip = ax > 0 ? s.x1 : s.x2, dist = (lip - h.x) * ax;
+      if (dist > 0 && dist < 40 && h.y > s.y && h.y - s.y < 70) {
+        h.vaultT = 0.14; h.vaultFrom = { x: h.x, y: h.y }; h.vaultTo = { x: lip + ax * 24, y: s.y }; h.vy = 0; bus.emit('cue', 'jump'); break;
+      }
+    }
+  }
+  finishMove(b, h, dt, rage, rollTime, wasGround, fallV);
+  if (b.diff.aimAssist) autoKick(b, h, canAct);
+}
+
+function finishMove(b, h, dt, rage, rollTime, wasGround = true, fallV = 0) {
+  const T = b.tun.hero;
   if (!wasGround && h.onGround) {
     // landing: squash, and a few puffs of ink dust
     h.airHang = 0; h.squash = Math.min(0.2, 0.06 + fallV / 6000);
@@ -124,10 +259,14 @@ export function updateHero(b, dt) {
   if (Math.abs(h.vx) > 1 && h.onGround) h.walkT += dt; else if (h.onGround) h.walkT = 0;
   if ((rage || h.rollT > 0) && Math.floor(b.time * 30) % 2 === 0) h.after.push({ x: h.x, y: h.y, pose: heroPose(h), facing: h.facing, rot: h.rollT > 0 ? (1 - h.rollT / rollTime) * Math.PI * 2 * h.rollDir : 0, t: 0.18, gold: rage || h.perfectDodge > 0 });
   if (h.perfectDodge > 0) h.perfectDodge -= dt;
+  void T;
+}
 
-  // the kick: automatic when an enemy, or a low shot, is within arm's reach. Its first moments
-  // are a parry window: a shot is sent back, a blow is turned and the striker staggers.
-  if (h.kickT <= 0 && h.rollT <= 0 && h.onGround && canAct) {
+// Story mode keeps the automatic kick: when an enemy or a low shot is within arm's reach Rama
+// kicks by himself, and the kick's first moments are a parry window.
+function autoKick(b, h, canAct) {
+  const T = b.tun.hero;
+  if (h.kickT <= 0 && h.rollT <= 0 && h.onGround && canAct && h.comboT <= 0) {
     let did = false;
     for (const e of b.enemies) {
       if (e.dead || e.dying || e.def.flies || e.illusionGone || e.state === 'climb' && Math.abs(e.x - h.x) > T.kickReach) continue;
@@ -198,12 +337,28 @@ export function heroPose(h) {
   if (h.dead) return 'hurt';
   if (h.hurtAnim > 0) return 'hurt';
   if (h.rollT > 0) return 'crouch';
+  if (h.comboT > 0) return COMBO[h.comboStep].pose;
   if (h.kickAnim > 0) return 'kick';
+  if (h.vaultT > 0) return 'climb';
+  if (h.sliding) return 'wallSlide';
   if (!h.onGround) return 'jump';
   if (h.drawT > 0) return h.drawT < 0.18 ? 'draw0' : h.drawT < 0.5 ? 'draw1' : 'draw2';
   if (h.shootAnim > 0) return 'shoot';
   if (Math.abs(h.vx) > 1) return WALK[Math.floor(h.walkT * 9) % 4];
   return 'stand';
+}
+
+/** A tapered ink smear following the swing: thin at the start, thick at the cut, fading out. */
+export function drawSmear(ctx, x, y, facing, step, k) {
+  if (k < 0.15 || k > 0.95) return;
+  const [a0, a1, r, cy] = step === 1 ? [-0.6, 0.7, 70, -95] : step === 2 ? [1.1, -1.3, 64, -100] : [-0.1, 0.5, 96, -55];
+  const n = 10, end = a0 + (a1 - a0) * Math.min(1, (k - 0.15) / 0.5);
+  ctx.save(); ctx.translate(x, y); ctx.scale(facing, 1); ctx.globalAlpha = k > 0.7 ? (0.95 - k) / 0.25 : 1;
+  ctx.fillStyle = step === 3 ? PAL.madder : PAL.black;
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) { const a = a0 + (end - a0) * (i / n), w = (step === 3 ? 7 : 4) * Math.sin((i / n) * Math.PI); ctx.lineTo(Math.cos(a) * (r + w) + 10, cy + Math.sin(a) * (r + w)); }
+  for (let i = n; i >= 0; i--) { const a = a0 + (end - a0) * (i / n), w = (step === 3 ? 7 : 4) * Math.sin((i / n) * Math.PI); ctx.lineTo(Math.cos(a) * (r - w) + 10, cy + Math.sin(a) * (r - w)); }
+  ctx.closePath(); ctx.fill(); ctx.restore();
 }
 
 export function drawHero(ctx, b) {
@@ -227,6 +382,9 @@ export function drawHero(ctx, b) {
   ctx.save(); ctx.translate(h.x, h.y); ctx.scale(1 + sq, 1 - sq); ctx.translate(-h.x, -h.y);
   fig(ctx, h.spec, pose, h.x, h.y, { facing: h.facing, aim: h.aim, rot, alpha: blink ? 0.45 : 1, pivot: h.rollT > 0 ? 0.25 : 0.05 });
   ctx.restore();
+  // a swing leaves a tapered brush-stroke smear; a raised parry shows as a ring of ink
+  if (h.comboT > 0) drawSmear(ctx, h.x, h.y, h.facing, h.comboStep, 1 - h.comboT / comboDur(COMBO[h.comboStep]));
+  if (h.parryT > 0) { ctx.save(); ctx.globalAlpha = Math.min(1, h.parryT / 0.1) * 0.8; ctx.strokeStyle = PAL.white; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(h.x + h.facing * 30, h.y - 80, 46, -Math.PI / 2.2, Math.PI / 2.2); ctx.stroke(); ctx.strokeStyle = PAL.black; ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore(); }
   // the charge ring: a thin arc around the hero fills as the draw charges
   if (h.drawT > 0) {
     const B = b.tun.bow, k = Math.min(1, h.drawT / B.fullDraw);
