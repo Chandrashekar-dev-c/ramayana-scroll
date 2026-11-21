@@ -79,13 +79,15 @@ export function createRooftops(b, r) {
   const rng = new Rng('roofs');
   const roofs = [];
   let x = 0;
-  for (let i = 0; i < 16; i++) { const w = rng.range(260, 420), h = rng.range(170, 330); roofs.push({ x, w, top: 720 - h, lit: false, i, grove: i === 9 }); x += w + (i === 8 ? 220 : rng.range(70, 150)); }
+  // the Ashoka grove (roof 9) is spared the fire, but its treetops still carry Hanuman across:
+  // with it out of reach the gap was ~600 units against a jump of ~245
+  for (let i = 0; i < 16; i++) { const w = rng.range(260, 420), h = rng.range(170, 330); roofs.push({ x, w, top: i === 9 ? 720 - 250 : 720 - h, lit: false, i, grove: i === 9 }); x += w + rng.range(70, 150); }
   const len = x - 200;
   const hn = character('hanuman');
   const st = { x: 80, y: roofs[0].top, vy: 0, vx: 0, ground: true, facing: 1, walkT: 0, shots: [], shotT: 2, safe: 80, inv: 0 };
   const need = roofs.filter((q) => !q.grove).length - 3;
   o.hintOnce('hint.roofs', 3);
-  const roofAt = (px) => roofs.find((q) => px > q.x && px < q.x + q.w && !q.grove);
+  const roofAt = (px) => roofs.find((q) => px > q.x && px < q.x + q.w);
   o.update = (dt) => {
     o.tick(dt); st.inv -= dt;
     const ax = input.axis;
@@ -94,9 +96,9 @@ export function createRooftops(b, r) {
     st.vy += 2100 * dt; st.x = Math.max(20, st.x + st.vx * dt);
     const ny = st.y + st.vy * dt;
     const roof = roofAt(st.x);
-    if (roof && st.y <= roof.top + 1 && ny >= roof.top) { st.y = roof.top; st.vy = 0; st.ground = true; st.safe = st.x; if (!roof.lit) { roof.lit = true; cue('fireWhoosh'); } }
+    if (roof && st.y <= roof.top + 1 && ny >= roof.top) { st.y = roof.top; st.vy = 0; st.ground = true; st.safe = st.x; if (!roof.lit && !roof.grove) { roof.lit = true; cue('fireWhoosh'); } }
     else { st.y = ny; if (!roof || st.y > roof.top + 4) st.ground = false; }
-    if (st.y > 760) { st.x = st.safe; const q = roofAt(st.safe); st.y = q ? q.top : 300; st.vy = 0; o.hits++; o.say('ch30.fall', 1.6); }
+    if (st.y > 760) { st.x = st.safe; const q = roofAt(st.safe); st.y = q ? q.top : 300; st.x = q ? st.x : roofs[0].x + 80; st.vy = 0; o.hits++; o.say('ch30.fall', 1.6); }
     // archers below loose arrows along painted red paths
     st.shotT -= dt;
     if (st.shotT <= 0) { st.shotT = 1.6 + rng.next() * 1.2; st.shots.push({ x: st.x + rng.range(200, 420), y: 720, tx: st.x + 120 + st.vx * 0.6, ty: st.y - 60, t: 0, warn: 0.9 }); cue('bowCreak'); }

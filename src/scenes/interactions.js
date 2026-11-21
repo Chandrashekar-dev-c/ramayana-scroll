@@ -17,6 +17,7 @@ import { cue } from '../audio/audio.js';
 import heads from '../data/heads.json';
 import { nameOf } from './runner.js';
 import { createKohbar } from '../trials/kohbar.js';
+import { SYMBOLS } from '../play/astra.js';
 
 const held = () => input.pointer.down || input.held.action || input.held.jump || input.held.right || input.drawHeld();
 const tapped = () => input.pointer.justDown || input.consume('confirm') || input.consume('action') || input.consume('jump');
@@ -126,7 +127,7 @@ function tap(b, r) {
     else if (fx === 'hide' && p) r.props.delete(q.prop);
     else if (fx.startsWith('pose:') && a) a.pose = fx.slice(5);
     else if (fx === 'remove' && a) r.actors.delete(q.actor);
-    if (q.then) for (const bt of q.then) r.instant(bt);
+    if (q.then) r.runThen(q.then);
     o.anim.push({ kind: 'burst', x: pos(q).x, y: pos(q).y, t: 0 });
     if (q.k) o.lq.push(q.who || '', q.k);
   };
@@ -150,34 +151,49 @@ function tap(b, r) {
   };
   o.render = (ctx) => {
     const act = active();
-    act.forEach((q) => { const p = pos(q); if (q.icon === 'ornament') shape(ctx, ellipsePts(p.x, p.y, 10, 10, 8), { mode: 'colour', fill: PAL.gold, gap: PAL.madder, w: 1.4, smooth: true }); else if (q.icon === 'flower') dots(ctx, p.x, p.y, 7, 6, PAL.pink, 3, 3.2); if (q.lab) plate(ctx, t(q.lab), p.x, p.y + (q.r || 60) * 0.75 + 18, { size: 16, seed: 2 }); });
+    act.forEach((q) => { const p = pos(q); tapIcon(ctx, q.icon, p.x, p.y, o.t); if (q.lab) plate(ctx, t(q.lab), p.x, p.y + (q.r || 60) * 0.75 + 18, { size: 16, seed: 2 }); });
     act.forEach((q, i) => { const p = pos(q); M.usableRing(ctx, p.x, p.y, (q.r || 60) * 0.75, o.t + i); if (i === Math.min(o.focus, act.length - 1) && input.device !== 'touch' && input.device !== 'mouse') { ctx.strokeStyle = PAL.indigo; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(p.x, p.y, (q.r || 60) * 0.9, 0, 7); ctx.stroke(); } });
     for (const an of o.anim) if (an.kind === 'burst') dots(ctx, an.x, an.y, 10 + an.t * 80, 12, PAL.turmeric, 4, 3.5 * (1 - an.t));
     if (!o.lq.busy) promptPlate(ctx, b.k);
     if (app.isTouch && o.t < 3 && act.length && !o.lq.busy) { const p = pos(act[0]); drawHand(ctx, p.x + 10, p.y + 70, o.t); }
   };
-  o.skip = () => { for (const q of targets) if (!q.hit) { q.hit = true; const a = q.actor && r.actors.get(q.actor); if (q.fx === 'colourUp' && a) { a.colourUp = null; a.mode = null; if (a.spec.ghost) a.spec = character(a.char, 'freed'); } if (q.then) for (const bt of q.then) r.instant(bt); } hideLine(); o.done = true; };
+  o.skip = () => { for (const q of targets) if (!q.hit) { q.hit = true; const a = q.actor && r.actors.get(q.actor); if (q.fx === 'colourUp' && a) { a.colourUp = null; a.mode = null; if (a.spec.ghost) a.spec = character(a.char, 'freed'); } if (q.then) r.runThen(q.then); } hideLine(); o.done = true; };
   return o;
+}
+
+/** The small painted sign on a tap target, one per kind of thing to tap. */
+function tapIcon(ctx, icon, x, y, t) {
+  if (icon === 'ornament') shape(ctx, ellipsePts(x, y, 10, 10, 8), { mode: 'colour', fill: PAL.gold, gap: PAL.madder, w: 1.4, smooth: true });
+  else if (icon === 'flower') dots(ctx, x, y, 7, 6, PAL.pink, 3, 3.2);
+  else if (icon === 'herb') { line(ctx, [[x, y + 12], [x, y - 8]], { w: 2, color: PAL.leaf }); dots(ctx, x, y - 10, 6, 5, PAL.turmeric, 2, 2.6); }
+  else if (icon === 'honey') { shape(ctx, ellipsePts(x, y, 11, 13, 10), { mode: 'colour', fill: PAL.turmeric, gap: PAL.brown, w: 1.4, smooth: true }); dots(ctx, x, y + 16 + (t % 1) * 6, 0, 1, PAL.gold, 1, 3); }
+  else if (icon === 'tree') M.tree(ctx, x, y + 14, 34, 'mango', { colour: true, seed: 3 });
+  else if (icon === 'pavilion') { M.pillar(ctx, x - 12, y + 14, 6, 30, { colour: true }); M.pillar(ctx, x + 12, y + 14, 6, 30, { colour: true }); shape(ctx, [[x - 18, y - 16], [x, y - 26], [x + 18, y - 16]], { mode: 'colour', fill: PAL.madder, w: 1.2 }); }
+  else if (icon === 'place') M.lotusBud(ctx, x, y + 10, 12, { colour: true, seed: 2 });
 }
 
 // ---------------------------------------------------------------- give: drag ornaments to waiting hands
 function give(b, r) {
-  const o = { done: false, t: 0, drag: null };
+  const o = { done: false, t: 0, drag: null, lq: lineQueue() };
+  const lines = (b.lines || []).slice(); // said one at a time as each giver empties their hands
   const items = [];
   for (const g of b.from) {
     const a = r.actors.get(g.actor);
     for (let i = 0; i < g.n; i++) items.push({ actor: g.actor, kind: ['necklace', 'bangle', 'earring', 'crown'][i % 4], given: false, ox: (i - (g.n - 1) / 2) * 34, a });
   }
-  const hands = b.hands.map((x, i) => ({ x, y: b.handY || 560, i, got: 0 }));
+  // hands are placed in world units like the actors, so they line up on any screen width
+  const hands = b.hands.map((x, i) => ({ x: x - r.camX, y: b.handY || 560, i, got: 0 }));
   const home = (it) => ({ x: it.a.x - r.camX + it.ox, y: it.a.y - BASE_U * it.a.spec.build.height * 0.72 });
   const drop = (it) => {
     it.given = true; cue('coin');
     const left = items.filter((x) => x.actor === it.actor && !x.given).length;
-    if (left === 0) { const a = r.actors.get(it.actor); a.stage = 'exile'; a.spec = character(a.char, 'exile'); cue('chime'); }
+    if (left === 0) { const a = r.actors.get(it.actor); a.stage = 'exile'; a.spec = character(a.char, 'exile'); cue('chime'); if (lines.length) o.lq.push('', lines.shift()); }
   };
   o.update = (dt) => {
     o.t += dt;
     const p = input.pointer;
+    if (o.lq.update(dt, p.justDown || input.consume('confirm'))) return;
+    if (items.every((x) => x.given)) { if (lines.length) { o.lq.push('', lines.shift()); return; } o.done = true; return; }
     if (p.justDown && !o.drag) for (const it of items) if (!it.given) { const h = home(it); if (near(p, h.x, h.y, 44)) { o.drag = it; break; } }
     if (o.drag && p.justUp) {
       const hand = hands.find((h) => near(p, h.x, h.y, 90));
@@ -185,7 +201,6 @@ function give(b, r) {
       o.drag = null;
     }
     if (input.consume('action') || input.consume('confirm') || input.consume('jump')) { const it = items.find((x) => !x.given); if (it) { hands[items.indexOf(it) % hands.length].got++; drop(it); } }
-    if (items.every((x) => x.given)) o.done = true;
   };
   const drawItem = (ctx, kind, x, y) => {
     if (kind === 'necklace') { line(ctx, ellipsePts(x, y - 6, 14, 12, 10, 0, Math.PI), { w: 4, color: PAL.black, smooth: true }); line(ctx, ellipsePts(x, y - 6, 14, 12, 10, 0, Math.PI), { w: 2, color: PAL.gold, smooth: true, flat: true }); dots(ctx, x, y + 6, 0, 1, PAL.madder, 1, 4); }
@@ -197,10 +212,10 @@ function give(b, r) {
     for (const h of hands) { shape(ctx, [[h.x - 22, h.y], [h.x - 26, h.y - 16], [h.x + 26, h.y - 16], [h.x + 22, h.y]], { mode: 'colour', fill: PAL.skin, w: 1.6, seed: h.i }); if (h.got) drawItem(ctx, 'bangle', h.x, h.y - 26); M.usableRing(ctx, h.x, h.y - 10, 40, o.t + h.i); }
     for (const it of items) if (!it.given && it !== o.drag) { const hm = home(it); drawItem(ctx, it.kind, hm.x, hm.y); }
     if (o.drag) drawItem(ctx, o.drag.kind, input.pointer.x, input.pointer.y);
-    promptPlate(ctx, b.k);
+    if (!o.lq.busy) promptPlate(ctx, b.k);
     if (app.isTouch && o.t < 4 && items.length && !items[0].given) { const h = home(items[0]); drawHand(ctx, h.x + (hands[0].x - h.x) * ((o.t % 2) / 2), h.y + 40 + (hands[0].y - h.y) * ((o.t % 2) / 2), o.t); }
   };
-  o.skip = () => { for (const it of items) if (!it.given) drop(it); o.done = true; };
+  o.skip = () => { for (const it of items) if (!it.given) { it.given = true; } for (const a of new Set(items.map((x) => x.actor))) { const ac = r.actors.get(a); if (ac) { ac.stage = 'exile'; ac.spec = character(ac.char, 'exile'); } } hideLine(); o.done = true; };
   return o;
 }
 
@@ -210,7 +225,11 @@ function trace(b, r) {
   const cx = (b.cx ?? 640) - r.camX, cy = b.cy ?? 600, rx = b.rx ?? 300, ry = b.ry ?? 60;
   const guide = [];
   const n = 40;
-  for (let i = 0; i <= n; i++) { const a = Math.PI / 2 + (i / n) * Math.PI * 2; guide.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); }
+  // a named aripan symbol (the sun disc for the fire astra) is traced from its own shape;
+  // otherwise the line is an ellipse round the hut, starting in front
+  const sym = b.symbol && SYMBOLS[b.symbol];
+  if (sym) for (let i = 0; i <= n; i++) { const q = sym.pts[Math.round((i / n) * (sym.pts.length - 1))]; guide.push([cx + q[0] * rx, cy + q[1] * ry]); }
+  else for (let i = 0; i <= n; i++) { const a = Math.PI / 2 + (i / n) * Math.PI * 2; guide.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); }
   const corners = [0, 10, 20, 30].map((i) => guide[i]);
   o.update = (dt) => {
     o.t += dt;
@@ -229,7 +248,8 @@ function trace(b, r) {
     const k = Math.floor(o.idx);
     ctx.setLineDash([3, 14]); line(ctx, guide, { w: 4, color: PAL.black, amp: 0, flat: true }); ctx.setLineDash([]);
     if (k > 1) { const part = guide.slice(0, k); line(ctx, part, { w: 9, color: PAL.black, amp: 0.5, flat: true }); line(ctx, part, { w: 5.5, color: PAL.white, amp: 0.5, flat: true }); }
-    corners.forEach((c, i) => { if (k > i * 10) M.lotus(ctx, c[0], c[1], 16, 1, { flat: true, fill: PAL.pink }); });
+    if (b.symbol === 'sun') { for (let i = 0; i < 12; i++) { if (k < (i + 1) * (guide.length / 12)) break; const a = (i / 12) * Math.PI * 2; line(ctx, [[cx + Math.cos(a) * rx * 1.12, cy + Math.sin(a) * ry * 1.12], [cx + Math.cos(a) * rx * 1.35, cy + Math.sin(a) * ry * 1.35]], { w: 4, color: PAL.turmeric }); } }
+    else corners.forEach((c, i) => { if (k > i * 10) M.lotus(ctx, c[0], c[1], 16, 1, { flat: true, fill: PAL.pink }); });
     const g = guide[Math.min(k, guide.length - 1)];
     if (o.idx < guide.length) M.usableRing(ctx, g[0], g[1], 26, o.t);
     promptPlate(ctx, b.k);
@@ -446,6 +466,8 @@ function berries(b, r) {
   const list = sweet.map((s, i) => ({ s, i, x: 400 - r.camX + (i % 4) * 60, y: 600 + Math.floor(i / 4) * 50, state: 'basket' }));
   const plateZ = { x: (b.plateX ?? 900) - r.camX, y: 610 }, asideZ = { x: (b.asideX ?? 260) - r.camX, y: 640 };
   const shabari = r.actors.get('shabari');
+  // where each berry is drawn right now (the aside pile is laid out in list order)
+  const berryPos = (b0) => { if (b0.state !== 'aside') return { x: b0.x, y: b0.y }; const k = list.filter((x) => x.state === 'aside').indexOf(b0); return { x: asideZ.x - 30 + k * 18, y: asideZ.y - 4 }; };
   o.update = (dt) => {
     o.t += dt;
     const p = input.pointer, tp = p.justDown || input.consume('confirm') || input.consume('action');
@@ -459,7 +481,9 @@ function berries(b, r) {
       if (o.onPlate >= 5) o.done = true;
       return;
     }
-    const pick = kb ? list.find((x) => x.state === 'basket') : list.find((x) => x.state === 'basket' && near(p, x.x, x.y, 30));
+    // a berry set aside can be picked up again, so a sweet one put there by mistake is not lost
+    const pickable = (x) => x.state === 'basket' || x.state === 'aside';
+    const pick = kb ? list.find((x) => x.state === 'basket') || list.find((x) => x.state === 'aside' && x.s) : list.find((x) => pickable(x) && near(p, berryPos(x).x, berryPos(x).y, 30));
     if (pick) { pick.state = 'tasted'; o.sel = pick; if (shabari) shabari.pose = 'give'; cue('chime'); o.lq.push('shabari', pick.s ? 'ch21.sweet' : 'ch21.sour'); }
     if (o.onPlate >= 5) o.done = true;
   };
@@ -475,7 +499,7 @@ function berries(b, r) {
       if (x.state === 'plate') { px = plateZ.x - 50 + (pi++) * 24; py = plateZ.y - 4; }
       if (x.state === 'aside') { px = asideZ.x - 30 + (ai++) * 18; py = asideZ.y - 4; }
       shape(ctx, ellipsePts(px, py, 13, 13, 10), { mode: 'colour', fill: x.state === 'tasted' || x.state !== 'basket' ? (x.s ? PAL.madder : PAL.leaf) : PAL.madder, gap: x.state === 'tasted' ? (x.s ? PAL.turmeric : PAL.grey) : null, w: 1.5, smooth: true, seed: x.i });
-      if (x.state === 'basket') M.usableRing(ctx, px, py, 20, o.t + x.i);
+      if (x.state === 'basket' || (x.state === 'aside' && !o.sel)) M.usableRing(ctx, px, py, x.state === 'aside' ? 14 : 20, o.t + x.i);
     }
     if (!o.lq.busy) promptPlate(ctx, o.sel ? 'ch21.where' : b.k);
   };
@@ -499,7 +523,8 @@ function resolve(b, r) {
       tickLine(dt, 60);
       o.threat.t += dt;
       o.meter += (h ? 0.22 : -0.34) * dt;
-      if (o.meter <= 0) { o.meter = 0.25; o.emptied = true; o.lq.push('sita', 'ch28.remember'); }
+      // when resolve runs out the threat ends there, so Sita's line can be tapped away
+      if (o.meter <= 0) { o.meter = 0.25; o.emptied = true; o.threat = null; o.t = 0; hideLine(); o.lq.push('sita', 'ch28.remember'); return; }
       if (o.threat.t >= o.threat.dur) { o.threat = null; o.t = 0; hideLine(); }
     }
     o.meter = Math.max(0, Math.min(1, o.meter));

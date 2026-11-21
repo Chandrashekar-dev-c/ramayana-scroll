@@ -15,6 +15,7 @@ import { clearFrameCache } from './art/borders.js';
 import { setLoading, hideLoading, showRotate, setDraftNote, panelOpen, updateReady } from './ui/dom.js';
 import { openTitle } from './ui/screens.js';
 import { applyDevMode } from './ui/devpanel.js';
+import { initAudio } from './audio/audio.js';
 
 // iPhone Safari zooms the page on rapid taps and on pinches. Stop both on the game surface only,
 // so the buttons (which use click events) still respond to quick taps.
@@ -38,15 +39,17 @@ async function boot() {
   save.load();
   const s = save.data.settings;
   if (q.get('lang')) s.lang = q.get('lang');
-  await loadLang(s.lang || 'en');
+  // a language that can't load (offline, not cached) falls back to English rather than stopping the boot
+  try { await loadLang(s.lang || 'en'); } catch { s.lang = 'en'; await loadLang('en'); }
   setDraftNote(isDraft());
-  if (app.debug) save.data.settings.devMode = true;
+  app.devForce = app.debug; // ?debug turns developer mode on for this visit only; it is never saved
   document.documentElement.style.setProperty('--text', { normal: 1, large: 1.2, xl: 1.45 }[s.textSize] || 1);
   app.reducedMotion = s.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.toggle('rm', !!s.reducedMotion);
   if (matchMedia('(prefers-reduced-motion: reduce)').matches && !save.seen('rm')) { s.reducedMotion = true; save.markSeen('rm'); }
   setLoading(0.4);
-  try { await Promise.race([document.fonts.load('22px "Yatra One"'), new Promise((r) => setTimeout(r, 1200))]); await document.fonts.load('18px "Alegreya Sans"'); } catch { /* fonts are a nicety */ }
+  const fontWait = (f) => Promise.race([document.fonts.load(f), new Promise((r) => setTimeout(r, 1200))]);
+  try { await fontWait('22px "Yatra One"'); await fontWait('18px "Alegreya Sans"'); } catch { /* fonts are a nicety */ }
   setLoading(0.8);
   initInput();
   const onResize = () => {
@@ -79,19 +82,10 @@ async function boot() {
   app.loop.start();
   setLoading(1);
   document.addEventListener('visibilitychange', () => { if (document.hidden) input.releaseAll(); });
-// Safari zooms the page on rapid taps and on pinch. The game is one full-screen canvas, so stop
-// that here. Buttons are not affected: only touches that start on the canvas are changed.
-document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
-document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
-{
-  const gameCanvas = document.getElementById('game');
-  let lastTouch = 0;
-  gameCanvas.addEventListener('touchstart', (e) => {
-    const now = performance.now();
-    if (now - lastTouch < 350 && e.touches.length === 1) e.preventDefault();
-    lastTouch = now;
-  }, { passive: false });
-}
+  // sound may only start from a gesture; booting straight into ?chapter= or ?hub skips the title's
+  // Begin button, so the first tap or key anywhere starts it instead
+  const wake = () => { initAudio(); window.removeEventListener('pointerdown', wake, true); window.removeEventListener('keydown', wake, true); };
+  window.addEventListener('pointerdown', wake, true); window.addEventListener('keydown', wake, true);
 
   if ('serviceWorker' in navigator && location.protocol === 'https:' && !app.debug) {
     const hadController = !!navigator.serviceWorker.controller;
@@ -99,7 +93,7 @@ document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive:
     // the new worker activates itself; tell the player so they are never stuck on an old build
     navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) updateReady(t('update.ready'), t('update.reload')); });
   }
-  if (q.get('chapter')) { const m = await import('./scenes/runner.js'); m.startChapter(q.get('chapter')); }
+  if (q.get('chapter')) { const m = await import('./scenes/runner.js'); await m.startChapter(q.get('chapter')); }
   else if (q.has('hub')) { const m = await import('./hub/hub.js'); m.openHub(); }
   else openTitle();
   applyDevMode();

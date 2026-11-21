@@ -187,12 +187,20 @@ function paintNear(id, colour, index) {
 }
 
 const nearCache = new Map();
+/** Least-recently-used get: a hit moves the entry to the back, so the oldest unused is evicted. */
+function lru(map, key, make, max) {
+  let c = map.get(key);
+  if (c) { map.delete(key); map.set(key, c); return c; }
+  c = make(); map.set(key, c);
+  if (map.size > max) map.delete(map.keys().next().value);
+  return c;
+}
 export function drawNear(ctx, id, camX, W, o = {}) {
   if (!lookOf(id).near) return;
   const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK), top = GROUND - 30, H = 720 - top;
   for (let i = i0; i <= i1; i++) {
     const colour = !!o.colour;
-    const get = (cl) => { const key = `${id}|${cl ? 1 : 0}|${i}`; let c = nearCache.get(key); if (!c) { c = paintNear(id, cl, i); nearCache.set(key, c); if (nearCache.size > 12) nearCache.delete(nearCache.keys().next().value); } return c; };
+    const get = (cl) => lru(nearCache, `${id}|${cl ? 1 : 0}|${i}`, () => paintNear(id, cl, i), 12);
     const dx = i * CHUNK - camX;
     ctx.drawImage(get(colour), dx, top, CHUNK + 0.5, H);
     if (o.heal && !colour) { const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK); if (b > a) { ctx.save(); ctx.beginPath(); ctx.rect(a - camX, top, b - a, H); ctx.clip(); ctx.drawImage(get(true), dx, top, CHUNK + 0.5, H); ctx.restore(); } }
@@ -274,7 +282,7 @@ function paintGround(ctx, def, x0, o, seed) {
   ctx.restore();
 }
 
-function paintItem(ctx, kind, x, y, size, k, o, lo) {
+function paintItem(ctx, kind, x, y, size, k, o, lo, sp = 250) {
   const sd = hashStr(kind) % 1000 + k * 13;
   const oo = { colour: o.colour, night: o.night, seed: sd, lineColor: o.night ? PAL.nightLine : undefined, ...lo };
   const c = o.night ? PAL.nightLine : PAL.black;
@@ -287,7 +295,8 @@ function paintItem(ctx, kind, x, y, size, k, o, lo) {
     case 'building': M.building(ctx, x, y, size * (lo.tiers === 3 ? 0.78 : 1.0), size * vary, oo); break;
     case 'hut': M.hut(ctx, x, y, size * 1.2, size * vary, oo); break;
     case 'pillar': M.pillar(ctx, x, y, 34, size, oo); break;
-    case 'arch': { const w = 250; line(ctx, [[x + 17, y - size + 22], [x + w - 17, y - size + 22]], { w: 1.4, color: c, seed: sd, amp: 0.5 }); for (let i = 0; i < 8; i++) { const bx = x + 30 + i * ((w - 60) / 7); shape(ctx, [[bx - 12, y - size + 22], [bx, y - size + 44], [bx + 12, y - size + 22]], { mode: o.colour ? 'colour' : 'line', fill: i % 2 ? PAL.turmeric : PAL.madder, lineColor: second, w: 1, seed: sd + i, amp: 0.4 }); } break; }
+    // the arch spans one bay between pillars, so its width is the layer's spacing
+    case 'arch': { const w = Math.min(250, sp); line(ctx, [[x + 17, y - size + 22], [x + w - 17, y - size + 22]], { w: 1.4, color: c, seed: sd, amp: 0.5 }); for (let i = 0; i < 8; i++) { const bx = x + 30 + i * ((w - 60) / 7); shape(ctx, [[bx - 12, y - size + 22], [bx, y - size + 44], [bx + 12, y - size + 22]], { mode: o.colour ? 'colour' : 'line', fill: i % 2 ? PAL.turmeric : PAL.madder, lineColor: second, w: 1, seed: sd + i, amp: 0.4 }); } break; }
     case 'curtain': { const p = [[x - 60, y - size + 10], [x + 60, y - size + 10], [x + 48, y - 40], [x - 48, y - 40]]; shape(ctx, p, { mode: o.colour ? 'colour' : 'line', fill: PAL.madder, lineFill: PAL.cream, lineColor: c, w: 1.3, seed: sd, amp: 0.8 }); hatch(ctx, p, { color: second, spacing: 9, angle: 1.57, seed: sd, w: 0.8 }); break; }
     case 'lampStand': { line(ctx, [[x, y], [x, y - size]], { w: 1.6, color: c, seed: sd, amp: 0.5 }); M.diya(ctx, x - 4, y - size - 4, 9, o.colour || o.night, 0, { ...oo }); break; }
     case 'post': { line(ctx, [[x, y], [x + noise(sd, 1) * 10, y - size * vary]], { w: 2, color: c, seed: sd, amp: 1 }); line(ctx, [[x - 14, y - size * 0.7], [x + 22, y - size * 0.76]], { w: 1.4, color: second, seed: sd + 1, amp: 1 }); break; }
@@ -298,7 +307,8 @@ function paintItem(ctx, kind, x, y, size, k, o, lo) {
     case 'pond': { shape(ctx, ellipsePts(x, y + 60, size * 1.6, 22, 12), { mode: o.colour ? 'colour' : 'line', fill: PAL.river, lineFill: PAL.cream, lineColor: c, w: 1.2, seed: sd, smooth: true, amp: 0.8 }); for (let i = -1; i <= 1; i++) M.lotusBud(ctx, x + i * size * 0.7, y + 58, 11, { colour: o.colour, seed: sd + i, lineColor: c }); break; }
     case 'cave': { const p = [[x - size * 0.5, y], [x - size * 0.4, y - size * 0.7], [x, y - size], [x + size * 0.4, y - size * 0.7], [x + size * 0.5, y]]; shape(ctx, p, { mode: 'colour', fill: PAL.black, w: 1.5, seed: sd, smooth: true, amp: 1 }); break; }
     case 'stalactite': shape(ctx, [[x - size * 0.2, 40], [x, 40 + size * vary], [x + size * 0.2, 40]], { mode: o.colour ? 'colour' : 'line', fill: PAL.stone, lineFill: PAL.night, lineColor: c, w: 1.2, seed: sd, amp: 0.8 }); break;
-    case 'cloud': M.cloud(ctx, x, GROUND + y, size * vary, { ...oo, hatch: o.style === 'bharni-bright' ? 0 : 9 }); break;
+    // y already includes GROUND (adding it again put every cloud below the bottom of the screen)
+    case 'cloud': M.cloud(ctx, x, y, size * vary, { ...oo, hatch: o.style === 'bharni-bright' ? 0 : 9 }); break;
     case 'herb': { line(ctx, [[x, y], [x + noise(sd, 1) * 5, y - size]], { w: 1.1, color: o.colour ? PAL.leaf : c, seed: sd, amp: 0.5 }); dots(ctx, x + noise(sd, 1) * 5, y - size, 4, 4, o.colour ? PAL.turmeric : c, sd, 1.8); break; }
     case 'wall': { for (let gx = x; gx < x + CHUNK; gx += 46) shape(ctx, rectPts(gx, y - size, 40, size), { mode: 'line', lineColor: second, w: 1, seed: sd + gx, amp: 0.5 }); break; }
     case 'bannerPole': { line(ctx, [[x, y], [x, y - size * vary]], { w: 1.6, color: c, seed: sd, amp: 0.6 }); shape(ctx, [[x, y - size * vary], [x + 40, y - size * vary + 12], [x, y - size * vary + 26]], { mode: o.colour ? 'colour' : 'line', fill: k % 2 ? PAL.saffron : PAL.gold, lineFill: PAL.cream, lineColor: c, w: 1.2, seed: sd + 1, amp: 0.6 }); break; }
@@ -410,7 +420,7 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
       const jitter = kind === 'pillar' || kind === 'arch' || kind === 'curtain' || kind === 'wall' ? 0 : noise(hashStr(id) + li * 17, k) * sp * 0.22;
       const x = k * sp + off + jitter - x0;
       const sz = (kind === 'tree' || kind === 'hill') ? size * (o.tree || 1) : size;
-      paintItem(ctx, kind, x, GROUND + (kind === 'cloud' ? yOff : yOff), sz, k, o, lo);
+      paintItem(ctx, kind, x, GROUND + yOff, sz, k, o, lo, sp);
     }
   }
   paintExtras(ctx, look, x0, o, seed);
@@ -420,9 +430,7 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
 
 export function backdropChunk(id, style, colour, index, regrow = false, density = '') {
   const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}`;
-  let c = cache.get(key);
-  if (!c) { c = paintChunk(id, style, colour, index, regrow, density); cache.set(key, c); if (cache.size > 16) cache.delete(cache.keys().next().value); }
-  return c;
+  return lru(cache, key, () => paintChunk(id, style, colour, index, regrow, density), 16);
 }
 
 /**

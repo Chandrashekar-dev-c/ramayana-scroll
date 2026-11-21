@@ -73,6 +73,5 @@ export function createRow(b, r) {
     distanceMeter(ctx, st.x / len);
     o.overlay(ctx, { objective: b.k || 'ch10.obj', progress: st.x / len, hand: { x: W - 160, y: 600 } });
   };
-  o.restart = () => { Object.assign(st, { x: 0, lane: 1, hazards: [], nextH: 600 }); };
   return o;
 }

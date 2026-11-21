@@ -24,6 +24,9 @@ import { openTitle, openSettings, openGallery } from '../ui/screens.js';
 export const WALL_W = 2400, TIER_H = 380, WALL_H = TIER_H * 6 + 60;
 const tierY = (i) => 40 + i * TIER_H;
 const MARKS = marksData;
+// the secret scroll door at the far end of the last tier (drawn in paintWall)
+const DOOR_X = WALL_W - 120;
+const onDoor = (w) => save.data.unlocked && Math.abs(w.x - DOOR_X) < 80 && w.y > tierY(5) + TIER_H - 260 && w.y < tierY(5) + TIER_H - 30;
 
 /** Vignettes for places, drawn small at (x, base y). */
 function vignette(ctx, p, x, y, colour, o = {}) {
@@ -105,7 +108,7 @@ function paintWall(states) {
       else for (const q of pts) { ctx.fillStyle = m.gold ? PAL.gold : PAL.black; ctx.beginPath(); ctx.arc(q[0], q[1], m.gold ? 5 : 3.5, 0, 7); ctx.fill(); }
     }
   }
-  if (save.data.unlocked) { const x = WALL_W - 120, y = tierY(5) + TIER_H - 60; line(ctx, [[x - 300, y - 30], [x - 100, y - 60], [x - 40, y - 60]], { w: 2, color: PAL.terracotta, smooth: true }); drawProp(ctx, 'door', x, y, { colour: false, scale: 0.7 }); }
+  if (save.data.unlocked) { const x = DOOR_X, y = tierY(5) + TIER_H - 60; line(ctx, [[x - 300, y - 30], [x - 100, y - 60], [x - 40, y - 60]], { w: 2, color: PAL.terracotta, smooth: true }); drawProp(ctx, 'door', x, y, { colour: false, scale: 0.7 }); }
   return cv;
 }
 
@@ -186,7 +189,10 @@ class Hub {
   }
   flipView() { this.view = this.view === 'ravana' ? 'rama' : 'ravana'; closePanel(); this.setTopbar(); cue('bell'); }
   invalidate() { cache.key = ''; }
-  toggleFit() { this.fit = !this.fit; this.zoomTo = this.fit ? this.fitZoom() : Math.max(0.42, Math.min(0.8, app.W / 1600)); if (this.fit) { this.panTo = { x: WALL_W / 2, y: WALL_H / 2 }; } }
+  toggleFit() {
+    // the journey view is the whole main wall: from Ravana's court it turns back to it first
+    if (this.view === 'ravana') { this.view = 'rama'; this.setTopbar(); this.fit = false; }
+    this.fit = !this.fit; this.zoomTo = this.fit ? this.fitZoom() : Math.max(0.42, Math.min(0.8, app.W / 1600)); if (this.fit) { this.panTo = { x: WALL_W / 2, y: WALL_H / 2 }; } }
   wallCanvas() {
     const key = JSON.stringify(this.states.st) + Object.keys(save.data.done).join() + save.data.unlocked;
     if (cache.key !== key) { cache.cv = paintWall(this.states); cache.key = key; }
@@ -212,7 +218,7 @@ class Hub {
       if (k >= 1 || input.pointer.justDown) { this.intro = -1; c.x = PLACES[0].x; c.y = tierY(0) + TIER_H / 2; }
       input.endTick(); return;
     }
-    if (this.wash) { this.wash.t += dt; if (this.wash.t > 3 || input.pointer.justDown) { this.wash = null; this.states = placeStates(); this.invalidate(); bus.emit('hub:paint'); this.startMarker(); } input.endTick(); return; }
+    if (this.wash) { this.wash.t += dt; if (this.wash.t > 3 || input.pointer.justDown) { this.startMarker(); this.wash = null; this.states = placeStates(); this.invalidate(); bus.emit('hub:paint'); } input.endTick(); return; }
     if (this.marker) { this.marker.t += dt; if (this.marker.t >= 2 || input.pointer.justDown) { const m = this.marker; this.marker = null; c.x = m.to.x; c.y = tierY(m.to.tier) + TIER_H / 2; } else { const k = this.marker.t / 2; c.x = this.marker.from.x + (this.marker.to.x - this.marker.from.x) * k; c.y = tierY(this.marker.from.tier) + TIER_H / 2 + (tierY(this.marker.to.tier) - tierY(this.marker.from.tier)) * k; } input.endTick(); return; }
     if (panelOpen()) { input.endTick(); return; }
     // pan, zoom
@@ -229,15 +235,20 @@ class Hub {
     c.y = Math.max(Math.min(hh, WALL_H / 2), Math.min(Math.max(WALL_H - hh, WALL_H / 2), c.y));
     if (p.justUp && p.moved < 10) {
       const w = this.toWall(p.x, p.y);
-      const hit = PLACES.find((q) => placeOnRamaWall(q) && Math.abs(q.x - w.x) < 190 && w.y > tierY(q.tier) + 40 && w.y < tierY(q.tier) + TIER_H);
-      if (hit) this.openCard(hit);
-      else if (save.data.unlocked && w.x > WALL_W - 220 && w.y > tierY(5) + 100) this.openScroll();
+      // the door is tested first: Ayodhya's place on the same tier would otherwise catch every tap on it
+      const hit = onDoor(w) ? null : PLACES.find((q) => placeOnRamaWall(q) && Math.abs(q.x - w.x) < 190 && w.y > tierY(q.tier) + 40 && w.y < tierY(q.tier) + TIER_H);
+      if (onDoor(w)) this.openScroll();
+      else if (hit) this.openCard(hit);
     }
-    if (input.consume('confirm') || input.consume('action')) { const n = nextChapter(); if (n) this.openCard(placeOf(n.id)); }
+    if (input.consume('confirm') || input.consume('action')) {
+      const n = nextChapter();
+      if (n && isRavanaCh(n.id)) { this.flipView(); this.openRavanaCard(n.id); }
+      else if (n) this.openCard(placeOf(n.id));
+    }
     input.endTick();
   }
   startMarker() {
-    const n = nextChapter(); if (!n) return;
+    const n = nextChapter(); if (!n || isRavanaCh(n.id)) return;
     const to = placeOf(n.id); const from = this.wash ? this.wash.place : null;
     if (to && from && to !== from) this.marker = { from, to, t: 0 };
   }
@@ -283,14 +294,15 @@ class Hub {
     }
     // place labels and markers: labels sit under their markers and stay inside the view
     const next = nextChapter();
-    const nextPlace = next ? placeOf(next.id) : null;
+    // Ravana's chapters have no place on this wall, so no ring and no Rama standing in for them
+    const nextPlace = next && !isRavanaCh(next.id) ? placeOf(next.id) : null;
     for (const p of PLACES) {
       if (!placeOnRamaWall(p)) continue;
       const y = tierY(p.tier) + TIER_H - 20;
       const st = this.states.st[p.id];
       const lit = st === 'colour';
       const lb = plate(ctx, t('place.' + p.id), p.x, y + 4, { size: 20, bg: lit ? PAL.paper : PAL.cream, gap: lit ? PAL.turmeric : PAL.cream, seed: p.x | 0 });
-      if (p === nextPlace && !isRavanaCh(next.id)) { M.usableRing(ctx, p.x, y - 120, 150, this.t); }
+      if (p === nextPlace) { M.usableRing(ctx, p.x, y - 120, 150, this.t); }
       void lb;
     }
     if (this.marker || nextPlace) {

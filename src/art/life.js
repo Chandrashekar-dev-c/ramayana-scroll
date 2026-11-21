@@ -247,7 +247,9 @@ export function drawLife(ctx, id, camX, visW, t, o = {}) {
     const k0 = Math.floor((camX - size0 * 3.2) / spacing), k1 = Math.ceil((camX + visW + size0 * 3.2) / spacing);
     for (let k = k0; k <= k1; k++) {
       if (o.quiet && (((k % 2) + 2) % 2) === 0) continue;   // half as many in battle
-      const seed = (base / 7 + k * 1.618) % 97;
+      // a whole-number seed, never negative (k is negative left of the origin on wide screens), so
+      // seed % 2 really varies colour and facing and the animation phase keeps its pattern
+      const seed = (((Math.floor(base / 7) + k * 37) % 97) + 97) % 97;
       const jx = noise(base + 2, k) * spacing * 0.3;
       const x = k * spacing + jx;
       const size = size0 * (1 + noise(base + 4, k) * 0.15);

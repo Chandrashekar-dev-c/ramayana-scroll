@@ -30,7 +30,8 @@ export function renderSheet(canvas, { mode = 'colour', pose = 'stand', set = 'ca
   items.forEach((it, i) => {
     const x = (i % cols) * cellW + cellW / 2, y = Math.floor(i / cols) * cellH + cellH - 34 * size;
     ctx.save(); ctx.translate(x, y);
-    const k = Math.min(1, (cellH - 70 * size) / (BASE_U * it.spec.build.height * 1.6)) * size;
+    // cellH already carries size, so the fit ratio does too; multiplying by size again shrank figures by size²
+    const k = Math.min(size, (cellH - 70 * size) / (BASE_U * it.spec.build.height * 1.6));
     ctx.scale(k, k);
     drawFigure(ctx, it.spec, it.pose || pose, { mode });
     ctx.restore();

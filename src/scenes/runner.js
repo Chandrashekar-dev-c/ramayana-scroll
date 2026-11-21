@@ -15,7 +15,7 @@ import { drawFrame } from '../art/borders.js';
 import { drawProp } from '../art/props.js';
 import { plate } from '../art/ink.js';
 import * as M from '../art/motifs.js';
-import { showLine, tickLine, lineTyping, finishTyping, hideLine, topbar, touchControls, choose, showBusy, hideBusy } from '../ui/dom.js';
+import { showLine, tickLine, lineTyping, finishTyping, hideLine, topbar, touchControls, choose, choicePending, showBusy, hideBusy } from '../ui/dom.js';
 import { createBattle, updateBattle, renderBattle, battleSeals } from '../play/battle.js';
 import { setMood, cue } from '../audio/audio.js';
 import { createInteraction } from './interactions.js';
@@ -217,28 +217,44 @@ class Runner {
       this.startBattle(this.script[this.levelBeat], cp);
       return;
     }
+    // a trial starts over from a fresh copy of its beat, so nothing from the last try leaks in
+    if (this.sub && this.sub.kind === 'trial' && this.cur && this.cur.trial) {
+      const fails = this.sub.fails;
+      this.sub = createTrial(this.cur.trial, this.cur, this); this.sub.kind = 'trial'; this.sub.fails = fails;
+      this.ui(); return;
+    }
     if (this.sub && this.sub.restart) { this.sub.restart(); return; }
     if (fromPause) startChapter(this.ch.id);
   }
 
   skip() {
+    // a choice on screen is the player's to make; skipping past it would leave it open
+    if (choicePending()) return;
     if (this.sub && this.sub.kind === 'trial') { this.sub.done = true; this.sub.skipped = true; return; }
     hideLine(); this.card = null; this.waitT = 0;
     if (this.sub && this.sub.kind === 'interaction') { if (this.sub.skip) this.sub.skip(); else this.sub.done = true; return; }
     // fast-forward scene beats until something the player must play
-    if (this.cur && this.cur.move) { const a = this.actors.get(this.cur.move); if (a) { a.x = a.moveTo; a.moveTo = null; a.pose = a.endPose; } }
+    // finish every walk in progress, and let walkers who were leaving actually leave
+    for (const [k, a] of [...this.actors]) if (a.moveTo != null) { a.x = a.moveTo; a.moveTo = null; a.pose = a.endPose; if (a.moveY !== undefined) a.y = a.moveY; if (a.exitAfter) this.actors.delete(k); }
     this.skipping = true;
     while (this.pc < this.script.length) {
       const b = this.script[this.pc];
       if (b.battle || b.trial) break;
       if (b.choice) { this.pc++; const op = b.choice[0]; if (op.flag) save.data.flags[op.flag] = op.value ?? true; if (op.then) this.script.splice(this.pc, 0, ...op.then); if (op.goto) { const j = this.script.findIndex((x) => x.label === op.goto); if (j >= 0) this.pc = j; } continue; }
-      if (b.do || b.heads) { if (b.heads && b.mode !== 'silence' && !save.data.headsChosen[b.heads] && b.voices && b.voices.length) save.data.headsChosen[b.heads] = b.voices[0]; this.pc++; if (b.after) { this.script.splice(this.pc, 0, ...b.after); } if (b.do === 'tap') for (const q of b.targets) if (q.then) for (const bt of q.then) this.instant(bt); continue; }
+      if (b.do || b.heads) { if (b.heads && b.mode !== 'silence' && !save.data.headsChosen[b.heads] && b.voices && b.voices.length) save.data.headsChosen[b.heads] = b.voices[0]; this.pc++; if (b.after) { this.script.splice(this.pc, 0, ...b.after); } if (b.do === 'tap') for (const q of b.targets) if (q.then) this.runThen(q.then); continue; }
       this.pc++;
       if (!this.instant(b)) { /* timed beats are dropped while skipping */ }
     }
     this.skipping = false;
     if (this.wash) { this.applyWash(this.wash); this.wash = null; }
     this.next();
+  }
+
+  /** Run beats a tap leaves behind: instant ones now, timed ones (a wash, a line) next in the script. */
+  runThen(list) {
+    const later = [];
+    for (const bt of list) if (!this.instant(bt)) later.push(bt);
+    if (later.length) this.script.splice(this.pc, 0, ...later);
   }
 
   applyWash(w) {
@@ -269,6 +285,8 @@ class Runner {
       if (this.sub.done) {
         const s = this.sub; this.sub = null;
         if (s.kind === 'trial') { this.mergeSeals(s.seals || { finish: true, gentle: !s.skipped, fast: !s.skipped }, s.stats); setMood(this.lanka ? 'lanka' : this.kanda, 'calm'); }
+        // interactions can earn seals too: Sita's resolve (gentle), Ayodhya's lamps (fast)
+        else if (s.kind === 'interaction') { const sl = s.seals || (s.result && ('gentle' in s.result || 'fast' in s.result) ? s.result : null); if (sl) { this.anySeals = true; this.mergeSeals(sl); } }
         if (s.result && s.result.then) this.script.splice(this.pc, 0, ...s.result.then);
         if (s.result && s.result.gotoLabel) { const j = this.script.findIndex((x) => x.label === s.result.gotoLabel); if (j >= 0) this.pc = j; }
         if (this.cur && this.cur.after) this.script.splice(this.pc, 0, ...this.cur.after);

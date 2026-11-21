@@ -4,13 +4,14 @@ import { save } from './save.js';
 
 export const DEFAULT_KEYS = {
   left: ['KeyA', 'ArrowLeft'], right: ['KeyD', 'ArrowRight'], up: ['KeyW', 'ArrowUp'],
-  down: ['KeyS', 'ArrowDown'], jump: ['Space', 'KeyW', 'ArrowUp'], roll: ['ShiftLeft', 'ShiftRight'],
-  astra: ['KeyE'], pause: ['Escape'], confirm: ['Enter'], action: ['KeyF'],
+  // up aims and steers; Space jumps, so aiming up no longer makes Rama jump. J draws the bow.
+  down: ['KeyS', 'ArrowDown'], jump: ['Space'], roll: ['ShiftLeft', 'ShiftRight'], draw: ['KeyJ'],
+  astra: ['KeyE'], rage: ['KeyR'], pause: ['Escape'], confirm: ['Enter'], action: ['KeyF'],
 };
 
 export const input = {
   axis: 0, axisY: 0,
-  held: { draw: false, mouseDraw: false, jump: false, roll: false, left: false, right: false, up: false, down: false, action: false },
+  held: { draw: false, mouseDraw: false, padDraw: false, jump: false, roll: false, left: false, right: false, up: false, down: false, action: false },
   pressed: {},
   pointer: { x: 0, y: 0, down: false, justDown: false, justUp: false, sx: 0, sy: 0, moved: 0, type: 'mouse' },
   aim: { x: 0, y: 0, dx: 0, dy: 0, source: 'mouse', padX: 0, padY: 0 },
@@ -29,11 +30,14 @@ export const input = {
   drawHeld() { return this.held.draw || this.held.mouseDraw || this.held.padDraw; },
   releaseAll() {
     for (const k in this.held) this.held[k] = false;
+    for (const k in this.keys) this.keys[k] = false;
+    pointers.clear(); pinchDist = 0; drawToggleOn = false;
     this.axis = 0; this.axisY = 0; this.pointer.down = false;
   },
 };
 
-function keymap() { return (save.data.settings.keys) || DEFAULT_KEYS; }
+// a saved keymap from an older build may lack newer actions (draw, rage): fill them in
+function keymap() { const k = save.data.settings.keys; return k ? { ...DEFAULT_KEYS, ...k } : DEFAULT_KEYS; }
 function actionsFor(code) {
   const map = keymap(); const out = [];
   for (const a in map) if (map[a].includes(code)) out.push(a);
@@ -67,7 +71,9 @@ export function initInput() {
   });
   window.addEventListener('keyup', (e) => {
     input.keys[e.code] = false;
-    for (const a of actionsFor(e.code)) if (a in input.held) input.held[a] = false;
+    // an action stays held while any other key bound to it is still down
+    const map = keymap();
+    for (const a of actionsFor(e.code)) if (a in input.held) input.held[a] = map[a].some((k) => input.keys[k]);
     refreshAxis();
   });
   window.addEventListener('blur', () => input.releaseAll());
@@ -153,7 +159,11 @@ export function pollGamepad() {
   const pads = navigator.getGamepads ? navigator.getGamepads() : [];
   let gp = null;
   for (const p of pads) if (p && p.connected) { gp = p; break; }
-  if (!gp) { if (input.held.padDraw) input.held.padDraw = false; return; }
+  if (!gp) {
+    // the pad went away: let go of everything it was holding
+    if (input.device === 'pad' || input.held.padDraw) { input.held.padDraw = false; for (const k of ['left', 'right', 'up', 'down', 'jump', 'roll', 'action']) input.held[k] = false; refreshAxis(); input.device = 'key'; }
+    return;
+  }
   const dead = (v) => (Math.abs(v) < 0.25 ? 0 : v);
   const lx = dead(gp.axes[0] || 0), ly = dead(gp.axes[1] || 0);
   const rx = dead(gp.axes[2] || 0), ry = dead(gp.axes[3] || 0);

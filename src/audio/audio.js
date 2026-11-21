@@ -22,6 +22,9 @@ const RAGAS = {
 let ac = null, master = null, musicBus = null, sfxBus = null, droneNodes = [], noiseBuf = null;
 let growN = -1;
 let mood = { kanda: 'bala', intensity: 'calm' }, phraseT = null, started = false;
+let rage = 0; // Rama's rage doubles the battle drums
+/** Rama's rage: double-time drums and the bowstring's thunder while it lasts. */
+export function setRage(on) { rage = on ? 1 : 0; }
 
 const hz = (semi, oct = 0) => SA * Math.pow(2, semi / 12 + oct);
 
@@ -37,6 +40,7 @@ export function initAudio() {
   noiseBuf = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
   const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; // audio noise only; not gameplay
   started = true;
+  startDrone(); // a mood set before the first tap (e.g. booting straight into ?chapter=) starts now
   document.addEventListener('visibilitychange', () => { if (!ac) return; if (document.hidden) ac.suspend(); else ac.resume(); });
   wire();
 }
@@ -80,7 +84,7 @@ function noise({ at = 0, a = 0.01, dec = 0.3, peak = 0.2, freq = 1200, q = 1, ty
 }
 
 const bell = (f, o = {}) => { for (const [k, p] of [[1, 0.3], [2.76, 0.12], [5.4, 0.06]]) tone(f * k, { dec: (o.dec || 1.6) / k, peak: p * (o.vol || 1), at: o.at || 0 }); };
-const drum = (f, o = {}) => { tone(f, { glide: 0.5, dec: o.dec || 0.25, peak: o.vol || 0.5, at: o.at || 0 }); noise({ freq: 300, dec: 0.06, peak: 0.08 * (o.vol || 1), at: o.at || 0 }); };
+const drum = (f, o = {}) => { const out = o.out || sfxBus; tone(f, { glide: 0.5, dec: o.dec || 0.25, peak: o.vol || 0.5, at: o.at || 0, out }); noise({ freq: 300, dec: 0.06, peak: 0.08 * (o.vol || 1), at: o.at || 0, out }); };
 
 export const CUES = {
   starBell: () => bell(hz(12, 2), { dec: 0.4, vol: 0.8 }),
@@ -137,19 +141,21 @@ export const CUES = {
   win: () => { bell(hz(0, 2), { dec: 2 }); phrase([0, 4, 7, 8, 7, 11, 12], 0.2, 0.18); },
 };
 
-function phrase(notes, step, vol, voice) {
+// out: sfxBus for cues (a win, a wash), musicBus for the raga itself, so each follows its slider
+function phrase(notes, step, vol, voice, out = sfxBus) {
   const v = voice || (RAGAS[mood.kanda] || RAGAS.bala).voice;
   notes.forEach((n, i) => {
     const f = hz(n, 1);
-    if (v === 'bansuri') { tone(f, { type: 'sine', a: 0.06, dec: step * 1.6, peak: vol, at: i * step, vib: 0.006 }); noise({ freq: f * 2, dec: step, peak: vol * 0.05, at: i * step }); }
-    else if (v === 'sitar' || v === 'veena') { tone(f, { type: 'sawtooth', a: 0.005, dec: step * (v === 'veena' ? 3 : 2), peak: vol * 0.6, at: i * step, filter: 2400 }); tone(f * 2.01, { type: 'sine', dec: step, peak: vol * 0.2, at: i * step }); }
-    else tone(f, { type: 'square', a: 0.04, dec: step * 1.4, peak: vol * 0.35, at: i * step, vib: 0.008, filter: 1800 });
+    if (v === 'bansuri') { tone(f, { type: 'sine', a: 0.06, dec: step * 1.6, peak: vol, at: i * step, vib: 0.006, out }); noise({ freq: f * 2, dec: step, peak: vol * 0.05, at: i * step, out }); }
+    else if (v === 'sitar' || v === 'veena') { tone(f, { type: 'sawtooth', a: 0.005, dec: step * (v === 'veena' ? 3 : 2), peak: vol * 0.6, at: i * step, filter: 2400, out }); tone(f * 2.01, { type: 'sine', dec: step, peak: vol * 0.2, at: i * step, out }); }
+    else tone(f, { type: 'square', a: 0.04, dec: step * 1.4, peak: vol * 0.35, at: i * step, vib: 0.008, filter: 1800, out });
   });
 }
 
 function stopDrone(fade = 0.8) {
   if (!ac) return;
-  for (const n of droneNodes) { try { n.g.gain.setTargetAtTime(0.0001, ac.currentTime, fade / 3); n.o.stop(ac.currentTime + fade + 0.2); } catch { /* already stopped */ } }
+  // each voice fades; its slow pulse (pg) fades with it, or the pulse keeps nudging a silent gain and clicks
+  for (const n of droneNodes) { try { n.g.gain.setTargetAtTime(0.0001, ac.currentTime, fade / 3); if (n.pg) n.pg.gain.setTargetAtTime(0, ac.currentTime, fade / 3); n.o.stop(ac.currentTime + fade + 0.2); } catch { /* already stopped */ } }
   droneNodes = [];
 }
 function stopMusic(fade = 0.8) { stopDrone(fade); clearTimeout(phraseT); phraseT = null; }
@@ -157,6 +163,7 @@ function stopMusic(fade = 0.8) { stopDrone(fade); clearTimeout(phraseT); phraseT
 function startDrone() {
   if (!ac) return;
   stopDrone(0.4);
+  clearTimeout(phraseT); phraseT = null; // 'silent' must not leave the last mood's phrases playing
   const m = mood;
   if (m.intensity === 'silent') return;
   const lanka = m.kanda === 'lanka';
@@ -171,7 +178,7 @@ function startDrone() {
     const lvl = m.intensity === 'grief' ? 0.025 : lanka ? 0.03 : 0.04;
     g.gain.setTargetAtTime(lvl, ac.currentTime, 0.8);
     o.start(); pulse.start();
-    droneNodes.push({ o, g }); droneNodes.push({ o: pulse, g });
+    droneNodes.push({ o, g, pg }); droneNodes.push({ o: pulse, g: pg });
   });
   schedulePhrase();
 }
@@ -186,8 +193,8 @@ function schedulePhrase() {
     const sc = r.scale, n = battle ? 6 : 4;
     const notes = []; let idx = Math.floor(sc.length / 2);
     for (let i = 0; i < n; i++) { idx = Math.max(0, Math.min(sc.length - 1, idx + [-1, 1, 1, -2, 2][Math.floor((Date.now() / 7 + i * 3) % 5)])); notes.push(sc[idx]); }
-    if (battle) { for (let i = 0; i < 8; i++) drum(i % 4 === 0 ? 90 : 170, { vol: i % 4 === 0 ? 0.22 : 0.1, dec: 0.12, at: i * 0.22 }); }
-    if (mood.intensity !== 'drums') phrase(notes, battle ? 0.22 : 0.42, mood.intensity === 'grief' ? 0.07 : 0.1);
+    if (battle) { const step = rage > 0 ? 0.11 : 0.22, beats = rage > 0 ? 16 : 8; for (let i = 0; i < beats; i++) drum(i % 4 === 0 ? 90 : 170, { vol: i % 4 === 0 ? 0.22 : 0.1, dec: 0.12, at: i * step, out: musicBus }); }
+    if (mood.intensity !== 'drums') phrase(notes, battle ? 0.22 : 0.42, mood.intensity === 'grief' ? 0.07 : 0.1, null, musicBus);
     schedulePhrase();
   }, gap);
 }

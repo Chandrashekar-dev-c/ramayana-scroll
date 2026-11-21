@@ -44,7 +44,8 @@ export function enemyBoxes(e) {
   if (d.custom === 'elephant') return { body: { x: e.x - 95, y: e.y - 165, w: 190, h: 165 }, head: { x: e.x - 30 * e.facing - 22, y: e.y - 268, w: 44, h: 44 } };
   if (d.custom === 'naga') return { body: { x: e.x - 80, y: e.y - 40, w: 160, h: 40 }, head: { x: e.x + e.facing * 78 - 22, y: e.y - 96, w: 44, h: 40 } };
   const boxes = { body: { x: e.x - w * 0.36, y: e.y - h * 0.8, w: w * 0.72, h: h * 0.8 }, head: { x: e.x - 17 + e.facing * 4, y: e.y - h * 1.02, w: 34, h: h * 0.24 } };
-  if (d.banner) boxes.banner = { x: e.x - 30, y: e.y - h - 150, w: 60, h: 120 };
+  // the flag flies out from the pole on the side the bearer faces (as drawEnemy paints it)
+  if (d.banner) boxes.banner = { x: e.facing > 0 ? e.x : e.x - 64, y: e.y - h - 150, w: 64, h: 90 };
   return boxes;
 }
 
@@ -58,7 +59,9 @@ function strike(b, e, tgt, dmg, reach) {
   if (tgt.protect) { if (Math.abs(tgt.x - e.x) < reach + 30) b.damageProtect(dmg); return; }
   if (tgt.ally) { if (Math.abs(tgt.x - e.x) < reach + 20) b.allyHurt(); return; }
   const h = b.hero;
-  if (Math.abs(h.x - e.x) < reach + 12) b.hurtHero(dmg, e.x, e.def.attack.answer, e.def.attack.kind);
+  // a blow or dive has height too: a hero high in a jump is clear of a club swung at the ground
+  const ey = e.def.flies ? e.y + 70 : e.y;
+  if (Math.abs(h.x - e.x) < reach + 12 && Math.abs(h.y - ey) < 95) b.hurtHero(dmg, e.x, e.def.attack.answer, e.def.attack.kind);
 }
 
 export function updateEnemies(b, dt) {
@@ -121,7 +124,8 @@ export function updateEnemies(b, dt) {
         if (A.kind === 'charge') {
           e.x += e.dashDir * d.speed * A.dash * sp * dt; e.walkT += dt * 2;
           const h = b.hero;
-          if (!e.struck && Math.abs(h.x - e.x) < d.width * 0.5 + 18 && h.y > GROUND - 46 - (d.custom ? 40 : 0)) { e.struck = true; b.hurtHero(A.damage, e.x, A.answer, 'charge'); }
+          if (tgt.protect) { if (!e.struck && Math.abs(tgt.x - e.x) < d.width * 0.5 + 40) { e.struck = true; b.damageProtect(A.damage); } }
+          else if (!e.struck && Math.abs(h.x - e.x) < d.width * 0.5 + 18 && h.y > GROUND - 46 - (d.custom ? 40 : 0)) { e.struck = true; b.hurtHero(A.damage, e.x, A.answer, 'charge'); }
           if (Math.abs(e.x - e.dashFrom) > d.reach + 300 || e.x < b.bounds.left - 60 || e.x > b.bounds.right + 60) { e.state = 'recover'; e.t = 0; }
         } else if (A.kind === 'dive') {
           const k = Math.min(1, e.t / 0.42);

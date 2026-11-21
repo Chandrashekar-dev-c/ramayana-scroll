@@ -33,6 +33,8 @@ function sky(ctx, o, st, kind) {
 
 export function createFlight(b, r) {
   const kind = b.kind || 'leap';
+  // the first flight north (calm) is the quiet trip out: no storm, no eagles, no mountain yet
+  const calm = !!b.calm;
   const o = baseTrial(b, r, kind === 'jewels' ? ['action'] : kind === 'jatayu' ? ['left', 'right', 'up', 'down', 'action'] : ['up', 'down', 'action']);
   const rng = new Rng('flight:' + kind);
   const len = b.length || (kind === 'leap' ? 9000 : kind === 'sanjeevani' ? 7000 : kind === 'jewels' ? 5200 : 0);
@@ -54,7 +56,7 @@ export function createFlight(b, r) {
   function spawnObstacles() {
     while (st.nextO < st.x + app.W + 300 && st.nextO < len - 500) {
       const ev = st.events.find((e) => !e.done && Math.abs(st.nextO / len - e.at) < 0.06);
-      if (!ev && kind !== 'jewels') {
+      if (!ev && kind !== 'jewels' && !calm) {
         const k = kind === 'leap' ? rng.pick(['bird', 'bird', 'spray']) : rng.pick(['storm', 'eagle', 'eagle']);
         st.obs.push({ x: st.nextO, y: k === 'spray' ? SEA : rng.range(170, 520), kind: k, t: 0, vy: 0 });
       }
@@ -98,7 +100,6 @@ export function createFlight(b, r) {
       const main = st.targets.find((q) => q.main);
       if (main && !main.got && st.x + st.px > main.x + 260) { main.x = st.x + st.px + 900; st.missed = (st.missed || 0) + 1; o.say('ch19.again', 2.4); }
       if (main && main.got && st.x > main.x + 400) o.finish({ finish: true, gentle: st.targets.filter((q) => !q.main && q.got).length >= 2, fast: !st.missed });
-      if (main && !main.got) st.x = Math.min(st.x, len);
     } else if (st.x >= len) o.finish({ finish: true, gentle: o.hits <= 2, fast: kind === 'sanjeevani' ? o.t + st.timePen < o.dawnAt : o.t < (b.par || 45) });
   };
 
@@ -133,7 +134,7 @@ export function createFlight(b, r) {
 
   function updateJatayu(dt) {
     const e = st.enemy;
-    const ax = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0) + (input.axis || 0);
+    const ax = input.axis || 0; // axis already folds in the left/right keys and buttons
     st.px = Math.max(120, Math.min(app.W - 120, st.px + ax * 380 * dt));
     if (input.pointer.down && input.device !== 'pad') { const d = input.pointer.x - st.px; st.px += Math.sign(d) * Math.min(Math.abs(d), 380 * dt); }
     steerY(dt, 420);
@@ -144,14 +145,15 @@ export function createFlight(b, r) {
     if (e.wind) {
       e.wind.t += dt;
       if (e.wind.t >= 0.9) {
-        if (e.phase === 1) st.obs.push({ kind: 'spear', x: e.x - 60, y: e.y, vx: -620, vy: (e.wind.ty - e.y) * 0.9, t: 0 });
+        // the spear flies down the red dotted path it was telegraphed on
+        if (e.phase === 1) { const a = Math.atan2(e.wind.ty - e.y, e.wind.tx - (e.x - 60)); st.obs.push({ kind: 'spear', x: e.x - 60, y: e.y, vx: Math.cos(a) * 640, vy: Math.sin(a) * 640, t: 0 }); }
         else if (Math.hypot(st.px - e.x, st.y - e.y) < 170) hurt();
         e.wind = null; e.atk = e.phase === 1 ? 1.5 : 1.3; e.swing = 0.3;
       }
     }
     e.swing = Math.max(0, (e.swing || 0) - dt);
     for (const q of st.obs) { q.x += q.vx * dt; q.y += q.vy * dt; if (Math.abs(q.x - st.px) < 40 && Math.abs(q.y - st.y) < 30) { q.dead = true; hurt(); } }
-    st.obs = st.obs.filter((q) => !q.dead && q.x > -100);
+    st.obs = st.obs.filter((q) => !q.dead && q.x > -100 && q.x < app.W + 100 && q.y > -100 && q.y < 820);
     // strike by flying close; a short cooldown between strikes
     st.cd = (st.cd || 0) - dt;
     if (st.cd <= 0 && Math.hypot(st.px - e.x, st.y - e.y) < 120 && (input.held.action || input.pointer.down)) {
@@ -205,11 +207,11 @@ export function createFlight(b, r) {
       fig(ctx, character('sita', 'exile'), 'sit', st.px - 26, seat, { scale: 0.42, facing: -1 });
       for (const d of st.drops) dots(ctx, d.x - st.x, d.y, 4, 5, PAL.gold, 3, 4);
     } else {
-      if (kind === 'sanjeevani') drawProp(ctx, 'herbPeak', st.px + 6, st.y - 64, { scale: 0.42, colour: true });
+      if (kind === 'sanjeevani' && !calm) drawProp(ctx, 'herbPeak', st.px + 6, st.y - 64, { scale: 0.42, colour: true });
       fig(ctx, hero, Math.floor(o.t * 4) % 2 ? 'fly' : 'fly2', st.px, st.y + 50, { facing: 1, scale: st.scale, alpha: blink ? 0.4 : 1 });
     }
     distanceMeter(ctx, st.x / len, kind === 'leap' ? t('ch26.yojanas', { n: Math.round((st.x / len) * 100) }) : null);
-    o.overlay(ctx, { objective: b.k, progress: st.x / len, night: kind === 'sanjeevani' && o.t < o.dawnAt * 0.5, hand: { x: W / 2, y: 420 } });
+    o.overlay(ctx, { objective: b.k, progress: Math.min(1, st.x / len), night: kind === 'sanjeevani' && o.t < o.dawnAt * 0.5, hand: { x: W / 2, y: 420 } });
     if (app.isTouch && o.t < 3 && kind !== 'jewels') drawHand(ctx, 140, 380 + Math.sin(o.t * 3) * 60, o.t);
   };
 
@@ -237,6 +239,5 @@ export function createFlight(b, r) {
     o.overlay(ctx, { objective: e.phase === 1 ? 'ch18.obj1' : e.phase === 2 ? 'ch18.obj2' : null, progress: e.phase === 1 ? (6 - e.hp) / 12 : 0.5 + (4 - e.hp2) / 8 });
   }
 
-  o.restart = () => {};
   return o;
 }

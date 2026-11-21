@@ -12,7 +12,8 @@ import { drawFrame } from '../art/borders.js';
 import { symbolPoints } from './astra.js';
 import { controlPoint } from '../ui/dom.js';
 
-export function sunRect() { return { x: BORDER + 14 + app.safe.l + 262 + 34, y: BORDER + 30, r: 34 }; }
+// the sun sits in the same safe-area-inset row as the health band it is drawn beside
+export function sunRect() { return { x: BORDER + 14 + app.safe.l + 262 + 34, y: BORDER + 30 + app.safe.t, r: 34 }; }
 
 export function drawHud(ctx, b) {
   const W = app.W, h = b.hero;

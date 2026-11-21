@@ -2,6 +2,7 @@
 import chapters from './chapters.json';
 import places from './places.json';
 import { save } from '../core/save.js';
+import { app } from '../core/app.js';
 
 export const CHAPTERS = chapters;
 export const PLACES = places;
@@ -20,7 +21,9 @@ export function playOrder() {
 
 export function isUnlocked(id) {
   // Developer mode opens every chapter on the wall (remove with the dev mode, see README).
-  if (save.data.allOpen || save.data.settings.devMode) return true;
+  if (save.data.allOpen || app.devActive) return true;
+  // a finished chapter stays open whatever the play order (e.g. after moving Lanka to the end)
+  if (save.data.done[id]) return true;
   const order = playOrder();
   const i = order.findIndex((c) => c.id === id);
   if (i <= 0) return i === 0;
@@ -31,6 +34,7 @@ export function isUnlocked(id) {
 export function blocker(id) {
   const order = playOrder();
   const i = order.findIndex((c) => c.id === id);
+  if (i < 0) return null;
   return order.slice(0, i).find((c) => !save.data.done[c.id]) || null;
 }
 

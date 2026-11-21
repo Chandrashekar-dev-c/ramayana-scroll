@@ -3,11 +3,34 @@ import { shape, line, hatch, ellipsePts, rectPts, dots } from './ink.js';
 import { PAL } from './palette.js';
 import { pattern } from './patterns.js';
 import * as M from './motifs.js';
+import { app, makeCanvas } from '../core/app.js';
 
 const TAU = Math.PI * 2;
 
+// Heavy props that never move are painted once into a sprite (their wobbly ink lines cost a lot to
+// redraw every frame). Bounds are in prop units around the base centre: [x0, y0, x1, y1].
+const STATIC = { shimshapa: [-300, -500, 300, 40], hut: [-190, -270, 190, 40], salaRow: [-220, -440, 780, 40] };
+const sprites = new Map();
+function cachedProp(ctx, name, x, y, o) {
+  const [x0, y0, x1, y1] = STATIC[name];
+  const s = Math.max(0.5, Math.min(2, app.scale || 1));
+  const key = `${name}|${o.colour === false ? 0 : 1}|${o.night ? 1 : 0}|${s.toFixed(2)}`;
+  let cv = sprites.get(key);
+  if (!cv) {
+    cv = makeCanvas((x1 - x0) * s, (y1 - y0) * s);
+    const c = cv.getContext('2d'); c.scale(s, s); c.translate(-x0, -y0);
+    drawProp(c, name, 0, 0, { colour: o.colour, night: o.night, raw: true });
+    sprites.set(key, cv); if (sprites.size > 24) sprites.delete(sprites.keys().next().value);
+  }
+  const k = o.scale || 1;
+  ctx.save(); ctx.translate(x, y); if (o.rot) ctx.rotate(o.rot); ctx.scale((o.dir === -1 ? -1 : 1) * k, k);
+  ctx.drawImage(cv, x0, y0, x1 - x0, y1 - y0);
+  ctx.restore();
+}
+
 /** o: { colour, t, state, night, dir, scale } — origin is the base centre of the prop. */
 export function drawProp(ctx, name, x, y, o = {}) {
+  if (STATIC[name] && !o.raw && typeof document !== 'undefined') { cachedProp(ctx, name, x, y, o); return; }
   const m = o.colour === false ? 'line' : 'colour';
   const c = o.night ? PAL.nightLine : PAL.black;
   const lf = o.night ? PAL.night : PAL.cream;

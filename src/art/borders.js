@@ -43,9 +43,11 @@ export function frameCanvas(colour = false, night = false) {
 /** Draw the frame. progress 0..1 reveals the coloured frame clockwise from the top-left. */
 export function drawFrame(ctx, o = {}) {
   const W = app.W, H = 720;
-  ctx.drawImage(frameCanvas(false, o.night), 0, 0, W, H);
   const p = o.colour ? 1 : o.progress || 0;
+  // a fully coloured frame covers the line one completely, so skip blitting the line frame then
+  if (p < 1) ctx.drawImage(frameCanvas(false, o.night), 0, 0, W, H);
   if (p <= 0) return;
+  if (p >= 1) { ctx.drawImage(frameCanvas(true, o.night), 0, 0, W, H); return; }
   const col = frameCanvas(true, o.night);
   const per = 2 * (W + H), d = p * per, b = BORDER;
   ctx.save(); ctx.beginPath();

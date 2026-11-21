@@ -197,7 +197,8 @@ export function drawFigure(ctx, spec, poseName, o = {}) {
     S([[f[0] - fl * 0.35, f[1] - fl * 0.2], [f[0] + fl, f[1] + fl * 0.12], [f[0] + fl * 0.9, f[1] + fl * 0.3], [f[0] - fl * 0.4, f[1] + fl * 0.3]], { fill: skin, smooth: false });
     if (spec.jewels === 'full' || female) bangle([f[0], f[1] - fl * 0.4], legT * 0.75);
   };
-  drawArm(armB, isFur);
+  // a figure standing with folded arms draws its folded back arm later; drawing armB too gave three
+  if (!(sig.fold && poseName === 'stand')) drawArm(armB, isFur);
   drawLeg(legB); drawLeg(legF);
   const gl = GARMENT_LEN[spec.garment] ?? 0.6;
   if (gl > 0) {

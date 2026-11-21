@@ -31,7 +31,10 @@ export function migrate(old) {
   let v = Number.isInteger(s.v) ? s.v : 0;
   while (v < SAVE_VERSION) { s = MIGRATIONS[v](s); v = s.v; }
   const base = freshSave();
-  return { ...base, ...s, settings: { ...base.settings, ...(s.settings || {}) } };
+  const out = { ...base, ...s, settings: { ...base.settings, ...(s.settings && typeof s.settings === 'object' ? s.settings : {}) } };
+  // a damaged save can hold null (or a non-object) where a table belongs; start that table fresh
+  for (const k of Object.keys(base)) if (base[k] && typeof base[k] === 'object' && (!out[k] || typeof out[k] !== 'object')) out[k] = base[k];
+  return out;
 }
 
 let memory = {};

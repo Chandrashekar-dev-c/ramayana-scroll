@@ -106,11 +106,13 @@ const cache = new Map();
 
 /** A CanvasPattern for name, drawn with fg over bg. `k` scales the tile. */
 export function pattern(ctx, name, bg, fg, k = 1) {
-  const key = `${name}|${bg}|${fg}|${k}`;
-  let p = cache.get(key);
-  if (p) return p;
+  // keyed on the whole-pixel tile size, not the raw scale: an enemy's float scale used to make a new
+  // canvas for almost every value and the cache grew without end
   const def = TILES[name] || TILES.dots;
   const s = Math.max(4, Math.round(def[0] * k));
+  const key = `${name}|${bg}|${fg}|${s}`;
+  let p = cache.get(key);
+  if (p) return p;
   const c = document.createElement('canvas');
   c.width = c.height = s;
   const x = c.getContext('2d');
@@ -122,6 +124,7 @@ export function pattern(ctx, name, bg, fg, k = 1) {
   }
   p = ctx.createPattern(c, 'repeat');
   cache.set(key, p);
+  if (cache.size > 400) cache.delete(cache.keys().next().value);
   return p;
 }
 

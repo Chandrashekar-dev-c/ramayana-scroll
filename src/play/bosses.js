@@ -36,7 +36,8 @@ export function tenHeadCentres(boss, pride = 0) {
   for (let k = 0; k < order.length; k++) {
     const i = order[k], side = i < 4.5 ? -1 : 1, rank = Math.ceil((k + 1) / 2);
     const a = side * (0.42 + (rank - 1) * 0.36), dist = r * (1.2 + rank * 1.18);
-    out[i] = { x: hc[0] + boss.facing * Math.sin(a) * dist, y: hc[1] + r * 0.2 - Math.cos(a) * dist * 0.42 + rank * r * 0.1, r: r * (0.78 - rank * 0.05) * (i === 8 ? 1 + pride * 0.06 : 1) };
+    // same sizes as drawTenHeads: the pride head swells and the others shrink with pride
+    out[i] = { x: hc[0] + boss.facing * Math.sin(a) * dist, y: hc[1] + r * 0.2 - Math.cos(a) * dist * 0.42 + rank * r * 0.1, r: r * (0.78 - rank * 0.05) * (i === 8 ? 1 + pride * 0.06 : 1 - pride * 0.022) };
   }
   out[9] = { x: hc[0], y: hc[1], r: r * 1.05 };
   return out;
@@ -84,9 +85,9 @@ export function hitBoss(b, boss, arrow, box) {
   const B = b.tun.bow;
   let mult = box.weak ? B.headMultiplier * (boss.state === 'weak' ? 1.5 : 1) : boss.def.strictWeak ? 0 : 0.75;
   if (mult === 0) { b.tink(arrow.x, arrow.y); return true; }
-  if (box.weak) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else b.addBoon(b.tun.boon.perHit);
+  if (!arrow.ally && !arrow.astra) { if (box.weak) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else b.addBoon(b.tun.boon.perHit); }
   b.burst(arrow.x, arrow.y, box.weak ? PAL.turmeric : PAL.white, box.weak ? 12 : 6);
-  damageBoss(b, boss, arrow.dmg * mult, { full: arrow.full });
+  damageBoss(b, boss, arrow.dmg * mult, { full: arrow.full, ally: arrow.ally });
   return true;
 }
 
@@ -298,9 +299,28 @@ const RULES = {
   },
 
   // Khara: break the chariot first; then only one fully drawn, blazing arrow ends it.
+  // While he rides, the chariot itself can be shot to pieces (parts.chariot); it also breaks
+  // when he drops to his second phase.
   khara: {
     init(b, boss) { boss.data.mounted = true; },
-    update(b, boss) { if (boss.data.mounted && boss.phase >= 1) { boss.data.mounted = false; b.say('khara.chariot'); b.shake(5); b.burst(boss.x, GROUND - 60, PAL.brown, 18); } },
+    boxes(b, boss) {
+      const U = boss.U, w = boss.spec.build.width;
+      const out = [
+        { name: 'head', x: boss.x - U * 0.14, y: boss.y - U * 1.08, w: U * 0.28, h: U * 0.28, weak: true },
+        { name: 'body', x: boss.x - U * 0.17 * w, y: boss.y - U * 0.8, w: U * 0.34 * w, h: U * 0.8, weak: false },
+      ];
+      if (boss.data.mounted && boss.parts.chariot > 0) out.push({ name: 'chariot', x: boss.x - boss.facing * 40 - 110, y: GROUND - 120, w: 220, h: 120, weak: false, part: 'chariot' });
+      return out;
+    },
+    hit(b, boss, arrow, box) {
+      if (box.part !== 'chariot') return undefined;
+      boss.parts.chariot = Math.max(0, boss.parts.chariot - arrow.dmg * (arrow.full ? 2 : 1));
+      b.burst(arrow.x, arrow.y, PAL.brown, 8); if (!arrow.ally && !arrow.astra) b.addBoon(b.tun.boon.perHit);
+      if (boss.parts.chariot <= 0) RULES.khara.dismount(b, boss);
+      return true;
+    },
+    dismount(b, boss) { if (!boss.data.mounted) return; boss.data.mounted = false; b.say('khara.chariot'); b.shake(5); b.burst(boss.x, GROUND - 60, PAL.brown, 18); },
+    update(b, boss) { if (boss.data.mounted && boss.phase >= 1) RULES.khara.dismount(b, boss); },
     clamp(b, boss, hp, o) { if (hp <= 0 && !o.full) { if (!boss.data.told) { boss.data.told = true; b.say('khara.rule'); } return 1; } return hp; },
     draw(ctx, b, boss) { if (boss.data.mounted && !boss.dying) drawProp(ctx, 'kharaChariot', boss.x - boss.facing * 40, GROUND, { dir: boss.facing, t: b.time, moving: boss.state === 'charging', spin: boss.walkT * 9 }); },
   },
@@ -391,7 +411,9 @@ const RULES = {
   // Hitting Sugriva restarts the duel.
   vali: {
     init(b, boss) { boss.data.sug = character('sugriva'); boss.data.cx = boss.x; boss.data.ph = 0; boss.facing = -1; },
-    pos(boss) { const sep = 40 + Math.max(0, Math.sin(boss.data.ph * 0.9)) * 230 + Math.max(0, Math.sin(boss.data.ph * 2.3 + 1)) * 30; const swap = Math.sin(boss.data.ph * 0.37) > 0 ? 1 : -1; return { vx: boss.data.cx - swap * sep / 2, sx: boss.data.cx + swap * sep / 2, sep }; },
+    // the brothers trade sides smoothly as they wrestle round each other (a hard sign flip made
+    // them jump past each other mid-separation)
+    pos(boss) { const sep0 = 40 + Math.max(0, Math.sin(boss.data.ph * 0.9)) * 230 + Math.max(0, Math.sin(boss.data.ph * 2.3 + 1)) * 30; const swap = Math.max(-1, Math.min(1, Math.sin(boss.data.ph * 0.37) * 4)); const sep = Math.max(40, Math.abs(swap) * sep0); const sg = swap >= 0 ? 1 : -1; return { vx: boss.data.cx - sg * sep / 2, sx: boss.data.cx + sg * sep / 2, sep }; },
     boxes(b, boss) {
       const p = RULES.vali.pos(boss), U = boss.U, clear = p.sep > 150;
       return [{ name: 'sugriva', x: p.sx - 40, y: boss.y - U * 1.05, w: 80, h: U * 1.05, sug: true }, { name: 'vali', x: p.vx - 45, y: boss.y - U * 1.1, w: 90, h: U * 1.1, weak: clear }];

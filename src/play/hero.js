@@ -12,6 +12,7 @@ export function createHero(b, def) {
     id: def.id, spec: character(def.id, def.stage), x: def.start ?? 200, y: GROUND, vx: 0, vy: 0, facing: 1,
     hp: maxHp, maxHp, onGround: true, drawT: 0, rollT: 0, rollDir: 1, inv: 0, kickT: 0, kickAnim: 0, coyote: 0, jumpBuf: 0,
     walkT: 0, shootCd: 0, shootAnim: 0, hurtAnim: 0, aim: 0, held: 0, dead: false, fullCue: false, w: 44, h: 150,
+    rollInv: 0, dropT: 0,
   };
 }
 
@@ -29,12 +30,13 @@ export function updateHero(b, dt) {
   const h = b.hero, T = b.tun.hero, B = b.tun.bow, F = b.tun.feel;
   if (h.dead) { h.vy += T.gravity * dt; h.y = Math.min(GROUND, h.y + h.vy * dt); return; }
   h.inv -= dt; h.kickT -= dt; h.kickAnim -= dt; h.shootCd -= dt; h.shootAnim -= dt; h.hurtAnim -= dt;
-  if (h.held > 0) { h.held -= dt; h.vx = 0; h.drawT = 0; }
+  if (h.held > 0) { h.held -= dt; h.vx = 0; h.drawT = 0; h.fullCue = false; }
   const canAct = h.held <= 0 && !b.frozenInput;
   const ax = canAct ? input.axis : 0;
 
   if (canAct && input.consume('roll') && h.onGround && h.rollT <= 0) {
-    h.rollT = T.rollTime; h.rollDir = ax || h.facing; h.drawT = 0; h.inv = Math.max(h.inv, T.rollInvulnerable);
+    // rollInv (not inv) protects the roll, so a shockwave, stomp or charge still has to be jumped
+    h.rollT = T.rollTime; h.rollDir = ax || h.facing; h.drawT = 0; h.fullCue = false;
     h.rollInv = T.rollInvulnerable; bus.emit('cue', 'roll');
   }
   if (h.rollInv > 0) h.rollInv -= dt;
@@ -66,7 +68,11 @@ export function updateHero(b, dt) {
   const py = h.y;
   h.x += h.vx * dt; h.y += h.vy * dt;
   let floor = GROUND;
-  for (const s of b.level.shelves || []) if (h.x > s.x1 && h.x < s.x2 && py <= GROUND - s.h + 1 && h.vy >= 0 && !(input.held.down && h.onGround)) floor = Math.min(floor, GROUND - s.h);
+  // down on a shelf drops through it; the short timer keeps the shelf from catching Rama again
+  // on the next frame (onGround is already false by then)
+  h.dropT -= dt;
+  if (canAct && input.held.down && h.onGround && h.y < GROUND - 1) h.dropT = 0.22;
+  if (h.dropT <= 0) for (const s of b.level.shelves || []) if (h.x > s.x1 && h.x < s.x2 && py <= GROUND - s.h + 1 && h.vy >= 0) floor = Math.min(floor, GROUND - s.h);
   if (h.y >= floor) { h.y = floor; h.vy = 0; h.onGround = true; } else h.onGround = false;
   h.x = Math.max(b.bounds.left + 30, Math.min(b.bounds.right - 30, h.x));
   if (Math.abs(h.vx) > 1 && h.onGround) h.walkT += dt; else if (h.onGround) h.walkT = 0;

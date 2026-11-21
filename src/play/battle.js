@@ -30,6 +30,7 @@ const TEACH = {
   shield: { key: 'hint.shield', button: 'roll' },
   climber: { key: 'hint.climber', button: null },
   stomp: { key: 'hint.stomp', button: 'jump' },
+  kick: { key: 'hint.kick', button: null },
 };
 
 export function createBattle(level, opts = {}) {
@@ -43,7 +44,9 @@ export function createBattle(level, opts = {}) {
     camX: 0, zoom: 1, shakeT: 0, shakeA: 0, hitStop: 0, slowT: 0, slow: 1, boon: opts.boon || 0, boonOn: !!level.astras,
     astra: null, outcome: null, healT: -1, ending: null, mood: null, gust: null, goRight: false, checkpoints: [], cpIndex: opts.checkpoint ? opts.checkpoint.step : -1,
     night: isNight(level.backdrop), teachDone: {}, pride: save.data.pride || 0, protect: null, protected: null, timer: null, frozenInput: false,
-    allyHurtFlag: false, protectTouched: false, onEnd: opts.onEnd,
+    allyHurtFlag: false, protectTouched: false, onEnd: opts.onEnd, astraQueue: [],
+    // a retry keeps the checkpoint it started from, so a second death doesn't fall back to arena 0
+    savedCheckpoint: opts.checkpoint || null,
   };
   b.hero = createHero(b, { ...level.hero, start: 0 });
   const startArena = opts.checkpoint ? opts.checkpoint.arena : 0;
@@ -103,7 +106,7 @@ function installApi(b) {
     let teach = null;
     if (kind === 'lotusOpen') teach = 'stomp';
     else if (step && step.teach === answer) teach = answer;
-    if (teach && !b.teachDone[teach] && (!save.seen('teach.' + teach) || b.teachFails[teach] >= 2)) {
+    if (teach && TEACH[teach] && !b.teachDone[teach] && (!save.seen('teach.' + teach) || b.teachFails[teach] >= 2)) {
       b.teachDone[teach] = true; save.markSeen('teach.' + teach);
       b.slowT = b.tun.feel.teachTime; b.slow = b.tun.feel.teachSlow;
       showHint(b, TEACH[teach].key, TEACH[teach].button, 1.8);
@@ -119,12 +122,15 @@ function installApi(b) {
   b.killEnemy = (e, how) => {
     if (e.dying) return;
     e.dying = true; e.t = 0; e.hp = 0;
+    b.zones = b.zones.filter((z) => z.src !== e); // a dead naga's coil goes with it
     if (!e.illusion) { b.stats.kills++; b.addBoon(b.tun.boon.perKill); }
     bus.emit('enemy:die', { type: e.type, how });
   };
   b.hurtHero = (dmg, fromX, answer, kind) => {
     const h = b.hero;
-    if (h.dead || h.inv > 0 || b.outcome || b.healT >= 0 || (app.dev && app.dev.god)) return;
+    if (h.dead || b.outcome || b.healT >= 0 || (app.dev && app.dev.god)) return;
+    if (h.inv > 0) return;
+    // a roll dodges blows and shots, but a shockwave, stomp or charge must be jumped
     if (h.rollInv > 0 && kind !== 'wave' && kind !== 'stomp' && kind !== 'charge') return;
     const amount = Math.max(1, Math.round(dmg * b.diff.damageTaken));
     h.hp -= amount; h.inv = b.tun.hero.hurtInvulnerable; h.hurtAnim = 0.3;
@@ -171,7 +177,8 @@ function damageEnemy(b, e, dmg, head, kick) {
 
 // ---------------------------------------------------------------- astras
 function startAstra(b, symbol, key, cb, forced) {
-  if (b.astra) return;
+  // two bosses can ask for an astra in the same moment (Subahu and Maricha): queue the second
+  if (b.astra) { if (forced) b.astraQueue.push([symbol, key, cb, forced]); return; }
   b.astra = { symbol, key, cb, forced, pts: [], t: 0, tracing: false };
   input.releaseAll();
   bus.emit('astra:start');
@@ -186,7 +193,19 @@ function fireAstra(b, strength) {
   if (a.cb) { a.cb(strength); return; }
   const dmg = b.tun.boon.astraDamage * (0.4 + strength * 0.6);
   for (const e of b.enemies) if (!e.dead && !e.dying) damageEnemy(b, e, dmg, false);
-  for (const q of b.bosses) if (!q.dead && !q.dying) damageBoss(b, q, b.tun.boon.astraBossDamage * (0.4 + strength * 0.6));
+  for (const q of b.bosses) if (!q.dead && !q.dying) astraHitBoss(b, q, b.tun.boon.astraBossDamage * (0.4 + strength * 0.6));
+}
+
+/** An astra strikes a boss through its rule, at its open weak spot, like an arrow would. */
+export function astraHitBoss(b, q, dmg, o = {}) {
+  if (q.hidden && !o.reveal) return false;
+  const boxes = bossBoxes(b, q);
+  const box = boxes.find((x) => x.weak && !x.sug && !x.cloud) || (o.pierce ? boxes.find((x) => !x.sug) : null);
+  if (!box) { const c = b.headOf({ boss: q }); b.tink(c.x, c.y); return false; }
+  const x = box.x + box.w / 2, y = box.y + box.h / 2;
+  const mult = box.weak ? b.tun.bow.headMultiplier : 0.75;
+  hitBoss(b, q, { x, y, vx: 0, vy: 0, dmg: dmg / mult, full: true, power: 1, astra: true, pierceArmor: !!o.pierce }, o.pierce ? { ...box, weak: true } : box);
+  return true;
 }
 
 function updateAstra(b, dt) {
@@ -229,7 +248,7 @@ function nextStep(b) {
   } else if (s.checkpoint !== undefined) {
     const x = s.x ?? Math.min(b.bounds.right - 80, b.hero.x + 140);
     b.checkpoints.push({ x, t: 0 });
-    const counts = !(b.diff.bossCheckpointOnly && !(arenaSteps(b)[b.step + 1] && arenaSteps(b)[b.step + 1].boss));
+    const counts = !(b.diff.bossCheckpointOnly && !bossAhead(b));
     if (counts) { b.cpIndex = b.step; b.savedCheckpoint = { arena: b.arena, stepInArena: b.step, step: b.step + b.arena * 100, x: Math.min(x, b.hero.x + 40), hp: b.hero.hp, boon: b.boon }; }
     b.hero.hp = Math.min(b.hero.maxHp, b.hero.hp + Math.round(b.hero.maxHp * b.tun.hero.checkpointHeal));
     bus.emit('checkpoint', b.savedCheckpoint);
@@ -252,6 +271,19 @@ function nextStep(b) {
     b.boonOn = true; b.boon = b.tun.boon.max;
     startAstra(b, s.teachAstra, s.key || 'astra.first', () => { b.boon = 0; b.say(s.after || 'astra.learned'); }, true);
   } else if (s.timer) { b.timer = { t: 0, dur: s.timer.dur, label: s.timer.label, fail: s.timer.fail }; }
+  else if (s.timerStop) { b.timer = null; }
+}
+
+// Hard mode keeps only the checkpoint just before a boss: is the next fight (in this arena or
+// the next one) a boss, before any other checkpoint?
+function bossAhead(b) {
+  for (let a = b.arena, i = b.step + 1; a < b.level.arenas.length; a++, i = 0) {
+    for (const s of b.level.arenas[a].steps.slice(i)) {
+      if (s.boss || s.bosses) return true;
+      if (s.wave || s.targets || s.checkpoint !== undefined) return false;
+    }
+  }
+  return false;
 }
 
 function stepDone(b) {
@@ -287,6 +319,7 @@ export function updateBattle(b, dt) {
   if (b.outcome) return;
   // overlays that pause the fight
   if (b.loseDelay !== undefined) { b.loseDelay -= dt; b.hero.deadT = (b.hero.deadT || 0) + dt; if (b.loseDelay <= 0) b.outcome = 'lose'; updateFx(b, dt); return; }
+  if (!b.astra && b.astraQueue.length) startAstra(b, ...b.astraQueue.shift());
   if (b.astra) { updateAstra(b, dt); input.endTick(); return; }
   if (b.slowT > 0) { b.slowT -= dt; dt *= b.slow; }
   if (b.hitStop > 0) { b.hitStop -= dt; updateFx(b, dt); return; }
@@ -318,7 +351,7 @@ export function updateBattle(b, dt) {
       b.waveSpawned++;
       if (b.pendingTeach && ((b.pendingTeach === 'shield' && e.def.blocksFront) || (b.pendingTeach === 'climber' && e.def.climbs) || (b.pendingTeach === 'shootUp' && e.def.flies))) {
         const tch = b.pendingTeach; b.pendingTeach = null;
-        if (!save.seen('teach.' + tch)) { save.markSeen('teach.' + tch); b.slowT = b.tun.feel.teachTime * 1.4; b.slow = b.tun.feel.teachSlow; showHint(b, TEACH[tch].key, TEACH[tch].button, 2.4); }
+        if (TEACH[tch] && !save.seen('teach.' + tch)) { save.markSeen('teach.' + tch); b.slowT = b.tun.feel.teachTime * 1.4; b.slow = b.tun.feel.teachSlow; showHint(b, TEACH[tch].key, TEACH[tch].button, 2.4); }
       }
     }
   }
@@ -419,7 +452,7 @@ function updateArrows(b, dt) {
       const bx = enemyBoxes(e);
       const head = inBox(a.x, a.y, bx.head) || segBox(px, py, a.x, a.y, bx.head);
       const body = !head && (inBox(a.x, a.y, bx.body) || segBox(px, py, a.x, a.y, bx.body));
-      const flag = bx.banner && inBox(a.x, a.y, bx.banner);
+      const flag = bx.banner && (inBox(a.x, a.y, bx.banner) || segBox(px, py, a.x, a.y, bx.banner));
       if (!head && !body && !flag) continue;
       a.hit.add(e);
       if (e.def.blocksFront && !flag && Math.sign(a.vx) === -e.facing && e.state !== 'windup' && e.stun <= 0) { b.tink(a.x, a.y); a.life = 0; break; }
@@ -440,7 +473,9 @@ function updateArrows(b, dt) {
       for (const box of bossBoxes(b, q)) {
         if (!(inBox(a.x, a.y, box) || segBox(px, py, a.x, a.y, box))) continue;
         a.hit.add(q);
-        if (a.ally) { if (!q.hidden) { damageBoss(b, q, a.dmg * 0.5, { ally: true }); b.burst(a.x, a.y, PAL.white, 5); } a.life = 0; break; }
+        // ally arrows obey the boss's rule like Rama's do: Viradha's arms, Kumbhakarna's closed
+        // eyes, Indrajit in the clouds and Ravana's one coloured head all turn them away
+        if (a.ally) { if (!q.hidden && box.weak) { hitBoss(b, q, { ...a, dmg: a.dmg * 0.5 }, box); b.burst(a.x, a.y, PAL.white, 5); } else b.tink(a.x, a.y); a.life = 0; break; }
         const spent = hitBoss(b, q, a, box);
         if (spent) { bus.emit('arrow:hit', { head: box.weak }); b.hitStop = b.tun.feel.hitPause; a.life = 0; }
         break;

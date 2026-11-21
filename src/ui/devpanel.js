@@ -1,5 +1,6 @@
-// Developer mode. Turned on from Settings ("Developer mode"); shows a small DEV button
-// that opens this panel. Remove the setting before release (see README).
+// Developer mode. Only offered in a dev build (vite dev) or with ?debug in the address; the
+// release build shows no switch for it, honours no hotkeys, and ignores a devMode left in an
+// old save. Shows a small DEV button that opens this panel.
 import { app } from '../core/app.js';
 import { save } from '../core/save.js';
 import { t } from '../core/i18n.js';
@@ -9,10 +10,16 @@ import { panel, closePanel, button, el, withGrinding } from './dom.js';
 export const dev = { god: false, hitboxes: false, slow: 1, fps: true };
 app.dev = dev;
 
+/** Developer tools can exist in this build/visit at all. */
+export function devAllowed() { return !!(import.meta.env && import.meta.env.DEV) || !!app.devForce; }
+/** Developer mode is on right now. */
+export function devOn() { return devAllowed() && (!!app.devForce || !!save.data.settings.devMode); }
+
 let fab = null;
 
 export function applyDevMode() {
-  const on = !!save.data.settings.devMode;
+  const on = devOn();
+  app.devActive = on;
   app.debug = on && dev.fps;
   if (!on) { dev.god = false; dev.hitboxes = false; dev.slow = 1; if (app.loop) app.loop.setSlow(1); }
   if (on && !fab) {
@@ -64,7 +71,7 @@ export async function openDevPanel() {
 
 // Hotkeys while developer mode is on: ` opens the panel, G god mode, H hitboxes, [ ] speed.
 window.addEventListener('keydown', (e) => {
-  if (!save.data.settings.devMode || e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
+  if (!devOn() || e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
   if (e.code === 'Backquote') openDevPanel();
   else if (e.code === 'KeyG') dev.god = !dev.god;
   else if (e.code === 'KeyH') dev.hitboxes = !dev.hitboxes;

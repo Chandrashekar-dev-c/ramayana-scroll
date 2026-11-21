@@ -66,29 +66,38 @@ export function panel(content, o = {}) {
 export function closePanel() { const p = $('panel'); p.classList.add('hidden'); p.innerHTML = ''; const c = panelClose; panelClose = null; if (c) c(); }
 export function panelOpen() { return !$('panel').classList.contains('hidden'); }
 
-/** A choice on a plate. Resolves with the chosen index. */
-export function choose(prompt, options, o = {}) {
-  return new Promise((resolve) => {
-    const kids = [];
-    if (prompt) kids.push(el('p', { style: 'font-style:italic' }, prompt));
-    const row = el('div', { class: o.grid ? 'heads' : 'col' });
-    options.forEach((op, i) => row.append(button(op.label, () => { closePanel(); bus.emit('cue', 'choose'); resolve(i); }, { small: op.small, main: op.main })));
-    kids.push(row);
-    panel(kids, { cls: o.cls });
-  });
+/** A choice on a plate. Resolves with the chosen index. The pause menu can cover it and
+ * put it back (reopenChoice), so the promise is never left hanging. */
+let pendingChoice = null;
+function renderChoice(c) {
+  const kids = [];
+  if (c.prompt) kids.push(el('p', { style: 'font-style:italic' }, c.prompt));
+  const row = el('div', { class: c.o.grid ? 'heads' : 'col' });
+  c.options.forEach((op, i) => row.append(button(op.label, () => { if (pendingChoice !== c) return; pendingChoice = null; closePanel(); bus.emit('cue', 'choose'); c.resolve(i); }, { small: op.small, main: op.main })));
+  kids.push(row);
+  panel(kids, { cls: c.o.cls });
 }
+export function choose(prompt, options, o = {}) {
+  return new Promise((resolve) => { pendingChoice = { prompt, options, o, resolve }; renderChoice(pendingChoice); });
+}
+export function choicePending() { return !!pendingChoice; }
+export function reopenChoice() { if (pendingChoice) renderChoice(pendingChoice); }
+/** Drop a choice whose chapter is being left (restart, hub, title). */
+export function cancelChoice() { pendingChoice = null; }
 
 export function showBusy(text) { const b = $('busy'); b.textContent = text; b.classList.remove('hidden'); }
 export function hideBusy() { $('busy').classList.add('hidden'); }
 
 /** A new build has taken over: offer a reload, never force one mid-chapter. */
 export function updateReady(text, label) {
-  const tEl = $('toast'); tEl.innerHTML = ''; tEl.append(el('span', {}, text + ' '), button(label, () => location.reload(), { main: true }));
+  const tEl = $('toast'); clearTimeout(tEl._t); tEl._t = null; tEl.innerHTML = ''; tEl.append(el('span', {}, text + ' '), button(label, () => location.reload(), { main: true }));
   tEl.classList.remove('hidden');
 }
 
 export function toast(text, dur = 2) {
-  const tEl = $('toast'); tEl.textContent = text; tEl.classList.remove('hidden');
+  const tEl = $('toast');
+  if (tEl.querySelector('button')) return; // never cover the "new version" reload offer
+  tEl.textContent = text; tEl.classList.remove('hidden');
   clearTimeout(tEl._t); tEl._t = setTimeout(() => tEl.classList.add('hidden'), dur * 1000);
 }
 
@@ -109,15 +118,18 @@ const ICONS = {
   draw: '<svg viewBox="0 0 24 24"><path d="M6 2c8 4 8 16 0 20" fill="none" stroke="#1d1613" stroke-width="2.6"/><path d="M6 2v20M4 12h16m-4-4 4 4-4 4" fill="none" stroke="#28367c" stroke-width="2.2" stroke-linecap="round"/></svg>',
   jump: '<svg viewBox="0 0 24 24"><path d="M12 20V5m-6 6 6-6 6 6" fill="none" stroke="#1d1613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   roll: '<svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-3-5.7" fill="none" stroke="#1d1613" stroke-width="3" stroke-linecap="round"/><path d="m14 3 3 3-3.5 2.5" fill="none" stroke="#1d1613" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  rage: '<svg viewBox="0 0 24 24"><path d="M6 2c8 4 8 16 0 20" fill="none" stroke="#a82414" stroke-width="2.8"/><path d="M6 2v20" stroke="#1d1613" stroke-width="1.6"/><path d="m13 6 3 6-3 6m4-12 3 6-3 6" fill="none" stroke="#a82414" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   action: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="#1d1613" stroke-width="3"/><circle cx="12" cy="12" r="2.5" fill="#e6ac17"/></svg>',
 };
-const LABEL_KEYS = { draw: 'btn.draw', jump: 'btn.jump', roll: 'btn.roll', action: 'btn.action', left: 'btn.left', right: 'btn.right', up: 'btn.up', down: 'btn.down' };
+const LABEL_KEYS = { rage: 'act.rage', draw: 'btn.draw', jump: 'btn.jump', roll: 'btn.roll', action: 'btn.action', left: 'btn.left', right: 'btn.right', up: 'btn.up', down: 'btn.down' };
 
 /**
  * Show touch buttons. set: array of names among left, right, up, down, draw, jump, roll, action.
  * Layout keeps the middle third of the screen clear; left-handed mode mirrors it.
  */
+let lastTouchSet = null;
 export function touchControls(set) {
+  lastTouchSet = set;
   const box = $('touch'); box.innerHTML = '';
   if (!set || !set.length || !app.isTouch) { box.classList.add('hidden'); return; }
   box.classList.remove('hidden');
@@ -136,16 +148,26 @@ export function touchControls(set) {
   };
   if (set.includes('left')) place('left', 'left', m, m, s, 'hold');
   if (set.includes('right')) place('right', 'left', m * 2 + s, m, s, 'hold');
-  if (set.includes('up')) place('up', 'left', m + s * 0.5, m * 2 + s, s, 'hold');
-  if (set.includes('down') && !set.includes('left')) place('down', 'left', m + s * 0.5, m, s, 'hold');
+  // with left/right on the bottom row, up and down stack in a column beside them (Jatayu's flight
+  // needs all four); on their own they stack above each other
+  const hasLR = set.includes('left') || set.includes('right');
+  const udx = hasLR ? m * 3 + s * 2 : m + s * 0.5;
+  if (set.includes('up')) place('up', 'left', udx, hasLR ? m * 2 + s : m * 2 + s, s, 'hold');
+  if (set.includes('down')) place('down', 'left', udx, m, s, 'hold');
   if (set.includes('draw')) place('draw', 'right', m, m, big, 'draw');
   if (set.includes('jump')) place('jump', 'right', m + (big - s) / 2, m * 2 + big, s, 'tap');
   if (set.includes('roll')) place('roll', 'right', m * 2 + big, m, s, 'tap');
-  if (set.includes('action')) place('action', 'right', set.includes('draw') ? m * 2 + big : m, set.includes('draw') ? m * 2 + s : m, set.includes('draw') ? s : big, 'tap');
+  if (set.includes('rage')) place('rage', 'right', m * 2 + big, m * 2 + s, s, 'tap');
+  // action is held, not tapped: hiding in Lanka, rowing hard and flying fast all hold it
+  if (set.includes('action')) place('action', 'right', set.includes('draw') ? m * 2 + big : m, set.includes('draw') ? m * 2 + s : m, set.includes('draw') ? s : big, 'hold');
   void vw;
-  // fade when idle
-  clearInterval(box._fade);
+  for (const b of box.querySelectorAll('.tb')) b.tabIndex = 0;
 }
+/** Lay the touch buttons out again (after a resize, a turn of the phone, or the left-handed setting). */
+export function refreshTouchControls() { touchControls(lastTouchSet); }
+let touchResizeT = null;
+window.addEventListener('resize', () => { clearTimeout(touchResizeT); touchResizeT = setTimeout(refreshTouchControls, 120); });
+window.addEventListener('orientationchange', () => setTimeout(refreshTouchControls, 200));
 
 /** Centre of a touch button in logical units, or null when it is not on screen. */
 export function controlPoint(name) {

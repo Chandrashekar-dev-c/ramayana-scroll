@@ -4,7 +4,7 @@ import { save, defaultSettings } from '../core/save.js';
 import { t, LANGUAGES, loadLang, lang, isDraft } from '../core/i18n.js';
 import { input, DEFAULT_KEYS } from '../core/input.js';
 import { bus } from '../core/events.js';
-import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine, withGrinding } from './dom.js';
+import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine, withGrinding, reopenChoice, cancelChoice, refreshTouchControls } from './dom.js';
 import { initAudio, applyVolumes, cue } from '../audio/audio.js';
 import { PAL } from '../art/palette.js';
 import { plate } from '../art/ink.js';
@@ -14,7 +14,7 @@ import credits from '../data/credits.json';
 import motifs from '../data/motifs.json';
 import { CHAPTERS, nextChapter, allSeals, chapterById } from '../data/chapters.js';
 import { renderSheet } from './sheet.js';
-import { applyDevMode } from './devpanel.js';
+import { applyDevMode, devAllowed } from './devpanel.js';
 
 const go = {
   hub: (o) => withGrinding(() => import('../hub/hub.js').then((m) => m.openHub(o))),
@@ -27,6 +27,9 @@ function isIosBrowser() { return /iPhone|iPad|iPod/.test(navigator.userAgent) &&
 
 // A visible fullscreen toggle. Browsers only allow fullscreen from a tap, so this is a button
 // the player presses, and it says so if the browser refuses rather than failing silently.
+// one listener for the page's lifetime, pointed at whichever button the title shows now
+let fsButton = null;
+document.addEventListener('fullscreenchange', () => { if (fsButton) fsButton.textContent = document.fullscreenElement ? t('btn.exitFull') : t('btn.fullscreen'); });
 function fullscreenButton() {
   const canFs = !!document.documentElement.requestFullscreen;
   const label = () => (document.fullscreenElement ? t('btn.exitFull') : t('btn.fullscreen'));
@@ -42,7 +45,7 @@ function fullscreenButton() {
     }
     b.textContent = label();
   }, {});
-  document.addEventListener('fullscreenchange', () => { b.textContent = label(); });
+  fsButton = b;
   return b;
 }
 
@@ -66,7 +69,7 @@ class TitleMode {
     if (started) row.append(button(t('btn.journeyOpen'), () => this.begin('hub')));
     row.append(button(t('btn.settings'), () => openSettings({ back: () => this.show() })));
     const fs = fullscreenButton(); if (fs) row.append(fs);
-    if (isIosBrowser()) row.append(button(t('btn.installIos'), () => panel([el('p', {}, t('install.ios')), button(t('btn.back'), () => closePanel(), { main: true })])));
+    if (isIosBrowser()) row.append(button(t('btn.installIos'), () => panel([el('p', {}, t('install.ios')), button(t('btn.back'), () => this.show(), { main: true })])));
     if (allSeals()) row.append(button(t('btn.gallery'), () => openGallery({ back: () => this.show() })));
     kids.push(row);
     if (credits.reviewers.length) kids.push(el('p', { class: 'mini' }, t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') })));
@@ -85,7 +88,7 @@ class TitleMode {
   update() { this.t += 1 / 60; input.endTick(); }
   render(ctx) {
     ctx.fillStyle = PAL.cream; ctx.fillRect(0, 0, app.W, 720);
-    if (!this.wall) import('../hub/hub.js').then((m) => { this.wall = new m.Hub(); this.wall.states = { st: {}, marks: new Set() }; this.wall.cam.z = m.Hub.prototype.fitZoom.call(this.wall); this.wall.cam.x = m.WALL_W / 2; this.wall.cam.y = m.WALL_H / 2; });
+    if (!this.wall && !this.wallLoading) this.wallLoading = import('../hub/hub.js').then((m) => { this.wall = new m.Hub(); this.wall.states = { st: {}, marks: new Set() }; this.wall.cam.z = m.Hub.prototype.fitZoom.call(this.wall); this.wall.cam.x = m.WALL_W / 2; this.wall.cam.y = m.WALL_H / 2; });
     if (this.wall && this.wall.states) { ctx.save(); ctx.globalAlpha = 0.55; this.wall.render(ctx); ctx.restore(); }
     drawFrame(ctx, {});
   }
@@ -105,29 +108,46 @@ export function openSettings(o = {}) {
   const kids = [el('h2', {}, t('btn.settings')), el('div', { class: 'settings' },
     range('music', t('set.music')), range('sfx', t('set.sfx')), check('muted', t('set.mute')),
     select('textSize', t('set.text'), [['normal', t('set.text.normal')], ['large', t('set.text.large')], ['xl', t('set.text.xl')]]),
-    check('reducedMotion', t('set.motion')), check('leftHanded', t('set.left')), check('toggleDraw', t('set.toggleDraw')),
-    el('label', {}, t('set.dev'), el('input', { id: 'set-dev', type: 'checkbox', checked: s.devMode ? 'checked' : false, onchange: (e) => { s.devMode = e.target.checked; commit(); applyDevMode(); } })),
+    check('reducedMotion', t('set.motion')), el('label', {}, t('set.left'), el('input', { type: 'checkbox', checked: s.leftHanded ? 'checked' : false, onchange: (e) => { s.leftHanded = e.target.checked; commit(); refreshTouchControls(); } })), check('toggleDraw', t('set.toggleDraw')),
+    devAllowed() && el('label', {}, t('set.dev'), el('input', { id: 'set-dev', type: 'checkbox', checked: s.devMode ? 'checked' : false, onchange: (e) => { s.devMode = e.target.checked; commit(); applyDevMode(); } })),
     el('label', {}, t('set.difficulty'), diffSel),
     el('label', {}, t('set.lanka'), (() => { const sel = el('select', { onchange: (e) => { s.lankaWoven = e.target.value === 'woven'; commit(); } }, el('option', { value: 'woven' }, t('set.lanka.woven')), el('option', { value: 'end' }, t('set.lanka.end'))); sel.value = s.lankaWoven === false ? 'end' : 'woven'; return sel; })()),
-    langs.length > 1 ? select('lang', t('set.lang'), langs.map(([k, v]) => [k, v.name]), async (v) => { await loadLang(v); setDraftNote(isDraft()); openSettings(o); }) : null,
+    langs.length > 1 ? langSelect(s, langs, commit, o) : null,
   ),
   el('div', { class: 'row' }, !app.isTouch ? button(t('set.keys'), () => openKeys(o)) : null, button(t('set.reset'), () => confirmReset(o)), button(t('btn.back'), () => { closePanel(); if (o.back) o.back(); }, { main: true }))];
   panel(kids);
   void lang; void defaultSettings;
 }
 
+let keyCapture = null;
+function stopKeyCapture() { if (keyCapture) { window.removeEventListener('keydown', keyCapture, true); keyCapture = null; } }
+// The language is saved only once it has loaded: offline, a language that isn't cached stays
+// unchosen and the game keeps the one it has (it used to save first and then fail to boot).
+function langSelect(s, langs, commit, o) {
+  const prev = s.lang || 'en';
+  const sel = el('select', { 'aria-label': t('set.lang'), onchange: async (e) => {
+    const v = e.target.value;
+    try { await loadLang(v); s.lang = v; commit(); setDraftNote(isDraft()); openSettings(o); }
+    catch { sel.value = prev; try { await loadLang(prev); } catch { /* keep what is loaded */ } }
+  } });
+  for (const [v, l] of langs.map(([k, x]) => [k, x.name])) { const op = el('option', { value: v }, l); if (prev === v) op.selected = true; sel.append(op); }
+  return el('label', {}, t('set.lang'), sel);
+}
+
 function openKeys(o) {
+  stopKeyCapture();
   const s = save.data.settings;
-  const keys = s.keys || JSON.parse(JSON.stringify(DEFAULT_KEYS));
+  const keys = { ...JSON.parse(JSON.stringify(DEFAULT_KEYS)), ...(s.keys || {}) };
   const rows = Object.keys(DEFAULT_KEYS).map((a) => {
     const b = button(keys[a][0], () => {
       b.textContent = t('set.pressKey');
-      const h = (e) => { e.preventDefault(); keys[a] = [e.code, ...keys[a].slice(1).filter((k) => k !== e.code)]; s.keys = keys; save.commit(); window.removeEventListener('keydown', h, true); openKeys(o); };
-      window.addEventListener('keydown', h, true);
+      stopKeyCapture();
+      keyCapture = (e) => { e.preventDefault(); keys[a] = [e.code, ...keys[a].slice(1).filter((k) => k !== e.code)]; s.keys = keys; save.commit(); openKeys(o); };
+      window.addEventListener('keydown', keyCapture, true);
     });
     return el('label', {}, t('act.' + a), b);
   });
-  panel([el('h2', {}, t('set.keys')), el('div', { class: 'settings' }, rows), el('div', { class: 'row' }, button(t('set.keysDefault'), () => { delete s.keys; save.commit(); openKeys(o); }), button(t('btn.back'), () => openSettings(o), { main: true }))]);
+  panel([el('h2', {}, t('set.keys')), el('div', { class: 'settings' }, rows), el('div', { class: 'row' }, button(t('set.keysDefault'), () => { delete s.keys; save.commit(); openKeys(o); }), button(t('btn.back'), () => { stopKeyCapture(); openSettings(o); }, { main: true }))]);
 }
 
 function confirmReset(o) {
@@ -135,19 +155,25 @@ function confirmReset(o) {
 }
 
 // ---------------------------------------------------------------- pause
+let pauseEsc = null;
+function dropPauseEsc() { if (pauseEsc) { window.removeEventListener('keydown', pauseEsc); pauseEsc = null; } }
 export function openPause({ onResume, onRestart, chapter }) {
-  const resume = () => { closePanel(); onResume(); };
+  dropPauseEsc();
+  // a choice the pause menu covered comes back on resume; leaving the chapter drops it
+  const resume = () => { dropPauseEsc(); closePanel(); onResume(); reopenChoice(); };
+  const leave = (then) => () => { dropPauseEsc(); cancelChoice(); closePanel(); then(); };
   panel([
     el('h2', {}, t('chapter.' + chapter.id + '.title')),
     el('div', { class: 'col' },
       button(t('btn.resume'), resume, { main: true }),
-      button(t('btn.restartCp'), () => { closePanel(); onRestart(); }),
-      button(t('btn.settings'), () => openSettings({ back: () => openPause({ onResume, onRestart, chapter }) })),
-      button(t('btn.journeyOpen'), () => { closePanel(); onResume(); go.hub(); }),
-      button(t('btn.title'), () => { closePanel(); onResume(); openTitle(); })),
+      button(t('btn.restartCp'), leave(onRestart)),
+      button(t('btn.settings'), () => { dropPauseEsc(); openSettings({ back: () => openPause({ onResume, onRestart, chapter }) }); }),
+      button(t('btn.journeyOpen'), leave(() => { onResume(); go.hub(); })),
+      button(t('btn.title'), leave(() => { onResume(); openTitle(); }))),
   ]);
-  const esc = (e) => { if (e.code === 'Escape') { window.removeEventListener('keydown', esc); resume(); } };
-  setTimeout(() => window.addEventListener('keydown', esc), 50);
+  const esc = (e) => { if (e.code === 'Escape') resume(); };
+  pauseEsc = esc;
+  setTimeout(() => { if (pauseEsc === esc) window.addEventListener('keydown', esc); }, 50);
 }
 
 // ---------------------------------------------------------------- win plate
@@ -169,7 +195,7 @@ export function showWin({ ch, seals, earned, stats, next }) {
     kids.push(nb);
   }
   const row = el('div', { class: 'row' });
-  if (next) row.append(button(t('btn.next'), () => { closePanel(); go.hub(); }, { main: true, small: t('chapter.' + next.id + '.title') }));
+  if (next) row.append(button(t('btn.next'), () => { closePanel(); go.chapter(next.id); }, { main: true, small: t('chapter.' + next.id + '.title') }));
   row.append(button(t('btn.again'), () => { closePanel(); go.chapter(ch.id); }));
   row.append(button(t('btn.journeyOpen'), () => { closePanel(); go.hub(); }, { main: !next }));
   kids.push(row);

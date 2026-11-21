@@ -33,6 +33,7 @@ export function setMode(name, mode, arg) {
 export function resize() {
   const c = app.canvas;
   const cssW = window.innerWidth, cssH = window.innerHeight;
+  if (!cssW || !cssH) return; // a hidden or collapsed window (0 high) would divide by zero below
   app.portrait = cssH > cssW * 1.05 && app.isTouch;
   const aspect = Math.max(4 / 3, Math.min(2.4, cssW / Math.max(1, cssH)));
   const dpr = Math.min(window.devicePixelRatio || 1, app.dprCap);
