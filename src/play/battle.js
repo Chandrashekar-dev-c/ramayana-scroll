@@ -12,6 +12,7 @@ import { GROUND } from '../art/layout.js';
 import { character, fig, WALK } from '../art/figures.js';
 import { drawBackdrop, drawNear, isNight, regrowList, drawGrowingTree } from '../art/backdrops.js';
 import { drawLife } from '../art/life.js';
+import { drawAtmosphere } from '../art/atmosphere.js';
 import { drawProp } from '../art/props.js';
 import { shape, line, hatch, ellipsePts, dots } from '../art/ink.js';
 import * as M from '../art/motifs.js';
@@ -655,6 +656,7 @@ export function renderBattle(ctx, b) {
   drawBackdrop(ctx, b.level.backdrop, style, b.camX * z, W, { colour: done || b.level.painted, heal, regrow: !!b.regrow, density: b.level.density });
   if (b.regrow) { ctx.save(); ctx.translate(-b.camX * z, 0); const v0 = b.camX * z - 300, v1 = v0 + W + 600; for (const tr of b.regrow) if (tr.x > v0 && tr.x < v1) drawGrowingTree(ctx, tr, tr.grow); ctx.restore(); }
   ctx.restore();
+  drawAtmosphere(ctx, b.level.backdrop, b.camX * z, W, b.time, { colour: done || b.level.painted || (heal && b.healT > 0.5), quiet: true, startle: b.startle && { x: b.startle.x * z, t: b.startle.t }, reducedMotion: save.data.settings.reducedMotion });
   // dusk: hatching that thickens toward red-orange in phase 2
   if (b.mood === 'dusk') { ctx.save(); ctx.globalAlpha = 0.5; hatch(ctx, [[0, 0], [W, 0], [W, GROUND - 200], [0, GROUND - 200]], { color: PAL.terracotta, spacing: 16, angle: 0.4, w: 1.2 }); ctx.restore(); }
   if (b.mood && b.mood.startsWith('deer')) { const k = +b.mood.slice(4); ctx.save(); ctx.globalAlpha = Math.min(0.7, k * 0.12); hatch(ctx, [[0, 0], [W, 0], [W, 720], [0, 720]], { color: PAL.black, spacing: 14 - k, angle: 0.8, w: 1 }); ctx.restore(); }
@@ -662,7 +664,7 @@ export function renderBattle(ctx, b) {
   // world space
   ctx.save();
   ctx.translate(0, GROUND); ctx.scale(z, z); ctx.translate(-b.camX, -GROUND);
-  drawLife(ctx, b.level.backdrop, b.camX, W / z, b.time, { colour: done || b.level.painted, quiet: true });
+  drawLife(ctx, b.level.backdrop, b.camX, W / z, b.time, { colour: done || b.level.painted, quiet: true, startle: b.startle });
   drawZones(ctx, b);
   for (const c of b.checkpoints) { const k = Math.min(1, c.t / 0.8); M.lotusBud(ctx, c.x, GROUND - 2, 18 * k + 2, { wilt: 0, seed: 3 }); line(ctx, [[c.x, GROUND], [c.x, GROUND - 4]], { w: 2 }); }
   if (b.protect) drawProtect(ctx, b);

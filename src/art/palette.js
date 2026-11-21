@@ -5,8 +5,8 @@ export const PAL = {
   paper: '#f8efd9',      // plates behind text
   wash: '#e9d5a8',       // cow-dung wash blotches
   washDark: '#dcc48f',
-  black: '#1d1613',      // lampblack
-  indigo: '#28367c',     // Rama and the player's own arrows
+  black: '#1c140d',      // lampblack, warm as soot ink is (never pure black)
+  indigo: '#2c3a76',     // Rama and the player's own arrows (a dusty plant indigo)
   indigoLight: '#4c62b4',
   turmeric: '#e6ac17',   // allies and anything usable
   gold: '#c8921f',

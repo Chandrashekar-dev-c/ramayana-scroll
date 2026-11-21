@@ -40,9 +40,38 @@ export function frameCanvas(colour = false, night = false) {
   return c;
 }
 
+// Handmade paper: one 256-unit tile of warm seeded grain, laid over the whole view in multiply,
+// and a soft sepia vignette, so flat fills read as pigment on a wall or cloth.
+let grain = null, vignette = null;
+function paperGrain(ctx) {
+  if (!grain) {
+    const c = makeCanvas(256, 256), x = c.getContext('2d'), img = x.createImageData(256, 256);
+    let n = 1234567;
+    for (let i = 0; i < img.data.length; i += 4) {
+      n = (n * 1103515245 + 12345) & 0x7fffffff; const v = 200 + (n % 56);
+      img.data[i] = v; img.data[i + 1] = v - 10; img.data[i + 2] = v - 30; img.data[i + 3] = 10 + (n >> 8) % 13;
+    }
+    x.putImageData(img, 0, 0);
+    grain = ctx.createPattern(c, 'repeat');
+  }
+  return grain;
+}
+export function drawPaper(ctx) {
+  const W = app.W, H = 720;
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.6; ctx.fillStyle = paperGrain(ctx); ctx.fillRect(0, 0, W, H);
+  if (!vignette || vignette.W !== W) {
+    const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, Math.max(W, H) * 0.75);
+    g.addColorStop(0, 'rgba(120,80,40,0)'); g.addColorStop(1, 'rgba(120,80,40,0.16)');
+    vignette = { W, g };
+  }
+  ctx.globalAlpha = 1; ctx.fillStyle = vignette.g; ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
 /** Draw the frame. progress 0..1 reveals the coloured frame clockwise from the top-left. */
 export function drawFrame(ctx, o = {}) {
   const W = app.W, H = 720;
+  if (o.paper !== false) drawPaper(ctx);
   const p = o.colour ? 1 : o.progress || 0;
   // a fully coloured frame covers the line one completely, so skip blitting the line frame then
   if (p < 1) ctx.drawImage(frameCanvas(false, o.night), 0, 0, W, H);

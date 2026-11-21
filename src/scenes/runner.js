@@ -9,8 +9,9 @@ import tuning from '../data/tuning.json';
 import { PAL } from '../art/palette.js';
 import { GROUND } from '../art/layout.js';
 import { character, fig, WALK, BASE_U } from '../art/figures.js';
-import { drawBackdrop, drawNear, isNight, backdropChunk, CHUNK } from '../art/backdrops.js';
+import { drawBackdrop, drawNear, isNight, backdropChunk, CHUNK, FAR_SPEED } from '../art/backdrops.js';
 import { drawLife } from '../art/life.js';
+import { drawAtmosphere } from '../art/atmosphere.js';
 import { drawFrame } from '../art/borders.js';
 import { drawProp } from '../art/props.js';
 import { plate } from '../art/ink.js';
@@ -57,7 +58,10 @@ function prewarm(script, ch) {
   const lanka = ch.type === 'lanka';
   const colour = bg.colour !== undefined ? bg.colour : true;
   const i0 = Math.floor((640 - app.W / 2) / CHUNK);
-  for (let i = i0; i <= i0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, bg.style || (lanka ? 'bharni-earth' : 'bharni-bright'), colour, i);
+  const st = bg.style || (lanka ? 'bharni-earth' : 'bharni-bright');
+  for (let i = i0; i <= i0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, st, colour, i, false, '', 'mid');
+  const f0 = Math.floor(((640 - app.W / 2) * FAR_SPEED) / CHUNK);
+  for (let i = f0; i <= f0 + Math.ceil(app.W / CHUNK); i++) backdropChunk(bg.bg, st, colour, i, false, '', 'far');
 }
 
 export async function startChapter(id, from) {
@@ -155,7 +159,8 @@ class Runner {
       const who = b.say ? (b.nk ? t(b.nk) : nameOf(b.as || b.say)) : '';
       const hint = this.linesShown++ < 3 && !save.seen('hint.tap.done') ? t(app.isTouch ? 'hint.tapToContinue' : 'hint.clickToContinue') : null;
       if (this.linesShown >= 3) save.markSeen('hint.tap.done');
-      showLine(who, t(b.k), { top: this.dialogTop || !!b.top, hint });
+      const speaker = b.say && this.actors.get(b.say);
+      showLine(who, t(b.k), { top: this.dialogTop || !!b.top, hint, portrait: b.say ? (speaker && speaker.char) || b.as || b.say : null });
       bus.emit('scene:line', b.k);
       return;
     }
@@ -385,6 +390,7 @@ class Runner {
     const unheal = w && (w.target === 'all' || w.target === 'bg') && w.to === 'line';
     drawBackdrop(ctx, this.bg.id, this.bg.style, this.camX, W, { colour: this.bg.colour && !unheal, heal });
     if (unheal) { ctx.save(); ctx.globalAlpha = 1 - w.t / w.dur; drawBackdrop(ctx, this.bg.id, this.bg.style, this.camX, W, { colour: true }); ctx.restore(); }
+    drawAtmosphere(ctx, this.bg.id, this.camX, W, this.time, { colour: this.bg.colour && !unheal, reducedMotion: save.data.settings.reducedMotion });
     ctx.save(); ctx.translate(-this.camX, 0);
     if (!unheal) drawLife(ctx, this.bg.id, this.camX, W, this.time, { colour: this.bg.colour });
     for (const [id, p] of this.props) if (!p.front) drawProp(ctx, p.name, p.x, p.y, { t: this.time, state: p.state, dir: p.dir, colour: p.colour ?? true, night: isNight(this.bg.id) && p.colour === false, scale: p.scale, moving: p.moving, spin: this.time * 6, broken: p.broken, width: p.width, rot: p.rot, lift: p.lift });

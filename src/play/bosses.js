@@ -17,7 +17,8 @@ export function createBoss(b, id, x) {
   const def = BOSS[id];
   if (!def) throw new Error('Unknown boss ' + id);
   const spec = character(def.character);
-  const U = BASE_U * spec.build.height;
+  // a mythic boss can be drawn larger than in the story scenes (def.scale), so the fight feels monumental
+  const U = BASE_U * spec.build.height * (def.scale || 1);
   const boss = {
     id, def, spec, U, x, y: def.flies ? FLY_Y : GROUND, facing: -1, hp: def.hp, maxHp: def.hp, phase: 0, state: 'intro', t: 0,
     move: null, mv: null, moveIdx: 0, addT: 0, hidden: false, weakT: 0, walkT: 0, data: {}, dying: false, dead: false, hitFlash: 0, parts: def.parts ? { ...def.parts } : null,
@@ -238,7 +239,7 @@ export function drawBoss(ctx, b, boss) {
     rot = -boss.facing * Math.min(1.35, boss.t * 0.9); drain = Math.min(1, boss.t / 1.2); alpha = Math.max(0, 1 - Math.max(0, boss.t - 1.5) / 0.8); sink = Math.max(0, boss.t - 1.4) * 20;
   }
   const breath = boss.state === 'windup' && boss.move === 'breath' ? 1 + Math.min(0.06, boss.t * 0.04) : 1;
-  fig(ctx, boss.spec, bossPose(boss), boss.x + (boss.hitFlash > 0 ? -boss.facing * 5 : 0), boss.y + sink, { facing: boss.facing, rot, alpha, drain, pivot: 0.05, scale: breath, heads: boss.data.heads });
+  fig(ctx, boss.spec, bossPose(boss), boss.x + (boss.hitFlash > 0 ? -boss.facing * 5 : 0), boss.y + sink, { facing: boss.facing, rot, alpha, drain, pivot: 0.05, scale: breath * (boss.def.scale || 1), heads: boss.data.heads });
   if (boss.dying) return;
   const U = boss.U;
   if (boss.state === 'windup' && boss.mv && boss.mv.telegraph === 'star') M.star(ctx, boss.x, boss.y - U * 1.3 - 20, 20 + Math.min(1, boss.t / boss.windup) * 12, { rot: b.time * 2 });

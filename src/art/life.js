@@ -18,7 +18,6 @@ const ease = (a, b, k) => a + (b - a) * (k < 0 ? 0 : k > 1 ? 1 : k);
 // band: 'ground' feet on the line, 'perch' up at branch height, 'air' in the sky, 'water' at the band.
 const FAUNA = {
   city: [['peacock', 620, 40, 'ground'], ['bird', 560, 9, 'air'], ['butterfly', 640, 10, 'air']],
-  cityNight: [['bird', 900, 9, 'air']],
   mithila: [['peacock', 600, 40, 'ground'], ['bird', 640, 9, 'air'], ['butterfly', 620, 10, 'air']],
   riverbank: [['heron', 760, 28, 'water'], ['deer', 540, 28, 'ground'], ['bird', 600, 9, 'air']],
   road: [['deer', 640, 28, 'ground'], ['hare', 560, 20, 'ground'], ['bird', 600, 9, 'air'], ['butterfly', 620, 10, 'air']],
@@ -31,17 +30,27 @@ const FAUNA = {
   ridge: [['vanara', 540, 42, 'ground'], ['bird', 680, 9, 'air']],
   kishkindha: [['vanara', 380, 44, 'ground'], ['squirrel', 420, 26, 'ground'], ['bird', 640, 9, 'air']],
   pampa: [['heron', 720, 28, 'water'], ['deer', 560, 28, 'ground'], ['bird', 620, 9, 'air'], ['butterfly', 640, 10, 'air']],
-  shore: [['heron', 900, 26, 'water'], ['bird', 520, 9, 'air']],
+  shore: [['heron', 900, 26, 'water'], ['fish', 520, 16, 'water'], ['bird', 520, 9, 'air']],
+  // places that used to be empty: leaping fish at sea, drips in the cave, kites over the wasteland,
+  // peacocks in Lanka's gardens and fireflies by night
+  ocean: [['fish', 420, 18, 'water'], ['bird', 700, 9, 'air']],
+  cave: [['drip', 360, 10, 'drip']],
+  waste: [['kite', 760, 14, 'high']],
+  battlefield: [['kite', 820, 14, 'high']],
+  lanka: [['peacock', 640, 40, 'ground'], ['bird', 700, 9, 'air']],
+  lankaNight: [['firefly', 180, 4, 'glow']],
+  cityNight: [['bird', 900, 9, 'air'], ['firefly', 220, 4, 'glow']],
+  tamasa: [['heron', 840, 26, 'water'], ['firefly', 200, 4, 'glow']],
+  nightSky: [['firefly', 260, 4, 'glow']],
   mountain: [['bird', 760, 9, 'air']],
   grove: [['peacock', 440, 40, 'ground'], ['parrot', 540, 30, 'perch'], ['bird', 660, 9, 'air']],
   camp: [['bird', 560, 9, 'air']],
   nandigram: [['deer', 620, 28, 'ground'], ['peacock', 780, 38, 'ground'], ['bird', 620, 9, 'air']],
-  tamasa: [['heron', 840, 26, 'water'], ['bird', 760, 9, 'air']],
   sky: [['bird', 520, 10, 'air']],
   kailash: [['bird', 900, 9, 'air']],
 };
 // Interiors, desolation, night voids and open water get no ambient land life.
-const BARE = new Set(['court', 'chamber', 'kingRoom', 'cave', 'lankaCourt', 'lankaRoofs', 'ocean', 'nightSky', 'waste', 'battlefield', 'lanka', 'lankaNight']);
+const BARE = new Set(['court', 'chamber', 'kingRoom', 'lankaCourt', 'lankaRoofs']);
 
 function faunaFor(id) {
   if (FAUNA[id]) return FAUNA[id];
@@ -211,8 +220,37 @@ function butterfly(ctx, x, y, s, seed, t) {
   ctx.fillStyle = PAL.black; ctx.fillRect(bx - 1, by - s * 0.6, 2, s * 1.2);
 }
 
+// ---- FISH: leaps out of the water now and then, an arc of a few heartbeats ----
+function fish(ctx, x, y, s, seed, t) {
+  const P = 4 + (seed % 3), ph = ((t / P + seed * 0.29) % 1);
+  if (ph > 0.3) { if (ph < 0.4) { ctx.strokeStyle = PAL.white; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(x + s * 3, y + 4, (ph - 0.3) * 120, (ph - 0.3) * 30, 0, 0, TAU); ctx.stroke(); } return; }
+  const k = ph / 0.3, dir = seed % 2 ? 1 : -1, fx = x + dir * (k - 0.5) * s * 6, fy = y - Math.sin(k * Math.PI) * s * 3.4;
+  ctx.save(); ctx.translate(fx, fy); ctx.rotate(dir * (k - 0.5) * 2.2); M.fish(ctx, 0, 0, s * 0.7, { colour: true, fill: seed % 3 ? PAL.turmeric : PAL.orange, dir }); ctx.restore();
+}
+// ---- DRIP: water gathers on the cave roof, falls, and rings the floor ----
+function drip(ctx, x, y, s, seed, t) {
+  const P = 2.2 + (seed % 4) * 0.4, ph = ((t / P + seed * 0.41) % 1), top = 120;
+  if (ph < 0.55) { const r = 2 + ph * 4; dot(ctx, x, top, r, PAL.river); }
+  else if (ph < 0.75) { const k = (ph - 0.55) / 0.2; dot(ctx, x, top + (y - top) * k * k, 3, PAL.river); }
+  else { const k = (ph - 0.75) / 0.25; ctx.save(); ctx.globalAlpha = 1 - k; ctx.strokeStyle = PAL.river; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(x, y, 4 + k * s * 3, 1 + k * s * 0.8, 0, 0, TAU); ctx.stroke(); ctx.restore(); }
+}
+// ---- KITE: a bird of prey circling high and slow over dead land ----
+function kite(ctx, x, y, s, seed, t) {
+  const a = t * 0.45 + seed, bx = x + Math.cos(a) * 70, by = y + Math.sin(a) * 18;
+  M.bird(ctx, bx, by, s, { colour: true, fill: PAL.brown, dir: -Math.sin(a) >= 0 ? 1 : -1 });
+}
+// ---- FIREFLY: a point of light drifting and pulsing ----
+function firefly(ctx, x, y, s, seed, t) {
+  const bx = x + Math.sin(t * 0.6 + seed) * 50, by = y + Math.cos(t * 0.9 + seed * 1.7) * 30, k = 0.3 + 0.7 * Math.max(0, Math.sin(t * 2.4 + seed * 3));
+  ctx.save(); ctx.globalAlpha = k; dot(ctx, bx, by, s * 2.2, 'rgba(230,172,23,0.35)'); dot(ctx, bx, by, s * 0.8, PAL.turmeric); ctx.restore();
+}
+
 function draw(ctx, type, x, y, size, seed, t) {
   switch (type) {
+    case 'fish': fish(ctx, x, y, size, seed, t); break;
+    case 'drip': drip(ctx, x, y, size, seed, t); break;
+    case 'kite': kite(ctx, x, y, size, seed, t); break;
+    case 'firefly': firefly(ctx, x, y, size, seed, t); break;
     case 'deer': deer(ctx, x, y, size, seed % 2 ? 1 : -1, seed, t); break;
     case 'peacock': peacock(ctx, x, y, size, seed, t); break;
     case 'squirrel': squirrel(ctx, x, y, size, seed, t); break;
@@ -257,7 +295,16 @@ export function drawLife(ctx, id, camX, visW, t, o = {}) {
       if (band === 'air') y = 110 + ((noise(base + 5, k) + 1) / 2) * 90;
       else if (band === 'perch') y = GROUND - 140 - ((noise(base + 6, k) + 1) / 2) * 30;
       else if (band === 'water') y = GROUND - 24;
+      else if (band === 'high') y = 90 + ((noise(base + 5, k) + 1) / 2) * 50;
+      else if (band === 'glow') y = GROUND - 60 - ((noise(base + 7, k) + 1) / 2) * 260;
       else y = GROUND - 2;
+      // a big impact nearby (a boss's stomp, an astra, Rama's rage) startles birds up into the sky
+      const st = o.startle;
+      if (st && (band === 'air' || band === 'perch' || type === 'peacock') && Math.abs(x - st.x) < 520 && t - st.t >= 0 && t - st.t < 3) {
+        const k2 = Math.min(1, (t - st.t) / 1.4), dir = x >= st.x ? 1 : -1;
+        if (type === 'peacock') { y -= Math.sin(Math.min(1, k2 * 2) * Math.PI) * 60; }
+        else { ctx.save(); ctx.globalAlpha *= 1 - Math.max(0, (t - st.t) - 2); draw(ctx, type === 'butterfly' ? type : 'bird', x + dir * k2 * 240, y - k2 * 320, size, seed, t * 2.5); ctx.restore(); continue; }
+      }
       draw(ctx, type, x, y, size, seed, t);
     }
   }

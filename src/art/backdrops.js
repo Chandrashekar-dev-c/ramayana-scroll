@@ -195,8 +195,11 @@ function lru(map, key, make, max) {
   if (map.size > max) map.delete(map.keys().next().value);
   return c;
 }
-export function drawNear(ctx, id, camX, W, o = {}) {
+export function drawNear(ctx, id, camX0, W, o = {}) {
   if (!lookOf(id).near) return;
+  // the near band passes a little faster than the world, as foreground does
+  const camX = camX0 * 1.15;
+  if (o.heal) o = { ...o, heal: { x: o.heal.x - camX0 + camX, r: o.heal.r } };
   const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK), top = GROUND - 30, H = 720 - top;
   for (let i = i0; i <= i1; i++) {
     const colour = !!o.colour;
@@ -206,6 +209,24 @@ export function drawNear(ctx, id, camX, W, o = {}) {
     if (o.heal && !colour) { const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK); if (b > a) { ctx.save(); ctx.beginPath(); ctx.rect(a - camX, top, b - a, H); ctx.clip(); ctx.drawImage(get(true), dx, top, CHUNK + 0.5, H); ctx.restore(); } }
   }
 }
+
+/** Where the chunk painter put every item of one kind (lampStand, bannerPole...), for the live layer. */
+export function layerItems(id, kind, left, right) {
+  const def = BACKDROPS[id]; if (!def) return [];
+  const out = [];
+  def.layers.forEach(([k, sp, yOff, size, lo], li) => {
+    if (k !== kind) return;
+    const off = lo.off || 0;
+    for (let n = Math.floor((left - off) / sp) - 1; n <= Math.ceil((right - off) / sp) + 1; n++) {
+      const jitter = kind === 'pillar' || kind === 'arch' || kind === 'curtain' || kind === 'wall' ? 0 : noise(hashStr(id) + li * 17, n) * sp * 0.22;
+      const sd = hashStr(kind) % 1000 + n * 13;
+      out.push({ x: n * sp + off + jitter, y: GROUND + yOff, size, vary: 1 + noise(sd, 3) * 0.14, k: n });
+    }
+  });
+  return out;
+}
+/** What a backdrop is made of, for the live layer. */
+export function backdropInfo(id) { const d = BACKDROPS[id]; return d ? { night: !!d.night, ground: d.ground, band: d.band, lanka: !!d.lanka, sky: d.sky } : null; }
 
 /** Trees that a battle can bring back to life, at the same places the chunk painter uses. */
 export function regrowList(id, left, right) {
@@ -383,7 +404,34 @@ function paintMithilaTree(ctx, x, y, h, colour, night, seed) {
   ctx.restore();
 }
 
-function paintChunk(id, style, colour, index, regrow, density = '') {
+// A backdrop is two planes now. The far plane (wash, sky pattern, scalloped sky bands, little
+// sky motifs, sun or moon, the faint far band) slides at a quarter of the camera's speed; the mid
+// plane (water band, trees and buildings, ground) moves with the world. That difference is the depth.
+export const FAR_SPEED = 0.25;
+
+/** Scalloped kachni bands across the sky: rows of half-moons with fine parallel hatching. */
+function skyBands(ctx, x0, colour, seed) {
+  const col = colour ? PAL.terracotta : PAL.brown;
+  ctx.save(); ctx.globalAlpha = colour ? 0.32 : 0.26;
+  for (let row = 0; row < 2; row++) {
+    const y = 64 + row * 62, r = 26 + row * 4, step = r * 2;
+    const start = Math.floor(x0 / step) * step - step;
+    for (let x = start; x < x0 + CHUNK + step; x += step) {
+      const cx = x - x0 + (row % 2 ? r : 0);
+      ctx.strokeStyle = col; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(cx, y, r, Math.PI, 0); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, y, r * 0.62, Math.PI, 0); ctx.stroke();
+      // fine parallel hatching inside each scallop (kachni)
+      ctx.save(); ctx.beginPath(); ctx.arc(cx, y, r * 0.62, Math.PI, 0); ctx.clip();
+      ctx.lineWidth = 0.8; for (let h = -r; h < r; h += 4) { ctx.beginPath(); ctx.moveTo(cx + h, y); ctx.lineTo(cx + h + r * 0.5, y - r); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+  ctx.restore();
+  void seed;
+}
+
+function paintChunk(id, style, colour, index, regrow, density = '', part = 'all') {
   const def = BACKDROPS[id] || BACKDROPS.road;
   const dp = DENSITY[density] || null;
   const s = Math.min(1, Math.max(0.5, app.scale));
@@ -393,10 +441,11 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   const x0 = index * CHUNK;
   const seed = hashStr(id) + index * 31;
   const o = { colour, night: !!def.night, style, far: dp ? dp.far : null, tree: dp ? dp.tree : 1 };
+  const look = lookOf(id);
+  if (part !== 'mid') {
   // the wall itself: a mottled wash that differs slightly every time
   ctx.fillStyle = def.night ? PAL.night : PAL.cream;
   ctx.fillRect(0, 0, CHUNK, 720);
-  const look = lookOf(id);
   // the sky pattern: faint by default, but a bold kachni tapestry when a density is set
   ctx.save(); ctx.globalAlpha = dp ? (def.night ? dp.sky + 0.06 : dp.sky) : (def.night ? 0.16 : colour ? 0.13 : 0.1);
   ctx.fillStyle = pattern(ctx, look.skyPat || 'dots', null, def.night ? PAL.nightLine : colour ? PAL.terracotta : PAL.brown, dp ? dp.skyScale : 1.5);
@@ -407,7 +456,10 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   if (!def.night && look.sun !== false && def.ground !== 'floor' && index % 2 !== 0) M.sun(ctx, x0 + 330, 118, 24, { colour, lineFill: PAL.cream });
   if (def.moon && index % 2 === 0) M.moon(ctx, x0 + 760, 130, 34, { night: true });
   ctx.restore();
+  if (!def.night && look.sun !== false && def.ground !== 'floor' && def.ground !== 'none' && !dp) skyBands(ctx, x0, colour, seed);
   paintFar(ctx, def, look, x0, o, seed);
+  if (part === 'far') return cv;
+  }
   paintBand(ctx, def, x0, o);
   const skip = new Set(regrow && look.regrow ? look.regrow.map((r) => r[0]) : []);
   for (let li = 0; li < def.layers.length; li++) {
@@ -428,9 +480,9 @@ function paintChunk(id, style, colour, index, regrow, density = '') {
   return cv;
 }
 
-export function backdropChunk(id, style, colour, index, regrow = false, density = '') {
-  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}`;
-  return lru(cache, key, () => paintChunk(id, style, colour, index, regrow, density), 16);
+export function backdropChunk(id, style, colour, index, regrow = false, density = '', part = 'all') {
+  const key = `${id}|${style}|${colour ? 1 : 0}|${index}|${regrow ? 1 : 0}|${density}|${part}`;
+  return lru(cache, key, () => paintChunk(id, style, colour, index, regrow, density, part), 32);
 }
 
 /**
@@ -439,19 +491,25 @@ export function backdropChunk(id, style, colour, index, regrow = false, density 
  * colour: true paints the whole plane in colour.
  */
 export function drawBackdrop(ctx, id, style, camX, W, o = {}) {
-  const i0 = Math.floor(camX / CHUNK), i1 = Math.floor((camX + W) / CHUNK);
-  for (let i = i0; i <= i1; i++) {
-    const dx = i * CHUNK - camX;
-    ctx.drawImage(backdropChunk(id, style, !!o.colour, i, !!o.regrow, o.density), dx, 0, CHUNK + 0.5, 720);
-    if (o.heal && !o.colour) {
-      const a = Math.max(o.heal.x - o.heal.r, i * CHUNK), b = Math.min(o.heal.x + o.heal.r, (i + 1) * CHUNK);
-      if (b > a) {
-        ctx.save(); ctx.beginPath(); ctx.rect(a - camX, 0, b - a, 720); ctx.clip();
-        ctx.drawImage(backdropChunk(id, style, true, i, !!o.regrow, o.density), dx, 0, CHUNK + 0.5, 720);
-        ctx.restore();
+  // the heal circle is a span of screen, so both planes colour in under it together
+  const healA = o.heal && !o.colour ? o.heal.x - o.heal.r - camX : null, healB = o.heal && !o.colour ? o.heal.x + o.heal.r - camX : null;
+  const plane = (cam, part) => {
+    const i0 = Math.floor(cam / CHUNK), i1 = Math.floor((cam + W) / CHUNK);
+    for (let i = i0; i <= i1; i++) {
+      const dx = i * CHUNK - cam;
+      ctx.drawImage(backdropChunk(id, style, !!o.colour, i, !!o.regrow, o.density, part), dx, 0, CHUNK + 0.5, 720);
+      if (healA !== null) {
+        const a = Math.max(healA, dx), b = Math.min(healB, dx + CHUNK);
+        if (b > a) {
+          ctx.save(); ctx.beginPath(); ctx.rect(a, 0, b - a, 720); ctx.clip();
+          ctx.drawImage(backdropChunk(id, style, true, i, !!o.regrow, o.density, part), dx, 0, CHUNK + 0.5, 720);
+          ctx.restore();
+        }
       }
     }
-  }
+  };
+  plane(camX * FAR_SPEED, 'far');
+  plane(camX, 'mid');
 }
 
 export function isNight(id) { return !!(BACKDROPS[id] && BACKDROPS[id].night); }

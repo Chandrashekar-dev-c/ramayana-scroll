@@ -26,8 +26,13 @@ export function button(label, onClick, o = {}) {
 
 // ---------------------------------------------------------------- dialogue
 const dlg = { full: '', shown: 0, typing: false, onDone: null };
+// Optional painted portraits: only ids listed in art/portraits/index.json are ever requested.
+let portraits = null;
+fetch('./art/portraits/index.json').then((r) => (r.ok ? r.json() : [])).then((l) => { portraits = new Set(Array.isArray(l) ? l : []); }).catch(() => { portraits = new Set(); });
 export function showLine(who, text, o = {}) {
   const box = $('dialogue');
+  const img = box.querySelector('.portrait');
+  if (img) { const id = o.portrait; if (id && portraits && portraits.has(id)) { img.src = `./art/portraits/${id}.webp`; img.alt = who || ''; img.classList.remove('hidden'); } else img.classList.add('hidden'); }
   box.classList.remove('hidden');
   box.classList.toggle('top', !!o.top);
   box.querySelector('.who').textContent = who || '';
