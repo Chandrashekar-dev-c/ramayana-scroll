@@ -304,11 +304,6 @@
   "k": "viradha.13"
  },
  {
-  "wash": "all",
-  "to": "colour",
-  "dur": 2.6
- },
- {
   "goto": "__seg3"
  },
  {

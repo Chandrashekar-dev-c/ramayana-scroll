@@ -335,7 +335,7 @@ function tenHeads(b, r) {
     if (mode === 'silence') {
       if (o.phase === 'speak') {
         if (o.t > 1.1 && silenceOrder.length) { o.t = 0; const v = silenceOrder.shift(); rav.heads = { ...rav.heads, silent: { ...rav.heads.silent, [HEAD_INDEX[v]]: true }, active: HEAD_INDEX[most] }; cue('tink'); }
-        if (!silenceOrder.length && o.t > 1.2) { o.phase = 'last'; o.lq.push('head.' + most, b.lines && b.lines[most] ? b.lines[most] : 'heads.last.' + most); }
+        if (!silenceOrder.length && o.t > 1.2) { o.phase = 'last'; if (b.lines && b.lines[most]) o.lq.push('head.' + most, b.lines[most]); }
       } else if (!o.lq.busy) o.done = true;
       return;
     }
@@ -510,7 +510,7 @@ function berries(b, r) {
 // ---------------------------------------------------------------- Sita's resolve
 function resolve(b, r) {
   const o = { done: false, t: 0, meter: 0.7, threat: null, ti: 0, emptied: false, lq: lineQueue() };
-  const threats = b.threats || ['ch28.t1', 'ch28.t2', 'ch28.t3', 'ch28.t4', 'ch28.t5'];
+  const threats = b.threats || []; // the script names Ravana's threats; there are no built-in ones
   o.update = (dt) => {
     o.t += dt;
     const tp = input.pointer.justDown && !o.threat;

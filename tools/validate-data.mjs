@@ -12,13 +12,26 @@ const bosses = new Set(J('src/data/bosses.json').map((b) => b.id));
 const backdrops = new Set([...src('src/art/backdrops.js').matchAll(/^\s{2}(\w+): \{ ground:/gm)].map((m) => m[1]));
 const props = new Set([...src('src/art/props.js').matchAll(/case '(\w+)'/g)].map((m) => m[1]));
 const kinds = new Set([...src('src/scenes/interactions.js').matchAll(/const KINDS = \{([^}]+)\}/g)][0][1].split(',').map((s) => s.trim().split(':')[0]).filter(Boolean));
-const trials = new Set(['row', 'flight', 'stealth', 'rooftops', 'kohbar']);
+// read from the code that registers them, so the check can't drift from the game
+const trials = new Set([...src('src/trials/index.js').matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));
+const cues = new Set([...src('src/audio/audio.js').matchAll(/^\s{2}(\w+): \(\)/gm)].map((m) => m[1]));
+const poses = new Set([...src('src/art/figures.js').split('export const POSES = {')[1].split('\n};')[0].matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));
+const signatures = new Set([...src('src/art/objects.js').matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));
+const patterns = new Set([...src('src/art/patterns.js').matchAll(/^\s{2}(\w+): \[/gm)].map((m) => m[1]));
+const figSrc = src('src/art/figures.js');
+const teach = new Set([...src('src/play/battle.js').split('const TEACH = {')[1].split('};')[0].matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));
 const chapters = J('src/data/chapters.json');
 const places = J('src/data/places.json');
 const levels = Object.fromEntries(fs.readdirSync(path.join(ROOT, 'src/data/levels')).map((f) => [f.replace('.json', ''), J('src/data/levels/' + f)]));
 // a pattern belongs to one named character only
 const owner = {};
-for (const c of J('src/data/characters.json')) { if (c.crowd) continue; if (owner[c.pattern]) errs.push(`pattern ${c.pattern} used by ${owner[c.pattern]} and ${c.id}`); owner[c.pattern] = c.id; }
+for (const c of J('src/data/characters.json')) {
+  if (c.pattern && patterns.size && !patterns.has(c.pattern)) errs.push(`character ${c.id}: unknown pattern ${c.pattern}`);
+  if (c.signature && signatures.size && !signatures.has(c.signature)) errs.push(`character ${c.id}: unknown signature ${c.signature}`);
+  if (c.headdress && c.headdress !== 'none' && !figSrc.includes(`'${c.headdress}'`)) errs.push(`character ${c.id}: headdress ${c.headdress} is never drawn`);
+  if (c.crowd) continue;
+  if (owner[c.pattern]) errs.push(`pattern ${c.pattern} used by ${owner[c.pattern]} and ${c.id}`); owner[c.pattern] = c.id;
+}
 for (const ch of chapters) {
   if (ch.playable === false) continue;
   if (!places.some((p) => p.chapters.includes(ch.id))) errs.push(`chapter ${ch.id} has no place on the wall`);
@@ -35,10 +48,14 @@ for (const ch of chapters) {
     if (b.trial && !trials.has(b.trial)) errs.push(`${at}: unknown trial ${b.trial}`);
     if (b.battle && !levels[b.battle]) errs.push(`${at}: unknown level ${b.battle}`);
     if (b.goto && !labels.has(b.goto)) errs.push(`${at}: goto to missing label ${b.goto}`);
-    if (b.choice) for (const o of b.choice) if (o.goto && !labels.has(o.goto)) errs.push(`${at}: choice goes to missing label ${o.goto}`);
+    if (b.choice) for (const o of b.choice) { if (o.goto && !labels.has(o.goto)) errs.push(`${at}: choice goes to missing label ${o.goto}`); if (Array.isArray(o.then)) walk(o.then, where + i + '.choice.'); }
+    if (b.cue && !cues.has(b.cue)) errs.push(`${at}: unknown audio cue ${b.cue}`);
+    for (const k of ['pose', 'p', 'end']) { const v = k === 'pose' && b.actor ? b.pose : k === 'p' ? b.p : k === 'end' ? b.end : null; if (v && !poses.has(v)) errs.push(`${at}: unknown pose ${v}`); }
+    if (b.heads && b.then && !Array.isArray(b.then)) for (const lab of Object.values(b.then)) if (!labels.has(lab)) errs.push(`${at}: heads choice goes to missing label ${lab}`);
     if (b.then && Array.isArray(b.then)) walk(b.then, where + i + '.then.');
+    if (b.else && Array.isArray(b.else)) walk(b.else, where + i + '.else.');
     if (b.after) walk(b.after, where + i + '.after.');
-    if (b.targets) b.targets.forEach((q, k) => q.then && walk(q.then, `${where}${i}.t${k}.`));
+    if (b.targets) b.targets.forEach((q, k) => { if (q.cue && !cues.has(q.cue)) errs.push(`${at}.t${k}: unknown audio cue ${q.cue}`); if (q.then) walk(q.then, `${where}${i}.t${k}.`); });
   });
   walk(sc, '');
 }
@@ -46,9 +63,10 @@ for (const [id, lv] of Object.entries(levels)) {
   if (!backdrops.has(lv.backdrop)) errs.push(`level ${id}: unknown backdrop ${lv.backdrop}`);
   if (!chars.has(lv.hero.id)) errs.push(`level ${id}: unknown hero ${lv.hero.id}`);
   for (const a of lv.arenas) for (const s of a.steps) {
+    if (s.teach && !teach.has(s.teach)) errs.push(`level ${id}: step teaches "${s.teach}", which has no hint (TEACH in battle.js)`);
     if (s.wave) for (const g of s.groups) { const t = g.type.startsWith('elite:') ? g.type.slice(6) : g.type; if (!(g.type.startsWith('elite:') ? chars.has(t) : enemies.has(t))) errs.push(`level ${id}: unknown enemy ${g.type}`); }
     for (const b of [].concat(s.boss || [], s.bosses || [])) if (!bosses.has(b)) errs.push(`level ${id}: unknown boss ${b}`);
   }
 }
 if (errs.length) { console.error('Data check failed:\n  ' + errs.join('\n  ')); process.exit(1); }
-console.log(`data ok: ${chapters.length} chapters, ${Object.keys(levels).length} levels, ${chars.size} characters, ${backdrops.size} backdrops`);
+console.log(`data ok (${trials.size} trials, ${cues.size} cues, ${poses.size} poses, ${signatures.size} signatures, ${patterns.size} patterns):  ${chapters.length} chapters, ${Object.keys(levels).length} levels, ${chars.size} characters, ${backdrops.size} backdrops`);

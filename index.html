@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="author" content="Chandrashekar C">
 <meta name="theme-color" content="#f2e4c3">
 <meta name="description" content="Ramayana Scroll — the whole epic as a playable wall painting. Inspired by Madhubani art. Told after Valmiki, with reverence.">
 <title>Ramayana Scroll</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <style>
   :root { --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px); --sal: env(safe-area-inset-left, 0px); --sar: env(safe-area-inset-right, 0px);
     --cream: #f2e4c3; --paper: #f8efd9; --black: #1d1613; --indigo: #28367c; --turmeric: #e6ac17; --madder: #96283a; --leaf: #3f8038; --kusum: #cf2a1c; --text: 1; }
@@ -18,6 +19,7 @@
   #ui { position: fixed; inset: 0; pointer-events: none; }
   #ui > * { pointer-events: auto; }
   .hidden { display: none !important; }
+  #panel { touch-action: pan-x pan-y pinch-zoom; } /* menus and notes can be zoomed to read */
   .plate { background: var(--paper); border: 3px solid var(--black); box-shadow: inset 0 0 0 3px var(--turmeric), inset 0 0 0 5px var(--black); padding: 14px 18px; border-radius: 3px; }
   button.btn { font: 700 calc(18px * var(--text)) "Alegreya Sans", sans-serif; min-height: 48px; min-width: 48px; padding: 8px 18px; margin: 5px; color: var(--black); background: var(--paper);
     border: 2.5px solid var(--black); box-shadow: inset 0 0 0 3px var(--turmeric); border-radius: 3px; cursor: pointer; }

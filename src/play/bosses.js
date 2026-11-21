@@ -74,6 +74,7 @@ export function killBoss(b, boss) {
   if (boss.dying) return;
   boss.hp = 0; boss.dying = true; boss.state = 'dying'; boss.t = 0; boss.hidden = false;
   bus.emit('boss:die', { id: boss.id });
+  if (b.onBossKilled) b.onBossKilled(boss);
   b.zones = b.zones.filter((z) => z.src !== boss);
 }
 

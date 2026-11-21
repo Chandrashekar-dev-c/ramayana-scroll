@@ -1,12 +1,16 @@
 // Smoke test: plays through every chapter in a real browser and fails on any error,
 // failed request or a chapter that does not finish. Usage:
-//   node tools/smoke-test.mjs [baseUrl] [--shots dir] [--only id,id]
-// Scenes are tapped through; interactions and trials are exercised, then skipped;
+//   node tools/smoke-test.mjs [baseUrl] [--shots dir] [--only id,id] [--strict]
+// Scenes are tapped through; interactions and trials are played for up to 30 seconds and only
+// then skipped (each skip is reported, and --strict fails on them, so a softlock shows up);
 // battles are fought by a simple autoplayer on Story difficulty.
+// Playwright comes from this project or PLAYWRIGHT_DIR; Chrome from CHROME_PATH or Playwright's own.
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
-const require = createRequire('/opt/npm-tools/node_modules/');
-const { chromium } = require('playwright');
+import path from 'node:path';
+let chromium;
+try { ({ chromium } = await import('playwright')); }
+catch { const require = createRequire(path.join(process.env.PLAYWRIGHT_DIR || '/opt/npm-tools/node_modules', '/')); ({ chromium } = require('playwright')); }
 const args = process.argv.slice(2);
 const base = args.find((a) => a.startsWith('http')) || 'http://localhost:4173/';
 const shotDir = args.includes('--shots') ? args[args.indexOf('--shots') + 1] : null;
@@ -14,7 +18,8 @@ const only = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',
 const size = args.includes('--size') ? args[args.indexOf('--size') + 1].split('x').map(Number) : [1280, 720];
 if (shotDir) fs.mkdirSync(shotDir, { recursive: true });
 
-const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+const browser = await chromium.launch({ ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}), args: ['--no-sandbox'] });
+const strict = args.includes('--strict');
 const page = await browser.newPage({ viewport: { width: size[0], height: size[1] } });
 const errors = [];
 let current = 'boot';
@@ -82,7 +87,8 @@ for (const id of list) {
         input.pointer.down = subFrames % 90 < 70; input.held.action = input.pointer.down;
         input.pointer.x = app.W / 2; input.pointer.y = 400;
         if (subFrames % 25 === 0) { input.pointer.justDown = true; input.press('action'); }
-        if (subFrames > 240) { input.pointer.down = false; input.held.action = false; if (sub.skip && sub.kind !== 'trial') sub.skip(); else m.skip(); }
+        // a working interaction finishes on its own within this time; only a stuck one gets skipped
+        if (subFrames > 60 * 30) { log.push('SKIPPED ' + sub.kind + (sub.kind === 'interaction' && m.cur ? ':' + (m.cur.do || m.cur.heads) : '')); input.pointer.down = false; input.held.action = false; if (sub.skip && sub.kind !== 'trial') sub.skip(); else m.skip(); }
         step(1); continue;
       }
       input.pointer.down = false; input.held.action = false;
@@ -93,7 +99,7 @@ for (const id of list) {
     return { ok: false, frames, log, why: 'timeout', pc: app.mode && app.mode.pc, beat: app.mode && JSON.stringify(app.mode.cur) };
   }, id).catch((e) => ({ ok: false, why: 'evaluate: ' + e.message }));
   if (shotDir) await page.screenshot({ path: `${shotDir}/${String(list.indexOf(id) + 1).padStart(2, '0')}-${id}.png` });
-  await page.evaluate(() => { const b = document.querySelector('#panel button.btn'); }).catch(() => {});
+  if (r.ok && strict && (r.log || []).some((l) => l.startsWith('SKIPPED'))) { r.ok = false; r.why = 'had to skip: ' + r.log.filter((l) => l.startsWith('SKIPPED')).join(', '); }
   results.push({ id, ...r, secs: ((Date.now() - t0) / 1000).toFixed(1) });
   console.log(`${r.ok ? 'ok  ' : 'FAIL'} ${id.padEnd(12)} ${(r.frames / 60 | 0)}s game ${((Date.now() - t0) / 1000).toFixed(1)}s real ${r.ok ? '' : r.why + ' ' + JSON.stringify(r).slice(0, 300)}`);
 }

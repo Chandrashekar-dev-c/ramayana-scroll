@@ -137,6 +137,12 @@ export const CUES = {
   thunder: () => { noise({ freq: 120, a: 0.02, dec: 1.6, peak: 0.6, type: 'lowpass' }); drum(50, { vol: 1, dec: 0.8 }); },
   fail: () => phrase([7, 5, 4, 1], 0.22, 0.12),
   coin: () => bell(hz(11, 2), { dec: 0.4, vol: 0.5 }),
+  // tankaara: the thunder of Rama's bowstring as his rage rises
+  tankaara: () => { tone(hz(0, -2), { type: 'sawtooth', a: 0.005, dec: 0.9, peak: 0.3, glide: 0.6, filter: 700 }); noise({ freq: 160, a: 0.01, dec: 1.2, peak: 0.45, type: 'lowpass' }); drum(55, { vol: 0.9, dec: 0.7 }); },
+  perfect: () => { bell(hz(12, 2), { dec: 0.5, vol: 0.7 }); bell(hz(7, 3), { dec: 0.4, vol: 0.4, at: 0.05 }); },
+  parry: () => { bell(hz(4, 2), { dec: 0.3, vol: 0.9 }); tone(hz(0, 1), { type: 'sawtooth', dec: 0.12, peak: 0.1, filter: 1500 }); },
+  // a torch set down on a roof as Lanka burns: a soft thud and a catch of flame
+  place: () => { drum(140, { vol: 0.25, dec: 0.1 }); noise({ freq: 500, dec: 0.35, peak: 0.12, sweep: 2.2, type: 'lowpass', at: 0.05 }); },
   grow: () => { growN = (growN + 1) % 8; const n = BHAIRAV[growN]; tone(hz(n, 1), { type: 'sine', a: 0.05, dec: 0.9, peak: 0.07, vib: 0.006 }); bell(hz(n, 2), { dec: 0.6, vol: 0.25 }); },
   win: () => { bell(hz(0, 2), { dec: 2 }); phrase([0, 4, 7, 8, 7, 11, 12], 0.2, 0.18); },
 };
@@ -187,7 +193,7 @@ function schedulePhrase() {
   clearTimeout(phraseT);
   const r = RAGAS[mood.kanda] || RAGAS.bala;
   const battle = mood.intensity === 'battle';
-  const gap = (mood.intensity === 'grief' ? 9000 : battle ? 2600 : 6000) / r.tempo;
+  const gap = (mood.intensity === 'grief' ? 9000 : battle ? (rage ? 1800 : 2600) : 6000) / r.tempo;
   phraseT = setTimeout(() => {
     if (!ac || document.hidden) { schedulePhrase(); return; }
     const sc = r.scale, n = battle ? 6 : 4;
@@ -198,6 +204,9 @@ function schedulePhrase() {
     schedulePhrase();
   }, gap);
 }
+
+// when the rage starts, bring the next drum phrase forward so the double time is heard at once
+function schedulePhraseSoon() { if (ac && mood.intensity === 'battle') schedulePhrase(); }
 
 /** kanda: bala..yuddha or lanka; intensity: calm, battle, grief, silent, drums. */
 export function setMood(kanda, intensity = 'calm') {
@@ -215,6 +224,8 @@ function wire() {
   bus.on('enemy:telegraph', (s) => cue(s || 'starBell'));
   bus.on('hero:shoot', (d) => cue(d.full ? 'shootFull' : 'shoot'));
   bus.on('hero:hurt', () => cue('hurt'));
+  bus.on('rage:start', () => { setRage(true); schedulePhraseSoon(); });
+  bus.on('rage:end', () => setRage(false));
   bus.on('arrow:hit', (d) => cue(d.head ? 'headshot' : 'hit'));
   bus.on('enemy:die', () => cue('inkFade'));
   bus.on('checkpoint', () => cue('checkpoint'));

@@ -243,7 +243,8 @@
   ]
  },
  {
-  "bg": "cityNight"
+  "bg": "cityNight",
+  "colour": false
  },
  {
   "prop": "p",
@@ -262,7 +263,8 @@
   "dur": 45
  },
  {
-  "bg": "cityNight"
+  "bg": "cityNight",
+  "colour": false
  },
  {
   "wash": "all",

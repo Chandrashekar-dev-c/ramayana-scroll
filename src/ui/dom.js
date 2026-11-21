@@ -51,19 +51,40 @@ export function hideLine() { $('dialogue').classList.add('hidden'); dlg.typing =
 
 // ---------------------------------------------------------------- panels
 let panelClose = null;
+let returnFocus = null; // where keyboard focus was before the panel opened, to give it back
 export function panel(content, o = {}) {
   const p = $('panel');
+  if (p.classList.contains('hidden')) returnFocus = document.activeElement;
   p.innerHTML = '';
   p.className = 'center plate' + (o.cls ? ' ' + o.cls : '');
   p.append(...[].concat(content));
   p.classList.remove('hidden');
   p.setAttribute('role', 'dialog');
+  p.setAttribute('aria-modal', 'true');
+  const head = p.querySelector('h1, h2');
+  if (head) { head.id = head.id || 'panel-title'; p.setAttribute('aria-labelledby', head.id); } else p.removeAttribute('aria-labelledby');
   panelClose = o.onClose || null;
   const f = p.querySelector('button');
   if (f && !app.isTouch) setTimeout(() => f.focus(), 30);
   return p;
 }
-export function closePanel() { const p = $('panel'); p.classList.add('hidden'); p.innerHTML = ''; const c = panelClose; panelClose = null; if (c) c(); }
+export function closePanel() {
+  const p = $('panel'); p.classList.add('hidden'); p.innerHTML = '';
+  const c = panelClose; panelClose = null; if (c) c();
+  if (p.classList.contains('hidden') && returnFocus && returnFocus.focus && document.contains(returnFocus)) { try { returnFocus.focus(); } catch { /* gone */ } }
+  returnFocus = null;
+}
+// keep Tab inside an open panel (it is modal)
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const p = $('panel'); if (!p || p.classList.contains('hidden')) return;
+  const items = [...p.querySelectorAll('button, select, input, [tabindex]:not([tabindex="-1"])')].filter((x) => !x.disabled);
+  if (!items.length) return;
+  const first = items[0], last = items[items.length - 1];
+  if (!p.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+  else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 export function panelOpen() { return !$('panel').classList.contains('hidden'); }
 
 /** A choice on a plate. Resolves with the chosen index. The pause menu can cover it and

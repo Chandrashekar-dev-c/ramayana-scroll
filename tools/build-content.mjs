@@ -30,6 +30,22 @@ const REGROW = new Set(['tataka']);
 // Every scene and fight is painted in full colour. Set to false to bring back the line-art
 // (kachni) states that scripts can still ask for.
 const FULL_COLOUR = true;
+// ...except the few turning points where colour flowing into line IS the moment (kachni to
+// bharni): Ahalya freed, Rama's ring in the Ashoka grove, Ayodhya's lamps lit.
+const KEEP_LINE = new Set(['ahalya', 'ashoka', 'lighting']);
+/** In a fully coloured script a wash has nothing left to colour: drop it rather than wait 2.6s on nothing. */
+function dropEmptyWashes(list) {
+  if (!Array.isArray(list)) return list;
+  const out = [];
+  for (const b of list) {
+    if (b && typeof b === 'object' && b.wash !== undefined && (b.to || 'colour') === 'colour') continue;
+    if (b && typeof b === 'object') for (const k of ['then', 'else', 'after']) if (Array.isArray(b[k])) b[k] = dropEmptyWashes(b[k]);
+    if (b && Array.isArray(b.choice)) for (const op of b.choice) if (Array.isArray(op.then)) op.then = dropEmptyWashes(op.then);
+    if (b && Array.isArray(b.targets)) for (const q of b.targets) if (Array.isArray(q.then)) q.then = dropEmptyWashes(q.then);
+    out.push(b);
+  }
+  return out;
+}
 const LINE_MODES = new Set(['line', 'kachni']);
 /** Turns every line-art request into colour, in place. */
 function paintAll(v) {
@@ -272,15 +288,27 @@ const notes = {};
 for (const c of chapters) {
   const s = c.source || {};
   const text = [];
-  if (strings[c.note]) for (const [i, para] of strings[c.note].split(/\n\s*\n|\n/).entries()) { const k = `${c.note}.${i + 1}`; strings[k] = para; text.push(k); }
-  notes[c.id] = { text, source: `${s.text || 'Valmiki'}, ${s.kanda || ''} Kanda, sargas ${s.sargas || '(verify)'}`, later: s.later ? (typeof s.later === 'string' ? s.later : 'later tradition') : null, claim: strings[c.note] ? strings[c.note].slice(0, 140) : '', reviewer: s.reviewedBy || null };
+  const whole = strings[c.note];
+  if (whole) for (const [i, para] of whole.split(/\n\s*\n|\n/).entries()) { const k = `${c.note}.${i + 1}`; strings[k] = para; text.push(k); }
+  notes[c.id] = { text, source: `${s.text || 'Valmiki'}, ${s.kanda || ''} Kanda, sargas ${s.sargas || '(verify)'}`, later: s.later ? (typeof s.later === 'string' ? s.later : 'later tradition') : null, claim: whole ? whole.slice(0, 140) : '', reviewer: s.reviewedBy || null };
+  delete strings[c.note]; // only the split paragraphs are shown; the whole note was a dead duplicate key
 }
 
 // ---------------------------------------------------------------- write
 const write = (rel, data) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n'); };
 fs.rmSync(path.join(ROOT, 'src/data/scripts'), { recursive: true, force: true });
 fs.rmSync(path.join(ROOT, 'src/data/levels'), { recursive: true, force: true });
-for (const id in scripts) write(`src/data/scripts/${id}.json`, paintAll(scripts[id]));
+// Ayodhya by night stays ink until the lamps are lit; then the final wash brings the colour in
+{
+  const L = scripts.lighting;
+  const lamps = L ? L.findIndex((b) => b.do === 'lamps') : -1;
+  const washAt = L ? L.findIndex((b, i) => i > lamps && b.wash !== undefined) : -1;
+  if (lamps >= 0 && washAt > lamps) {
+    let from = lamps; while (from > 0 && L[from].bg === undefined) from--;
+    for (let i = from; i < washAt; i++) if (L[i].bg !== undefined) L[i].colour = false;
+  }
+}
+for (const id in scripts) write(`src/data/scripts/${id}.json`, FULL_COLOUR && !KEEP_LINE.has(id) ? dropEmptyWashes(paintAll(scripts[id])) : scripts[id]);
 for (const id in levels) write(`src/data/levels/${id}.json`, levels[id]);
 write('src/data/chapters.json', out);
 write('src/data/places.json', outPlaces);

@@ -15,10 +15,10 @@ import { drawLife } from '../art/life.js';
 import { drawProp } from '../art/props.js';
 import { shape, line, hatch, ellipsePts, dots } from '../art/ink.js';
 import * as M from '../art/motifs.js';
-import { createHero, updateHero, drawHero } from './hero.js';
+import { createHero, updateHero, drawHero, addRage, startRage, RAGE_MAX } from './hero.js';
 import { spawnEnemy, updateEnemies, drawEnemy, enemyBoxes } from './enemies.js';
 import { createBoss, updateBoss, drawBoss, bossBoxes, hitBoss, damageBoss } from './bosses.js';
-import { drawHud, sunRect } from './hud.js';
+import { drawHud, sunRect, rageRect } from './hud.js';
 import { grade } from './astra.js';
 
 const inBox = (x, y, bx) => x >= bx.x && x <= bx.x + bx.w && y >= bx.y && y <= bx.y + bx.h;
@@ -47,7 +47,15 @@ export function createBattle(level, opts = {}) {
     allyHurtFlag: false, protectTouched: false, onEnd: opts.onEnd, astraQueue: [],
     // a retry keeps the checkpoint it started from, so a second death doesn't fall back to arena 0
     savedCheckpoint: opts.checkpoint || null,
+    camZoom: 1, camZoomTo: 1, slowMo: null, retry: !!opts.retry,
   };
+  // Rama's rage arrives with his krodha at Janasthana, and stays for every battle after it
+  if (level.id === 'janasthana') save.data.flags.rageUnlocked = true;
+  b.rageOn = !level.practice && !!save.data.flags.rageUnlocked;
+  // the boon picked on the pre-battle card (or none)
+  const lo = save.data.loadout || {};
+  if (lo.boon && lo.boon !== 'none') b['boon_' + lo.boon] = true;
+  b.astraSymbol = lo.astra && (save.data.astrasKnown || []).includes(lo.astra) ? lo.astra : null;
   b.hero = createHero(b, { ...level.hero, start: 0 });
   const startArena = opts.checkpoint ? opts.checkpoint.arena : 0;
   b.arena = startArena;
@@ -60,7 +68,7 @@ export function createBattle(level, opts = {}) {
   for (const a of level.allies || []) b.allies.push({ ...a, spec: character(a.id, a.stage), lane: b.allies.length * 52, x: b.hero.x - 90 - b.allies.length * 52, y: GROUND, fireT: 1 + b.allies.length, facing: 1, walkT: 0, shootAnim: 0 });
   if (level.protect) b.protect = { ...level.protect, hp: level.protect.hp, max: level.protect.hp };
   if (level.protected) b.protected = { ...level.protected, spec: character(level.protected.id, level.protected.stage), hurt: false };
-  if (!opts.checkpoint && level.title) b.banner = { title: t(level.title), sub: level.kandaTitle ? t(level.kandaTitle) : '', t: 2.4 };
+  if (!opts.checkpoint && level.title && !opts.retry) b.banner = { title: t(level.title), sub: level.kandaTitle ? t(level.kandaTitle) : '', t: 2.4 };
   else if (opts.checkpoint) b.stepT = 0.6;
   installApi(b);
   // trees that come back to life when the boss falls (Tataka's wasteland, the Dandaka forest...)
@@ -74,7 +82,8 @@ export function createBattle(level, opts = {}) {
 
 function installApi(b) {
   b.view = () => ({ left: b.camX, right: b.camX + app.W / b.zoom });
-  b.toWorld = (sx, sy) => ({ x: b.camX + sx / b.zoom, y: GROUND + (sy - GROUND) / b.zoom });
+  // the camera lean (camZoom) scales the picture about the screen centre; undo it for the pointer
+  b.toWorld = (sx0, sy0) => { const cz = b.camZoom || 1, sx = (sx0 - app.W / 2) / cz + app.W / 2, sy = (sy0 - 360) / cz + 360; return { x: b.camX + sx / b.zoom, y: GROUND + (sy - GROUND) / b.zoom }; };
   b.toScreen = (x, y) => ({ x: (x - b.camX) * b.zoom, y: GROUND + (y - GROUND) * b.zoom });
   b.foes = function* () {
     for (const e of b.enemies) if (!e.dead && !e.dying) yield e;
@@ -131,10 +140,15 @@ function installApi(b) {
     if (h.dead || b.outcome || b.healT >= 0 || (app.dev && app.dev.god)) return;
     if (h.inv > 0) return;
     // a roll dodges blows and shots, but a shockwave, stomp or charge must be jumped
-    if (h.rollInv > 0 && kind !== 'wave' && kind !== 'stomp' && kind !== 'charge') return;
-    const amount = Math.max(1, Math.round(dmg * b.diff.damageTaken));
-    h.hp -= amount; h.inv = b.tun.hero.hurtInvulnerable; h.hurtAnim = 0.3;
-    h.vx = 0; h.x += Math.sign(h.x - fromX || 1) * 26;
+    if (h.rollInv > 0 && kind !== 'wave' && kind !== 'stomp' && kind !== 'charge') {
+      // rolled into it at the last moment: a Perfect Dodge slows time and readies the next arrow
+      if (h.rollStart !== undefined && b.time - h.rollStart < 0.12 && !(h.perfectDodge > 0)) perfectDodge(b);
+      return;
+    }
+    const amount = Math.max(1, Math.round(dmg * b.diff.damageTaken * (h.rageT > 0 ? 0.5 : 1)));
+    h.hp -= amount; h.inv = b.tun.hero.hurtInvulnerable; h.hurtAnim = h.rageT > 0 ? 0 : 0.3;
+    if (h.rageT <= 0) { h.vx = 0; h.x += Math.sign(h.x - fromX || 1) * 26; } // rage: no flinch, no knockback
+    addRage(b, 12);
     b.stats.hits++; b.shake(3); b.lastHurt = answer;
     if (answer) b.teachFails[answer] = (b.teachFails[answer] || 0) + 1;
     bus.emit('hero:hurt', { amount, kind });
@@ -145,14 +159,24 @@ function installApi(b) {
   };
   b.damageProtect = (dmg) => {
     if (!b.protect || b.outcome) return;
-    b.protect.hp = Math.max(0, b.protect.hp - Math.max(1, Math.round(dmg / 10))); b.protectTouched = true;
+    b.protect.hp = Math.max(0, b.protect.hp - Math.max(1, Math.round(dmg / 10))); b.protectTouched = true; addRage(b, 10);
     b.fx.push({ kind: 'burst', x: b.protect.x, y: GROUND - 60, color: PAL.kusum, n: 8, t: 0, dur: 0.4, seed: 3 });
     if (b.protect.hp <= 0) b.lose(b.protect.fail || 'lose.fire');
   };
-  b.allyHurt = () => { if (b.protected && !b.outcome) { b.protected.hurt = true; b.allyHurtFlag = true; b.lose('lose.sita'); } };
+  b.allyHurt = () => { if (b.protected && !b.outcome) { addRage(b, 10); b.protected.hurt = true; b.allyHurtFlag = true; b.lose('lose.sita'); } };
   b.lose = (key) => { if (b.outcome) return; b.loseKey = key; b.loseDelay = 1.1; };
   b.requestAstra = (symbol, key, cb) => startAstra(b, symbol, key, cb, true);
   b.onBossDown = (boss) => { b.lastBossX = boss.x; };
+  // the killing blow: time slows and the camera leans in on the falling boss
+  b.onBossKilled = (boss) => { b.slowMo = { t: 0.45, scale: 0.22 }; b.camZoomTo = 1.07; b.zoomAt = boss.x; b.hitStop = 0; b.shake(7); if (b.scatter) b.scatter(boss.x); };
+  // a parried blow or shot: the attacker reels, a short freeze, boon and rage
+  b.parry = (x, y, e) => {
+    b.hitStop = 0.085; b.addBoon(5); addRage(b, 18); bus.emit('cue', 'parry');
+    b.fx.push({ kind: 'parry', x, y, t: 0, dur: 0.35 });
+    if (e) { e.stun = Math.max(e.stun || 0, 1.2); e.vx = Math.sign(e.x - b.hero.x || 1) * 160; e.state = 'approach'; e.t = 0; }
+  };
+  // birds lift off and leaves fall near a big impact (life.js reads b.startle)
+  b.scatter = (x) => { b.startle = { x, t: b.time }; };
   b.waveProgress = () => {
     const total = b.level.arenas.reduce((n, a) => n + a.steps.length, 0);
     let done = 0; for (let i = 0; i < b.arena; i++) done += b.level.arenas[i].steps.length;
@@ -184,16 +208,57 @@ function startAstra(b, symbol, key, cb, forced) {
   bus.emit('astra:start');
 }
 
+function perfectDodge(b) {
+  const h = b.hero;
+  h.perfectDodge = 0.6; h.drawT = Math.max(h.drawT, b.tun.bow.fullDraw); h.fullCue = true;
+  b.slowMo = { t: 0.25, scale: 0.3 }; addRage(b, 18); b.addBoon(3);
+  b.fx.push({ kind: 'parry', x: h.x, y: h.y - 90, t: 0, dur: 0.35, gold: true });
+  bus.emit('cue', 'perfect');
+}
+
+// Each astra does its own thing (Part 3 of the plan), at a strength set by how cleanly it was traced:
+// sun reveals what hides and burns; wind clears the air and throws foes back; the serpent binds;
+// the lotus heals and frees; Brahma's astra pierces armour on one great foe.
 function fireAstra(b, strength) {
   const a = b.astra; b.astra = null;
-  bus.emit('astra:fire', { strength });
+  bus.emit('astra:fire', { strength, symbol: a.symbol });
   b.fx.push({ kind: 'astra', t: 0, dur: 0.9, symbol: a.symbol, strength });
-  b.shake(6);
+  b.shake(6); if (b.scatter) b.scatter(b.hero.x);
+  if (strength >= 0.85) bus.emit('cue', 'conch');
   if (!a.forced) b.boon = 0;
   if (a.cb) { a.cb(strength); return; }
-  const dmg = b.tun.boon.astraDamage * (0.4 + strength * 0.6);
-  for (const e of b.enemies) if (!e.dead && !e.dying) damageEnemy(b, e, dmg, false);
-  for (const q of b.bosses) if (!q.dead && !q.dying) astraHitBoss(b, q, b.tun.boon.astraBossDamage * (0.4 + strength * 0.6));
+  const k = 0.4 + strength * 0.6, dmg = b.tun.boon.astraDamage * k, bossDmg = b.tun.boon.astraBossDamage * k;
+  const live = b.enemies.filter((e) => !e.dead && !e.dying), bosses = b.bosses.filter((q) => !q.dead && !q.dying);
+  const h = b.hero;
+  switch (a.symbol) {
+    case 'wind':
+      b.shots = []; b.zones = b.zones.filter((z) => z.kind === 'lotus');
+      for (const e of live) { damageEnemy(b, e, dmg * 0.6, false); if (!e.dying) { e.stun = 1.2; e.vx = Math.sign(e.x - h.x || 1) * 900; } }
+      for (const q of bosses) astraHitBoss(b, q, bossDmg * 0.5);
+      break;
+    case 'serpent':
+      for (const e of live) { damageEnemy(b, e, dmg * 0.4, false); if (!e.dying) { e.stun = 3 * k; e.vx = 0; } }
+      for (const q of bosses) { astraHitBoss(b, q, bossDmg * 0.4); if (!q.dying && q.state !== 'intro') { q.state = 'weak'; q.t = 0; q.weakT = 1.6 * k; } }
+      break;
+    case 'lotus':
+      h.hp = Math.min(h.maxHp, h.hp + Math.round(30 * k)); h.held = 0;
+      b.zones = b.zones.filter((z) => z.kind !== 'coil');
+      b.fx.push({ kind: 'vine', x: h.x, y: h.y, t: 0, dur: 0.8 });
+      for (const e of live) damageEnemy(b, e, dmg * 0.3, false);
+      break;
+    case 'brahma': {
+      // one target: the boss if there is one, else the toughest foe on the field
+      const q = bosses[0];
+      if (q) astraHitBoss(b, q, bossDmg * 2.2, { pierce: true, reveal: true });
+      else { const e = live.sort((x, y) => y.hp - x.hp)[0]; if (e) damageEnemy(b, e, 999, true); }
+      break;
+    }
+    case 'sun': default:
+      for (const e of live) { if (e.illusion) { b.burst(e.x, e.y - 80, PAL.turmeric, 10); e.dying = true; e.t = 0.3; continue; } damageEnemy(b, e, dmg, false); }
+      for (const q of bosses) { if (q.hidden) { q.hidden = false; if (q.state === 'windup' || q.move === 'hide') { q.state = 'weak'; q.t = 0; q.weakT = 1.8; } } astraHitBoss(b, q, bossDmg); }
+      b.zones = b.zones.filter((z) => z.kind !== 'shadowStar');
+      break;
+  }
 }
 
 /** An astra strikes a boss through its rule, at its open weak spot, like an arrow would. */
@@ -269,6 +334,7 @@ function nextStep(b) {
     if (s.hint) showHint(b, s.hint, 'draw', s.hintDur || 4);
   } else if (s.teachAstra) {
     b.boonOn = true; b.boon = b.tun.boon.max;
+    const known = save.data.astrasKnown || (save.data.astrasKnown = []); if (!known.includes(s.teachAstra)) known.push(s.teachAstra);
     startAstra(b, s.teachAstra, s.key || 'astra.first', () => { b.boon = 0; b.say(s.after || 'astra.learned'); }, true);
   } else if (s.timer) { b.timer = { t: 0, dur: s.timer.dur, label: s.timer.label, fail: s.timer.fail }; }
   else if (s.timerStop) { b.timer = null; }
@@ -322,7 +388,11 @@ export function updateBattle(b, dt) {
   if (!b.astra && b.astraQueue.length) startAstra(b, ...b.astraQueue.shift());
   if (b.astra) { updateAstra(b, dt); input.endTick(); return; }
   if (b.slowT > 0) { b.slowT -= dt; dt *= b.slow; }
-  if (b.hitStop > 0) { b.hitStop -= dt; updateFx(b, dt); return; }
+  if (b.slowMo) { b.slowMo.t -= dt; const s0 = b.slowMo.scale; if (b.slowMo.t <= 0) b.slowMo = null; dt *= s0; }
+  b.camZoom += (b.camZoomTo - b.camZoom) * Math.min(1, dt * 8);
+  if (!b.slowMo && b.camZoomTo > 1.065) b.camZoomTo = 1;
+  // hit-stop freezes the action but not the shake, so an impact still lands
+  if (b.hitStop > 0) { b.hitStop -= dt; if (b.shakeT > 0) b.shakeT -= dt; updateFx(b, dt); input.endTick(); return; }
   b.time += dt; b.stats.time += dt;
   for (const k of ['hint', 'line']) if (b[k]) { b[k].t -= dt; if (b[k].t <= 0) b[k] = null; }
   if (b.banner) { b.banner.t -= dt; if (b.banner.t <= 0) b.banner = null; }
@@ -330,8 +400,15 @@ export function updateBattle(b, dt) {
   // the astra ring on the HUD sun, or the astra key
   if (b.level.astras && b.boon >= b.tun.boon.max && !b.ending) {
     const s = sunRect(), p = input.pointer;
-    if (input.consume('astra') || (p.justDown && Math.hypot(p.x - s.x, p.y - s.y) < 48)) { startAstra(b, b.level.astraSymbol || 'sun', 'astra.ready'); input.endTick(); return; }
+    if (input.consume('astra') || (p.justDown && Math.hypot(p.x - s.x, p.y - s.y) < 48)) { startAstra(b, b.astraSymbol || b.level.astraSymbol || 'sun', 'astra.ready'); input.endTick(); return; }
   }
+  // Rama's rage: the Kodanda badge beside the sun, the R key, or the touch button
+  if (b.rageOn && b.hero.rage >= RAGE_MAX && !b.ending) {
+    const r = rageRect(), p = input.pointer;
+    if (p.justDown && Math.hypot(p.x - r.x, p.y - r.y) < 44) { p.justDown = false; startRage(b); }
+  }
+  // the camera leans in a touch on a full draw, more when Rama and a boss close in
+  if (!b.slowMo) { const h = b.hero, q = b.bosses.find((x) => !x.dead && !x.dying); b.camZoomTo = q && Math.abs(q.x - h.x) < 420 ? 1.06 : h.drawT >= b.tun.bow.fullDraw ? 1.04 : 1; }
 
   // steps
   if (!b.banner || b.step >= 0) {
@@ -429,12 +506,26 @@ function updateAllies(b, dt) {
   }
 }
 
+/** A headshot or a perfect draw: Lakshmana (or Sita) answers at once with an arrow of their own. */
+function allyCombo(b, target) {
+  for (const a of b.allies) {
+    if (!a.fire || a.comboT > b.time) continue;
+    a.comboT = b.time + 1.2; a.fireT = Math.max(a.fireT, 0.8);
+    const tx = target.boss ? b.headOf(target) : { x: target.x, y: target.y - 90 };
+    const ox = a.x + (tx.x >= a.x ? 30 : -30), oy = GROUND - 118, ang = Math.atan2(tx.y - oy, tx.x - ox), sp = 1400;
+    a.facing = tx.x >= a.x ? 1 : -1; a.shootAnim = 0.25;
+    b.arrows.push({ x: ox, y: oy, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 40, g: 160, power: 0.6, full: false, dmg: b.tun.ally.damage * 1.5, pierce: 0, hit: new Set(), life: 2, stuck: 0, own: false, ally: true, combo: true });
+    bus.emit('cue', 'shoot');
+  }
+}
+
 function updateArrows(b, dt) {
   for (const a of b.arrows) {
     if (a.stuck > 0) { a.stuck -= dt; continue; }
     a.life -= dt;
     const px = a.x, py = a.y;
     a.vy += a.g * dt; a.x += a.vx * dt; a.y += a.vy * dt;
+    if (a.trail && (a.perfect || a.rage || a.full)) { a.trail.push([a.x, a.y]); if (a.trail.length > 8) a.trail.shift(); }
     if (a.y >= GROUND - 2) { a.y = GROUND - 2; a.stuck = 0.6; a.life = 0; continue; }
     // practice targets
     for (const q of b.targets) {
@@ -460,11 +551,15 @@ function updateArrows(b, dt) {
       if (head) dmg *= b.tun.bow.headMultiplier;
       if (flag) dmg *= 3;
       if (e.def.custom === 'elephant' && !head) dmg *= 0.5;
-      if (head && a.own) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); } else if (a.own) b.addBoon(b.tun.boon.perHit);
+      if (a.rage) dmg = 999; // in rage an arrow ends any rakshasa
+      if (head && a.own) { b.stats.headshots++; b.addBoon(b.tun.boon.perHeadshot); addRage(b, 14); } else if (a.own) { b.addBoon(b.tun.boon.perHit); addRage(b, 6); }
       b.burst(a.x, a.y, head ? PAL.turmeric : PAL.white, head ? 12 : 7);
       bus.emit('arrow:hit', { head });
       damageEnemy(b, e, dmg, head);
-      if (!a.ally) b.hitStop = b.tun.feel.hitPause;
+      if (a.rage && e.dying) b.fx.push({ kind: 'shatter', x: e.x, y: e.y - 80, t: 0, dur: 0.5, seed: e.seed });
+      if (a.own && (head || a.perfect)) allyCombo(b, e);
+      // heavier impacts hold the frame a little longer
+      if (!a.ally) b.hitStop = head || a.full ? 0.05 : 0.02;
       if (a.pierce-- <= 0) { a.life = 0; break; }
     }
     if (a.life <= 0) continue;
@@ -476,8 +571,9 @@ function updateArrows(b, dt) {
         // ally arrows obey the boss's rule like Rama's do: Viradha's arms, Kumbhakarna's closed
         // eyes, Indrajit in the clouds and Ravana's one coloured head all turn them away
         if (a.ally) { if (!q.hidden && box.weak) { hitBoss(b, q, { ...a, dmg: a.dmg * 0.5 }, box); b.burst(a.x, a.y, PAL.white, 5); } else b.tink(a.x, a.y); a.life = 0; break; }
-        const spent = hitBoss(b, q, a, box);
-        if (spent) { bus.emit('arrow:hit', { head: box.weak }); b.hitStop = b.tun.feel.hitPause; a.life = 0; }
+        // rage hits bosses harder, but always through the boss's own rule (weak spots, phases)
+        const spent = hitBoss(b, q, a.rage ? { ...a, dmg: a.dmg * 1.8 } : a, box);
+        if (spent) { bus.emit('arrow:hit', { head: box.weak }); b.hitStop = box.part ? 0.085 : box.weak || a.full ? 0.05 : 0.02; a.life = 0; if (box.weak) { addRage(b, 14); if (a.perfect) allyCombo(b, q); } else addRage(b, 6); }
         break;
       }
       if (a.life <= 0) break;
@@ -499,6 +595,10 @@ function updateShots(b, dt) {
     s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt;
     if (s.kind !== 'bolt') s.vy += 300 * dt;
     if (s.y > GROUND) { s.life = 0; continue; }
+    // a shot Rama kicked back flies at the rakshasas instead
+    if (s.fromHero) { for (const e of b.enemies) { if (e.dead || e.dying) continue; const bx = enemyBoxes(e); if (inBox(s.x, s.y, bx.body) || inBox(s.x, s.y, bx.head)) { damageEnemy(b, e, 3, false); b.burst(s.x, s.y, PAL.turmeric, 8); s.life = 0; break; } } continue; }
+    // the kick's parry window turns a low shot around
+    if (h.parryT > 0 && s.kind !== 'bolt' && Math.abs(s.x - h.x) < b.tun.hero.kickReach + 30 && s.y > h.y - 100 && s.y < h.y) { s.vx = -s.vx * 1.4; s.vy = -Math.abs(s.vy) * 0.3 - 120; s.fromHero = true; s.life = 2; b.parry(s.x, s.y); continue; }
     // the protected ally or the altar can be hit too
     if (b.protected && !b.protected.hurt && Math.abs(s.x - b.protected.x) < 26 && s.y > GROUND - 150) { s.life = 0; b.allyHurt(); continue; }
     if (Math.abs(s.x - h.x) < 24 && s.y > h.y - 150 && s.y < h.y) { s.life = 0; b.hurtHero(s.dmg, s.x - s.vx, s.answer, 'shot'); }
@@ -543,6 +643,9 @@ export function renderBattle(ctx, b) {
   const W = app.W, z = b.zoom;
   ctx.save();
   if (b.shakeA > 0 && b.shakeT > 0) ctx.translate((b.rng.next() - 0.5) * b.shakeA * 2, (b.rng.next() - 0.5) * b.shakeA * 2);
+  // the camera lean: a slight zoom about the screen centre (the HUD is drawn outside it)
+  ctx.save();
+  if (b.camZoom > 1.001) { ctx.translate(W / 2, 360); ctx.scale(b.camZoom, b.camZoom); ctx.translate(-W / 2, -360); }
   // the backdrop: line world, painted where it heals
   const style = b.level.style || 'bharni-earth';
   const done = b.healT >= 0 && b.healT > b.healDur;
@@ -567,6 +670,7 @@ export function renderBattle(ctx, b) {
   if (b.protected) fig(ctx, b.protected.spec, b.protected.hurt ? 'hurt' : 'stand', b.protected.x, GROUND, { facing: b.hero.x > b.protected.x ? 1 : -1 });
   for (const q of b.bosses) drawBoss(ctx, b, q);
   for (const e of b.enemies) if (!e.dead) drawEnemy(ctx, b, e);
+  drawGlints(ctx, b);
   for (const a of b.allies) fig(ctx, a.spec, a.shootAnim > 0 ? 'shoot' : a.walkT > 0 ? WALK[Math.floor(a.walkT * 9) % 4] : 'stand', a.x, GROUND, { facing: a.facing === 1 ? (b.hero.facing) : a.facing });
   drawHero(ctx, b);
   for (const a of b.arrows) drawArrow(ctx, a);
@@ -576,8 +680,37 @@ export function renderBattle(ctx, b) {
   ctx.restore();
 
   drawNear(ctx, b.level.backdrop, b.camX * z, W, { colour: done || b.level.painted, heal });
+  ctx.restore();
+  // Rama's rage: the whole scene washes vermilion
+  if (b.hero.rageT > 0) { const k = Math.min(1, b.hero.rageT * 2, (7 - b.hero.rageT) * 4); ctx.save(); ctx.globalAlpha = 0.18 * k; ctx.fillStyle = 'rgb(168,36,20)'; ctx.fillRect(0, 0, W, 720); ctx.restore(); }
   drawHud(ctx, b);
   ctx.restore();
+}
+
+// The three-colour language of a coming attack, as a glint at its source in its last quarter
+// second: crimson (jump or roll: it can't be blocked), gold (shoot now: a weak spot or a shot to
+// beat), ink-white (a plain blow the kick can turn).
+const GLINT = { jump: 'crimson', roll: 'crimson', move: 'crimson', shoot: 'gold', kick: 'ink' };
+function drawGlints(ctx, b) {
+  const tele = b.diff.telegraph;
+  const glint = (x, y, kind, k) => {
+    const col = kind === 'crimson' ? PAL.kusum : kind === 'gold' ? PAL.gold : PAL.white;
+    ctx.save(); ctx.globalAlpha = 0.35 + k * 0.6;
+    const r = 10 + k * 16;
+    ctx.fillStyle = col; ctx.strokeStyle = PAL.black; ctx.lineWidth = 2;
+    ctx.beginPath(); for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + b.time * 4, rr = i % 2 ? r * 0.4 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  };
+  for (const e of b.enemies) {
+    if (e.dead || e.dying || e.state !== 'windup' || e.illusion) continue;
+    const w = e.def.attack.windup * tele, left = w - e.t;
+    if (left < 0.25 && left > 0) glint(e.x + e.facing * 26, e.y - e.def.height * 0.75, GLINT[e.def.attack.answer] || 'ink', 1 - left / 0.25);
+  }
+  for (const q of b.bosses) {
+    if (q.dead || q.dying || q.state !== 'windup' || q.hidden || !q.mv) continue;
+    const left = q.windup - q.t;
+    if (left < 0.25 && left > 0) glint(q.x + q.facing * q.U * 0.3, q.y - q.U * 0.8, GLINT[q.mv.answer] || 'ink', 1 - left / 0.25);
+  }
 }
 
 function drawHitboxes(ctx, b) {
@@ -622,6 +755,12 @@ function drawTarget(ctx, q, b) {
 }
 
 function drawArrow(ctx, a) {
+  // perfect draws, rage arrows and full draws leave a blazing gold trail
+  if (a.trail && a.trail.length > 1 && a.stuck <= 0) {
+    ctx.save(); ctx.lineCap = 'round';
+    for (let i = 1; i < a.trail.length; i++) { const k = i / a.trail.length; ctx.globalAlpha = k * (a.perfect || a.rage ? 0.8 : 0.35); ctx.strokeStyle = a.rage ? PAL.kusum : PAL.gold; ctx.lineWidth = (a.perfect || a.rage ? 7 : 4) * k; ctx.beginPath(); ctx.moveTo(a.trail[i - 1][0], a.trail[i - 1][1]); ctx.lineTo(a.trail[i][0], a.trail[i][1]); ctx.stroke(); }
+    ctx.restore();
+  }
   const ang = Math.atan2(a.vy, a.vx), L = a.full ? 64 : 52;
   ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(a.stuck > 0 ? Math.atan2(a.vy, a.vx) : ang);
   ctx.globalAlpha = a.stuck > 0 ? Math.min(1, a.stuck * 2) : 1;
@@ -655,6 +794,14 @@ function drawFx(ctx, b) {
     else if (f.kind === 'label') { ctx.save(); ctx.globalAlpha = 1 - Math.max(0, k - 0.6) * 2.5; plateText(ctx, f.text, f.x, f.y - k * 30); ctx.restore(); }
     else if (f.kind === 'vine') { ctx.save(); ctx.globalAlpha = 1 - k; M.vineBand(ctx, f.x - 40, f.x + 40, f.y - 60 - k * 40, { colour: true, h: 12 }); ctx.restore(); }
     else if (f.kind === 'fall') dots(ctx, f.x, GROUND - 10, 20 + k * 50, 12, f.what === 'boulder' ? PAL.brown : PAL.kusum, 5, 4 * (1 - k));
+    else if (f.kind === 'dust') {
+      // a coiled puff of ink dust, like the swirls in a Mithila painting
+      const x = f.x + f.vx * f.t, y = f.y - k * 18, r = 6 + k * 12;
+      ctx.save(); ctx.globalAlpha = 0.6 * (1 - k); ctx.strokeStyle = PAL.brown; ctx.lineWidth = 2;
+      ctx.beginPath(); for (let i = 0; i <= 16; i++) { const a = i * 0.7 + f.seed, rr = r * (i / 16); ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.6); } ctx.stroke(); ctx.restore();
+    } else if (f.kind === 'nib') { ctx.save(); ctx.globalAlpha = 1 - k; M.star(ctx, f.x, f.y, 10 + k * 26, { rot: k * 2, points: 8 }); ctx.restore(); }
+    else if (f.kind === 'parry') { ctx.save(); ctx.globalAlpha = 1 - k; ctx.strokeStyle = f.gold ? PAL.gold : PAL.white; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, 14 + k * 50, 0, Math.PI * 2); ctx.stroke(); ctx.strokeStyle = PAL.black; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(f.x, f.y, 18 + k * 50, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
+    else if (f.kind === 'shatter') { ctx.save(); ctx.globalAlpha = 1 - k; for (let i = 0; i < 9; i++) { const a = i * 0.7 + f.seed, d = 10 + k * 70; line(ctx, [[f.x + Math.cos(a) * d, f.y + Math.sin(a) * d], [f.x + Math.cos(a) * (d + 14), f.y + Math.sin(a) * (d + 14)]], { w: 3, color: i % 2 ? PAL.kusum : PAL.black }); } ctx.restore(); }
     else if (f.kind === 'astra') {
       const v = b.view();
       ctx.save(); ctx.globalAlpha = 1 - k;

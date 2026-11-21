@@ -183,5 +183,5 @@ export function pollGamepad() {
     if (hold) input.held[hold] = now;
     padPrev[i] = now;
   };
-  edge(0, 'jump', 'jump'); edge(1, 'roll', 'roll'); edge(3, 'astra'); edge(9, 'pause'); edge(2, 'action', 'action');
+  edge(0, 'jump', 'jump'); edge(1, 'roll', 'roll'); edge(3, 'astra'); edge(4, 'rage'); edge(9, 'pause'); edge(2, 'action', 'action');
 }

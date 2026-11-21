@@ -498,11 +498,6 @@
   "state": 1
  },
  {
-  "wash": "all",
-  "to": "colour",
-  "dur": 2.6
- },
- {
   "goto": "__seg1"
  },
  {

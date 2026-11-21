@@ -15,16 +15,37 @@ import { controlPoint } from '../ui/dom.js';
 // the sun sits in the same safe-area-inset row as the health band it is drawn beside
 export function sunRect() { return { x: BORDER + 14 + app.safe.l + 262 + 34, y: BORDER + 30 + app.safe.t, r: 34 }; }
 
+/** Rama's rage badge (the Kodanda), just right of the boon sun. */
+export function rageRect() { const s = sunRect(); return { x: s.x + 74, y: s.y, r: 30 }; }
+
+function drawRage(ctx, b) {
+  const r = rageRect(), h = b.hero, full = h.rage >= 100, on = h.rageT > 0;
+  const k = on ? h.rageT / 7 : h.rage / 100;
+  ctx.save(); ctx.translate(r.x, r.y + 2);
+  // a round plate with the bow drawn on it; the vermilion fill rises with the rage
+  ctx.fillStyle = PAL.paper; ctx.strokeStyle = PAL.black; ctx.lineWidth = 2.4;
+  ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = on || full ? '#a82414' : PAL.kusum; ctx.fillRect(-20, 20 - 40 * k, 40, 40 * k); ctx.restore();
+  ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = full || on ? PAL.gold : PAL.black; ctx.lineWidth = 2.6;
+  ctx.beginPath(); ctx.arc(-14, 0, 18, -1.05, 1.05); ctx.stroke();
+  ctx.lineWidth = 1.2; ctx.strokeStyle = PAL.black; ctx.beginPath(); ctx.moveTo(-5, -15); ctx.lineTo(-5, 15); ctx.stroke();
+  ctx.restore();
+  if (full && !on) M.usableRing(ctx, r.x, r.y + 2, 32, b.time);
+}
+
 export function drawHud(ctx, b) {
   const W = app.W, h = b.hero;
   const x0 = BORDER + 14 + app.safe.l, y0 = BORDER + 14 + app.safe.t;
   drawFrame(ctx, { progress: b.waveProgress(), night: b.night });
 
-  // health band: segments keep their pattern while the hero is unhurt
+  // health: a band of lotus pips on a patterned strip; each pip wilts as Rama is hurt
   const segs = 10, sw = 25, ratio = Math.max(0, h.hp / h.maxHp);
+  shape(ctx, rectPts(x0 - 4, y0 - 2, segs * sw + 6, 26), { mode: 'colour', fill: PAL.paper, pattern: pattern(ctx, 'lotusRow', null, PAL.wash || PAL.cream, 0.9), w: 1.3, seed: 2, amp: 0.5 });
   for (let i = 0; i < segs; i++) {
-    const full = ratio * segs > i + 0.5;
-    shape(ctx, rectPts(x0 + i * sw, y0, sw - 2, 22), { mode: 'colour', fill: full ? PAL.indigo : PAL.paper, pattern: full ? pattern(ctx, 'lotusRow', null, PAL.turmeric, 0.9) : null, w: 1.3, seed: i + 2, amp: 0.5 });
+    const k = Math.max(0, Math.min(1, ratio * segs - i));
+    M.lotusBud(ctx, x0 + i * sw + sw / 2 - 1, y0 + 20, 10, { wilt: 1 - k, seed: i + 2, colour: k > 0 });
   }
   // boon sun
   if (b.boonOn) {
@@ -33,6 +54,7 @@ export function drawHud(ctx, b) {
     M.sun(ctx, s.x, s.y + 2, 17, { rays: 12, lit: Math.floor((b.boon / max) * 12 + 0.001), colour: true, face: b.boon >= max, lineFill: PAL.paper });
     if (b.boon >= max && b.level.astras) M.usableRing(ctx, s.x, s.y + 2, 38, b.time);
   }
+  if (b.rageOn) drawRage(ctx, b);
   // objective plate and wave dots
   let oy = y0 + 4;
   if (b.objective) {
@@ -50,7 +72,11 @@ export function drawHud(ctx, b) {
   // boss vine: lotuses wilt as the boss is hurt
   const bosses = b.bosses.filter((q) => !q.dead && q.state !== 'fled' && !q.def.passive);
   bosses.forEach((boss, bi) => {
-    const n = 8, vw = Math.min(360, W * 0.3), vx = W - BORDER - 80 - vw - app.safe.r, vy = y0 + 20 + bi * 44;
+    const n = 8, vw = Math.min(360, W * 0.3), vx = W - BORDER - 80 - vw - app.safe.r, vy = y0 + 20 + bi * 52;
+    // a slim gold-framed bar under the vine gives the exact measure
+    const ratioB = Math.max(0, boss.hp / boss.maxHp);
+    ctx.fillStyle = PAL.black; ctx.fillRect(vx - 2, vy + 20, vw + 4, 9); ctx.fillStyle = PAL.gold; ctx.fillRect(vx - 1, vy + 21, vw + 2, 7);
+    ctx.fillStyle = PAL.paper; ctx.fillRect(vx + 1, vy + 23, vw - 2, 3); ctx.fillStyle = PAL.madder; ctx.fillRect(vx + 1, vy + 23, (vw - 2) * ratioB, 3);
     const pts = []; for (let i = 0; i <= 16; i++) pts.push([vx + (vw * i) / 16, vy + (i % 2 ? -5 : 5)]);
     line(ctx, pts, { w: 2.2, color: PAL.black, smooth: true, seed: 4, amp: 0.3, flat: true });
     line(ctx, pts, { w: 1, color: PAL.leaf, smooth: true, seed: 4, amp: 0.3, flat: true });

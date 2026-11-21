@@ -204,7 +204,7 @@ class Runner {
     this.levelBeat = this.pc - 1;
     const battle = createBattle(level, { kanda: this.kanda, seed: app.seed, checkpoint: cp || (this.from && this.from.battle) || null, hp: cp ? cp.hp : this.from && this.from.battle ? this.from.battle.hp : undefined, boon: cp ? cp.boon : 0, prevTime: this.stats.time });
     this.from = null;
-    this.sub = { kind: 'battle', b: battle, level, controls: ['left', 'right', 'draw', 'jump', 'roll'] };
+    this.sub = { kind: 'battle', b: battle, level, controls: ['left', 'right', 'draw', 'jump', 'roll', ...(battle.rageOn ? ['rage'] : [])] };
     this.anySeals = true;
     setMood(this.lanka ? 'lanka' : this.kanda, 'battle');
     this.ui();

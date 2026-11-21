@@ -61,7 +61,11 @@ function strike(b, e, tgt, dmg, reach) {
   const h = b.hero;
   // a blow or dive has height too: a hero high in a jump is clear of a club swung at the ground
   const ey = e.def.flies ? e.y + 70 : e.y;
-  if (Math.abs(h.x - e.x) < reach + 12 && Math.abs(h.y - ey) < 95) b.hurtHero(dmg, e.x, e.def.attack.answer, e.def.attack.kind);
+  if (Math.abs(h.x - e.x) < reach + 12 && Math.abs(h.y - ey) < 95) {
+    // a blow that lands inside the kick's parry window is turned aside and the striker reels
+    if (h.parryT > 0 && !e.def.custom && Math.sign(e.x - h.x) === h.facing) { b.parry(e.x, e.y - 90, e); return; }
+    b.hurtHero(dmg, e.x, e.def.attack.answer, e.def.attack.kind);
+  }
 }
 
 export function updateEnemies(b, dt) {
