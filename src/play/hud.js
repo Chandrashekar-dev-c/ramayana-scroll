@@ -15,6 +15,21 @@ import { controlPoint } from '../ui/dom.js';
 // the sun sits in the same safe-area-inset row as the health band it is drawn beside
 export function sunRect() { return { x: BORDER + 14 + app.safe.l + 262 + 34, y: BORDER + 30 + app.safe.t, r: 34 }; }
 
+const strips = new Map();
+function healthStrip(ctx, filled, segs, sw) {
+  const key = filled + '|' + app.scale.toFixed(2);
+  let c = strips.get(key);
+  if (c) return c;
+  const sc = Math.max(1, app.scale);
+  c = document.createElement('canvas'); c.width = Math.ceil((segs * sw + 12) * sc); c.height = Math.ceil(36 * sc);
+  const x = c.getContext('2d'); x.scale(sc, sc); x.translate(6, 6);
+  shape(x, rectPts(-4, -2, segs * sw + 6, 26), { mode: 'colour', fill: PAL.paper, pattern: pattern(x, 'lotusRow', null, PAL.wash, 0.9), w: 1.3, seed: 2, amp: 0.5 });
+  for (let i = 0; i < segs; i++) { const k = Math.max(0, Math.min(1, filled - i)); M.lotusBud(x, i * sw + sw / 2 - 1, 20, 10, { wilt: 1 - k, seed: i + 2, colour: k > 0 }); }
+  const out = { c, w: segs * sw + 12, h: 36 };
+  strips.set(key, out); if (strips.size > 64) strips.delete(strips.keys().next().value);
+  return out;
+}
+
 /** Rama's rage badge (the Kodanda), just right of the boon sun. */
 export function rageRect() { const s = sunRect(); return { x: s.x + 74, y: s.y, r: 30 }; }
 
@@ -41,12 +56,9 @@ export function drawHud(ctx, b) {
   drawFrame(ctx, { progress: b.waveProgress(), night: b.night });
 
   // health: a band of lotus pips on a patterned strip; each pip wilts as Rama is hurt
+  // (painted once per health level into a small cached canvas: wilting buds are costly to draw)
   const segs = 10, sw = 25, ratio = Math.max(0, h.hp / h.maxHp);
-  shape(ctx, rectPts(x0 - 4, y0 - 2, segs * sw + 6, 26), { mode: 'colour', fill: PAL.paper, pattern: pattern(ctx, 'lotusRow', null, PAL.wash || PAL.cream, 0.9), w: 1.3, seed: 2, amp: 0.5 });
-  for (let i = 0; i < segs; i++) {
-    const k = Math.max(0, Math.min(1, ratio * segs - i));
-    M.lotusBud(ctx, x0 + i * sw + sw / 2 - 1, y0 + 20, 10, { wilt: 1 - k, seed: i + 2, colour: k > 0 });
-  }
+  { const st = healthStrip(ctx, Math.round(ratio * segs * 4) / 4, segs, sw); ctx.drawImage(st.c, x0 - 6, y0 - 6, st.w, st.h); }
   // boon sun
   if (b.boonOn) {
     const s = sunRect();

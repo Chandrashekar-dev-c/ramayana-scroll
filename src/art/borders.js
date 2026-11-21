@@ -15,6 +15,7 @@ function paint(W, H, colour, night) {
   const ctx = cv.getContext('2d'); ctx.scale(s, s);
   const b = BORDER, c = night ? PAL.nightLine : PAL.black;
   const lf = night ? PAL.night : PAL.cream;
+  if (!colour) paintVignette(ctx, W, H); // the line frame is always drawn, so it carries the vignette
   ctx.fillStyle = colour ? PAL.madder : lf;
   ctx.fillRect(0, 0, W, b); ctx.fillRect(0, H - b, W, b); ctx.fillRect(0, 0, b, H); ctx.fillRect(W - b, 0, b, H);
   const tri = (x, y, dx, dy, i) => {
@@ -56,25 +57,25 @@ function paperGrain(ctx) {
   }
   return grain;
 }
-export function drawPaper(ctx) {
-  const W = app.W, H = 720;
-  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.6; ctx.fillStyle = paperGrain(ctx); ctx.fillRect(0, 0, W, H);
-  if (!vignette || vignette.W !== W) {
-    const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, Math.max(W, H) * 0.75);
-    g.addColorStop(0, 'rgba(120,80,40,0)'); g.addColorStop(1, 'rgba(120,80,40,0.16)');
-    vignette = { W, g };
-  }
-  ctx.globalAlpha = 1; ctx.fillStyle = vignette.g; ctx.fillRect(0, 0, W, H);
-  ctx.restore();
+/** Lay the grain over a canvas once (backdrop chunks bake it in, so it costs nothing per frame). */
+export function grainOver(ctx, w, h, offX = 0) {
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.6; ctx.fillStyle = paperGrain(ctx);
+  ctx.translate(-(offX % 256), 0); ctx.fillRect(0, 0, w + 256, h); ctx.restore();
 }
+/** The sepia vignette, painted into the cached frame canvas so it is one drawImage a frame. */
+function paintVignette(ctx, W, H) {
+  const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, Math.max(W, H) * 0.75);
+  g.addColorStop(0, 'rgba(120,80,40,0)'); g.addColorStop(1, 'rgba(120,80,40,0.16)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+void vignette;
 
 /** Draw the frame. progress 0..1 reveals the coloured frame clockwise from the top-left. */
 export function drawFrame(ctx, o = {}) {
   const W = app.W, H = 720;
-  if (o.paper !== false) drawPaper(ctx);
   const p = o.colour ? 1 : o.progress || 0;
-  // a fully coloured frame covers the line one completely, so skip blitting the line frame then
-  if (p < 1) ctx.drawImage(frameCanvas(false, o.night), 0, 0, W, H);
+  // the line frame carries the vignette, so it is always drawn; the coloured one goes over it
+  ctx.drawImage(frameCanvas(false, o.night), 0, 0, W, H);
   if (p <= 0) return;
   if (p >= 1) { ctx.drawImage(frameCanvas(true, o.night), 0, 0, W, H); return; }
   const col = frameCanvas(true, o.night);

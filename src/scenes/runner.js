@@ -22,7 +22,7 @@ import { setMood, cue } from '../audio/audio.js';
 import { createInteraction } from './interactions.js';
 import { createTrial } from '../trials/index.js';
 import { CHAPTERS, chapterById, kandaOf } from '../data/chapters.js';
-import { showWin, showFail, openPause } from '../ui/screens.js';
+import { showWin, showFail, openPause, pickLoadout, knownAstras, unlockedBoons, showRushEnd } from '../ui/screens.js';
 import { drawHand } from '../play/hud.js';
 
 const scripts = import.meta.glob('../data/scripts/*.json');
@@ -76,6 +76,29 @@ export async function startChapter(id, from) {
   setMode('chapter', r);
 }
 
+/**
+ * Boss Rush: the battles of one finished kanda, back to back, with nothing between them.
+ * Unlocked on the wall once every chapter of that kanda is done.
+ */
+export async function bossRushList(kanda) {
+  const out = [];
+  for (const c of CHAPTERS.filter((x) => x.kanda === kanda && x.playable !== false && x.type !== 'lanka')) {
+    const sc = await loadScript(c.id);
+    for (const b of sc) if (b.battle) { const lv = await loadLevel(b.battle); if (!lv.practice) out.push(b.battle); }
+  }
+  return out;
+}
+export async function startBossRush(kanda) {
+  const ids = await bossRushList(kanda);
+  if (!ids.length) return false;
+  for (const id of ids) await loadLevel(id);
+  const ch = { id: 'rush', n: '', type: 'battle', kanda, playable: false };
+  const r = new Runner(ch, ids.map((id) => ({ battle: id })), null);
+  r.rush = kanda; r.replay = true;
+  setMode('chapter', r);
+  return true;
+}
+
 class Runner {
   constructor(ch, script, from) {
     this.ch = ch; this.script = script.slice(); this.pc = from ? from.beat : 0;
@@ -87,6 +110,7 @@ class Runner {
     this.stats = { kills: 0, headshots: 0, time: 0, hits: 0, shots: 0 }; this.seals = { finish: true, gentle: true, fast: true }; this.anySeals = false;
     this.from = from; this.skipping = false; this.linesShown = 0; this.dialogTop = false; this.flags = {};
     this.overlay = null; this.endedTo = null;
+    this.replay = !!save.data.done[ch.id];
   }
   label() { return t('aria.' + (this.sub ? (this.sub.kind === 'battle' ? 'battle' : 'trial') : 'scene')); }
 
@@ -199,15 +223,17 @@ class Runner {
     this.next();
   }
 
-  async startBattle(b, cp) {
+  async startBattle(b, cp, retry = false) {
     const level = await loadLevel(b.battle);
     if (!save.data.difficulty && !level.practice) {
       const opts = ['story', 'normal', 'hard'];
       const i = await choose(t('diff.ask'), opts.map((d) => ({ label: t('diff.' + d), small: t('diff.' + d + '.sub'), main: d === 'normal' })));
       save.data.difficulty = opts[i]; save.commit();
     }
+    // the loadout card, once there is something to choose (never on a retry: retries are instant)
+    if (!retry && !cp && !level.practice && (knownAstras().length >= 2 || unlockedBoons().length >= 1) && !this.rush) await pickLoadout();
     this.levelBeat = this.pc - 1;
-    const battle = createBattle(level, { kanda: this.kanda, seed: app.seed, checkpoint: cp || (this.from && this.from.battle) || null, hp: cp ? cp.hp : this.from && this.from.battle ? this.from.battle.hp : undefined, boon: cp ? cp.boon : 0, prevTime: this.stats.time });
+    const battle = createBattle(level, { kanda: this.kanda, seed: app.seed, retry, checkpoint: cp || (this.from && this.from.battle) || null, hp: cp ? cp.hp : this.from && this.from.battle ? this.from.battle.hp : undefined, boon: cp ? cp.boon : 0, prevTime: this.stats.time });
     this.from = null;
     this.sub = { kind: 'battle', b: battle, level, controls: ['left', 'right', 'draw', 'jump', 'roll', ...(battle.rageOn ? ['rage'] : [])] };
     this.anySeals = true;
@@ -219,7 +245,7 @@ class Runner {
     hideLine();
     if (this.sub && this.sub.kind === 'battle') {
       const b = this.sub.b; const cp = b.savedCheckpoint || null;
-      this.startBattle(this.script[this.levelBeat], cp);
+      this.startBattle(this.script[this.levelBeat], cp, true);
       return;
     }
     // a trial starts over from a fresh copy of its beat, so nothing from the last try leaks in
@@ -313,7 +339,8 @@ class Runner {
     const tapped = input.pointer.justDown || input.consume('confirm') || input.consume('jump') || input.consume('action');
     if (b) {
       if (b.say || b.narrate) {
-        tickLine(dt, tuning.scene.typeSpeed * (b.slow ? 0.6 : 1));
+        // a chapter already finished once types three times as fast
+        tickLine(dt, tuning.scene.typeSpeed * (b.slow ? 0.6 : 1) * (this.replay ? 3 : 1));
         if (tapped) { if (lineTyping()) finishTyping(); else this.next(); }
       } else if (b.move && !b.nowait) { const a = this.actors.get(b.move); if (!a || a.moveTo == null) this.next(); else if (tapped && b.skippable !== false) { a.x = a.moveTo; } }
       else if (b.wait) { this.waitT -= dt; if (this.waitT <= 0 || (tapped && b.tap !== false)) this.next(); }
@@ -350,6 +377,7 @@ class Runner {
   end() {
     if (this.ended) return; this.ended = true;
     hideLine(); topbar(null); touchControls(null);
+    if (this.rush) { showRushEnd({ kanda: this.rush, stats: this.stats, seals: this.seals }); return; }
     const ch = this.ch;
     save.data.done[ch.id] = true;
     const prev = save.data.seals[ch.id] || {};

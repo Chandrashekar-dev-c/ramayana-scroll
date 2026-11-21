@@ -96,6 +96,7 @@ export function panelOpen() { return !$('panel').classList.contains('hidden'); }
  * put it back (reopenChoice), so the promise is never left hanging. */
 let pendingChoice = null;
 function renderChoice(c) {
+  if (c.build) { panel(c.build((v) => { if (pendingChoice !== c) return; pendingChoice = null; closePanel(); c.resolve(v); }), { cls: c.o.cls }); return; }
   const kids = [];
   if (c.prompt) kids.push(el('p', { style: 'font-style:italic' }, c.prompt));
   const row = el('div', { class: c.o.grid ? 'heads' : 'col' });
@@ -105,6 +106,10 @@ function renderChoice(c) {
 }
 export function choose(prompt, options, o = {}) {
   return new Promise((resolve) => { pendingChoice = { prompt, options, o, resolve }; renderChoice(pendingChoice); });
+}
+/** A modal of any shape that resolves with a value, and survives the pause menu like choose(). */
+export function ask(build, o = {}) {
+  return new Promise((resolve) => { pendingChoice = { build, o, resolve }; renderChoice(pendingChoice); });
 }
 export function choicePending() { return !!pendingChoice; }
 export function reopenChoice() { if (pendingChoice) renderChoice(pendingChoice); }

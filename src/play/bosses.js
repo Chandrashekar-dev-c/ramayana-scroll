@@ -2,6 +2,8 @@
 // rule only it has, kept as a small documented hook in RULES below. Numbers are in
 // data/bosses.json.
 import defs from '../data/bosses.json';
+import headsData from '../data/heads.json';
+import { save } from '../core/save.js';
 import { bus } from '../core/events.js';
 import { character, fig, WALK, BASE_U } from '../art/figures.js';
 import { PAL } from '../art/palette.js';
@@ -442,8 +444,28 @@ const RULES = {
 
   // Ravana: ten heads, each with its own pattern. Only the head in colour can be hurt, and
   // heads grow back unless the boon is full. Then the Brahma astra ends it.
+  // The six Lanka chapters shape this fight: each shadowed head the player let speak (fear,
+  // anger, desire, pride...) is favoured here and makes him fiercer; each wise head (the scholar,
+  // the devotee...) makes his heads waver and slower to turn. The last lines answer the same way.
   ravana: {
-    init(b, boss) { boss.data.heads = { active: 9, gone: {}, pride: b.pride || 0 }; boss.data.headHp = 3; boss.data.swapT = 0; boss.data.regrow = []; boss.data.mounted = true; },
+    init(b, boss) {
+      boss.data.heads = { active: 9, gone: {}, pride: b.pride || 0 }; boss.data.swapT = 0; boss.data.regrow = []; boss.data.mounted = true;
+      const chosen = Object.values(save.data.headsChosen || {});
+      const wiseIds = new Set(headsData.filter((h) => h.wise).map((h) => h.id));
+      const order = headsData.map((h) => h.id);
+      const shadow = chosen.filter((v) => !wiseIds.has(v)), wise = chosen.filter((v) => wiseIds.has(v));
+      boss.data.favour = [...new Set(shadow.map((v) => order.indexOf(v)).filter((i) => i >= 0))];
+      boss.data.headMax = wise.length >= 4 ? 2 : 3; boss.data.headHp = boss.data.headMax;
+      boss.data.swapEvery = 5.5 + wise.length * 0.4;
+      if (shadow.length >= 2) {
+        const def = JSON.parse(JSON.stringify(boss.def));
+        def.phases[0].moves.push('volley');
+        for (const ph of def.phases) ph.speed = (ph.speed || 1) + 0.04 * shadow.length;
+        if (shadow.length >= 4) for (const ph of def.phases) if (ph.adds) ph.adds.max += 1;
+        boss.def = def;
+      }
+      b.extraEnd = chosen.length ? [wise.length > shadow.length ? 'ravana.end.wise' : 'ravana.end.shadow'] : [];
+    },
     boxes(b, boss) {
       const U = boss.U, c = tenHeadCentres(boss, b.pride || 0), st = boss.data.heads;
       const out = [];
@@ -467,8 +489,10 @@ const RULES = {
     next(b, boss) {
       const st = boss.data.heads; const free = [];
       for (let i = 0; i < 10; i++) if (!st.gone[i] && i !== st.active) free.push(i);
-      boss.data.heads = { ...st, active: free.length ? free[Math.floor(b.rng.next() * free.length)] : st.active };
-      boss.data.headHp = 3; boss.data.swapT = 0;
+      const fav = (boss.data.favour || []).filter((i) => free.includes(i));
+      const pool = fav.length && b.rng.next() < 0.5 ? fav : free;
+      boss.data.heads = { ...st, active: pool.length ? pool[Math.floor(b.rng.next() * pool.length)] : st.active };
+      boss.data.headHp = boss.data.headMax || 3; boss.data.swapT = 0;
     },
     clamp(b, boss, hp) {
       const floor = boss.maxHp * 0.12;
@@ -482,7 +506,7 @@ const RULES = {
     update(b, boss, dt) {
       if (boss.data.mounted && boss.phase >= 1) { boss.data.mounted = false; b.shake(5); b.burst(boss.x, GROUND - 60, PAL.gold, 18); }
       boss.data.swapT += dt;
-      if (boss.data.swapT > 5.5) RULES.ravana.next(b, boss);
+      if (boss.data.swapT > (boss.data.swapEvery || 5.5)) RULES.ravana.next(b, boss);
       for (const r of boss.data.regrow) r.t -= dt;
       const back = boss.data.regrow.filter((r) => r.t <= 0);
       if (back.length) { const g = { ...boss.data.heads.gone }; for (const r of back) delete g[r.i]; boss.data.heads = { ...boss.data.heads, gone: g }; boss.data.regrow = boss.data.regrow.filter((r) => r.t > 0); bus.emit('cue', 'headGrow'); }

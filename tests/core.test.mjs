@@ -62,3 +62,22 @@ test('every chapter script reaches its battles and labels', () => {
     for (const b of sc) if (b.goto) assert.ok(labels.has(b.goto), `${f}: ${b.goto}`);
   }
 });
+
+test('a damaged save with null tables loads with fresh ones', () => {
+  const s = migrate({ v: 1, done: null, seals: 'x', flags: null, settings: null, headsChosen: 5 });
+  assert.deepEqual(s.done, {});
+  assert.deepEqual(s.seals, {});
+  assert.deepEqual(s.flags, {});
+  assert.equal(typeof s.settings, 'object');
+  assert.deepEqual(s.headsChosen, {});
+});
+
+test('every rooftop gap in the burning of Lanka can be jumped', async () => {
+  const rng = new Rng('roofs'); const roofs = []; let x = 0;
+  for (let i = 0; i < 16; i++) { const w = rng.range(260, 420), h = rng.range(170, 330); roofs.push({ x, w, top: i === 9 ? 720 - 250 : 720 - h }); x += w + rng.range(70, 150); }
+  for (let i = 0; i < 15; i++) {
+    const a = roofs[i], b = roofs[i + 1], gap = b.x - (a.x + a.w), dh = b.top - a.top;
+    const t = (860 + Math.sqrt(860 * 860 + 4 * 1050 * dh)) / 2100; // vy -860, gravity 2100
+    assert.ok(300 * t > gap + 10, `roof ${i} to ${i + 1}: gap ${gap.toFixed(0)} beyond reach ${(300 * t).toFixed(0)}`);
+  }
+});

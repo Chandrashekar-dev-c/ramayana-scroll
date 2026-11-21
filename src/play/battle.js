@@ -378,7 +378,7 @@ function finish(b) {
     b.healDur = Math.max(3.2, far + 1);
   }
   if (b.level.heal) { b.healT = 0; bus.emit('cue', 'wash'); b.mood = null; }
-  b.ending = { lines: b.level.end || [], i: 0, t: b.level.heal ? -b.healDur : -0.6 };
+  b.ending = { lines: [...(b.level.end || []), ...(b.extraEnd || [])], i: 0, t: b.level.heal ? -b.healDur : -0.6 };
 }
 
 // ---------------------------------------------------------------- update
@@ -405,6 +405,7 @@ export function updateBattle(b, dt) {
   }
   // Rama's rage: the Kodanda badge beside the sun, the R key, or the touch button
   if (b.rageOn && b.hero.rage >= RAGE_MAX && !b.ending) {
+    if (!save.seen('hint.rage')) { save.markSeen('hint.rage'); showHint(b, 'hint.rage', 'rage', 2.6); }
     const r = rageRect(), p = input.pointer;
     if (p.justDown && Math.hypot(p.x - r.x, p.y - r.y) < 44) { p.justDown = false; startRage(b); }
   }
@@ -439,6 +440,7 @@ export function updateBattle(b, dt) {
   updateHero(b, dt);
   if (b.gust) { b.gust.t -= dt; b.hero.x += b.gust.dir * 420 * dt; if (b.gust.t <= 0) b.gust = null; }
   updateEnemies(b, dt);
+  for (const e of b.enemies) if (e.burnT > 0 && !e.dying && !e.dead) { e.burnT -= dt; e.hp -= 1.5 * dt; if (e.hp <= 0) b.killEnemy(e, 'fire'); }
   for (const q of b.bosses) updateBoss(b, q, dt);
   updateAllies(b, dt);
   updateArrows(b, dt);
@@ -557,6 +559,7 @@ function updateArrows(b, dt) {
       b.burst(a.x, a.y, head ? PAL.turmeric : PAL.white, head ? 12 : 7);
       bus.emit('arrow:hit', { head });
       damageEnemy(b, e, dmg, head);
+      if (b.boon_agni && a.own && a.full && !e.dying) e.burnT = 2; // the Agni boon: a full draw sets the foe alight
       if (a.rage && e.dying) b.fx.push({ kind: 'shatter', x: e.x, y: e.y - 80, t: 0, dur: 0.5, seed: e.seed });
       if (a.own && (head || a.perfect)) allyCombo(b, e);
       // heavier impacts hold the frame a little longer
@@ -644,9 +647,7 @@ export function renderBattle(ctx, b) {
   const W = app.W, z = b.zoom;
   ctx.save();
   if (b.shakeA > 0 && b.shakeT > 0) ctx.translate((b.rng.next() - 0.5) * b.shakeA * 2, (b.rng.next() - 0.5) * b.shakeA * 2);
-  // the camera lean: a slight zoom about the screen centre (the HUD is drawn outside it)
   ctx.save();
-  if (b.camZoom > 1.001) { ctx.translate(W / 2, 360); ctx.scale(b.camZoom, b.camZoom); ctx.translate(-W / 2, -360); }
   // the backdrop: line world, painted where it heals
   const style = b.level.style || 'bharni-earth';
   const done = b.healT >= 0 && b.healT > b.healDur;
@@ -661,8 +662,10 @@ export function renderBattle(ctx, b) {
   if (b.mood === 'dusk') { ctx.save(); ctx.globalAlpha = 0.5; hatch(ctx, [[0, 0], [W, 0], [W, GROUND - 200], [0, GROUND - 200]], { color: PAL.terracotta, spacing: 16, angle: 0.4, w: 1.2 }); ctx.restore(); }
   if (b.mood && b.mood.startsWith('deer')) { const k = +b.mood.slice(4); ctx.save(); ctx.globalAlpha = Math.min(0.7, k * 0.12); hatch(ctx, [[0, 0], [W, 0], [W, 720], [0, 720]], { color: PAL.black, spacing: 14 - k, angle: 0.8, w: 1 }); ctx.restore(); }
 
-  // world space
+  // world space. The camera lean (a slight zoom about the screen centre) applies to the figures
+  // only: scaling the big backdrop images every frame is far too slow on a phone.
   ctx.save();
+  if (b.camZoom > 1.001) { ctx.translate(W / 2, 360); ctx.scale(b.camZoom, b.camZoom); ctx.translate(-W / 2, -360); }
   ctx.translate(0, GROUND); ctx.scale(z, z); ctx.translate(-b.camX, -GROUND);
   drawLife(ctx, b.level.backdrop, b.camX, W / z, b.time, { colour: done || b.level.painted, quiet: true, startle: b.startle });
   drawZones(ctx, b);
@@ -671,7 +674,7 @@ export function renderBattle(ctx, b) {
   for (const q of b.targets) drawTarget(ctx, q, b);
   if (b.protected) fig(ctx, b.protected.spec, b.protected.hurt ? 'hurt' : 'stand', b.protected.x, GROUND, { facing: b.hero.x > b.protected.x ? 1 : -1 });
   for (const q of b.bosses) drawBoss(ctx, b, q);
-  for (const e of b.enemies) if (!e.dead) drawEnemy(ctx, b, e);
+  for (const e of b.enemies) if (!e.dead) { drawEnemy(ctx, b, e); if (e.burnT > 0 && !e.dying) M.flame(ctx, e.x, e.y - e.def.height * 0.5, 26, { t: b.time, seed: e.seed % 7, tongues: 2 }); }
   drawGlints(ctx, b);
   for (const a of b.allies) fig(ctx, a.spec, a.shootAnim > 0 ? 'shoot' : a.walkT > 0 ? WALK[Math.floor(a.walkT * 9) % 4] : 'stand', a.x, GROUND, { facing: a.facing === 1 ? (b.hero.facing) : a.facing });
   drawHero(ctx, b);

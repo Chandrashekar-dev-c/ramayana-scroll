@@ -7,6 +7,7 @@ import { noise, hashStr } from '../core/rng.js';
 import { PAL } from './palette.js';
 import { line, shape, hatch, rectPts, ellipsePts, dots } from './ink.js';
 import * as M from './motifs.js';
+import { grainOver } from './borders.js';
 import { pattern } from './patterns.js';
 import { GROUND } from './layout.js';
 
@@ -458,7 +459,7 @@ function paintChunk(id, style, colour, index, regrow, density = '', part = 'all'
   ctx.restore();
   if (!def.night && look.sun !== false && def.ground !== 'floor' && def.ground !== 'none' && !dp) skyBands(ctx, x0, colour, seed);
   paintFar(ctx, def, look, x0, o, seed);
-  if (part === 'far') return cv;
+  if (part === 'far') { grainOver(ctx, CHUNK, 720, x0); return cv; }
   }
   paintBand(ctx, def, x0, o);
   const skip = new Set(regrow && look.regrow ? look.regrow.map((r) => r[0]) : []);
@@ -477,6 +478,7 @@ function paintChunk(id, style, colour, index, regrow, density = '', part = 'all'
   }
   paintExtras(ctx, look, x0, o, seed);
   paintGround(ctx, def, x0, o, seed);
+  if (part === 'all') grainOver(ctx, CHUNK, 720, x0);
   return cv;
 }
 

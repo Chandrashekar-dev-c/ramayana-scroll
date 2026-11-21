@@ -19,7 +19,8 @@ import { panel, closePanel, panelOpen, button, el, topbar, touchControls, sealSv
 import { setMood, cue } from '../audio/audio.js';
 import { drawHand } from '../play/hud.js';
 import { startChapter } from '../scenes/runner.js';
-import { openTitle, openSettings, openGallery } from '../ui/screens.js';
+import { openTitle, openSettings, openGallery, openCompendium } from '../ui/screens.js';
+const fmtTime = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 export const WALL_W = 2400, TIER_H = 380, WALL_H = TIER_H * 6 + 60;
 const tierY = (i) => 40 + i * TIER_H;
@@ -61,8 +62,8 @@ function vignette(ctx, p, x, y, colour, o = {}) {
 
 const cache = { key: '', cv: null };
 
-function paintWall(states) {
-  const s = 0.5;
+function paintWall(states, scale = 0.5) {
+  const s = scale;
   const cv = makeCanvas(WALL_W * s, WALL_H * s);
   const ctx = cv.getContext('2d'); ctx.scale(s, s);
   ctx.fillStyle = PAL.cream; ctx.fillRect(0, 0, WALL_W, WALL_H);
@@ -184,6 +185,7 @@ class Hub {
     topbar([
       { label: t(this.view === 'ravana' ? 'btn.ramaWall' : 'btn.ravanaWall'), on: () => this.flipView() },
       { label: t('btn.journey'), on: () => this.toggleFit() },
+      ...(Object.keys(save.data.done).length ? [{ label: t('btn.more'), on: () => this.openMore() }] : []),
       { label: t('btn.menu'), on: () => openTitle() },
     ]);
   }
@@ -267,7 +269,33 @@ class Hub {
     }
     panel([el('h2', {}, t('place.' + p.id)), el('div', { class: 'col' }, rows), button(t('btn.close'), () => closePanel())], { cls: 'card' });
   }
-  openScroll() { panel([el('h2', {}, t('scroll.title')), el('p', {}, t('scroll.body')), button(t('btn.close'), () => closePanel())]); }
+  openScroll() {
+    // the epilogue answers the heads the player let speak in Lanka
+    const chosen = Object.values(save.data.headsChosen || {}), wise = new Set(['scholar', 'devotee', 'brother', 'father', 'honour', 'king']);
+    const w = chosen.filter((v) => wise.has(v)).length, sh = chosen.length - w;
+    const coda = chosen.length ? el('p', { style: 'font-style:italic' }, t(w > sh ? 'scroll.wise' : 'scroll.shadow')) : null;
+    panel([el('h2', {}, t('scroll.title')), el('p', {}, t('scroll.body')), coda, button(t('btn.close'), () => closePanel())]);
+  }
+  /** Boss Rush for finished kandas, the painted wall to keep, and the compendium. */
+  openMore() {
+    const done = (k) => CHAPTERS.filter((c) => c.kanda === k && c.playable !== false && c.type !== 'lanka').every((c) => save.data.done[c.id]);
+    const rush = KANDAS.filter(done).filter((k) => k !== 'ayodhya'); // Ayodhya Kanda has no battles
+    const rows = [button(t('btn.saveWall'), () => { closePanel(); this.exportWall(); }), button(t('btn.compendium'), () => { closePanel(); openCompendium({ back: () => this.openMore() }); })];
+    for (const k of rush) rows.push(button(t('rush.start', { kanda: t('kanda.' + k) }), () => { closePanel(); import('../scenes/runner.js').then((m) => m.startBossRush(k).then((ok) => { if (!ok) toast(t('rush.none')); })); }, { small: save.data.rush && save.data.rush[k] ? t('rush.best', { t: fmtTime(save.data.rush[k]) }) : '' }));
+    if (!rush.length) rows.push(el('p', { class: 'mini' }, t('rush.locked')));
+    panel([el('h2', {}, t('btn.more')), el('div', { class: 'col' }, rows), button(t('btn.close'), () => closePanel())]);
+  }
+  /** Save the player's painted wall, as it stands now, as one large image. */
+  exportWall() {
+    const cv = paintWall(this.states, 1);
+    const name = 'ramayana-scroll-wall.png';
+    cv.toBlob((blob) => {
+      if (!blob) { toast(t('wall.saveFail')); return; }
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000); toast(t('wall.saved'));
+    }, 'image/png');
+  }
   openRavanaCard(id) {
     const ch = chapterById(id), open = isUnlocked(id), seals = save.data.seals[id] || {};
     const sealRow = el('span', { html: ['finish', 'gentle', 'fast'].map((k) => sealSvg(!!seals[k])).join('') });
@@ -291,6 +319,19 @@ class Hub {
       const after = placeStates();
       vignette(ctx, p, p.x, y, after.st[p.id] === 'colour', { t: this.t });
       ctx.restore();
+    }
+    // the wall comes alive where it has been painted: small moving Mithila touches on finished places,
+    // and a gold-leaf flourish under a place whose every chapter carries all three seals
+    for (const p of PLACES) {
+      if (!placeOnRamaWall(p) || this.states.st[p.id] !== 'colour') continue;
+      const y = tierY(p.tier) + TIER_H - 60, tt = this.t + (p.x % 7);
+      if (p.icon === 'hut' || p.icon === 'forest' || p.icon === 'hermitage' || p.icon === 'grove') { const k = (tt * 0.25) % 1; M.bird(ctx, p.x - 160 + k * 320, y - 230 - Math.sin(k * Math.PI) * 30, 10, { colour: true, fill: PAL.indigo, dir: 1 }); }
+      if (p.icon === 'bridge' || p.icon === 'ocean') for (let i = 0; i < 3; i++) M.rock(ctx, p.x - 80 + i * 80, y - 46 + Math.sin(tt * 1.4 + i) * 6, 26, 14, { colour: true, seed: i });
+      if (p.icon === 'city' || p.icon === 'palace') for (let i = 0; i < 5; i++) M.lampFlame(ctx, p.x - 120 + i * 60, y + 8, 14, this.t, i);
+      if (p.icon === 'river' || p.icon === 'lake') M.waves(ctx, p.x - 120, p.x + 120, y - 28, y - 12, { t: this.t, gap: 14, speed: 30 });
+      if (p.id === 'panchavati' || p.icon === 'mithila') M.lotusBud(ctx, p.x + 140, y - 4 - Math.abs(Math.sin(tt)) * 4, 12, { colour: true, seed: 3 });
+      const chs = p.chapters.filter((id) => !isRavanaCh(id) && chapterById(id).playable !== false);
+      if (chs.length && chs.every((id) => { const sl = save.data.seals[id]; return sl && sl.finish && sl.gentle && sl.fast; })) M.vineBand(ctx, p.x - 150, p.x + 150, y + 26, { colour: true, h: 12, step: 30, fill: PAL.gold });
     }
     // place labels and markers: labels sit under their markers and stay inside the view
     const next = nextChapter();

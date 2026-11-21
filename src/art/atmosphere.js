@@ -9,6 +9,18 @@ import * as M from './motifs.js';
 import { layerItems, backdropInfo, FAR_SPEED } from './backdrops.js';
 
 const TAU = Math.PI * 2;
+// clouds are painted once into small canvases and then only moved
+const cloudCache = new Map();
+function cloudSprite(i, w, colour) {
+  const key = `${i}|${w}|${colour ? 1 : 0}`;
+  let c = cloudCache.get(key);
+  if (!c) {
+    c = document.createElement('canvas'); c.width = Math.ceil(w * 1.6); c.height = Math.ceil(w * 0.9);
+    const x = c.getContext('2d'); M.cloud(x, c.width / 2, c.height * 0.62, w, { hatch: colour ? 0 : 7, seed: i + 11 });
+    cloudCache.set(key, c);
+  }
+  return c;
+}
 const frac = (x) => x - Math.floor(x);
 const hash = (n) => frac(Math.sin(n * 127.1 + 311.7) * 43758.5453);
 
@@ -42,9 +54,8 @@ export function drawAtmosphere(ctx, id, camX, W, t, o = {}) {
     const farX = camX * FAR_SPEED;
     for (let i = 0; i < 3; i++) {
       const span = W + 600, x = ((i * 523 + t * (9 + i * 4) * calm - farX * 0.6) % span + span) % span - 300;
-      ctx.save(); ctx.globalAlpha = colour ? 0.55 : 0.4;
-      M.cloud(ctx, x, 150 + i * 46 + Math.sin(t * 0.2 + i) * 6, 120 + i * 30, { hatch: colour ? 0 : 7, seed: i + 11 });
-      ctx.restore();
+      const w = 120 + i * 30, c = cloudSprite(i, w, colour), y = 150 + i * 46 + Math.sin(t * 0.2 + i) * 6;
+      ctx.save(); ctx.globalAlpha = colour ? 0.55 : 0.4; ctx.drawImage(c, x - c.width / 2, y - c.height * 0.62); ctx.restore();
     }
   }
 

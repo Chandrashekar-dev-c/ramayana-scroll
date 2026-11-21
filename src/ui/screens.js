@@ -4,7 +4,7 @@ import { save, defaultSettings } from '../core/save.js';
 import { t, LANGUAGES, loadLang, lang, isDraft } from '../core/i18n.js';
 import { input, DEFAULT_KEYS } from '../core/input.js';
 import { bus } from '../core/events.js';
-import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine, withGrinding, reopenChoice, cancelChoice, refreshTouchControls } from './dom.js';
+import { panel, closePanel, button, el, topbar, touchControls, sealSvg, setDraftNote, hideLine, withGrinding, reopenChoice, cancelChoice, refreshTouchControls, ask } from './dom.js';
 import { initAudio, applyVolumes, cue } from '../audio/audio.js';
 import { PAL } from '../art/palette.js';
 import { plate } from '../art/ink.js';
@@ -70,6 +70,7 @@ class TitleMode {
     row.append(button(t('btn.settings'), () => openSettings({ back: () => this.show() })));
     const fs = fullscreenButton(); if (fs) row.append(fs);
     if (isIosBrowser()) row.append(button(t('btn.installIos'), () => panel([el('p', {}, t('install.ios')), button(t('btn.back'), () => this.show(), { main: true })])));
+    if (started) row.append(button(t('btn.compendium'), () => openCompendium({ back: () => this.show() })));
     if (allSeals()) row.append(button(t('btn.gallery'), () => openGallery({ back: () => this.show() })));
     kids.push(row);
     if (credits.reviewers.length) kids.push(el('p', { class: 'mini' }, t('title.reviewers', { names: credits.reviewers.map((r) => r.name).join(', ') })));
@@ -176,6 +177,33 @@ export function openPause({ onResume, onRestart, chapter }) {
   setTimeout(() => { if (pauseEsc === esc) window.addEventListener('keydown', esc); }, 50);
 }
 
+// ---------------------------------------------------------------- loadout
+// Boons are earned by the battles that teach their spirit; astras by being taught in battle.
+export const BOONS = [
+  { id: 'agni', after: 'yajna' },      // full-draw arrows burn
+  { id: 'vayu', after: 'viradha' },    // a longer, safer roll
+  { id: 'indra', after: 'janasthana' }, // a full draw looses three arrows
+  { id: 'raudra', after: 'vali' },     // rage fills faster
+];
+export function unlockedBoons() { return BOONS.filter((b) => save.data.done[b.after]).map((b) => b.id); }
+export function knownAstras() { return save.data.astrasKnown || []; }
+
+/** The two-slot card before a battle: one astra to call, one boon to carry. Resolves when Fight is pressed. */
+export function pickLoadout() {
+  const lo = save.data.loadout || (save.data.loadout = { astra: null, boon: 'none' });
+  const astras = knownAstras(), boons = unlockedBoons();
+  return ask((done) => {
+    const sel = (label, opts, cur, onChange) => { const s0 = el('select', { 'aria-label': label, onchange: (e) => onChange(e.target.value) }); for (const [v, l] of opts) { const op = el('option', { value: v }, l); if (cur === v) op.selected = true; s0.append(op); } return el('label', {}, label, s0); };
+    const rows = [];
+    if (astras.length >= 2) rows.push(sel(t('loadout.astra'), [['', t('loadout.levelAstra')], ...astras.map((a) => [a, t('astra.name.' + a)])], lo.astra || '', (v) => { lo.astra = v || null; save.commit(); }));
+    if (boons.length) rows.push(sel(t('loadout.boon'), [['none', t('boon.none')], ...boons.map((b) => [b, t('boon.' + b)])], lo.boon || 'none', (v) => { lo.boon = v; save.commit(); }));
+    return [el('h2', {}, t('loadout.title')), el('div', { class: 'settings' }, rows), el('p', { class: 'mini' }, t('loadout.note')), el('div', { class: 'row' }, button(t('loadout.fight'), () => done(true), { main: true }))];
+  });
+}
+
+/** Lotus rank for a chapter's seals: bronze for one, silver for two, gold for all three. */
+export function lotusRank(seals) { const n = ['finish', 'gentle', 'fast'].filter((k) => seals && seals[k]).length; return n >= 3 ? 'gold' : n === 2 ? 'silver' : n === 1 ? 'bronze' : null; }
+
 // ---------------------------------------------------------------- win plate
 export function showWin({ ch, seals, earned, stats, next }) {
   const note = notes[ch.id] || {};
@@ -183,7 +211,9 @@ export function showWin({ ch, seals, earned, stats, next }) {
   const sealNames = ['finish', 'gentle', 'fast'];
   const sealRow = el('div', { class: 'seals', html: sealNames.map((k) => `<span title="${t('seal.' + k + (k === 'gentle' && ch.gentle ? '.' + ch.gentle : ''))}">${sealSvg(!!seals[k])}</span>`).join('') });
   const sealText = el('p', { class: 'mini' }, sealNames.map((k) => (seals[k] ? '✓ ' : '· ') + t('seal.' + k + (k === 'gentle' && ch.gentle ? '.' + ch.gentle : ''))).join('   '));
+  const rank = lotusRank(seals);
   const kids = [el('h2', {}, t('chapter.' + ch.id + '.title')), ...wins, sealRow, sealText];
+  if (rank) kids.push(el('p', { class: 'rank rank-' + rank }, t('rank.' + rank)));
   if (stats) {
     const m = Math.floor(stats.time / 60), s = Math.floor(stats.time % 60);
     kids.push(el('div', { class: 'stats' }, el('span', {}, t('stat.kills', { n: stats.kills || 0 })), el('span', {}, t('stat.headshots', { n: stats.headshots || 0 })), el('span', {}, t('stat.time', { t: `${m}:${String(s).padStart(2, '0')}` })), el('span', {}, t('stat.hits', { n: stats.hits || 0 }))));
@@ -203,6 +233,18 @@ export function showWin({ ch, seals, earned, stats, next }) {
   void earned;
 }
 
+/** The end of a Boss Rush: time, hits and the rank it earned. */
+export function showRushEnd({ kanda, stats, seals }) {
+  const m = Math.floor(stats.time / 60), sec = Math.floor(stats.time % 60);
+  const rank = lotusRank({ finish: true, gentle: seals.gentle, fast: seals.fast });
+  const best = (save.data.rush || (save.data.rush = {}))[kanda];
+  if (!best || stats.time < best) { save.data.rush[kanda] = stats.time; save.commit(); }
+  panel([el('h2', {}, t('rush.done', { kanda: t('kanda.' + kanda) })),
+    el('div', { class: 'stats' }, el('span', {}, t('stat.time', { t: `${m}:${String(sec).padStart(2, '0')}` })), el('span', {}, t('stat.hits', { n: stats.hits || 0 })), el('span', {}, t('stat.headshots', { n: stats.headshots || 0 }))),
+    rank ? el('p', { class: 'rank rank-' + rank }, t('rank.' + rank)) : null,
+    el('div', { class: 'row' }, button(t('btn.journeyOpen'), () => { closePanel(); go.hub(); }, { main: true }))], { cls: 'win' });
+}
+
 // ---------------------------------------------------------------- failure card
 export function showFail({ title, tip, onRetry, onSkip, onMenu }) {
   const kids = [el('h2', {}, title)];
@@ -212,6 +254,30 @@ export function showFail({ title, tip, onRetry, onSkip, onMenu }) {
   row.append(button(t('btn.journeyOpen'), () => { closePanel(); onMenu(); }));
   kids.push(row);
   panel(kids);
+}
+
+// ---------------------------------------------------------------- the compendium
+/** One book of what the journey has shown: Valmiki notes for each finished chapter, the folk-art
+ * motifs used to paint it, and the cast. Opens from the wall (More) and the title. */
+export function openCompendium(o = {}) {
+  const tabs = ['notes', 'motifs', 'cast'];
+  const show = (tab) => {
+    const body = el('div', { class: 'note', style: 'max-height:52vh;overflow:auto' });
+    if (tab === 'notes') {
+      const done = CHAPTERS.filter((c) => c.playable !== false && save.data.done[c.id]);
+      if (!done.length) body.append(el('p', {}, t('comp.empty')));
+      for (const c of done) {
+        const n = notes[c.id]; if (!n || !n.text) continue;
+        body.append(el('h3', {}, `${c.n}. ${t('chapter.' + c.id + '.title')}`));
+        for (const k of n.text) body.append(el('p', {}, t(k)));
+        body.append(el('div', { class: 'src' }, t('note.source') + ' ' + n.source));
+      }
+    } else if (tab === 'motifs') { for (const m of motifs) body.append(el('p', {}, el('b', {}, t(m.name) + ': '), t(m.text))); }
+    else { const cv = el('canvas', { style: 'width:100%;height:auto;border:2px solid #1c140d;background:#f2e4c3' }); body.append(cv); requestAnimationFrame(() => renderSheet(cv, { mode: 'colour', size: 0.6, cols: 10 })); }
+    panel([el('h2', {}, t('comp.title')), el('div', { class: 'row' }, ...tabs.map((x) => button(t('comp.' + x), () => show(x), { main: x === tab }))), body,
+      el('div', { class: 'row' }, button(t('btn.back'), () => { closePanel(); if (o.back) o.back(); }, { main: true }))]);
+  };
+  show('notes');
 }
 
 // ---------------------------------------------------------------- the making-of gallery
